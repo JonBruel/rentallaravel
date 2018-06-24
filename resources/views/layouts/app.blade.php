@@ -10,29 +10,25 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
+    <!-- Scripts-->
     <script src="{{ asset('js/app.js') }}" ></script>
-
-
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <!--link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css"-->
 
     <!-- Styles-->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
 </head>
 <body>
-    <div id="app">
+    <div class="wrapper">
         <nav class="navbar navbar-expand-md navbar-light row">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
+
+
+
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -47,7 +43,7 @@
                     <ul class="navbar-nav ml-auto pull-right">
                         <!-- Authentication Links -->
                         @guest
-                            <li class="nav-item">
+                            <li type="button" class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
                             <li class="nav-item">
@@ -78,24 +74,46 @@
         </nav>
 
         <main class="container">
-            <div class="row">
-                <br/>
-                <br/>
-                <div role="navigation" id="menuSupportedContent" class="col-sm-2 collapse navbar-collapse">
-                    <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation" class="active"><a  id="ost" href="/house">House</a> </li>
-                    </ul>
-                    <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation"><a href="/customer">Customer</a> </li>
-                    </ul>
+            <div role="navigation" class="navbar navbar-expand-md navbar-light row">
+                <div col-md-2 class="col align-self-start">
+                    <!-- Locale chooser, any existing query parameters are removed. It is possible to kkep them,
+                         but not as a form, but as a window.location.href = 'url value'.
+                         This will require that the url is calculated, possible but not elegant.
+                     -->
+                    <div class="form-group">
+                        <form id="selectLanguageForm" action="{{Session::get('sanitizedpath')}}" method="get">
+                            {{Form::select('culture', config('app.locales',[]), Session::get('culture'), array('id' => 'selectLanguage', 'onchange' => 'this.form.submit();'))}}
+                        </form>
+                    </div>
+
+
+                <!-- Menu -->
+                    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#menub" aria-controls="menub" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div id="menub" class="collapse navbar-collapse">
+                        <ul class="list-group">
+                            <li class="menulevel1"><a  class="" id="ost" href="/houses">Houses</a> </li>
+                            <li class="menulevel1"><a class="" href="/customers">Customers</a> </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="col-sm-10">
+                <div class="col-md-10 col">
                     <?php echo $__env->yieldContent('content'); ?>
                     <br />
-                    Flash: <?php echo e(\Session::get('timer')); ?>
-                </div>
-            </div>
+                    Time lapse: {{\Session::get('ost')}}
+                    <br />
+                        Culture: {{\Session::get('culture')}}
+                    <br />
+                    Uri: {{\Session::get('uri')}}
+                    <br />
+                        sanitizedpath: {{\Session::get('sanitizedpath')}}
 
+                        <br />
+                        App locale: {{App::getLocale()}}
+                </div>
+
+            </div>
         </main>
     </div>
 </body>
@@ -104,6 +122,11 @@
 
     //setInterval(function(){$("#ost").toggle();}, 1000);
 
+
 </script>
 
+<!--
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="{{ asset('js/bootstrap.js') }}"></script>
+ -->
 </html>

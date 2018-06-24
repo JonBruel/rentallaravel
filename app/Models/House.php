@@ -8,6 +8,9 @@
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Kyslik\ColumnSortable\Sortable;
+use Collective\Html\Eloquent\FormAccessible;
+use Number;
 
 /**
  * Class House
@@ -58,9 +61,23 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class House extends Eloquent
 {
-	protected $table = 'house';
 
-	protected $casts = [
+    use FormAccessible;
+    use Sortable;
+
+    protected $table = 'house';
+
+    public $sortable = [
+        'name',
+        'address1',
+        'address2',
+        'address3',
+        'country',
+        'ownerid',
+    ];
+
+
+    protected $casts = [
 		'latitude' => 'float',
 		'longitude' => 'float',
 		'lockbatch' => 'bool',
@@ -108,6 +125,45 @@ class House extends Eloquent
 		'internet',
 		'pets'
 	];
+
+    /**
+     * Formats a number.
+     *
+     * Supported options:
+     * - locale:                  The locale. Default: 'en'.
+     * - use_grouping:            Whether to use grouping separators,
+     *                            such as thousands separators.
+     *                            Default: true.
+     * - minimum_fraction_digits: Minimum fraction digits. Default: 0.
+     * - maximum_fraction_digits: Minimum fraction digits. Default: 3.
+     * - rounding_mode:           The rounding mode.
+     *                            A PHP_ROUND_ constant or 'none' to skip
+     *                            rounding. Default: PHP_ROUND_HALF_UP.
+     * - style:                   The style.
+     *                            One of: 'decimal', 'percent'.
+     *                            Default: 'decimal'.
+     *
+     * @param string $number  The number.
+     * @param array  $options The formatting options.
+     *
+     * @return string The formatted number.
+     */
+
+	public function getLongitudeAttribute($value) {
+        return Number::format($value, ['minimum_fraction_digits' => 12, 'maximum_fraction_digits' => 12]);
+    }
+
+    public function setLongitudeAttribute($value) {
+        return Number::parse($value);
+    }
+
+    public function getLatitudeAttribute($value) {
+        return Number::format($value, ['minimum_fraction_digits' => 12, 'maximum_fraction_digits' => 12]);
+    }
+
+    public function setlatitudeAttribute($value) {
+        return Number::parse($value);
+    }
 
 	public function currency()
 	{

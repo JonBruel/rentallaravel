@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Kyslik\ColumnSortable\Sortable;
 
 /**
  * Class Customer
@@ -54,7 +55,19 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class Customer extends Eloquent
 {
-	protected $table = 'customer';
+	use Sortable;
+
+	public $sortable = [
+        'name',
+        'address1',
+        'address2',
+        'address3',
+        'country',
+        'telephone',
+        'ownerid',
+    ];
+
+    protected $table = 'customer';
 
 	protected $casts = [
 		'customertypeid' => 'int',

@@ -1,0 +1,110 @@
+﻿{
+  "0": {
+    "text": "Login",
+    "path": "Account/Login",
+    "parentid": 0,
+    "cssclass": "menulevel1",
+    "roles": [ "Unauthenticated" ],
+    "level": 1,
+    "show": "show"
+  },
+  "1000": {
+    "text": "Customers",
+    "path": "Customers/Index?menupoint=1010",
+    "parentid": 1000,
+    "cssclass": "menulevel1",
+    "roles": [ "Administrator" ],
+    "level": 1,
+    "show": "show"
+  },
+  "1010": {
+    "text": "Customer list",
+    "path": "Customers/Index",
+    "parentid": 1000,
+    "cssclass": "menulevel2",
+    "roles": [ "Administrator" ],
+    "level": 2,
+    "show": "hide"
+  },
+  "1020": {
+    "text": "Customer Edit",
+    "path": "Customers/Edit",
+    "parentid": 1000,
+    "cssclass": "menulevel2",
+    "roles": [ "Administrator" ],
+    "level": 2,
+    "show": "select"
+  },
+  "1030": {
+    "text": "Customer Details",
+    "path": "Customers/Details",
+    "parentid": 1000,
+    "cssclass": "menulevel2",
+    "roles": [ "Administrator" ],
+    "level": 2,
+    "show": "select"
+  },
+  "2100": {
+    "text": "House",
+    "path": "Houses/Index?menupoint=2110",
+    "parentid": 2100,
+    "cssclass": "menulevel1",
+    "roles": [ "Customer" ],
+    "level": 1,
+    "show": "show"
+  },
+  "2110": {
+    "text": "House list",
+    "path": "Houses/Index",
+    "parentid": 2100,
+    "cssclass": "menulevel2",
+    "roles": [ "Customer" ],
+    "level": 2,
+    "show": "hide"
+  },
+  "2120": {
+    "text": "House Edit",
+    "path": "Houses/Edit/5a8ef5eeb7e56c02243ef63c",
+    "parentid": 2100,
+    "cssclass": "menulevel2",
+    "roles": [ "Customer" ],
+    "level": 2,
+    "show": "select"
+  },
+  "3000": {
+    "text": "User Administrator",
+    "path": "Manage/Index?menupoint=3010",
+    "parentid": 3000,
+    "cssclass": "menulevel1",
+    "roles": [ "Administrator" ],
+    "level": 1,
+    "show": "show"
+  },
+  "3010": {
+    "text": "User list",
+    "path": "Manage/Index",
+    "parentid": 3000,
+    "cssclass": "menulevel2",
+    "roles": [ "Administrator" ],
+    "level": 2,
+    "show": "show"
+  },
+  "3020": {
+    "text": "Same..",
+    "path": "Manage/Index",
+    "parentid": 3000,
+    "cssclass": "menulevel2",
+    "roles": [ "Administrator" ],
+    "level": 2,
+    "show": "select"
+  },
+  "3030": {
+    "text": "Changeme..",
+    "path": "Manage/Index",
+    "parentid": 3000,
+    "cssclass": "menulevel2",
+    "roles": [ "Administrator" ],
+    "level": 2,
+    "show": "select"
+  }
+}

@@ -25,6 +25,18 @@ class AfterMilliTimer
         $lapse = 'Timelapse  in milliseconds: ' . round(self::$tstart , 2);
         //$request->getSession()->flash('timer',$lapse);
         \Session::flash('timer',$lapse);
+        \Session::put('ost',$lapse);
+        //$response = $response instanceof RedirectResponse ? $response : response($response);
+
+        /*
+        * Custom cache headers for js and css files, disbales with "x"
+        */
+        //}
+        $response = $response->header('X-Through-Controller','Yes');
+        $response->header("pragma", "no-cache");
+        $response->header("Cache-Control", "no-store,no-cache, must-revalidate, post-check=0, pre-check=0");
+
+
         return $response;
     }
 

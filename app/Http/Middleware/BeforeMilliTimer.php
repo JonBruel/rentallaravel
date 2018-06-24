@@ -14,12 +14,12 @@ class BeforeMilliTimer
         return round(( (float) $usec * 1000 + (float) $sec * 1000), 2);
     }
     /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
+ * Handle an incoming request.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  \Closure  $next
+ * @return mixed
+ */
     public function handle($request, Closure $next)
     {
 

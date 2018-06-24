@@ -1,0 +1,133 @@
+﻿/* Menu buttons */
+
+.leftmenu {
+    text-align: left;
+    background-color: white;
+    border-color: black;
+    border-width: 1px 3px 3px 1px;
+    width: 130px;
+    min-width: 130px;
+    padding: 15px 0 0 4px;
+    vertical-align: top;
+}
+
+
+.menulevel1 {
+    background-color: #08468a;
+    font-size: 16px;
+    color: white;
+    background-repeat: no-repeat;
+    float: left;
+    text-align: left;
+    margin: 2px 0 0 0;
+    padding: 2px 1px 2px 7px;
+    border-color: white;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    position: relative;
+    width: 110px
+}
+
+.menulevel1chosen {
+    background-color: #08468a;
+    background-repeat: no-repeat;
+    float: left;
+    text-align: left;
+    margin: 2px 0 0 0;
+    padding: 2px 1px 2px 7px;
+    border-color: white;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    position: relative;
+    width: 110px
+}
+
+.menulevel1 a {
+    font-size: 16px;
+    text-decoration: none;
+    color: white;
+}
+
+.menulevel1chosen a {
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+
+.menulevel2 {
+    background-color: #adadad;
+    text-align: left;
+    float: left;
+    margin: 0 0 0 0;
+    padding: 1px 0 2px 4px;
+    border-color: white;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    position: relative;
+    width: 105px
+}
+
+.menulevel2chosen {
+    background-color: #888888;
+    text-align: left;
+    float: left;
+    margin: 0 0 0 0;
+    padding: 1px 0 2px 4px;
+    border-color: white;
+    border-style: solid;
+    border-width: 0 0 1px 0;
+    position: relative;
+    width: 105px
+}
+
+.menulevel2 a {
+    font-size: 12px;
+    text-decoration: none;
+    color: white;
+}
+
+.menulevel2chosen a {
+    font-size: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    color: white;
+}
+
+.menulevel3 {
+    background-color: #adadad;
+    text-align: left;
+    float: left;
+    margin: 0 0 0 3px;
+    padding: 1px 0 2px 4px;
+    border-width: 0 0 1px 0;
+    border-color: white;
+    border-style: solid;
+    position: relative;
+    width: 102px
+}
+
+.menulevel3chosen {
+    background-color: #888888;
+    text-align: left;
+    float: left;
+    margin: 0 0 0 3px;
+    padding: 1px 0 2px 4px;
+    border-width: 0 0 1px 0;
+    border-color: white;
+    border-style: solid;
+    position: relative;
+    width: 102px
+}
+
+.menulevel3 a {
+    font-size: 11px;
+    text-decoration: none;
+    color: white;
+}
+
+.menulevel3chosen a {
+    font-size: 11px;
+    text-decoration: none;
+    color: white;
+}
