@@ -2,6 +2,7 @@
 @section('content')
     <h3>Customer</h3>
     <div class="table-responsive">
+        <a href="/house/edit/{{$model->id}}">Edit House</a>
         @foreach($fields as $field)
         <dl class="dl-horizontal row">
             <dt class="col-md-5 col">

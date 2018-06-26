@@ -11,10 +11,10 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts-->
-    <script src="{{ asset('js/app.js') }}" ></script>
+    <script src="{{ asset('js/app.js', true) }}" ></script>
 
     <!-- Styles-->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css', true) }}" rel="stylesheet">
 
 
 </head>
@@ -93,8 +93,8 @@
                     </button>
                     <div id="menub" class="collapse navbar-collapse">
                         <ul class="list-group">
-                            <li class="menulevel1"><a  class="" id="ost" href="/houses">Houses</a> </li>
-                            <li class="menulevel1"><a class="" href="/customers">Customers</a> </li>
+                            <li class="menulevel1"><a  class="" id="ost" href="/houses">@lang('messages.Houses')</a> </li>
+                            <li class="menulevel1"><a class="" href="/customers">@lang('messages.Customers')</a> </li>
                         </ul>
                     </div>
                 </div>
@@ -119,14 +119,6 @@
 </body>
 
 <script >
-
-    //setInterval(function(){$("#ost").toggle();}, 1000);
-
-
 </script>
 
-<!--
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="{{ asset('js/bootstrap.js') }}"></script>
- -->
 </html>

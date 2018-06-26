@@ -7,6 +7,7 @@
 
 require('./bootstrap');
 require('./sidebar');
+//require('globalize');
 //window.Vue = require('vue');
 
 /**
