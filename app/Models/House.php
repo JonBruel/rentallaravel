@@ -7,7 +7,8 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
+//use Reliese\Database\Eloquent\Model as Eloquent;
+use \Esensi\Model\Model as Eloquent;;
 use Kyslik\ColumnSortable\Sortable;
 use Collective\Html\Eloquent\FormAccessible;
 use Number;
@@ -149,20 +150,28 @@ class House extends Eloquent
      * @return string The formatted number.
      */
 
+    protected $rules = [
+        'name' => ['required', 'between:3,30'],
+        'address1' => ['required', 'between:3,30'],
+        'latitude' => ['required', 'between:-180,180', 'numeric'],
+        'longitude' => ['required', 'between:-180,180', 'numeric']
+    ];
+
+
 	public function getLongitudeAttribute($value) {
         return Number::format($value, ['minimum_fraction_digits' => 12, 'maximum_fraction_digits' => 12]);
     }
 
     public function setLongitudeAttribute($value) {
-        return Number::parse($value);
+        $this->attributes['longitude'] = Number::parse($value);
     }
 
     public function getLatitudeAttribute($value) {
         return Number::format($value, ['minimum_fraction_digits' => 12, 'maximum_fraction_digits' => 12]);
     }
 
-    public function setlatitudeAttribute($value) {
-        return Number::parse($value);
+    public function setLatitudeAttribute($value) {
+	    $this->attributes['latitude'] = Number::parse($value);
     }
 
 	public function currency()

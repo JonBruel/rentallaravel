@@ -8,8 +8,10 @@ use Schema;
 use Kyslik\ColumnSortable\Sortable;
 use App\Rules\Name;
 
+
 class HouseController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -77,20 +79,23 @@ class HouseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $modelOriginal = (new House)->findOrFail($id);
-        $fields = Schema::getColumnListing($modelOriginal->getTable());
+        $model = (new House)->findOrFail($id);
 
-        $model = new House();
-        $data = $this->validate($request, ['longitude' => 'required',
-            'name' => ['required', 'string', new Name]]);
-
-        $data['id'] = $id;
+        //We set the model
+        $fields = Schema::getColumnListing($model->getTable());
         foreach ($fields as $field){
-            if (array_key_exists($field, $data)) $modelOriginal->$field = $data[$field] ;
+            $model->$field = $request->get($field) ;
         }
-        //die($data['longitude']);
-        $modelOriginal->save();
-        return redirect('/houses')->with('success', 'House has been updated!');
+
+        //We save. The save validates after the Mutators have been used.
+        $errors = '';
+        $success = 'House has been updated!';
+        if (!$model->save()) {
+            $errors = $model->getErrors();
+            $success = '';
+        }
+
+        return redirect('/house/edit/'.$id)->with('success', $success)->with('errors',$errors);
     }
 
     /**
