@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "22c8487820fe1f1caf8ab29ea037fe37",
+    "content-hash": "0ba2641e58bdcb6f68e924c36e8995d3",
     "packages": [
         {
             "name": "commerceguys/intl",
@@ -1283,80 +1283,6 @@
                 "random"
             ],
             "time": "2018-06-08T15:26:40+00:00"
-        },
-        {
-            "name": "proengsoft/laravel-jsvalidation",
-            "version": "2.2.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/proengsoft/laravel-jsvalidation.git",
-                "reference": "3711e2eb4d406c50826e74caf40ca8ac027daf6f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/proengsoft/laravel-jsvalidation/zipball/3711e2eb4d406c50826e74caf40ca8ac027daf6f",
-                "reference": "3711e2eb4d406c50826e74caf40ca8ac027daf6f",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/config": "5.4.*|5.5.*|5.6.*",
-                "illuminate/contracts": "5.4.*|5.5.*|5.6.*",
-                "illuminate/http": "5.4.*|5.5.*|5.6.*",
-                "illuminate/support": "5.4.*|5.5.*|5.6.*",
-                "illuminate/translation": "5.4.*|5.5.*|5.6.*",
-                "illuminate/validation": "5.4.*|5.5.*|5.6.*",
-                "illuminate/view": "5.4.*|5.5.*|5.6.*",
-                "php": ">=5.6.4"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.10",
-                "mockery/mockery": "^1.0",
-                "phpunit/phpunit": "~5.7|^7.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Proengsoft\\JsValidation\\JsValidationServiceProvider"
-                    ],
-                    "aliases": {
-                        "JsValidator": "Proengsoft\\JsValidation\\Facades\\JsValidatorFacade"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Proengsoft\\JsValidation\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Albert Moreno",
-                    "email": "albert@memorylimit.net",
-                    "homepage": "https://github.com/torrentalle"
-                },
-                {
-                    "name": "Anton Komarev",
-                    "email": "a.komarev@cybercog.su",
-                    "homepage": "http://ell.folio.su/"
-                }
-            ],
-            "description": "Validate forms transparently with Javascript reusing your Laravel Validation Rules, Messages, and FormRequest",
-            "homepage": "https://github.com/proengsoft/laravel-jsvalidation",
-            "keywords": [
-                "form",
-                "javascript",
-                "jquery",
-                "laravel",
-                "proengsoft",
-                "validation",
-                "validator"
-            ],
-            "time": "2018-05-17T19:37:12+00:00"
         },
         {
             "name": "propaganistas/laravel-intl",

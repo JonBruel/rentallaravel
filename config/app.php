@@ -160,6 +160,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Kyslik\ColumnSortable\ColumnSortableServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+       //EliteXp\AspNet\AspNetServiceProvider::class,
 
 
 

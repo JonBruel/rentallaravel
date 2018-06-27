@@ -8,7 +8,8 @@
 namespace App\Models;
 
 //use Reliese\Database\Eloquent\Model as Eloquent;
-use \Esensi\Model\Model as Eloquent;;
+use \Esensi\Model\Model as Eloquent;
+//use Elitexp\AspNet\Model as Eloquent;
 use Kyslik\ColumnSortable\Sortable;
 use Collective\Html\Eloquent\FormAccessible;
 use Number;

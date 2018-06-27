@@ -24,7 +24,7 @@
                         </ul>
                     </div>
                 @endif
-                {!! Form::label($field, ucfirst($field).':', ['class' => 'col-md-4 col']) !!}
+                {!! Form::label($field, ucfirst($field).':', ['class' => 'control-label col-md-4 col']) !!}
                  @if($field == 'latitude')
                     <input class="form-control col-md-6 col" data-rule-number="true" type="text" data-val="true" data-val-number="The field must be a number." data-val-range="Latitude must be between -180 and 180" data-val-range-max="180" data-val-range-min="-180" data-val-required="The latitude field is required." id="latitude" name="latitude" value="{{$model->$field}}" />
                     <div class="text-danger col-md-8 field-validation-valid" data-valmsg-for="latitude" data-valmsg-replace="true"></div>
