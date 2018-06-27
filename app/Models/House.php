@@ -151,7 +151,7 @@ class House extends Eloquent
      * @return string The formatted number.
      */
 
-    protected $rules = [
+    public $rules = [
         'name' => ['required', 'between:3,30'],
         'address1' => ['required', 'between:3,30'],
         'latitude' => ['required', 'between:-180,180', 'numeric'],

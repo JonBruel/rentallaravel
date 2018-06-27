@@ -80,6 +80,7 @@ class HouseController extends Controller
     public function update(Request $request, $id)
     {
         $model = (new House)->findOrFail($id);
+        $rules = $model->rules;
 
         //We set the model
         $fields = Schema::getColumnListing($model->getTable());
