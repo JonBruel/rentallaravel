@@ -230,6 +230,7 @@ return [
         'Session' => Illuminate\Support\Facades\Session::class,
         'Storage' => Illuminate\Support\Facades\Storage::class,
         'URL' => Illuminate\Support\Facades\URL::class,
+        'ValidationAttributes' => App\Helpers\CreateValidationAttributes::class,
         'View' => Illuminate\Support\Facades\View::class,
      ],
 

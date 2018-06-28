@@ -79,7 +79,7 @@ class House extends Eloquent
     ];
 
 
-    protected $casts = [
+    public $casts = [
 		'latitude' => 'float',
 		'longitude' => 'float',
 		'lockbatch' => 'bool',

@@ -66,6 +66,7 @@ class HouseController extends Controller
     public function edit($id)
     {
         $model = (new house)->findOrFail($id);
+
         $fields = Schema::getColumnListing($model->getTable());
         return view('house/edit', ['model' => $model, 'fields' => $fields]);
     }
@@ -81,6 +82,8 @@ class HouseController extends Controller
     {
         $model = (new House)->findOrFail($id);
         $rules = $model->rules;
+
+
 
         //We set the model
         $fields = Schema::getColumnListing($model->getTable());
