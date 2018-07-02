@@ -26,9 +26,6 @@
                     {{ config('app.name', 'Laravel') }}
                 </a>
 
-
-
-
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -40,7 +37,7 @@
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto pull-right">
+                    <ul class="navbar-nav ml-auto pull-right row">
                         <!-- Authentication Links -->
                         @guest
                             <li type="button" class="nav-item">
@@ -51,11 +48,18 @@
                             </li>
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                            @if(\Session::get('impersonate'))
+                                <a class="nav-link" href="/impersonate/leave">Stop impersonation </a>
+                            @endif
+                            </li>
+
+                            <li class="nav-item dropdown">
+
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle col" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }}<span class="caret"></span>
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-right col" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -91,12 +95,27 @@
                     <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#menub" aria-controls="menub" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div id="menub" class="collapse navbar-collapse">
-                        <ul class="list-group">
-                            <li class="menulevel1"><a  class="" id="ost" href="/houses">@lang('messages.Houses')</a> </li>
-                            <li class="menulevel1"><a class="" href="/customers">@lang('messages.Customers')</a> </li>
-                        </ul>
+
+                    <div id="menu">
+                        @foreach(\Session::get('menuStructure') as $menupoint => $item)
+                            @if(array_key_exists('level', $item))
+                                @if($item['level'] == 1)
+                                    <div class="{{$item['cssclass']}}" style="float: right" onclick="window.location = '/{{$item['path']}}'">
+                                        <a href="/{{$item['path']}}">@lang($item['text'])</a><br />
+                                    </div>
+                                @endif
+                                @if($item['level'] != 1)
+                                    @if($item['show'] == 'show')
+                                        <div class="{{$item['cssclass']}}" style="float: right" onclick="window.location = '/{{$item['path']}}'">
+                                            <a href="/{{$item['path']}}">@lang($item['text'])</a><br />
+                                        </div>
+                                    @endif
+                                @endif
+                           @endif
+                        @endforeach
                     </div>
+
+
                 </div>
                 <div class="col-md-10 col">
                     <?php echo $__env->yieldContent('content'); ?>

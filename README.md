@@ -5,6 +5,7 @@ The purpose of this repository is to get acquainted with Laravel and implement t
 - Database connection and scaffolding from database first
 - Authentication
 - Authorizarion with some simple roles
+- Impersonation
 - Menu system
 - Server validation of data saved (not requested, as we need to use Mutators)
 - Internationalization:

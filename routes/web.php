@@ -11,13 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HouseController@index');
 
 Auth::routes();
+Route::impersonate();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HouseController@index');
 
 Route::get('/customers', 'CustomerController@index');
 Route::get('/customer/show/{id}', 'CustomerController@show');

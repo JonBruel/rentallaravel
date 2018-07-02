@@ -1,5 +1,7 @@
 <?php
 return [
     'Houses' => 'Huse',
-    'Customers' => 'Kunder'
+    'House' => 'Hus',
+    'Customers' => 'Kunder',
+    'Customer' => 'Kunde'
 ];
