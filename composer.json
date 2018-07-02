@@ -9,6 +9,7 @@
         "esensi/model": "^0.6.0",
         "fideloper/proxy": "^4.0",
         "kyslik/column-sortable": "^5.6",
+        "lab404/laravel-impersonate": "^1.2",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "5.6.*",
@@ -54,9 +55,6 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
         ]
-        //"post-update-cmd": [
-        //    "php artisan vendor:publish --provider=\"Proengsoft\\JsValidation\\JsValidationServiceProvider\" --tag=public --force"
-        //]
     },
     "config": {
         "preferred-install": "dist",

@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'customertypeid',
     ];
 
     /**
@@ -34,5 +34,23 @@ class User extends Authenticatable
     {
         // Your your own implementation.
         $this->notify(new ResetPasswordNotification($token, $this->getEmailForPasswordReset()));
+    }
+
+    /**
+     * @return bool
+     */
+    public function canImpersonate()
+    {
+        // For example
+        return $this->customertypeid <= 10;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canBeImpersonated()
+    {
+        // For example
+        return $this->customertypeid > 10;
     }
 }

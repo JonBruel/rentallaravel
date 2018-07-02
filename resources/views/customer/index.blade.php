@@ -8,6 +8,7 @@
                 <th>@sortablelink('id')</th>
                 <th>@sortablelink('name')</th>
                 <th>@sortablelink('address1')</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -16,6 +17,7 @@
                     <td><a href="/customer/show/{{ $model->id }}">{{ $model->id }}</a></td>
                     <td>{{ $model->name }}</td>
                     <td>{{ $model->address1 }}</td>
+                    <td><a href="/impersonate/take/{{ $model->id }}">Impersonate</a></td>
                 </tr>
             @endforeach
             </tbody>

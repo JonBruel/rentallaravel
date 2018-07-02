@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use \Illuminate\Http\Request;
+
 
 class BeforeMilliTimer
 {
@@ -20,10 +22,9 @@ class BeforeMilliTimer
  * @param  \Closure  $next
  * @return mixed
  */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
 
-        //\Session::flash('timer','before');
         AfterMilliTimer::$tstart = $this->getMicroTime();
         return $next($request);
     }
