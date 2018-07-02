@@ -7,6 +7,9 @@ The purpose of this repository is to get acquainted with Laravel and implement t
 - Authorizarion with some simple roles
 - Impersonation
 - Menu system
+- Pagination
+- Sort
+- Search
 - Server validation of data saved (not requested, as we need to use Mutators)
 - Internationalization:
   o International decimal and date handling
