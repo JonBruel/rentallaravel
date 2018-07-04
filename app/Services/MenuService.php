@@ -75,6 +75,7 @@ class MenuService {
         $level = 0;
 
         $userMenu = $this->userMenu;
+        if (!array_key_exists($menuclicked, $userMenu)) $menuclicked =  0;
         if ($menuclicked > 0) {
 
             //We hide all menues at level > 1
@@ -92,7 +93,7 @@ class MenuService {
 
             //We set the right menu item, starting from deep in the structure going down the levels
             //die(var_dump($userMenu[$menuclicked]));
-            if (array_key_exists('level', $userMenu[$menuclicked])) Response::redirectToRoute('login');
+
             $level = $userMenu[$menuclicked]['level'];
             $presentnum = $menuclicked;
             $num1 = 0;

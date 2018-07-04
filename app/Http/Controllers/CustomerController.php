@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use Schema;
+use Gate;
 
 class CustomerController extends Controller
 {
@@ -13,10 +14,18 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $customers = Customer::sortable()->paginate(10);
-        return view('customer/index', ['models' => $customers]);
+        //$this->authorize('administrator');
+        if (Gate::allows('administrator')) {
+            $customers = Customer::sortable()->paginate(10);
+            return view('customer/index', ['models' => $customers]);
+        }
+        else {
+            $request>session()->flash('warning', 'You are now allowed to see the customer list.');
+            return redirect('/houses');
+        }
+
     }
 
     /**

@@ -78,6 +78,9 @@
         </nav>
 
         <main class="container">
+            @if(\Session::get('warning'))
+                <div class="alert alert-warning border border-primary"">{{\Session::get('warning')}}</div>
+            @endif
             <div role="navigation" class="navbar navbar-expand-md navbar-light row">
                 <div col-md-2 class="col align-self-start">
                     <!-- Locale chooser, any existing query parameters are removed. It is possible to kkep them,
