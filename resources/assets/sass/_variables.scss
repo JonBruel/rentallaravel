@@ -16,5 +16,11 @@ $font-family-sans-serif:
         "Helvetica Neue", Arial, sans-serif,
           // Emoji fonts
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+
+$bootstrap-sass-asset-helper: false;
+$icon-font-name: 'glyphicons-halflings-regular';
+$icon-font-svg-id: 'glyphicons_halflingsregular';
+$icon-font-path: '../fonts/';
+
 $font-size-base: 1.0rem;
 $line-height-base: 1.0;

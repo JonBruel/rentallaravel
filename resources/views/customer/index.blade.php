@@ -14,7 +14,11 @@
             <tbody>
             @foreach($models as $model)
                 <tr>
-                    <td><a href="/customer/show/{{ $model->id }}">{{ $model->id }}</a></td>
+                    <td>
+                        <a href="/customer/show/{{ $model->id }}"><span class='glyphicon glyphicon-list'></span></a>
+                        <a href="/customer/edit/{{ $model->id }}"><span class='glyphicon glyphicon-pencil'></span></a>
+                        <a href="/customer/edit/{{ $model->id }}"><span class='glyphicon glyphicon-remove'></span></a>
+                    </td>
                     <td>{{ $model->name }}</td>
                     <td>{{ $model->address1 }}</td>
                     <td><a href="/impersonate/take/{{ $model->id }}">Impersonate</a></td>

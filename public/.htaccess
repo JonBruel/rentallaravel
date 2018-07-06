@@ -46,4 +46,8 @@
 #Only way found to control the Cache headers "public" setting
  <IfModule mod_headers.c>
     #Header append Cache-Control "public"
+    #Header append Access-Control-Allow-Origin *
+      <FilesMatch ".(eot|otf|svg|ttf|woff2?)$">
+        Header set Access-Control-Allow-Origin "*"
+      </FilesMatch>
  </IfModule>
