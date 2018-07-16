@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Contractline
@@ -22,7 +21,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Contractline extends Eloquent
+class Contractline extends BaseModel
 {
 	public $timestamps = false;
 

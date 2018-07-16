@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Contract
@@ -41,7 +40,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Contract extends Eloquent
+class Contract extends BaseModel
 {
 	protected $table = 'contract';
 

@@ -20,6 +20,9 @@
 </head>
 <body>
     <div class="wrapper" style="background-color: #cccccc; min-height: 1000px">
+        <div class="row">
+            <div class="container" style="text-align: center">Test system - under construction!</div>
+        </div>
         <nav class="navbar navbar-expand-md navbar-light row" style="border-style: solid; border-width: 0 0 2px 0 ; border-color: black">
             <div class="container">
 
@@ -42,7 +45,10 @@
 
                         <?php $oldlevel = 1 ?>
                         @foreach(\Session::get('menuStructure') as $menupoint => $item)
-                            <?php $newlevel = $item['level']; ?>
+                            <?php
+                            $newlevel = $item['level'];
+                            $strong = ($item['strenght'] == true)?'bold':'normal';
+                            ?>
                             @if($newlevel < $oldlevel)
                                 </ul>
                                     </div>
@@ -51,20 +57,20 @@
                             @if($newlevel == 1 and sizeof($item['childrenmap']) > 0)
                                 <div class="dropdown">
                                     <button class="btn btn-dropdown dropdown-toggle" data-toggle="dropdown" style="margin-left: 3px">
-                                        {{ __($item['text']) }}<span class="caret"></span>
+                                        <span style="font-weight: {{$strong}}">{{ __($item['text']) }}</span><span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
                             @endif
 
                             @if($newlevel == 1 and sizeof($item['childrenmap']) == 0)
                                     <button class="btn btn-dropdown " style="margin-left: 3px">
-                                       <a  style="color: black" href="/{{$item['path']}}">{{ __($item['text']) }}</a>
+                                       <a  style="color: black" href="/{{$item['path']}}"><span style="font-weight: {{$strong}}">{{ __($item['text']) }}</span></a>
                                     </button>
                             @endif
 
                             @if($newlevel == 2 and $item['show'] != 'select')
                                 <li class="" onclick="window.location = '/{{$item['path']}}'">
-                                    <a class="dropdown-item" href="/{{$item['path']}}" >{{ __($item['text']) }}</a>
+                                    <a class="dropdown-item" href="/{{$item['path']}}" ><span style="font-weight: {{$strong}}">{{ __($item['text']) }}</span></a>
                                 </li>
                             @endif
 

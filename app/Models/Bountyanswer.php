@@ -7,7 +7,7 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
+
 
 /**
  * Class Bountyanswer
@@ -25,7 +25,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Bountyanswer extends Eloquent
+class Bountyanswer extends BaseModel
 {
 	protected $casts = [
 		'bountyid' => 'int',

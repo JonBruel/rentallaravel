@@ -10,6 +10,7 @@ use Gate;
 use ValidationAttributes;
 use App\Models\HouseI18n;
 use App;
+use App\Models\Period;
 
 class HomeController extends Controller
 {
@@ -27,10 +28,11 @@ class HomeController extends Controller
      */
     public function showinfo(Request $request, Response $response, $infotype = 'description')
     {
-
-        if (session('defaultHouse' , -1) != -1)
+        if (session('defaultHouse' , -1) == -1)
         {
-            $this->houseId = session('defaultHouse');
+            $request>session()->flash('warning', 'Please find the house you want to check out!');
+            $request>session()->flash('returnpath', 'home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
+            return redirect('home/listhouses');
         }
         if ($infotype == 'gallery')
         {
@@ -58,8 +60,28 @@ class HomeController extends Controller
      * Route::get('/home/listhouses', 'HomeController@listhouses');
      */
 
-    public function showbookings()
+    public function checkbookings(Request $request, Response $response)
     {
+        $response->header('Cache-Control', 'no-cache, must-revalidate');
+        $defaultHouse = session('defaultHouse' , -1);
+        if ($defaultHouse == -1)
+        {
+            $request>session()->flash('warning', 'Please find the house you want to check out!');
+            $request>session()->flash('returnpath', 'home/showbookings'.'?menupoint='.session('menupoint'));
+            return redirect('home/listhouses');
+        }
+        $house = $this->model::findOrFail($defaultHouse);
+
+        $months = 12;
+        $yearstart = date('Y');
+        //Below, we create the pseudo pager. This allows us to use tha standard
+        //helper to navigate through the months or years
+        //NOT implemented
+        $starttime = $yearstart . '-' . date('m') . '-' . '01';
+
+        $periodquery = Period::filter();
+
+        return redirect('home/listhouses');
 
     }
 
@@ -71,7 +93,7 @@ class HomeController extends Controller
         if ($defaultHouse != -1)
         {
             session(['defaultHouse' => $defaultHouse]);
-            return redirect('/home/showinfo/description?menupoint=10010');
+            return redirect(session('returnpath', 'home/showinfo/description?menupoint=10010'));
         }
 
         $models = $this->model::sortable()->paginate(10);

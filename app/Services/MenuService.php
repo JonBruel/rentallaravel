@@ -59,7 +59,7 @@ class MenuService {
             if ($value['role'] == 10001) $deletekey = true;
             if ($value['role'] < 1000) $deletekey = true;
         }
-
+        $value['strenght'] = false;
         $value['key'] = $key;
         if ($deletekey) $value = null;
     }
@@ -105,6 +105,7 @@ class MenuService {
             //The chosen is always show
             $userMenu[$presentnum]['show'] = 'show';
 
+
             //We show the structure below
             foreach ($userMenu[$presentnum]['childrenmap'] as $child => $value) {
                 if ($userMenu[$child]['show'] != 'select') {
@@ -115,6 +116,7 @@ class MenuService {
             //We move up in the structure from this level to the lower levels
             while ($level >= 1) {
                 $userMenu[$presentnum]['cssclass'] = "menulevel" . $level . "chosen";
+                $userMenu[$presentnum]['strenght'] = true;
 
                 //We set the siblings to show  $userMenu[$parentid]['childrenmap']
                 foreach ($userMenu[$userMenu[$presentnum]['parentid']]['childrenmap'] as $child) {

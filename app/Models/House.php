@@ -63,10 +63,6 @@ use EloquentFilter\Filterable;
  */
 class House extends BaseModel
 {
-
-    use FormAccessible;
-    use Sortable;
-
     protected $table = 'house';
 
     public $sortable = [

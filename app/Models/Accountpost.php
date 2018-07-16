@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Accountpost
@@ -39,7 +38,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Accountpost extends Eloquent
+class Accountpost extends BaseModel
 {
 	protected $casts = [
 		'houseid' => 'int',

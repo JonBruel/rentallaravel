@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Period
@@ -34,10 +33,15 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Period extends Eloquent
+class Period extends BaseModel
 {
 	protected $table = 'period';
 	public $timestamps = false;
+
+    public function modelFilter()
+    {
+        return $this->provideFilter(Filters\PeriodFilter::class);
+    }
 
 	protected $casts = [
 		'year' => 'int',

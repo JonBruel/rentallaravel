@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Standardemail
@@ -27,7 +26,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Standardemail extends Eloquent
+class Standardemail extends BaseModel
 {
 	protected $table = 'standardemail';
 

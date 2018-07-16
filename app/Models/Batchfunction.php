@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Batchfunction
@@ -19,7 +18,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Batchfunction extends Eloquent
+class Batchfunction extends BaseModel
 {
 	public $timestamps = false;
 

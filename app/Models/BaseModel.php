@@ -8,8 +8,13 @@
 
 namespace App\Models;
 use \Esensi\Model\Model;
+use Kyslik\ColumnSortable\Sortable;
+use EloquentFilter\Filterable;
+use Collective\Html\Eloquent\FormAccessible;
 
 class BaseModel extends Model
 {
-
+    use Sortable;
+    use Filterable;
+    use FormAccessible;
 }

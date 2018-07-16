@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Currencyrate
@@ -21,7 +20,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Currencyrate extends Eloquent
+class Currencyrate extends BaseModel
 {
 	public $timestamps = false;
 

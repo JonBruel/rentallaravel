@@ -7,8 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
-
 /**
  * Class Posttype
  * 
@@ -23,7 +21,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Posttype extends Eloquent
+class Posttype extends BaseModel
 {
 	public $timestamps = false;
 

@@ -7,8 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
-
 /**
  * Class StandardemailI18n
  * 
@@ -20,7 +18,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class StandardemailI18n extends Eloquent
+class StandardemailI18n extends BaseModel
 {
 	protected $table = 'standardemail_i18n';
 	public $incrementing = false;

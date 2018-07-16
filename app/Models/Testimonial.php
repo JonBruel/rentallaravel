@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Testimonial
@@ -25,7 +24,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Testimonial extends Eloquent
+class Testimonial extends BaseModel
 {
 	protected $casts = [
 		'houseid' => 'int',

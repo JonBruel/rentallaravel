@@ -7,7 +7,7 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
+
 
 /**
  * Class Batchstatus
@@ -19,7 +19,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Batchstatus extends Eloquent
+class Batchstatus extends BaseModel
 {
 	protected $table = 'batchstatus';
 	public $timestamps = false;

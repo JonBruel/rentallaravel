@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class HouseI18n
@@ -34,7 +33,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class HouseI18n extends Eloquent
+class HouseI18n extends BaseModel
 {
 	protected $table = 'house_i18n';
 	public $incrementing = false;

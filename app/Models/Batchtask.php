@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Batchtask
@@ -44,7 +43,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Batchtask extends Eloquent
+class Batchtask extends BaseModel
 {
 	protected $table = 'batchtask';
 	public $timestamps = false;

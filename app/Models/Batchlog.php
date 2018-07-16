@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Batchlog
@@ -35,7 +34,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Batchlog extends Eloquent
+class Batchlog extends BaseModel
 {
 	protected $table = 'batchlog';
 

@@ -6,11 +6,8 @@
  */
 
 namespace App\Models;
-
-use Kyslik\ColumnSortable\Sortable;
-use Collective\Html\Eloquent\FormAccessible;
 use Number;
-use EloquentFilter\Filterable;
+
 
 
 /**
@@ -58,7 +55,6 @@ use EloquentFilter\Filterable;
  */
 class Customer extends BaseModel
 {
-	use Sortable;
 
 	public $sortable = [
         'name',
@@ -70,7 +66,7 @@ class Customer extends BaseModel
         'ownerid',
     ];
 
-	use Filterable;
+
 
     public function modelFilter()
     {
