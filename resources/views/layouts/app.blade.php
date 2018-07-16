@@ -19,108 +19,87 @@
 
 </head>
 <body>
-    <div class="wrapper">
-        <nav class="navbar navbar-expand-md navbar-light row">
+    <div class="wrapper" style="background-color: #cccccc; min-height: 1000px">
+        <nav class="navbar navbar-expand-md navbar-light row" style="border-style: solid; border-width: 0 0 2px 0 ; border-color: black">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#menub" aria-controls="menub" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
+                @guest
+                @else
+                    @if(\Session::get('impersonate'))
+                        <a class="nav-link" href="/impersonate/leave">Stop impersonation </a>
+                    @endif
+                @endguest
 
-                    </ul>
+            <!-- Menu -->
+                <div class="col navbar navbar-expand-md navbar-dark">
+                    <nav class="collapse navbar-collapse" id="menub">
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto pull-right row">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li type="button" class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                            </li>
-                        @else
-                            <li class="nav-item dropdown">
-                            @if(\Session::get('impersonate'))
-                                <a class="nav-link" href="/impersonate/leave">Stop impersonation </a>
+
+
+                        <?php $oldlevel = 1 ?>
+                        @foreach(\Session::get('menuStructure') as $menupoint => $item)
+                            <?php $newlevel = $item['level']; ?>
+                            @if($newlevel < $oldlevel)
+                                </ul>
+                                    </div>
                             @endif
-                            </li>
 
-                            <li class="nav-item dropdown">
+                            @if($newlevel == 1 and sizeof($item['childrenmap']) > 0)
+                                <div class="dropdown">
+                                    <button class="btn btn-dropdown dropdown-toggle" data-toggle="dropdown" style="margin-left: 3px">
+                                        {{ __($item['text']) }}<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                            @endif
 
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle col" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}<span class="caret"></span>
-                                </a>
+                            @if($newlevel == 1 and sizeof($item['childrenmap']) == 0)
+                                    <button class="btn btn-dropdown " style="margin-left: 3px">
+                                       <a  style="color: black" href="/{{$item['path']}}">{{ __($item['text']) }}</a>
+                                    </button>
+                            @endif
 
-                                <div class="dropdown-menu dropdown-menu-right col" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+                            @if($newlevel == 2 and $item['show'] != 'select')
+                                <li class="" onclick="window.location = '/{{$item['path']}}'">
+                                    <a class="dropdown-item" href="/{{$item['path']}}" >{{ __($item['text']) }}</a>
+                                </li>
+                            @endif
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
+                            <?php $oldlevel = $newlevel ?>
+                        @endforeach
+                         </ul></div>
+
+                    </nav>
                 </div>
+
+            <!-- Locale chooser, any existing query parameters are removed. It is possible to kkep them,
+                 but not as a form, but as a window.location.href = 'url value'.
+                 This will require that the url is calculated, possible but not elegant.
+             -->
+            <form id="selectLanguageForm" action="{{Session::get('sanitizedpath')}}" method="get">
+                {{Form::select('culture', config('app.locales',[]), Session::get('culture'), array('id' => 'selectLanguage', 'onchange' => 'this.form.submit();'))}}
+            </form>
+
             </div>
         </nav>
 
-        <main class="container">
+        <main class="container" style="margin-top: 5px">
             @if(\Session::get('warning'))
                 <div class="alert alert-warning border border-primary"">{{\Session::get('warning')}}</div>
             @endif
-            <div role="navigation" class="navbar navbar-expand-md navbar-light row">
-                <div col-md-2 class="col align-self-start">
-                    <!-- Locale chooser, any existing query parameters are removed. It is possible to kkep them,
-                         but not as a form, but as a window.location.href = 'url value'.
-                         This will require that the url is calculated, possible but not elegant.
-                     -->
-                    <div class="form-group">
-                        <form id="selectLanguageForm" action="{{Session::get('sanitizedpath')}}" method="get">
-                            {{Form::select('culture', config('app.locales',[]), Session::get('culture'), array('id' => 'selectLanguage', 'onchange' => 'this.form.submit();'))}}
-                        </form>
-                    </div>
+            @if(\Session::get('success'))
+                <div class="alert alert-success border border-primary"">{{\Session::get('success')}}</div>
+            @endif
+
+            <div class="row">
 
 
-                <!-- Menu -->
-                    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#menub" aria-controls="menub" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div id="menu">
-                        @foreach(\Session::get('menuStructure') as $menupoint => $item)
-                            @if(array_key_exists('level', $item))
-                                @if($item['level'] == 1)
-                                    <div class="{{$item['cssclass']}}" style="float: right" onclick="window.location = '/{{$item['path']}}'">
-                                        <a href="/{{$item['path']}}">@lang($item['text'])</a><br />
-                                    </div>
-                                @endif
-                                @if($item['level'] != 1)
-                                    @if($item['show'] == 'show')
-                                        <div class="{{$item['cssclass']}}" style="float: right" onclick="window.location = '/{{$item['path']}}'">
-                                            <a href="/{{$item['path']}}">@lang($item['text'])</a><br />
-                                        </div>
-                                    @endif
-                                @endif
-                           @endif
-                        @endforeach
-                    </div>
 
 
-                </div>
-                <div class="col-md-10 col">
+                <div class="col col-md-12">
                     <?php echo $__env->yieldContent('content'); ?>
                     <br />
                     Time lapse: {{\Session::get('ost')}}
@@ -141,6 +120,12 @@
 </body>
 
 <script >
+    // Add hover effect to menus
+    jQuery('ul.nav li.dropdown').hover(function() {
+        jQuery(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn();
+    }, function() {
+        jQuery(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut();
+    });
 </script>
 
 </html>

@@ -10471,7 +10471,7 @@ a.text-dark:focus {
   background-color: #adadad;
   text-align: left;
   float: left;
-  margin: 0 0 0 0;
+  margin: 0 0 0 5px;
   padding: 1px 0 4px 4px;
   border-color: white;
   border-style: solid;
@@ -10484,7 +10484,7 @@ a.text-dark:focus {
   background-color: #888888;
   text-align: left;
   float: left;
-  margin: 0 0 0 0;
+  margin: 0 0 0 5px;
   padding: 1px 0 4px 4px;
   border-color: white;
   border-style: solid;

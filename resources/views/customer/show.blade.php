@@ -8,10 +8,11 @@
                 {{ucfirst($field)}}
             </dt>
             <dd class="col">
-                {{$model->$field}}
+                {{$models[0]->$field}}
             </dd>
         </dl>
         @endforeach
-        <a href="/customer/edit/{{$model->id}}">Edit Customer</a>
+        {!! $models->appends(\Request::except('page'))->render() !!}
+        <a href="/customer/edit/{{$models[0]->id}}">Edit Customer</a>
     </div>
 @endsection

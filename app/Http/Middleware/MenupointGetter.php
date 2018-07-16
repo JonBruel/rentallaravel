@@ -24,7 +24,7 @@ class MenupointGetter {
             if (session('impersonate', false) == false) $menupoint = 2110;
             session(['impersonate' => true]);
         }
-        else session(['impersonate' => false]);;
+        else session(['impersonate' => false]);
 
         session(['menupoint' => $menupoint]);
 

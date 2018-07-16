@@ -103,7 +103,7 @@ return [
     |
      */
 
-    'locales' => ['da' => 'Danish', 'en' => 'English', 'se' => 'Swedish'],
+    'locales' => ['da' => 'Dansk', 'en' => 'English', 'se' => 'Svenska'],
 
     /*
     |--------------------------------------------------------------------------
@@ -179,7 +179,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Propaganistas\LaravelIntl\IntlServiceProvider::class,
-        Mpociot\LaravelTestFactoryHelper\TestFactoryHelperServiceProvider::class
+        Mpociot\LaravelTestFactoryHelper\TestFactoryHelperServiceProvider::class,
+        EloquentFilter\ServiceProvider::class,
 
 
 

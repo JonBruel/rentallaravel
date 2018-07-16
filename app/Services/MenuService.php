@@ -44,6 +44,9 @@ class MenuService {
     private function menufilter(Array &$value, $key) {
         $deletekey = false;
 
+        //Menu role 10000: Only show when not logged in
+        //menu role 10001: Only show when logged in.
+
         //First handle when user authenticated
         if (Auth::check()) {
             if (Auth::user()->customertypeid > $value['role']) $deletekey = true;
@@ -53,6 +56,7 @@ class MenuService {
         //The handle if annonymous user
         else {
             if ($value['role'] == 10000) $deletekey = false;
+            if ($value['role'] == 10001) $deletekey = true;
             if ($value['role'] < 1000) $deletekey = true;
         }
 
@@ -60,6 +64,14 @@ class MenuService {
         if ($deletekey) $value = null;
     }
 
+
+    /*
+     * This function changes the css classes, used for experimenting with the manu
+     * structure. The aim is the create a "nice collapsable menu".
+     */
+    private function changecss(Array &$value, $key) {
+       //TODO Implement it.
+    }
 
     /**
      * When the user click a menu item, the request will be intercepted by the
@@ -80,29 +92,22 @@ class MenuService {
 
             //We hide all menues at level > 1
             foreach ($userMenu as $menupoint => $entry) {
-                //if ($entry != null) {
-                    if ($entry['level'] > 1) {
-                        $entry['show'] = 'hide';
+                    if (($userMenu[$menupoint]['level'] > 1) && ($userMenu[$menupoint]['show'] != 'select')) {
+                        $userMenu[$menupoint]['show'] = 'hide';
                     }
-
-                    $userMenu[$menupoint]['menupoint'] = "?menupoint=". $menupoint;
-                    if (strpos($entry['path'],'?') > 0) $userMenu[$menupoint]['menupoint']= '';
-                //}
-
+                    if (strpos($entry['path'],'?') === false) $userMenu[$menupoint]['path'] .= "?menupoint=". $menupoint;
             }
 
-            //We set the right menu item, starting from deep in the structure going down the levels
-            //die(var_dump($userMenu[$menuclicked]));
 
             $level = $userMenu[$menuclicked]['level'];
             $presentnum = $menuclicked;
-            $num1 = 0;
+
+            //The chosen is always show
+            $userMenu[$presentnum]['show'] = 'show';
 
             //We show the structure below
             foreach ($userMenu[$presentnum]['childrenmap'] as $child => $value) {
-                $defaultshow = $userMenu[$child]['show'];
-
-                if ($defaultshow != 'select') {
+                if ($userMenu[$child]['show'] != 'select') {
                     $userMenu[$child]['show'] = 'show';
                 }
             }
@@ -113,9 +118,10 @@ class MenuService {
 
                 //We set the siblings to show  $userMenu[$parentid]['childrenmap']
                 foreach ($userMenu[$userMenu[$presentnum]['parentid']]['childrenmap'] as $child) {
-                    $userMenu[$child]['show'] = 'show';
+                    if ($userMenu[$child]['show'] != 'select') {
+                        $userMenu[$child]['show'] = 'show';
+                    }
                 }
-                //}
                 $level--;
                 $presentnum = $userMenu[$presentnum]['parentid'];
             }

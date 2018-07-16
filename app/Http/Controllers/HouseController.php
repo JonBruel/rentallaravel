@@ -3,24 +3,39 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\House;
+//use App\Models\House as Model;
 use Schema;
 use Kyslik\ColumnSortable\Sortable;
 use App\Rules\Name;
+use ValidationAttributes;
+
 
 
 class HouseController extends Controller
 {
+
+    public function __construct() {
+        parent::__construct(\App\Models\House::class);
+    }
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $models = House::sortable()->paginate(10);
-        return view('house/index', ['models' => $models]);
+        $models = $this->model::sortable()->paginate(10);
+        $sortparams = ($request->query('order'))?'&order='.$request->query('order'):'';
+        $sortparams .= ($request->query('sort'))?'&sort='.$request->query('sort'):'';
+
+        $params['edit'] = "?menupoint=2120";
+        $params['edit'] .= $sortparams;
+
+        $params['show'] = "?menupoint=2130";
+        $params['show'] .= $sortparams;
+
+        return view('house/index', ['models' => $models, 'params' => $params]);
     }
 
     /**
@@ -50,11 +65,18 @@ class HouseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $model = (new House)->findOrFail($id);
-        $fields = Schema::getColumnListing($model->getTable());
-        return view('house/show', ['model' => $model, 'fields' => $fields]);
+        //Find page from id
+        if ($request->query('page') == null) {
+            $models = $this->model::sortable()->pluck('id')->all();
+            $page = array_flip($models)[$id]+1;
+            $request->merge(['page' => $page]);
+        }
+
+        $models = $this->model::sortable()->paginate(1);
+        $fields = Schema::getColumnListing($models[0]->getTable());
+        return view('customer/show', ['models' => $models, 'fields' => $fields]);
     }
 
     /**
@@ -65,10 +87,10 @@ class HouseController extends Controller
      */
     public function edit($id)
     {
-        $model = (new house)->findOrFail($id);
+        $model = (new $this->model)->findOrFail($id);
 
         $fields = Schema::getColumnListing($model->getTable());
-        return view('house/edit', ['model' => $model, 'fields' => $fields]);
+        return view('house/edit', ['model' => $model, 'fields' => $fields, 'vattr' => new ValidationAttributes($model)]);
     }
 
     /**
@@ -80,10 +102,7 @@ class HouseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $model = (new House)->findOrFail($id);
-        $rules = $model->rules;
-
-
+        $model = (new $this->model)->findOrFail($id);
 
         //We set the model
         $fields = Schema::getColumnListing($model->getTable());

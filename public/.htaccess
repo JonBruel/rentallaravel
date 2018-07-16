@@ -49,5 +49,6 @@
     #Header append Access-Control-Allow-Origin *
       <FilesMatch ".(eot|otf|svg|ttf|woff2?)$">
         Header set Access-Control-Allow-Origin "*"
+        #Header append Cache-Control "public"
       </FilesMatch>
  </IfModule>

@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Customer;
 use Schema;
 use Gate;
+use ValidationAttributes;
 
 class CustomerController extends Controller
 {
+
+    public function __construct() {
+        parent::__construct(\App\Models\Customer::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,12 +23,22 @@ class CustomerController extends Controller
     {
         //$this->authorize('administrator');
         if (Gate::allows('administrator')) {
-            $customers = Customer::sortable()->paginate(10);
-            return view('customer/index', ['models' => $customers]);
+            $customers = $this->model::filter()->sortable()->paginate(10);
+
+            $sortparams = ($request->query('order'))?'&order='.$request->query('order'):'';
+            $sortparams .= ($request->query('sort'))?'&sort='.$request->query('sort'):'';
+
+            $params['edit'] = "?menupoint=1020";
+            $params['edit'] .= $sortparams;
+
+            $params['show'] = "?menupoint=1030";
+            $params['show'] .= $sortparams;
+
+            return view('customer/index', ['models' => $customers, 'params' => $params]);
         }
         else {
             $request>session()->flash('warning', 'You are now allowed to see the customer list.');
-            return redirect('/houses');
+            return redirect('customer/index');
         }
 
     }
@@ -55,11 +70,18 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $model = (new Customer)->findOrFail($id);
-        $fields = Schema::getColumnListing($model->getTable());
-        return view('customer/show', ['model' => $model, 'fields' => $fields]);
+        //Find page from id
+        if ($request->query('page') == null) {
+            $models = $this->model::sortable()->pluck('id')->all();
+            $page = array_flip($models)[$id]+1;
+            $request->merge(['page' => $page]);
+        }
+
+        $models = $this->model::sortable()->paginate(1);
+        $fields = Schema::getColumnListing($models[0]->getTable());
+        return view('customer/show', ['models' => $models, 'fields' => $fields]);
     }
 
     /**
@@ -68,11 +90,18 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-        $model = (new Customer)->findOrFail($id);
-        $fields = Schema::getColumnListing($model->getTable());
-        return view('customer/edit', ['model' => $model, 'fields' => $fields]);
+        //Find page from id
+        if ($request->query('page') == null) {
+            $models = $this->model::sortable()->pluck('id')->all();
+            $page = array_flip($models)[$id]+1;
+            $request->merge(['page' => $page]);
+        }
+
+        $models = $this->model::sortable()->paginate(1);
+        $fields = Schema::getColumnListing($models[0]->getTable());
+        return view('customer/edit', ['models' => $models, 'fields' => $fields, 'vattr' => new ValidationAttributes($models[0])]);
     }
 
     /**
@@ -84,18 +113,21 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $modelOriginal = (new Customer)->findOrFail($id);
-        $fields = Schema::getColumnListing($modelOriginal->getTable());
+        $model = (new $this->model)->findOrFail($id);
+        $fields = Schema::getColumnListing($model->getTable());
 
-        $customer = new Customer();
-        $data = $this->validate($request, ['address3' => 'required']);
-
-        $data['id'] = $id;
         foreach ($fields as $field){
-            if (array_key_exists($field, $data)) $modelOriginal->$field = $data[$field] ;
+            $model->$field = $request->get($field) ;
         }
-        $modelOriginal->save();
-        return redirect('/customers')->with('success', 'Customer has been updated!');
+        //We save. The save validates after the Mutators have been used.
+        $errors = '';
+        $success = 'House has been updated!';
+        if (!$model->save()) {
+            $errors = $model->getErrors();
+            $success = '';
+        }
+        if ($errors != '') return redirect('/customer/edit/'.$id)->with('success', $success)->with('errors',$errors);
+        return redirect('/customer/index?menupoint=1010')->with('success', 'Customer has been updated!');
     }
 
     /**
@@ -106,6 +138,9 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $toBeDeleted = (new $this->model)->findOrFail($id);
+        $name = $toBeDeleted->name;
+        $toBeDeleted->delete();
+        return redirect('/customer/index?menupoint=1010')->with('success', 'Customer ' . $name . ' has been deleted!');
     }
 }

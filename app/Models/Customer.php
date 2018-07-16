@@ -7,8 +7,11 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 use Kyslik\ColumnSortable\Sortable;
+use Collective\Html\Eloquent\FormAccessible;
+use Number;
+use EloquentFilter\Filterable;
+
 
 /**
  * Class Customer
@@ -53,7 +56,7 @@ use Kyslik\ColumnSortable\Sortable;
  *
  * @package App\Models
  */
-class Customer extends Eloquent
+class Customer extends BaseModel
 {
 	use Sortable;
 
@@ -66,6 +69,13 @@ class Customer extends Eloquent
         'telephone',
         'ownerid',
     ];
+
+	use Filterable;
+
+    public function modelFilter()
+    {
+        return $this->provideFilter(Filters\CustomerFilter::class);
+    }
 
     protected $table = 'customer';
 
@@ -100,6 +110,14 @@ class Customer extends Eloquent
 		'status',
 		'cultureid'
 	];
+
+
+    public $rules = [
+        'name' => ['required', 'between:5,30'],
+        'address1' => ['required', 'between:3,40'],
+        'country' => ['required', 'between:3,40'],
+        'mobile' => ['required', 'between:8,15']
+    ];
 
 	public function customertype()
 	{

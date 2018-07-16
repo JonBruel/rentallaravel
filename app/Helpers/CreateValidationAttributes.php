@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jbr
- * Date: 27-06-2018
- * Time: 16:08
- */
-
 namespace App\Helpers;
 
 
@@ -14,7 +7,7 @@ class CreateValidationAttributes
     protected $model;
     protected $casts = [];
 
-    public function __contruct($model) {
+    public function __construct($model) {
         $this->setModel($model);
     }
 
@@ -50,9 +43,17 @@ class CreateValidationAttributes
                             case 'between':
                                 if (  sizeof($parameters) == 2) {
                                     $options[$prefix.'-range'] = "The value of $name must be between $parameters[0] and $parameters[1]";
-                                    if ($cast == 'string') $options[$prefix.'-range'] = "The number of characters in $name must be between $parameters[0] and $parameters[1]";
-                                    $options[$prefix.'-range-min'] = $parameters[0];
-                                    $options[$prefix.'-range-max'] = $parameters[1];
+                                    if ($cast == 'string') {
+                                        $options[$prefix.'-length'] = "The number of characters in $name must be between $parameters[0] and $parameters[1]";
+                                        $options[$prefix.'-length-min'] = $parameters[0];
+                                        $options[$prefix.'-length-max'] = $parameters[1];
+                                    }
+                                    else {
+                                        $options[$prefix.'-range'] = "The value of $name must be between $parameters[0] and $parameters[1]";
+                                        $options[$prefix.'-range-min'] = $parameters[0];
+                                        $options[$prefix.'-range-max'] = $parameters[1];
+                                    }
+
                                 }
                                 break;
                             case 'numeric':

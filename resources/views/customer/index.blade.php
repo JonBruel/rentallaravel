@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('content')
     <h3>Customers</h3>
+    <br />
+    <a href='/customer/create'>
+        <span class='glyphicon glyphicon-plus'></span>
+    </a>
+    <br /><br />
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -15,9 +20,7 @@
             @foreach($models as $model)
                 <tr>
                     <td>
-                        <a href="/customer/show/{{ $model->id }}"><span class='glyphicon glyphicon-list'></span></a>
-                        <a href="/customer/edit/{{ $model->id }}"><span class='glyphicon glyphicon-pencil'></span></a>
-                        <a href="/customer/edit/{{ $model->id }}"><span class='glyphicon glyphicon-remove'></span></a>
+                        @include('partials.detail_edit_delete', ['path' => 'customer', 'id' => $model->id, 'params' => $params])
                     </td>
                     <td>{{ $model->name }}</td>
                     <td>{{ $model->address1 }}</td>
@@ -28,4 +31,5 @@
         </table>
         {!! $models->appends(\Request::except('page'))->render() !!}
     </div>
+
 @endsection

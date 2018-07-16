@@ -35,7 +35,9 @@ class CultureChooser
         $querystring = str_replace('&culture='.$locale,'',$querystring);
         $querystring = str_replace('culture='.$locale.'&','',$querystring);
         session(['querystring' => $querystring]);
-        session(['sanitizedpath' => '/'.$request->path().'?'.$querystring]);
+        $sanitizedpath = '/'.$request->path().'?'.$querystring;
+        $sanitizedpath = str_replace('//', '/', $sanitizedpath);
+        session(['sanitizedpath' => $sanitizedpath]);
         return $next($request);
     }
 }
