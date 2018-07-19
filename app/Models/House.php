@@ -74,7 +74,6 @@ class House extends BaseModel
         'ownerid',
     ];
 
-
     public $casts = [
 		'latitude' => 'float',
 		'longitude' => 'float',

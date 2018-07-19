@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Helpers\PictureHelpers;
+use App\Helpers\ShowCalendar;
+use Illuminate\Pagination\Paginator;
 use Schema;
 use Gate;
 use ValidationAttributes;
 use App\Models\HouseI18n;
 use App;
 use App\Models\Period;
+use \Datetime;
+use \DateInterval;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -34,6 +39,7 @@ class HomeController extends Controller
             $request>session()->flash('returnpath', 'home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
             return redirect('home/listhouses');
         }
+
         if ($infotype == 'gallery')
         {
             $response->header('Cache-Control', 'no-cache, must-revalidate');
@@ -48,7 +54,7 @@ class HomeController extends Controller
         }
         else
         {
-            $info = HouseI18n::where('id', $this->houseId)->where('culture', 'LIKE', App::getLocale() . '%')->first()->$infotype;
+            $info = HouseI18n::where('id', $this->houseId)->where('culture', App::getLocale())->first()->$infotype;
             return view('home/showinfo', ['info' => $info]);
         }
     }
@@ -73,15 +79,38 @@ class HomeController extends Controller
         $house = $this->model::findOrFail($defaultHouse);
 
         $months = 12;
-        $yearstart = date('Y');
-        //Below, we create the pseudo pager. This allows us to use tha standard
+        $yearstart = Carbon::now()->year;
+        $thismonthstart = Carbon::parse('first day of this month');
+        //Below, we create the pager without a model. This allows us to use tha standard
         //helper to navigate through the months or years
-        //NOT implemented
-        $starttime = $yearstart . '-' . date('m') . '-' . '01';
+        $page = $request->get('page', 1);
+        $pager = new Paginator([1,1,1,1],1, (int)$page);
+        $path = '/home/checkbookings?menupoint=10020';
+        $pager->setPath($path);
+        if ($page > 3) $pager->hasMorePagesWhen(false);
+        $elements[0] = [$yearstart => $path.'&page=1', $yearstart+1 => $path.'&page=2', $yearstart+2 => $path.'&page=3', $yearstart+3 => $path.'&page=4'];
+
+        $starttime = $thismonthstart->addYears($page-1);
 
         $periodquery = Period::filter();
 
-        return redirect('home/listhouses');
+        ShowCalendar::setVdays($defaultHouse, $periodquery, App::getLocale(), $starttime, $months);
+        $cal = [];
+
+        for ($i = 0; $i < 12; $i++) {
+            $calendar = new ShowCalendar($starttime);
+            $calendar->houseid = $defaultHouse;
+            //$calendar->link_to = $this->url . '/contract/choseweeks/houseid/' . $this->houseid . '/cursor/0/restricttohouse/1/periodid/';
+            $calendar->link_to = '/contract/choseweeks/houseid/' . $defaultHouse . '/cursor/0/restricttohouse/1/periodid/';
+            $calendar->culture = App::getLocale();
+            $cal[$i] = $calendar->output_calendar();
+            $date = new DateTime($starttime);
+            $date->add(new DateInterval('P1M'));
+            $starttime = $date->format("Y-m-d");
+            //if ($i == 1) die($starttime);
+        }
+
+        return view('home/checkbookings', ['house' => $house, 'cal' => $cal, 'starttime' => $starttime, 'pager' => $pager, 'elements' => $elements, 'offset' => ($yearstart-1)]);
 
     }
 

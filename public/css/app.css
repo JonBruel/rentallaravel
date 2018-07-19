@@ -10611,6 +10611,153 @@ a.text-dark:focus {
   }
 }
 
+/* Calendar*/
+
+.calendar {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1em;
+}
+
+.calendar caption {
+  margin: 0;
+  padding: .3em 0;
+  margin-top: 5px;
+  font-size: 1.25em;
+  background: #ffa51e;
+  text-align: center;
+  caption-side: top;
+}
+
+.calendar th {
+  border-bottom: 1px solid #ccc;
+  font-weight: normal;
+  background: #fff;
+}
+
+.calendar td {
+  border: 1px solid #fff;
+  padding: .1em .3em;
+  width: 1em;
+  text-align: center;
+}
+
+.calendar a {
+  color: #000;
+  text-decoration: none;
+}
+
+.calendar td.today {
+  background: #ffc;
+}
+
+.calendar td.selected {
+  border: 1px dotted #ff7800;
+}
+
+.calendar td.highlighted {
+  background: #fc9;
+}
+
+.calendar td.occupied {
+  background: #FF9191;
+}
+
+.calendar td.family {
+  background: #00cc99;
+}
+
+.calendar td.notoffered {
+  background: #005588;
+}
+
+.calendar td.halfday {
+  background: #88ff66;
+}
+
+.calendar td:hover,
+.calendar td.today:hover,
+.calendar td.selected:hover,
+.calendar td.highlighted:hover {
+  background: #cff;
+  border: 1px solid #09f;
+}
+
+table.calendar td.pad {
+  color: #999;
+  background: #fff;
+}
+
+table.calendar td.pad:hover {
+  background: none;
+  border: 0;
+}
+
+table.calendar {
+  margin-right: 5px;
+}
+
+.sunday,
+.saturday {
+  background: #f0f0f0;
+}
+
+#year {
+  padding: 0;
+  width: 500px;
+  list-style: none;
+}
+
+#year:after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+#year li {
+  float: left;
+  padding: 0 .5em .5em 0;
+  height: 150px;
+}
+
+table.calendar td.pad {
+  color: #999;
+  background: #fff;
+}
+
+table.calendar td.pad:hover {
+  background: none;
+  border: 0;
+}
+
+.sunday,
+.saturday {
+  background: #f0f0f0;
+}
+
+#year {
+  padding: 0;
+  width: 500px;
+  list-style: none;
+}
+
+#year:after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+#year li {
+  float: left;
+  padding: 0 .5em .5em 0;
+  height: 150px;
+}
+
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url(/fonts/glyphicons-halflings-regular.eot?f4769f9bdb7466be65088239c12046d1);

@@ -103,7 +103,7 @@ return [
     |
      */
 
-    'locales' => ['da' => 'Dansk', 'en' => 'English', 'se' => 'Svenska'],
+    'locales' => ['da_DK' => 'Dansk', 'en_GB' => 'English'],
 
     /*
     |--------------------------------------------------------------------------

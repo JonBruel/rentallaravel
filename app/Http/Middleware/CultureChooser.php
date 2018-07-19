@@ -22,7 +22,7 @@ class CultureChooser
     public function handle($request, Closure $next)
     {
         //Get locale from query string
-        $locale = $request->query('culture',session('culture','da'));
+        $locale = $request->query('culture',session('culture','da_DK'));
         $request->setLocale($locale);
         App::setLocale($locale);
         session(['culture' => $locale]);

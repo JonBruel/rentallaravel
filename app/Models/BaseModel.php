@@ -7,9 +7,23 @@
  */
 
 namespace App\Models;
+
+//Chosen to validate AFTER mutators:
 use \Esensi\Model\Model;
+
+//Used to allow for sort colums in the views.
 use Kyslik\ColumnSortable\Sortable;
+
+//Used as a method to create filters which are controlled in a separate class for each table.
+//Also: allows for search forms, using query parameters (get).
 use EloquentFilter\Filterable;
+
+/* Common Laravel Form support.
+ * Laravel's Eloquent Accessor allow you to manipulate a model attribute before returning it.
+ * This can be extremely useful for defining global date formats, for example.
+ * However, the date format used for display might not match the date format used for form elements.
+ * You can solve this by creating two separate accessors: a standard accessor, and/or a form accessor.
+ */
 use Collective\Html\Eloquent\FormAccessible;
 
 class BaseModel extends Model
