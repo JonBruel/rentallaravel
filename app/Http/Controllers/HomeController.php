@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Input;
 use App\Helpers\PictureHelpers;
 use App\Helpers\ShowCalendar;
 use Illuminate\Pagination\Paginator;
@@ -13,9 +14,9 @@ use ValidationAttributes;
 use App\Models\HouseI18n;
 use App;
 use App\Models\Period;
-use \Datetime;
-use \DateInterval;
+use App\Models\Periodcontract;
 use Carbon\Carbon;
+use DB;
 
 class HomeController extends Controller
 {
@@ -35,9 +36,8 @@ class HomeController extends Controller
     {
         if (session('defaultHouse' , -1) == -1)
         {
-            $request>session()->flash('warning', 'Please find the house you want to check out!');
-            $request>session()->flash('returnpath', 'home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
-            return redirect('home/listhouses');
+            $request>session()->flash('warning', __('Please find the house you want to check out!'));
+            return redirect('home/listhouses')->with('returnpath', 'home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
         }
 
         if ($infotype == 'gallery')
@@ -55,7 +55,12 @@ class HomeController extends Controller
         else
         {
             $info = HouseI18n::where('id', $this->houseId)->where('culture', App::getLocale())->first()->$infotype;
-            return view('home/showinfo', ['info' => $info]);
+
+            //Find first vacant week
+            $freeperiod = Periodcontract::filter()->where('from', '>', Carbon::now())->where(function($q){$q->where('committed', '>', 0); $q->orWhere('prepaid', '>', 0);})->orderBy('from')->first();
+            $firstFree = ($freeperiod)?Carbon::parse($freeperiod->from)->toDateString('Y-m-d') . ' ' . __('to') . ' ' . Carbon::parse($freeperiod->to)->toDateString('Y-m-d'):'';
+
+            return view('home/showinfo', ['info' => $info, 'firstFree' => $firstFree]);
         }
     }
 
@@ -73,14 +78,14 @@ class HomeController extends Controller
         if ($defaultHouse == -1)
         {
             $request>session()->flash('warning', 'Please find the house you want to check out!');
-            $request>session()->flash('returnpath', 'home/showbookings'.'?menupoint='.session('menupoint'));
-            return redirect('home/listhouses');
+            return redirect('home/listhouses')->with('returnpath', 'home/showbookings'.'?menupoint='.session('menupoint'));
         }
         $house = $this->model::findOrFail($defaultHouse);
 
         $months = 12;
         $yearstart = Carbon::now()->year;
         $thismonthstart = Carbon::parse('first day of this month');
+
         //Below, we create the pager without a model. This allows us to use tha standard
         //helper to navigate through the months or years
         $page = $request->get('page', 1);
@@ -92,7 +97,7 @@ class HomeController extends Controller
 
         $starttime = $thismonthstart->addYears($page-1);
 
-        $periodquery = Period::filter();
+        $periodquery = Periodcontract::filter();
 
         ShowCalendar::setVdays($defaultHouse, $periodquery, App::getLocale(), $starttime, $months);
         $cal = [];
@@ -101,13 +106,10 @@ class HomeController extends Controller
             $calendar = new ShowCalendar($starttime);
             $calendar->houseid = $defaultHouse;
             //$calendar->link_to = $this->url . '/contract/choseweeks/houseid/' . $this->houseid . '/cursor/0/restricttohouse/1/periodid/';
-            $calendar->link_to = '/contract/choseweeks/houseid/' . $defaultHouse . '/cursor/0/restricttohouse/1/periodid/';
+            $calendar->link_to = '/contract/choseweeks?periodid=';
             $calendar->culture = App::getLocale();
             $cal[$i] = $calendar->output_calendar();
-            $date = new DateTime($starttime);
-            $date->add(new DateInterval('P1M'));
-            $starttime = $date->format("Y-m-d");
-            //if ($i == 1) die($starttime);
+            $starttime->addMonth();
         }
 
         return view('home/checkbookings', ['house' => $house, 'cal' => $cal, 'starttime' => $starttime, 'pager' => $pager, 'elements' => $elements, 'offset' => ($yearstart-1)]);
@@ -125,8 +127,30 @@ class HomeController extends Controller
             return redirect(session('returnpath', 'home/showinfo/description?menupoint=10010'));
         }
 
+        if (session('returnpath')) session()->keep(['returnpath']);
+
         $models = $this->model::sortable()->paginate(10);
         return view('home/listhouses', ['models' => $models]);
+    }
+
+    public function showmap(Request $request, Response $response)
+    {
+        $googlekey = config('app.googlekey', 'AIzaSyCmXZ5CEhhFY3-qXoHRzs0XFK4a495LyxE');
+
+        $response->header('Cache-Control', 'no-cache, must-revalidate');
+        $defaultHouse = session('defaultHouse' , -1);
+        if ($defaultHouse == -1)
+        {
+            $request>session()->flash('warning', 'Please find the house you want to check out!');
+            return redirect('home/listhouses')->with('returnpath', 'home/showmap'.'?menupoint='.session('menupoint'));
+        }
+
+        $this->model::$ajax = true;
+        $house = $this->model::findOrFail($defaultHouse);
+        $housefields = $house->toArray();
+        $veryShortDescription = HouseI18n::where('id', $this->houseId)->where('culture', App::getLocale())->first()->veryshortdescription;
+        $housefields['veryShortDescription'] = $veryShortDescription;
+        return view('home/showmap', ['house' => $house, 'veryShortDescription'  => $veryShortDescription, 'googlekey' => $googlekey, 'housefields' => json_encode($housefields)]);
     }
 
 }

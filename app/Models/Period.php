@@ -6,6 +6,7 @@
  */
 
 namespace App\Models;
+use DB;
 
 
 /**
@@ -94,8 +95,12 @@ class Period extends BaseModel
 
     static $committeds = [];
     static $contractids = [];
-    //The function below returns an array which are used for the
-    //calculation of the committed status of the contracts and the corresponding contractid.
+    /*
+     * The function below returns an array which are used for the
+     * calculation of the committed status of the contracts and the corresponding contractid.
+     * TODO: Delete if not used, replaced by functions in Periodcontract
+     *
+     */
     static function setPeriodStatus($houseid, $status)
     {
         //The execution below takes 5 ms
@@ -117,7 +122,11 @@ class Period extends BaseModel
         }
     }
 
-    function getContractid($status)
+
+    /*
+     * TODO: Delete if not used, moved to Periodcontract
+     */
+    function getContractid($status = 'Committed')
     {
         if (sizeof(static::$contractids) == 0) static::setPeriodStatus($this->houseid, $status);
         if (array_key_exists($this->id, static::$contractids)) return static::$contractids[$this->id];
@@ -126,6 +135,8 @@ class Period extends BaseModel
 
     /*
      * Return an array with to elements: currencysymbol and rate
+     *
+     * TODO: Delete if not used, moved to Periodcontract
      */
     function getRate($culture)
     {

@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 //use App\Models\House as Model;
 use Schema;
 use Kyslik\ColumnSortable\Sortable;
-use App\Rules\Name;
+use App\_Rules_not_used_anymore\Name;
 use ValidationAttributes;
+use App\Models\Customer;
 
 
 
@@ -25,7 +26,8 @@ class HouseController extends Controller
      */
     public function index(Request $request)
     {
-        $models = $this->model::sortable()->paginate(10);
+        $models = $this->model::sortable()->filter($request->all())->paginate(10);
+        $owners = ['' => __('Please select owner')] + Customer::filter()->where('customertypeid', 10)->pluck('name', 'id')->toArray();
         $sortparams = ($request->query('order'))?'&order='.$request->query('order'):'';
         $sortparams .= ($request->query('sort'))?'&sort='.$request->query('sort'):'';
 
@@ -35,7 +37,7 @@ class HouseController extends Controller
         $params['show'] = "?menupoint=2130";
         $params['show'] .= $sortparams;
 
-        return view('house/index', ['models' => $models, 'params' => $params]);
+        return view('house/index', ['models' => $models, 'params' => $params, 'search' => $request->all(), 'owners' => $owners]);
     }
 
     /**
@@ -130,5 +132,10 @@ class HouseController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function listperiods(Request $request)
+    {
+
     }
 }

@@ -2,10 +2,9 @@
 
 namespace App\Models\Filters;
 
-use EloquentFilter\ModelFilter;
 use Auth;
 
-class CustomerFilter extends ModelFilter
+class CustomerFilter extends BaseFilter
 {
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter
@@ -15,11 +14,31 @@ class CustomerFilter extends ModelFilter
     */
     public $relations = [];
 
+    /*
+     * The basic filter for viewing customers.
+     * When used by supervisor for chosing ownerid, add ->where('customertypeid', 10)
+     *
+     * For customertypes see Customer:
+     * Customer::$customertypes = ['Test' => 0, 'Supervisor' => 1, 'Owner' => 10, 'Administrator' => 100, 'Personel' => 110, 'Customer' => 1000];
+     *
+     */
     public function setup()
     {
+        if (config('user.role', 1000) == 10) return $this->where('ownerid', Auth::user()->id)->where('customertypeid', '>', 10);
+        if (config('user.role', 1000) == 100) return $this->where('ownerid', Auth::user()->ownerid)->where('customertypeid', '>', 100);
+        if (config('user.role', 1000) == 110) return $this->where('ownerid', Auth::user()->ownerid)->where('customertypeid', '>', 110);
         if (config('user.role', 1000) == 1000) return $this->where('id', Auth::user()->id);
-        if (config('user.role', 1000) == 100) return $this->where('ownerid', Auth::user()->id);
-        if (config('user.role', 1000) == 110) return $this->where('ownerid', Auth::user()->ownerid);
         return $this;
     }
+
+    public function address1($address1)
+    {
+        return $this->where('address1', 'LIKE', "%$address1%");
+    }
+
+    public function email($email)
+    {
+        return $this->where('email', 'LIKE', "%$email%");
+    }
+
 }

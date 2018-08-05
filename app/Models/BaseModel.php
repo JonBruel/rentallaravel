@@ -28,6 +28,8 @@ use Collective\Html\Eloquent\FormAccessible;
 
 class BaseModel extends Model
 {
+    public static $ajax = false;
+
     use Sortable;
     use Filterable;
     use FormAccessible;

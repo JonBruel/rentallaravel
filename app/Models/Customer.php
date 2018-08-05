@@ -55,8 +55,10 @@ use Number;
  */
 class Customer extends BaseModel
 {
+    public static $customertypes = ['Test' => 0, 'Supervisor' => 1, 'Owner' => 10, 'Administrator' => 100, 'Personel' => 110, 'Customer' => 1000];
 
 	public $sortable = [
+	    'id',
         'name',
         'address1',
         'address2',
@@ -64,6 +66,7 @@ class Customer extends BaseModel
         'country',
         'telephone',
         'ownerid',
+        'email',
     ];
 
 
@@ -99,6 +102,7 @@ class Customer extends BaseModel
 		'email',
 		'login',
 		'password',
+        'plain_password',
 		'notes',
 		'customertypeid',
 		'ownerid',
@@ -112,8 +116,55 @@ class Customer extends BaseModel
         'name' => ['required', 'between:5,30'],
         'address1' => ['required', 'between:3,40'],
         'country' => ['required', 'between:3,40'],
-        'mobile' => ['required', 'between:8,15']
+        'mobile' => ['required', 'between:8,15'],
+        'email' => ['required', 'unique:customer']
     ];
+
+    /*
+     * This function is used to show the relevant associated
+     * user-friendly value as opposed to showing the id.
+     * Performance: as we are making up to 4 queries, it does take some time.
+     * Measured to around 5 ms.
+     */
+    public function withBelongsTo($fieldname)
+    {
+        switch ($fieldname)
+        {
+            case 'customertypeid':
+                return $this->customertype->customertype;
+            case 'ownerid':
+                return $this->customer->name;
+            case 'cultureid':
+                return $this->culture->culturename;
+            case 'status':
+                return $this->customerstatus->status;
+            default:
+                return $this->$fieldname;
+        }
+    }
+
+    /*
+     * Retuns an array of keys ans values to be used in forms for select boxes. Typical uses
+     * are filters, e.g selection housed owner by a specific owner.
+     *
+     * Retuns null if no select boxes are to be used.
+     */
+    public function withSelect($fieldname)
+    {
+        switch ($fieldname)
+        {
+            case 'customertypeid':
+                return  Customertype::all()->pluck('customertype', 'id')->toArray();
+            case 'ownerid':
+                return Customer::filter()->where('customertypeid', 10)->pluck('name', 'id')->toArray();
+            case 'cultureid':
+                return  Culture::all()->pluck('culturename', 'id')->toArray();
+            case 'status':
+                return  Customerstatus::all()->pluck('status', 'id')->toArray();
+            default:
+                return null;
+        }
+    }
 
 	public function customertype()
 	{

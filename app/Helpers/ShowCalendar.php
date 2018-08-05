@@ -16,9 +16,12 @@ namespace App\Helpers;
 use \DateTime;
 use \DateInterval;
 use App\Models\Period;
+use App\Models\Periodcontract;
+use Illuminate\Session;
 use App\Models\Contract;
 use Carbon\Carbon;
 use Number;
+use DB;
 
 class ShowCalendar
 {
@@ -53,23 +56,10 @@ class ShowCalendar
     private $test = '';
 
     /* CONSTRUCTOR */
-    function __construct($date = NULL, $year = NULL, $month = NULL){
-        $self = htmlspecialchars($_SERVER['PHP_SELF']);
-        $this->link_to = $self;
-
-        if( is_null($year) || is_null($month) ){
-            if( !is_null($date) ){
-                //-------- strtotime the submitted date to ensure correct format
-                $this->date = date("Y-m-d", strtotime($date));
-            } else {
-                //-------------------------- no date submitted, use today's date
-                $this->date = date("Y-m-d");
-            }
-            $this->set_date_parts_from_date($this->date);
-        } else {
-            $this->year		= $year;
-            $this->month	= str_pad($month, 2, '0', STR_PAD_LEFT);
-        }
+    function __construct(Carbon $starttime){
+        $this->date = $starttime->format('Y-m-d');
+        $this->month = $starttime->format('m');
+        $this->year = $starttime->format('Y');
     }
 
 
@@ -109,7 +99,7 @@ class ShowCalendar
     }
 
     //Fills in the calander details based on houseid
-    static function setVdays($houseid, \Illuminate\Database\Eloquent\Builder $periodquery, $culture = NULL, Carbon $starttime = NULL, $months = NULL)
+    static function setVdays($houseid, \Illuminate\Database\Eloquent\Builder $periodcontractquery, $culture = NULL, Carbon $starttime = NULL, $months = NULL)
     {
         function addOneday($time)
         {
@@ -146,36 +136,27 @@ class ShowCalendar
         $lastdate = $datemax->toDateString();
         $datemax->addDays(7);
 
-        //$periodquery->whereBetween('from', [$date->sub(new DateInterval('P7D')), $date->add(new DateInterval('P7D'))]);
-        $periodquery->whereBetween('from', [$datemin, $datemax])
-                    ->orderBy('from');
-
-        $periods = $periodquery->get();
-        //die("from:".$datemin->toDateString().' to: '.$datemax->toDateString().' period: '.sizeof($periods));
-
-        //We prepare two arrays which are used inside the period object
-        //to check if committed and find the corresponding contractid.
-        //This is done for performance
-        Period::setPeriodStatus($houseid, 'Committed');
+        $periodcontractquery->whereBetween('from', [$datemin, $datemax])->orderBy('from');
+        $periodcontracts = $periodcontractquery->get();
 
         $contractid = null;
-        $maxKeyOfPeriods = sizeof($periods) - 1;
+
         //Below we fill in the days for the calendar
         //Time figures are in seconds after Unix birth.
-        foreach ($periods as $key => $period)
+        foreach ($periodcontracts as $key => $periodcontract)
         {
             //If starttime is after the end of the time scope we want to show, we just skip
             if (strtotime($starttime) >= strtotime($lastdate)) continue;
 
-            //Common preparation for all periods
-            $from = $period->from;
-            $to = $period->to;
-            $periodid = $period->id;
-            $r = $period->getRate($culture);
+            //Common preparation for all periodcontracts
+            $from = $periodcontract->from;
+            $to = $periodcontract->to;
+            $periodid = $periodcontract->id;
+            $r = $periodcontract->getRate($culture);
             $customercurrencysymbol = $r['currencysymbol'];
             $rate = $r['rate'];
             $categoryid = 0;
-            $newcontractid = $period->getContractid('Committed');
+            $newcontractid = $periodcontract->getContractid();
             $reserved = ($newcontractid != null)?true:false;
             $newcontract = ($contractid == $newcontractid)?false:true;
             $contractid = $newcontractid;
@@ -183,28 +164,27 @@ class ShowCalendar
                 $categoryid = Contract::find($contractid)->categoryid;
             }
 
-            //Formulate text information to be used when clicking on a day
-            $periodtext = $period->from.' '.__('to').' '.$period->to;
+            //Formulate text information to be used when hovering over a day
+            $periodtext = Carbon::parse($periodcontract->from)->format('Y-m-d').' '.__('to').' '.Carbon::parse($periodcontract->to)->format('Y-m-d');
             $price = '';
-            //Number::format($value, ['minimum_fraction_digits' => 12, 'maximum_fraction_digits' => 12]);
-            if ($period->personprice>0)
+            if ($periodcontract->personprice>0)
             {
                 $price .= __('Base price') . ': ' . $customercurrencysymbol . ' '
-                    . Number::format($rate*$period->baseprice,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => $culture])
+                    . Number::format($rate*$periodcontract->baseprice,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => $culture])
                     . ', '
-                    . __('per person more than') . ' ' . $period->basepersons . ': ' . $customercurrencysymbol . ' '
-                    . Number::format($rate*$period->personprice,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => $culture])
-                    .  ', max. ' . $period->maxpersons . ' ' . __('persons') . '.';
+                    . __('per person more than') . ' ' . $periodcontract->basepersons . ': ' . $customercurrencysymbol . ' '
+                    . Number::format($rate*$periodcontract->personprice,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => $culture])
+                    .  ', max. ' . $periodcontract->maxpersons . ' ' . __('persons') . '.';
             }
             else
             {
                 $price .= $customercurrencysymbol . ' '
-                    . Number::format($rate*$period->baseprice,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => $culture])
-                    . ' ' . __('with a maximum of') . ' ' . $period->maxpersons . ' ' . __('persons');
+                    . Number::format($rate*$periodcontract->baseprice,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => $culture])
+                    . ' ' . __('with a maximum of') . ' ' . $periodcontract->maxpersons . ' ' . __('persons');
             }
 
 
-            //We fill in all $vdays up to the present from-time by default values as non-scheduled periods
+            //We fill in all $vdays up in the gaps where there are no periodcontracts, e.g. future dates
             if (strtotime($from)>strtotime($starttime))
             {
                 $start = strtotime($starttime);
@@ -220,7 +200,7 @@ class ShowCalendar
                     $vdays[$daykey]['halfday'] = false;
                     $vdays[$daykey]['notoffered'] = true;
                     $vdays[$daykey]['text'] = 'N/A';
-                    $vdays[$daykey]['period'] = 'N/A';
+                    $vdays[$daykey]['periodcontract'] = 'N/A';
                     $vdays[$daykey]['price'] = 'N/A';
                     $vdays[$daykey]['date'] = $daykey;
                     $vdays[$daykey]['categoryid'] = 0;
@@ -228,7 +208,7 @@ class ShowCalendar
                 }
             }
 
-            //We fill $vdays data within the periods
+            //We fill $vdays data within the periodcontracts
             if (strtotime($from)<=strtotime($starttime))
             {
                 $start = strtotime($starttime);
@@ -248,7 +228,7 @@ class ShowCalendar
                     $vdays[$daykey]['halfday'] = false;
                     $vdays[$daykey]['notoffered'] = false;
                     $vdays[$daykey]['text'] = $periodtext . "\n" . $price;
-                    $vdays[$daykey]['period'] = $periodtext;
+                    $vdays[$daykey]['periodcontract'] = $periodtext;
                     $vdays[$daykey]['price'] = $price;
                     $vdays[$daykey]['date'] = $daykey;
                     if ($lastreserved)
@@ -273,9 +253,9 @@ class ShowCalendar
                 }
             }
         }
-        //Exit periods loop
+        //Exit periodcontracts loop
 
-        //We possible remaining days without periods
+        //We possible remaining days without periodcontracts
         if (strtotime($starttime) <= strtotime($lastdate))
         {
             $start = strtotime($starttime);
@@ -290,7 +270,7 @@ class ShowCalendar
                 $vdays[$daykey]['halfday'] = false;
                 $vdays[$daykey]['notoffered'] = true;
                 $vdays[$daykey]['text'] = 'N/A';
-                $vdays[$daykey]['period'] = 'N/A';
+                $vdays[$daykey]['periodcontract'] = 'N/A';
                 $vdays[$daykey]['price'] = 'N/A';
                 $vdays[$daykey]['date'] = $daykey;
             }
@@ -467,18 +447,15 @@ class ShowCalendar
             }
 
             //---------------------------------- start table cell, apply classes
-            $period = $rentalinfo['period'];
+            $period = $rentalinfo['periodcontract'];
             $price = $rentalinfo['price'];
-            $text = $period . "\n\n" . $price;
+            $text = $period . "\n" . $price;
 
-            $output .= "<td" . $day_class . " title=\"" . $text .
-                "\" onmouseover=\"
-        jQuery('#period').text('".str_replace("\n", ": ", $period)."');
-        jQuery('#price').text('".str_replace("\n", ": ", $price)."');
-        \"".
-                "\" onmouseout=\"
-        jQuery('#period').text('');
-        jQuery('#price').text('');
+            $output .= "<td" . $day_class . " title=\"" . $text . "\" data-toggle=\"tooltip\"" .
+        " onmouseover=\"
+        $('#period').html('".str_replace("\n", ": ", " ".$period)."');
+        $('#price').html('".str_replace("\n", ": ", " ".$price)."');
+        \""."\" onmouseout=\"$('#period').html('');$('#price').html('');
         \"". ">";
 
             //----------------------------------------- unset to keep loop clean

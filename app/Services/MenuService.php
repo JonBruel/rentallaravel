@@ -25,17 +25,18 @@ use Illuminate\Support\Facades\Response;
 class MenuService {
 
     private $fullMenu = Array();
-    private $userMenu;
+    public static $userMenu;
+
 
     /**
      * Construction of the MenuStructure.
      */
     public function __construct() {
         $this->fullMenu = config('menu.menustructure');
-        $userMenu = $this->fullMenu;
+       $userMenu = $this->fullMenu;
         array_walk($userMenu, [$this,'menufilter']);
         foreach ($userMenu as $key => $value) if ($value == null) unset($userMenu[$key]);
-        $this->userMenu = $userMenu;
+        static::$userMenu = $userMenu;
     }
 
 
@@ -86,7 +87,7 @@ class MenuService {
 
         $level = 0;
 
-        $userMenu = $this->userMenu;
+        $userMenu = static::$userMenu;
         if (!array_key_exists($menuclicked, $userMenu)) $menuclicked =  0;
         if ($menuclicked > 0) {
 
@@ -128,6 +129,7 @@ class MenuService {
                 $presentnum = $userMenu[$presentnum]['parentid'];
             }
         }
+        static::$userMenu = $userMenu;
         return $userMenu;
     }
 

@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use Schema;
 use Gate;
 use ValidationAttributes;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\MessageBag;
+use Auth;
+use App\Models\Customer;
 
 class CustomerController extends Controller
 {
@@ -21,26 +26,34 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        //$this->authorize('administrator');
-        if (Gate::allows('administrator')) {
-            $customers = $this->model::filter()->sortable()->paginate(10);
 
-            $sortparams = ($request->query('order'))?'&order='.$request->query('order'):'';
-            $sortparams .= ($request->query('sort'))?'&sort='.$request->query('sort'):'';
+        if (Gate::allows('Owner')) {
+            $customers = $this->model::filter($request->all())->sortable('id')->paginate(10);
 
-            $params['edit'] = "?menupoint=1020";
-            $params['edit'] .= $sortparams;
+            $params['edit'] = "?menupoint=1020&".session('querystring');
+            $params['show'] = "?menupoint=1030&".session('querystring');
 
-            $params['show'] = "?menupoint=1030";
-            $params['show'] .= $sortparams;
-
-            return view('customer/index', ['models' => $customers, 'params' => $params]);
+            return view('customer/index', ['models' => $customers, 'params' => $params, 'search' => $request->all()]);
         }
         else {
             $request>session()->flash('warning', 'You are now allowed to see the customer list.');
-            return redirect('customer/index');
+            return redirect('home');
         }
 
+    }
+
+    public function hashpasswords()
+    {
+        //Password hash
+        $customers = $this->model::all();
+        foreach ($customers as $customer)
+        {
+            if ((strlen($customer->password < 20) and (strlen($customer->password) > 3)))
+            {
+                $customer->password = Hash::make($customer->password);
+                $customer->save();
+            }
+        }
     }
 
     /**
@@ -50,7 +63,19 @@ class CustomerController extends Controller
      */
     public function create()
     {
-
+        $models = [new $this->model()];
+        $fields = [
+            'name',
+            'address1',
+            'address2',
+            'country',
+            'telephone',
+            'mobile',
+            'email',
+            'login',
+            'plain_password'
+        ];
+        return view('customer/create', ['models' => $models, 'fields' => $fields, 'vattr' => new ValidationAttributes($models[0])]);
     }
 
     /**
@@ -61,7 +86,40 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $model = new $this->model();
+
+        $fields = [
+            'name',
+            'address1',
+            'address2',
+            'country',
+            'telephone',
+            'mobile',
+            'email',
+            'login',
+            'plain_password'
+        ];
+        foreach ($fields as $field) $model->$field = $request->get($field);
+
+        //Set structural fields
+        //$model->ownerid = Auth::user()->ownerid;
+        $model->ownerid = 1;
+        $model->password = Hash::make(Input::get('plain_password'));
+        $model->houselicenses = 0;
+        $model->customertypeid = 1000;
+        $model->status = 1;
+        $model->cultureid = 1;
+
+        //We save. The save validates after the Mutators have been used.
+        //$errors = '';
+        $errors = new MessageBag();
+        $success = 'Customer has been updated!';
+        if (!$model->save()) {
+            $errors = $model->getErrors();
+            $success = 'Customer was not updated!';
+        }
+        if ($errors->any()) return redirect('/customer/create')->with('success', $success)->with('errors',$errors)->withInput(Input::except('plain_password'));
+        return redirect('/customer/index?menupoint=1010')->with('success', $success);
     }
 
     /**
@@ -74,12 +132,12 @@ class CustomerController extends Controller
     {
         //Find page from id
         if ($request->query('page') == null) {
-            $models = $this->model::sortable()->pluck('id')->all();
+            $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
             $page = array_flip($models)[$id]+1;
             $request->merge(['page' => $page]);
         }
 
-        $models = $this->model::sortable()->paginate(1);
+        $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
         $fields = Schema::getColumnListing($models[0]->getTable());
         return view('customer/show', ['models' => $models, 'fields' => $fields]);
     }
@@ -90,16 +148,16 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
         //Find page from id
-        if ($request->query('page') == null) {
-            $models = $this->model::sortable()->pluck('id')->all();
+        if (Input::get('page') == null) {
+            $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
             $page = array_flip($models)[$id]+1;
-            $request->merge(['page' => $page]);
+            Input::merge(['page' => $page]);
         }
 
-        $models = $this->model::sortable()->paginate(1);
+        $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
         $fields = Schema::getColumnListing($models[0]->getTable());
         return view('customer/edit', ['models' => $models, 'fields' => $fields, 'vattr' => new ValidationAttributes($models[0])]);
     }
@@ -111,13 +169,15 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
         $model = (new $this->model)->findOrFail($id);
         $fields = Schema::getColumnListing($model->getTable());
 
         foreach ($fields as $field){
-            $model->$field = $request->get($field) ;
+            $model->$field = Input::get($field);
+            if ($field == 'password' and strlen(Input::get('password') < 60)) $model->$field = Hash::make(Input::get('password'));
+            //if ($field == 'cultureid') die("Cultureid: " . Input::get('cultureid'));
         }
         //We save. The save validates after the Mutators have been used.
         $errors = '';
@@ -126,7 +186,7 @@ class CustomerController extends Controller
             $errors = $model->getErrors();
             $success = '';
         }
-        if ($errors != '') return redirect('/customer/edit/'.$id)->with('success', $success)->with('errors',$errors);
+        if ($errors != '') return redirect('/customer/edit/'.$id)->with('success', $success)->with('errors',$errors)->withInput(Input::except('plain_password'));
         return redirect('/customer/index?menupoint=1010')->with('success', 'Customer has been updated!');
     }
 
@@ -136,7 +196,7 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $toBeDeleted = (new $this->model)->findOrFail($id);
         $name = $toBeDeleted->name;

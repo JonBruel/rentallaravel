@@ -30,14 +30,17 @@ class CultureChooser
         session(['uri' => $request->path()]);
 
 
-        //Clean culture element away from querystring
+        //Clean culture element and menupoint element away from querystring
         $querystring = $request->getQueryString();
         $querystring = str_replace('&culture='.$locale,'',$querystring);
         $querystring = str_replace('culture='.$locale.'&','',$querystring);
+        $querystring = preg_replace ('/menupoint=(\d+)/', '', $querystring);
         session(['querystring' => $querystring]);
         $sanitizedpath = '/'.$request->path().'?'.$querystring;
         $sanitizedpath = str_replace('//', '/', $sanitizedpath);
         session(['sanitizedpath' => $sanitizedpath]);
+
+
         return $next($request);
     }
 }

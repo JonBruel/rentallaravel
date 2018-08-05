@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rules;
+namespace App\_Rules_not_used_anymore;
 
 use Illuminate\Contracts\Validation\Rule;
 

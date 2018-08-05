@@ -65,6 +65,11 @@ class House extends BaseModel
 {
     protected $table = 'house';
 
+    public function modelFilter()
+    {
+        return $this->provideFilter(Filters\HouseFilter::class);
+    }
+
     public $sortable = [
         'name',
         'address1',
@@ -155,18 +160,22 @@ class House extends BaseModel
 
 
 	public function getLongitudeAttribute($value) {
+        if (static::$ajax) return $value;
         return Number::format($value, ['minimum_fraction_digits' => 12, 'maximum_fraction_digits' => 12]);
     }
 
     public function setLongitudeAttribute($value) {
+	    if (static::$ajax) return $value;
         $this->attributes['longitude'] = Number::parse($value);
     }
 
     public function getLatitudeAttribute($value) {
+        if (static::$ajax) return $value;
         return Number::format($value, ['minimum_fraction_digits' => 12, 'maximum_fraction_digits' => 12]);
     }
 
     public function setLatitudeAttribute($value) {
+        if (static::$ajax) return $value;
 	    $this->attributes['latitude'] = Number::parse($value);
     }
 
