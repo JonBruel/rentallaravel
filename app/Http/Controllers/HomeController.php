@@ -13,16 +13,12 @@ use Gate;
 use ValidationAttributes;
 use App\Models\HouseI18n;
 use App;
-use App\Models\Period;
 use App\Models\Periodcontract;
 use Carbon\Carbon;
 use DB;
 
 class HomeController extends Controller
 {
-    //TODO: Let the user choose the house
-    private $houseId = 1;
-
     public function __construct() {
         parent::__construct(\App\Models\House::class);
     }
@@ -34,19 +30,15 @@ class HomeController extends Controller
      */
     public function showinfo(Request $request, Response $response, $infotype = 'description')
     {
-        if (session('defaultHouse' , -1) == -1)
-        {
-            $request>session()->flash('warning', __('Please find the house you want to check out!'));
-            return redirect('home/listhouses')->with('returnpath', 'home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
-        }
+        $this->checkHouseChoice($request, 'home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
+        $defaultHouse = session('defaultHouse' , 1);
 
         if ($infotype == 'gallery')
         {
             $response->header('Cache-Control', 'no-cache, must-revalidate');
-            $picturearray = PictureHelpers::getPictureArray($this->houseId, 1, 0);
-
+            $picturearray = PictureHelpers::getPictureArray($defaultHouse, 1, 0);
             $galleryid = session('galleryid', 1);
-            $fileinfo = PictureHelpers::getrandompicture($this->houseId, $galleryid);
+            $fileinfo = PictureHelpers::getrandompicture($defaultHouse, $galleryid);
             session(['lastran' => $fileinfo['r']]);
             $text = $fileinfo['text'];
             $picture = '<img src="' . $fileinfo['filepath'] . '" alt="' . $fileinfo['text'] . '"/>';
@@ -54,12 +46,11 @@ class HomeController extends Controller
         }
         else
         {
-            $info = HouseI18n::where('id', $this->houseId)->where('culture', App::getLocale())->first()->$infotype;
+            $info = HouseI18n::where('id', $defaultHouse)->where('culture', App::getLocale())->first()->$infotype;
 
             //Find first vacant week
-            $freeperiod = Periodcontract::filter()->where('from', '>', Carbon::now())->where(function($q){$q->where('committed', '>', 0); $q->orWhere('prepaid', '>', 0);})->orderBy('from')->first();
+            $freeperiod = Periodcontract::filter()->where('from', '>', Carbon::now())->whereNull('committed')->orderBy('from')->first();
             $firstFree = ($freeperiod)?Carbon::parse($freeperiod->from)->toDateString('Y-m-d') . ' ' . __('to') . ' ' . Carbon::parse($freeperiod->to)->toDateString('Y-m-d'):'';
-
             return view('home/showinfo', ['info' => $info, 'firstFree' => $firstFree]);
         }
     }
@@ -74,14 +65,12 @@ class HomeController extends Controller
     public function checkbookings(Request $request, Response $response)
     {
         $response->header('Cache-Control', 'no-cache, must-revalidate');
-        $defaultHouse = session('defaultHouse' , -1);
-        if ($defaultHouse == -1)
-        {
-            $request>session()->flash('warning', 'Please find the house you want to check out!');
-            return redirect('home/listhouses')->with('returnpath', 'home/showbookings'.'?menupoint='.session('menupoint'));
-        }
-        $house = $this->model::findOrFail($defaultHouse);
 
+        $this->checkHouseChoice($request, 'home/checkbookings'.'?menupoint='.session('menupoint'));
+
+        $defaultHouse = session('defaultHouse' , -1);
+
+        $house = $this->model::findOrFail($defaultHouse);
         $months = 12;
         $yearstart = Carbon::now()->year;
         $thismonthstart = Carbon::parse('first day of this month');
@@ -106,7 +95,7 @@ class HomeController extends Controller
             $calendar = new ShowCalendar($starttime);
             $calendar->houseid = $defaultHouse;
             //$calendar->link_to = $this->url . '/contract/choseweeks/houseid/' . $this->houseid . '/cursor/0/restricttohouse/1/periodid/';
-            $calendar->link_to = '/contract/choseweeks?periodid=';
+            $calendar->link_to = '/contract/chooseweeks?periodid=';
             $calendar->culture = App::getLocale();
             $cal[$i] = $calendar->output_calendar();
             $starttime->addMonth();
@@ -118,7 +107,7 @@ class HomeController extends Controller
 
     public function listhouses(Request $request)
     {
-        $defaultHouse = $request->query('defaultHouse',-1);
+        $defaultHouse = Input::get('defaultHouse',-1);
 
         //When user has chosen we redirect to house
         if ($defaultHouse != -1)
@@ -129,27 +118,29 @@ class HomeController extends Controller
 
         if (session('returnpath')) session()->keep(['returnpath']);
 
-        $models = $this->model::sortable()->paginate(10);
+        $models = $this->model::filter()->sortable()->paginate(10);
         return view('home/listhouses', ['models' => $models]);
     }
+
 
     public function showmap(Request $request, Response $response)
     {
         $googlekey = config('app.googlekey', 'AIzaSyCmXZ5CEhhFY3-qXoHRzs0XFK4a495LyxE');
-
         $response->header('Cache-Control', 'no-cache, must-revalidate');
-        $defaultHouse = session('defaultHouse' , -1);
-        if ($defaultHouse == -1)
-        {
-            $request>session()->flash('warning', 'Please find the house you want to check out!');
-            return redirect('home/listhouses')->with('returnpath', 'home/showmap'.'?menupoint='.session('menupoint'));
-        }
 
+        $this->checkHouseChoice($request, 'home/showmap'.'?menupoint='.session('menupoint'));
+
+        $defaultHouse = session('defaultHouse' , -1);
         $this->model::$ajax = true;
         $house = $this->model::findOrFail($defaultHouse);
         $housefields = $house->toArray();
-        $veryShortDescription = HouseI18n::where('id', $this->houseId)->where('culture', App::getLocale())->first()->veryshortdescription;
+        $veryShortDescription = HouseI18n::where('id', $defaultHouse)->where('culture', App::getLocale())->first()->veryshortdescription;
         $housefields['veryShortDescription'] = $veryShortDescription;
+
+        //Google translation test
+        //$gt = new GoogleTranslateWrapper();
+        //$gt->selfTest();
+
         return view('home/showmap', ['house' => $house, 'veryShortDescription'  => $veryShortDescription, 'googlekey' => $googlekey, 'housefields' => json_encode($housefields)]);
     }
 

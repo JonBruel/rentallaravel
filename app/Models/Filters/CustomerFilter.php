@@ -24,10 +24,16 @@ class CustomerFilter extends BaseFilter
      */
     public function setup()
     {
+        parent::setup();
+
         if (config('user.role', 1000) == 10) return $this->where('ownerid', Auth::user()->id)->where('customertypeid', '>', 10);
         if (config('user.role', 1000) == 100) return $this->where('ownerid', Auth::user()->ownerid)->where('customertypeid', '>', 100);
         if (config('user.role', 1000) == 110) return $this->where('ownerid', Auth::user()->ownerid)->where('customertypeid', '>', 110);
-        if (config('user.role', 1000) == 1000) return $this->where('id', Auth::user()->id);
+        if (config('user.role', 1000) == 1000)
+        {
+            if (Auth::check()) return $this->where('id', Auth::user()->id);
+            else return $this->where('ownerid', -1); //Will cause emptu customer list.
+        }
         return $this;
     }
 

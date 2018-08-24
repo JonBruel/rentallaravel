@@ -30,20 +30,3 @@
     </div>
 
 @endsection
-<!--
-        <div class="carousel-inner" role="listbox">
-            @foreach ($picturearray['path'] as $key => $pictureurl)
-    <?php
-    $active = '';
-    if ($key == 0) $active = 'active';
-    ?>
-            <figure class="carousel-item {{$active}}" style="background-color: #5a6268">
-                    <img src="{{$pictureurl}}" alt="{{@trans($picturearray['text'][$key])}}" class="d-block mx-auto"
-                    style="height: 555px; max-width: 740px">
-                    <div class="carousel-caption text-success d-none d-sm-block" style="background-color: #9fcdff; height: 20px; vertical-align: center">
-                        <h4 style="margin-top: -15px">{{ __($picturearray['text'][$key])}}</h4>
-                    </div>
-                </figure>
-            @endforeach
-        </div>
--->

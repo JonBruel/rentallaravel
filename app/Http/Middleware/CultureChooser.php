@@ -25,6 +25,7 @@ class CultureChooser
         $locale = $request->query('culture',session('culture','da_DK'));
         $request->setLocale($locale);
         App::setLocale($locale);
+        setlocale(LC_TIME, App::getLocale()); //Used by Carbon
         session(['culture' => $locale]);
         unset($request['culture']);
         session(['uri' => $request->path()]);

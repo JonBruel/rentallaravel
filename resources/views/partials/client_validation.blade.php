@@ -13,6 +13,7 @@
 <script type="text/javascript" src="{{ asset('vendor/globalize/js/jquery.validate.globalize.js', true)}}"></script>
 <script type="text/javascript">
     var culture = "{{App::getLocale()}}";
+    culture = culture.replace("_", "-");
     if (culture == 'da') culture = 'da-DK';
     $.when(
         $.get("/vendor/cldr-data/supplemental/likelySubtags.json"),

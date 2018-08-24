@@ -13,7 +13,28 @@
                 <th>@sortablelink('id')</th>
                 <th>@sortablelink('name')</th>
                 <th>@sortablelink('address1')</th>
+                <th>@sortablelink('email')</th>
                 <th>Actions</th>
+            </tr>
+            <tr>
+                <form id="Filter" action="{{Session::get('sanitizedpath')}}" method="get">
+                    <td>
+                        {!! Form::submit(__('Search'),['class' => 'form-control']) !!}
+                        <input type="hidden" name="sort" value="{{(array_key_exists('sort', $search))?$search['sort']:''}}" />
+                        <input type="hidden" name="order" value="{{(array_key_exists('order', $search))?$search['order']:''}}" />
+                    </td>
+
+                    <td>
+                        {!! Form::text('name',(array_key_exists('name', $search))?$search['name']:'',null,['class' => 'form-control']) !!}
+                    </td>
+                    <td>
+                        {!! Form::text('address1',(array_key_exists('address1', $search))?$search['address1']:'',null,['class' => 'form-control']) !!}
+                    </td>
+                    <td>
+                        {!! Form::text('email',(array_key_exists('email', $search))?$search['email']:'',null,['class' => 'form-control']) !!}
+                    </td>
+                    <td></td>
+                </form>
             </tr>
             </thead>
             <tbody>
@@ -24,7 +45,8 @@
                     </td>
                     <td>{{ $model->name }}</td>
                     <td>{{ $model->address1 }}</td>
-                    <td><a href="/impersonate/take/{{ $model->id }}">Impersonate</a></td>
+                    <td>{{ $model->email }}</td>
+                    <td><a href="/impersonate/take/{{ $model->id }}"  title="{{__('See site as: ')}} {{$model->name}}" data-toggle="tooltip">Impersonate</a></td>
                 </tr>
             @endforeach
             </tbody>

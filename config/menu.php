@@ -278,44 +278,64 @@ return [
         'show' => 'select',
         'childrenmap' => []
     ],
-    12100 => [
+    12000 => [
         'text' => 'House Adm.',
         'path' => 'house/index?menupoint=12110',
-        'parentid' => 12100,
+        'parentid' => 12000,
         'cssclass' => 'menulevel1',
-        'role' => 1000,
+        'role' => 100,
         'level' => 1,
         'show' => 'show',
-        'childrenmap' => [12110, 12120]
+        'childrenmap' => [12010, 12020, 12030, 12040, 12050]
     ],
-    12110 => [
-        'text' => 'House list',
-        'path' => 'house/index',
+    12010 => [
+        'text' => 'Create periods',
+        'path' => 'house/createperiods',
         'parentid' => 12100,
         'cssclass' => 'menulevel2',
-        'role' => 1000,
+        'role' => 100,
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => []
     ],
-    12120 => [
-        'text' => 'House Edit',
-        'path' => 'house/edit',
-        'parentid' => 12100,
+    12020 => [
+        'text' => 'List periods',
+        'path' => 'house/listperiods',
+        'parentid' => 12000,
         'cssclass' => 'menulevel2',
-        'role' => 1000,
+        'role' => 100,
         'level' => 2,
-        'show' => 'select',
+        'show' => 'hide',
         'childrenmap' => []
     ],
-    12130 => [
-        'text' => 'House details',
-        'path' => 'house/show',
+    12030 => [
+        'text' => 'List houses - administrator',
+        'path' => 'house/listhouses',
         'parentid' => 12100,
         'cssclass' => 'menulevel2',
-        'role' => 1000,
+        'role' => 100,
         'level' => 2,
-        'show' => 'select',
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    12040 => [
+        'text' => 'Statistics',
+        'path' => 'customer/statistics',
+        'parentid' => 12100,
+        'cssclass' => 'menulevel2',
+        'role' => 100,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    12050 => [
+        'text' => 'Annual overview',
+        'path' => 'contract/annualcontractoverview',
+        'parentid' => 12100,
+        'cssclass' => 'menulevel2',
+        'role' => 100,
+        'level' => 2,
+        'show' => 'hide',
         'childrenmap' => []
     ],
     13000 => [

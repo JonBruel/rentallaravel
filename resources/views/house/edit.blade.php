@@ -5,7 +5,9 @@
     <h3>Edit house</h3>
     <div class="table-responsive">
         {!! Form::model($model, ['action' => ['HouseController@update', $model], 'id' => 'HouseEdit']) !!}
-        {!! Form::submit('Save changes'); !!}
+        {!! Form::submit('Save changes',['class' => "btn btn-success"]); !!}
+        <br />
+        <br />
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -30,7 +32,7 @@
                 {!! Form::text($field, $model->$field, $vattr->validationOptions($field, ['class' => 'col-md-6 col form-control'])) !!}
             </div>
         @endforeach
-        {!! Form::submit('Save changes'); !!}
+        {!! Form::submit('Save changes',['class' => "btn btn-success"]); !!}
         {!! Form::close() !!}
     </div>
 @include('partials.client_validation')

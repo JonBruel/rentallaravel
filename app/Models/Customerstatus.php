@@ -7,7 +7,6 @@
 
 namespace App\Models;
 
-use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
  * Class Customerstatus
@@ -19,7 +18,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class Customerstatus extends Eloquent
+class Customerstatus extends BaseModel
 {
 	protected $table = 'customerstatus';
 	public $timestamps = false;

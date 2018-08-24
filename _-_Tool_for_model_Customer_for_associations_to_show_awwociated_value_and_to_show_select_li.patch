@@ -1,0 +1,1435 @@
+Index: app/Http/Middleware/CultureChooser.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Http/Middleware/CultureChooser.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Http/Middleware/CultureChooser.php	(date 1532709017453)
+@@ -30,14 +30,17 @@
+         session(['uri' => $request->path()]);
+ 
+ 
+-        //Clean culture element away from querystring
++        //Clean culture element and menupoint element away from querystring
+         $querystring = $request->getQueryString();
+         $querystring = str_replace('&culture='.$locale,'',$querystring);
+         $querystring = str_replace('culture='.$locale.'&','',$querystring);
++        $querystring = preg_replace ('/menupoint=(\d+)/', '', $querystring);
+         session(['querystring' => $querystring]);
+         $sanitizedpath = '/'.$request->path().'?'.$querystring;
+         $sanitizedpath = str_replace('//', '/', $sanitizedpath);
+         session(['sanitizedpath' => $sanitizedpath]);
++
++
+         return $next($request);
+     }
+ }
+\ No newline at end of file
+Index: app/Services/MenuService.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Services/MenuService.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Services/MenuService.php	(date 1532294117109)
+@@ -25,17 +25,18 @@
+ class MenuService {
+ 
+     private $fullMenu = Array();
+-    private $userMenu;
++    public static $userMenu;
++
+ 
+     /**
+      * Construction of the MenuStructure.
+      */
+     public function __construct() {
+         $this->fullMenu = config('menu.menustructure');
+-        $userMenu = $this->fullMenu;
++       $userMenu = $this->fullMenu;
+         array_walk($userMenu, [$this,'menufilter']);
+         foreach ($userMenu as $key => $value) if ($value == null) unset($userMenu[$key]);
+-        $this->userMenu = $userMenu;
++        static::$userMenu = $userMenu;
+     }
+ 
+ 
+@@ -86,7 +87,7 @@
+ 
+         $level = 0;
+ 
+-        $userMenu = $this->userMenu;
++        $userMenu = static::$userMenu;
+         if (!array_key_exists($menuclicked, $userMenu)) $menuclicked =  0;
+         if ($menuclicked > 0) {
+ 
+@@ -128,6 +129,7 @@
+                 $presentnum = $userMenu[$presentnum]['parentid'];
+             }
+         }
++        static::$userMenu = $userMenu;
+         return $userMenu;
+     }
+ 
+Index: app/Models/Period.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Models/Period.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Models/Period.php	(date 1532334486875)
+@@ -6,6 +6,7 @@
+  */
+ 
+ namespace App\Models;
++use DB;
+ 
+ 
+ /**
+@@ -94,8 +95,12 @@
+ 
+     static $committeds = [];
+     static $contractids = [];
+-    //The function below returns an array which are used for the
+-    //calculation of the committed status of the contracts and the corresponding contractid.
++    /*
++     * The function below returns an array which are used for the
++     * calculation of the committed status of the contracts and the corresponding contractid.
++     * TODO: Delete if not used, replaced by functions in Periodcontract
++     *
++     */
+     static function setPeriodStatus($houseid, $status)
+     {
+         //The execution below takes 5 ms
+@@ -117,7 +122,11 @@
+         }
+     }
+ 
+-    function getContractid($status)
++
++    /*
++     * TODO: Delete if not used, moved to Periodcontract
++     */
++    function getContractid($status = 'Committed')
+     {
+         if (sizeof(static::$contractids) == 0) static::setPeriodStatus($this->houseid, $status);
+         if (array_key_exists($this->id, static::$contractids)) return static::$contractids[$this->id];
+@@ -126,6 +135,8 @@
+ 
+     /*
+      * Return an array with to elements: currencysymbol and rate
++     *
++     * TODO: Delete if not used, moved to Periodcontract
+      */
+     function getRate($culture)
+     {
+Index: app/Helpers/ShowCalendar.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Helpers/ShowCalendar.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Helpers/ShowCalendar.php	(date 1532333946731)
+@@ -16,9 +16,12 @@
+ use \DateTime;
+ use \DateInterval;
+ use App\Models\Period;
++use App\Models\Periodcontract;
++use Illuminate\Session;
+ use App\Models\Contract;
+ use Carbon\Carbon;
+ use Number;
++use DB;
+ 
+ class ShowCalendar
+ {
+@@ -53,23 +56,10 @@
+     private $test = '';
+ 
+     /* CONSTRUCTOR */
+-    function __construct($date = NULL, $year = NULL, $month = NULL){
+-        $self = htmlspecialchars($_SERVER['PHP_SELF']);
+-        $this->link_to = $self;
+-
+-        if( is_null($year) || is_null($month) ){
+-            if( !is_null($date) ){
+-                //-------- strtotime the submitted date to ensure correct format
+-                $this->date = date("Y-m-d", strtotime($date));
+-            } else {
+-                //-------------------------- no date submitted, use today's date
+-                $this->date = date("Y-m-d");
+-            }
+-            $this->set_date_parts_from_date($this->date);
+-        } else {
+-            $this->year		= $year;
+-            $this->month	= str_pad($month, 2, '0', STR_PAD_LEFT);
+-        }
++    function __construct(Carbon $starttime){
++        $this->date = $starttime->format('Y-m-d');
++        $this->month = $starttime->format('m');
++        $this->year = $starttime->format('Y');
+     }
+ 
+ 
+@@ -109,7 +99,7 @@
+     }
+ 
+     //Fills in the calander details based on houseid
+-    static function setVdays($houseid, \Illuminate\Database\Eloquent\Builder $periodquery, $culture = NULL, Carbon $starttime = NULL, $months = NULL)
++    static function setVdays($houseid, \Illuminate\Database\Eloquent\Builder $periodcontractquery, $culture = NULL, Carbon $starttime = NULL, $months = NULL)
+     {
+         function addOneday($time)
+         {
+@@ -146,36 +136,27 @@
+         $lastdate = $datemax->toDateString();
+         $datemax->addDays(7);
+ 
+-        //$periodquery->whereBetween('from', [$date->sub(new DateInterval('P7D')), $date->add(new DateInterval('P7D'))]);
+-        $periodquery->whereBetween('from', [$datemin, $datemax])
+-                    ->orderBy('from');
+-
+-        $periods = $periodquery->get();
+-        //die("from:".$datemin->toDateString().' to: '.$datemax->toDateString().' period: '.sizeof($periods));
+-
+-        //We prepare two arrays which are used inside the period object
+-        //to check if committed and find the corresponding contractid.
+-        //This is done for performance
+-        Period::setPeriodStatus($houseid, 'Committed');
++        $periodcontractquery->whereBetween('from', [$datemin, $datemax])->orderBy('from');
++        $periodcontracts = $periodcontractquery->get();
+ 
+         $contractid = null;
+-        $maxKeyOfPeriods = sizeof($periods) - 1;
++
+         //Below we fill in the days for the calendar
+         //Time figures are in seconds after Unix birth.
+-        foreach ($periods as $key => $period)
++        foreach ($periodcontracts as $key => $periodcontract)
+         {
+             //If starttime is after the end of the time scope we want to show, we just skip
+             if (strtotime($starttime) >= strtotime($lastdate)) continue;
+ 
+-            //Common preparation for all periods
+-            $from = $period->from;
+-            $to = $period->to;
+-            $periodid = $period->id;
+-            $r = $period->getRate($culture);
++            //Common preparation for all periodcontracts
++            $from = $periodcontract->from;
++            $to = $periodcontract->to;
++            $periodid = $periodcontract->id;
++            $r = $periodcontract->getRate($culture);
+             $customercurrencysymbol = $r['currencysymbol'];
+             $rate = $r['rate'];
+             $categoryid = 0;
+-            $newcontractid = $period->getContractid('Committed');
++            $newcontractid = $periodcontract->getContractid();
+             $reserved = ($newcontractid != null)?true:false;
+             $newcontract = ($contractid == $newcontractid)?false:true;
+             $contractid = $newcontractid;
+@@ -183,28 +164,27 @@
+                 $categoryid = Contract::find($contractid)->categoryid;
+             }
+ 
+-            //Formulate text information to be used when clicking on a day
+-            $periodtext = $period->from.' '.__('to').' '.$period->to;
++            //Formulate text information to be used when hovering over a day
++            $periodtext = Carbon::parse($periodcontract->from)->format('Y-m-d').' '.__('to').' '.Carbon::parse($periodcontract->to)->format('Y-m-d');
+             $price = '';
+-            //Number::format($value, ['minimum_fraction_digits' => 12, 'maximum_fraction_digits' => 12]);
+-            if ($period->personprice>0)
++            if ($periodcontract->personprice>0)
+             {
+                 $price .= __('Base price') . ': ' . $customercurrencysymbol . ' '
+-                    . Number::format($rate*$period->baseprice,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => $culture])
++                    . Number::format($rate*$periodcontract->baseprice,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => $culture])
+                     . ', '
+-                    . __('per person more than') . ' ' . $period->basepersons . ': ' . $customercurrencysymbol . ' '
+-                    . Number::format($rate*$period->personprice,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => $culture])
+-                    .  ', max. ' . $period->maxpersons . ' ' . __('persons') . '.';
++                    . __('per person more than') . ' ' . $periodcontract->basepersons . ': ' . $customercurrencysymbol . ' '
++                    . Number::format($rate*$periodcontract->personprice,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => $culture])
++                    .  ', max. ' . $periodcontract->maxpersons . ' ' . __('persons') . '.';
+             }
+             else
+             {
+                 $price .= $customercurrencysymbol . ' '
+-                    . Number::format($rate*$period->baseprice,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => $culture])
+-                    . ' ' . __('with a maximum of') . ' ' . $period->maxpersons . ' ' . __('persons');
++                    . Number::format($rate*$periodcontract->baseprice,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => $culture])
++                    . ' ' . __('with a maximum of') . ' ' . $periodcontract->maxpersons . ' ' . __('persons');
+             }
+ 
+ 
+-            //We fill in all $vdays up to the present from-time by default values as non-scheduled periods
++            //We fill in all $vdays up in the gaps where there are no periodcontracts, e.g. future dates
+             if (strtotime($from)>strtotime($starttime))
+             {
+                 $start = strtotime($starttime);
+@@ -220,7 +200,7 @@
+                     $vdays[$daykey]['halfday'] = false;
+                     $vdays[$daykey]['notoffered'] = true;
+                     $vdays[$daykey]['text'] = 'N/A';
+-                    $vdays[$daykey]['period'] = 'N/A';
++                    $vdays[$daykey]['periodcontract'] = 'N/A';
+                     $vdays[$daykey]['price'] = 'N/A';
+                     $vdays[$daykey]['date'] = $daykey;
+                     $vdays[$daykey]['categoryid'] = 0;
+@@ -228,7 +208,7 @@
+                 }
+             }
+ 
+-            //We fill $vdays data within the periods
++            //We fill $vdays data within the periodcontracts
+             if (strtotime($from)<=strtotime($starttime))
+             {
+                 $start = strtotime($starttime);
+@@ -248,7 +228,7 @@
+                     $vdays[$daykey]['halfday'] = false;
+                     $vdays[$daykey]['notoffered'] = false;
+                     $vdays[$daykey]['text'] = $periodtext . "\n" . $price;
+-                    $vdays[$daykey]['period'] = $periodtext;
++                    $vdays[$daykey]['periodcontract'] = $periodtext;
+                     $vdays[$daykey]['price'] = $price;
+                     $vdays[$daykey]['date'] = $daykey;
+                     if ($lastreserved)
+@@ -273,9 +253,9 @@
+                 }
+             }
+         }
+-        //Exit periods loop
++        //Exit periodcontracts loop
+ 
+-        //We possible remaining days without periods
++        //We possible remaining days without periodcontracts
+         if (strtotime($starttime) <= strtotime($lastdate))
+         {
+             $start = strtotime($starttime);
+@@ -290,7 +270,7 @@
+                 $vdays[$daykey]['halfday'] = false;
+                 $vdays[$daykey]['notoffered'] = true;
+                 $vdays[$daykey]['text'] = 'N/A';
+-                $vdays[$daykey]['period'] = 'N/A';
++                $vdays[$daykey]['periodcontract'] = 'N/A';
+                 $vdays[$daykey]['price'] = 'N/A';
+                 $vdays[$daykey]['date'] = $daykey;
+             }
+@@ -467,18 +447,15 @@
+             }
+ 
+             //---------------------------------- start table cell, apply classes
+-            $period = $rentalinfo['period'];
++            $period = $rentalinfo['periodcontract'];
+             $price = $rentalinfo['price'];
+-            $text = $period . "\n\n" . $price;
++            $text = $period . "\n" . $price;
+ 
+-            $output .= "<td" . $day_class . " title=\"" . $text .
+-                "\" onmouseover=\"
+-        jQuery('#period').text('".str_replace("\n", ": ", $period)."');
+-        jQuery('#price').text('".str_replace("\n", ": ", $price)."');
+-        \"".
+-                "\" onmouseout=\"
+-        jQuery('#period').text('');
+-        jQuery('#price').text('');
++            $output .= "<td" . $day_class . " title=\"" . $text . "\" data-toggle=\"tooltip\"" .
++        " onmouseover=\"
++        $('#period').html('".str_replace("\n", ": ", " ".$period)."');
++        $('#price').html('".str_replace("\n", ": ", " ".$price)."');
++        \""."\" onmouseout=\"$('#period').html('');$('#price').html('');
+         \"". ">";
+ 
+             //----------------------------------------- unset to keep loop clean
+Index: app/Http/Controllers/HouseController.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Http/Controllers/HouseController.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Http/Controllers/HouseController.php	(date 1532603806404)
+@@ -6,8 +6,9 @@
+ //use App\Models\House as Model;
+ use Schema;
+ use Kyslik\ColumnSortable\Sortable;
+-use App\Rules\Name;
++use App\_Rules_not_used_anymore\Name;
+ use ValidationAttributes;
++use App\Models\Customer;
+ 
+ 
+ 
+@@ -25,7 +26,8 @@
+      */
+     public function index(Request $request)
+     {
+-        $models = $this->model::sortable()->paginate(10);
++        $models = $this->model::sortable()->filter($request->all())->paginate(10);
++        $owners = ['' => __('Please select owner')] + Customer::filter()->where('customertypeid', 10)->pluck('name', 'id')->toArray();
+         $sortparams = ($request->query('order'))?'&order='.$request->query('order'):'';
+         $sortparams .= ($request->query('sort'))?'&sort='.$request->query('sort'):'';
+ 
+@@ -35,7 +37,7 @@
+         $params['show'] = "?menupoint=2130";
+         $params['show'] .= $sortparams;
+ 
+-        return view('house/index', ['models' => $models, 'params' => $params]);
++        return view('house/index', ['models' => $models, 'params' => $params, 'search' => $request->all(), 'owners' => $owners]);
+     }
+ 
+     /**
+@@ -131,4 +133,9 @@
+     {
+         //
+     }
++
++    public function listperiods(Request $request)
++    {
++
++    }
+ }
+Index: app/Http/Controllers/HomeController.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Http/Controllers/HomeController.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Http/Controllers/HomeController.php	(date 1532715053796)
+@@ -4,6 +4,7 @@
+ 
+ use Illuminate\Http\Request;
+ use Illuminate\Http\Response;
++use Illuminate\Support\Facades\Input;
+ use App\Helpers\PictureHelpers;
+ use App\Helpers\ShowCalendar;
+ use Illuminate\Pagination\Paginator;
+@@ -13,9 +14,9 @@
+ use App\Models\HouseI18n;
+ use App;
+ use App\Models\Period;
+-use \Datetime;
+-use \DateInterval;
++use App\Models\Periodcontract;
+ use Carbon\Carbon;
++use DB;
+ 
+ class HomeController extends Controller
+ {
+@@ -35,9 +36,8 @@
+     {
+         if (session('defaultHouse' , -1) == -1)
+         {
+-            $request>session()->flash('warning', 'Please find the house you want to check out!');
+-            $request>session()->flash('returnpath', 'home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
+-            return redirect('home/listhouses');
++            $request>session()->flash('warning', __('Please find the house you want to check out!'));
++            return redirect('home/listhouses')->with('returnpath', 'home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
+         }
+ 
+         if ($infotype == 'gallery')
+@@ -55,7 +55,12 @@
+         else
+         {
+             $info = HouseI18n::where('id', $this->houseId)->where('culture', App::getLocale())->first()->$infotype;
+-            return view('home/showinfo', ['info' => $info]);
++
++            //Find first vacant week
++            $freeperiod = Periodcontract::filter()->where('from', '>', Carbon::now())->where(function($q){$q->where('committed', '>', 0); $q->orWhere('prepaid', '>', 0);})->orderBy('from')->first();
++            $firstFree = ($freeperiod)?Carbon::parse($freeperiod->from)->toDateString('Y-m-d') . ' ' . __('to') . ' ' . Carbon::parse($freeperiod->to)->toDateString('Y-m-d'):'';
++
++            return view('home/showinfo', ['info' => $info, 'firstFree' => $firstFree]);
+         }
+     }
+ 
+@@ -73,14 +78,14 @@
+         if ($defaultHouse == -1)
+         {
+             $request>session()->flash('warning', 'Please find the house you want to check out!');
+-            $request>session()->flash('returnpath', 'home/showbookings'.'?menupoint='.session('menupoint'));
+-            return redirect('home/listhouses');
++            return redirect('home/listhouses')->with('returnpath', 'home/showbookings'.'?menupoint='.session('menupoint'));
+         }
+         $house = $this->model::findOrFail($defaultHouse);
+ 
+         $months = 12;
+         $yearstart = Carbon::now()->year;
+         $thismonthstart = Carbon::parse('first day of this month');
++
+         //Below, we create the pager without a model. This allows us to use tha standard
+         //helper to navigate through the months or years
+         $page = $request->get('page', 1);
+@@ -92,7 +97,7 @@
+ 
+         $starttime = $thismonthstart->addYears($page-1);
+ 
+-        $periodquery = Period::filter();
++        $periodquery = Periodcontract::filter();
+ 
+         ShowCalendar::setVdays($defaultHouse, $periodquery, App::getLocale(), $starttime, $months);
+         $cal = [];
+@@ -101,13 +106,10 @@
+             $calendar = new ShowCalendar($starttime);
+             $calendar->houseid = $defaultHouse;
+             //$calendar->link_to = $this->url . '/contract/choseweeks/houseid/' . $this->houseid . '/cursor/0/restricttohouse/1/periodid/';
+-            $calendar->link_to = '/contract/choseweeks/houseid/' . $defaultHouse . '/cursor/0/restricttohouse/1/periodid/';
++            $calendar->link_to = '/contract/choseweeks?periodid=';
+             $calendar->culture = App::getLocale();
+             $cal[$i] = $calendar->output_calendar();
+-            $date = new DateTime($starttime);
+-            $date->add(new DateInterval('P1M'));
+-            $starttime = $date->format("Y-m-d");
+-            //if ($i == 1) die($starttime);
++            $starttime->addMonth();
+         }
+ 
+         return view('home/checkbookings', ['house' => $house, 'cal' => $cal, 'starttime' => $starttime, 'pager' => $pager, 'elements' => $elements, 'offset' => ($yearstart-1)]);
+@@ -125,8 +127,30 @@
+             return redirect(session('returnpath', 'home/showinfo/description?menupoint=10010'));
+         }
+ 
++        if (session('returnpath')) session()->keep(['returnpath']);
++
+         $models = $this->model::sortable()->paginate(10);
+         return view('home/listhouses', ['models' => $models]);
+     }
+ 
++    public function showmap(Request $request, Response $response)
++    {
++        $googlekey = config('app.googlekey', 'AIzaSyCmXZ5CEhhFY3-qXoHRzs0XFK4a495LyxE');
++
++        $response->header('Cache-Control', 'no-cache, must-revalidate');
++        $defaultHouse = session('defaultHouse' , -1);
++        if ($defaultHouse == -1)
++        {
++            $request>session()->flash('warning', 'Please find the house you want to check out!');
++            return redirect('home/listhouses')->with('returnpath', 'home/showmap'.'?menupoint='.session('menupoint'));
++        }
++
++        $this->model::$ajax = true;
++        $house = $this->model::findOrFail($defaultHouse);
++        $housefields = $house->toArray();
++        $veryShortDescription = HouseI18n::where('id', $this->houseId)->where('culture', App::getLocale())->first()->veryshortdescription;
++        $housefields['veryShortDescription'] = $veryShortDescription;
++        return view('home/showmap', ['house' => $house, 'veryShortDescription'  => $veryShortDescription, 'googlekey' => $googlekey, 'housefields' => json_encode($housefields)]);
++    }
++
+ }
+Index: app/Http/Controllers/AjaxController.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Http/Controllers/AjaxController.php	(date 1532603806304)
++++ app/Http/Controllers/AjaxController.php	(date 1532603806304)
+@@ -0,0 +1,128 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\Response;
++use Schema;
++use ValidationAttributes;
++use App\Models\BaseModel;
++
++
++
++class AjaxController extends Controller
++{
++
++    public function __construct() {
++        parent::__construct(\App\Models\House::class);
++        //We turn off mutators, we want . as decimal separator!
++        BaseModel::$ajax = true;
++    }
++
++
++    /**
++     * Display the specified resource.
++     *
++     * @param  int  $id
++     * @return \Illuminate\Http\Response
++     */
++    public function listhouses(Request $request, Response $response, $x1 = -179.99, $y1 = -179.99, $x2 = 179.99, $y2 = 179.99)
++    {
++        //TODO: modify from Symfony to Laravel
++
++        //$table = 'house';
++        //$customertypeid = $this->user->getAttribute('customertypeid', 1000);
++        $response->header('Cache-Control', 'no-cache, must-revalidate');
++        $defaultHouse = $request->query('defaultHouse',-1);
++
++
++        $housequery = $this->model::whereBetween('latitude', [$x1, $x2])
++                            ->whereBetween('longitude', [$y1, $y2]);
++
++        if ($defaultHouse != -1) $housequery->where('id', $defaultHouse);
++
++        if (session('housequery')) $housequery = session('housequery');
++        $housequery->where('id', '>', 0);
++
++        $houses = $housequery->get();
++
++
++        $housefields = [];
++        $i = 1;
++        $housefields[0] =  ['length' => $i];
++
++        if ($defaultHouse == -2)
++        {
++            //We have a new house not yet given coordinates
++            $house = new $this->model;
++            $house->latitude = 0;
++            $house->longitude = 0;
++            $house->id = -2;
++            $house->name = 'New House';
++            $houses = [$house];
++        }
++
++        foreach ($houses as $house)
++        {
++            $latitude = $house->latitude;
++            $longitude = $house->longitude;
++
++            //Below we center the marker in case of a new house or an existing house without coordinate
++            if (($latitude == 0) or ($latitude == null)) $latitude = ($x1+$x2)/2;
++            if (($longitude == 0) or ($longitude == null)) $longitude = ($y1+$y2)/2;
++
++            $housefields[$i] = $house->toArray();
++            $housefields[$i]['latitude'] = $latitude;
++            $housefields[$i]['longitude'] = $longitude;
++            //$housefields[$i]['veryshortdescription'] = $house->getVeryshortdescription($this->culture);
++            if ($i == 1)
++            {
++                $x1 = $latitude;
++                $y1 = $longitude;
++                $x2 = $latitude;
++                $y2 = $longitude;
++            }
++            $x1 = min($x1, $latitude);
++            $y1 = min($y1, $longitude);
++            $x2 = max($x2, $latitude);
++            $y2 = max($y2, $longitude);
++            $i++;
++        }
++
++        $deltax = $x2 - $x1;
++        $deltay = $y2 - $y1;
++        $border = 0.2;
++        $x1 = $x1 - $deltax*$border;
++        $y1 = $y1 - $deltay*$border;
++        $x2 = $x2 + $deltax*$border;
++        $y2 = $y2 + $deltay*$border;
++
++        $x1 = max(-179.99, $x1);
++        $y1 = max(-179.99, $y1);
++        $x2 = min(179.99, $x2);
++        $y2 = min(179.99, $y2);
++        $housefields[0]['length'] = $i;
++        $housefields[0]['x1'] = $x1;
++        $housefields[0]['y1'] = $y1;
++        $housefields[0]['x2'] = $x2;
++        $housefields[0]['y2'] = $y2;
++        $coordinates = json_encode($housefields);
++
++        return response()->json($housefields);
++    }
++
++    /**
++     * Show the form for editing the specified resource.
++     *
++     * @param  int  $id
++     * @return \Illuminate\Http\Response
++     */
++    public function edit($id)
++    {
++        $model = (new $this->model)->findOrFail($id);
++
++        $fields = Schema::getColumnListing($model->getTable());
++        return view('house/edit', ['model' => $model, 'fields' => $fields, 'vattr' => new ValidationAttributes($model)]);
++    }
++
++}
+Index: app/Models/Filters/BaseFilter.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Models/Filters/BaseFilter.php	(date 1532361627783)
++++ app/Models/Filters/BaseFilter.php	(date 1532361627783)
+@@ -0,0 +1,22 @@
++<?php
++
++namespace App\Models\Filters;
++
++use EloquentFilter\ModelFilter;
++use Auth;
++
++class BaseFilter extends ModelFilter
++{
++    public function name($name)
++    {
++        return $this->where(function($q) use ($name)
++        {
++            return $q->where('name', 'LIKE', "%$name%");
++        });
++    }
++
++    public function ownerid($id)
++    {
++        return $this->where('ownerid', $id);
++    }
++}
+Index: app/Models/Filters/HouseFilter.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Models/Filters/HouseFilter.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Models/Filters/HouseFilter.php	(date 1532361664998)
+@@ -1,9 +1,23 @@
+ <?php namespace App\Models\Filters;
+ 
+-use EloquentFilter\ModelFilter;
++
++
++class HouseFilter extends BaseFilter
++{
++
++    public function setup()
++    {
++        //if (session('defaultHouse' , -1) != -1) return $this->where('houseid', session('defaultHouse'));
++        return $this;
++    }
++
+ 
+-class HouseFilter extends ModelFilter
+-{
++    public function address1($address1)
++    {
++        return $this->where('address1', 'LIKE', "%$address1%");
++    }
++
++
+     /**
+     * Related Models that have ModelFilters as well as the method on the ModelFilter
+     * As [relationMethod => [input_key1, input_key2]].
+Index: app/Models/Periodcontract.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Models/Periodcontract.php	(date 1532333526155)
++++ app/Models/Periodcontract.php	(date 1532333526155)
+@@ -0,0 +1,102 @@
++<?php
++
++/**
++ * Created by Reliese Model.
++ * Date: Mon, 18 Jun 2018 10:19:01 +0000.
++ */
++
++namespace App\Models;
++
++
++/**
++ * Class Periodcontract
++ *
++ * @property float $prepaid
++ * @property int $id
++ * @property int $houseid
++ * @property int $ownerid
++ * @property \Carbon\Carbon $from
++ * @property \Carbon\Carbon $to
++ * @property int $weeknumber
++ * @property int $contractid
++ * @property float $committed
++ * @property int $uncommitted
++ * @property int $customerid
++ * @property float $personprice
++ * @property int $maxpersons
++ * @property int $basepersons
++ * @property float $baseprice
++ *
++ *
++ * @package App\Models
++ *
++ * Periodcontract is a view
++ *
++ */
++class Periodcontract extends BaseModel
++{
++	protected $table = 'periodcontract';
++	public $timestamps = false;
++
++
++    public function modelFilter()
++    {
++        return $this->provideFilter(Filters\PeriodcontractFilter::class);
++    }
++
++	protected $casts = [
++		'prepaid' => 'float',
++		'id' => 'int',
++		'houseid' => 'int',
++		'ownerid' => 'int',
++		'weeknumber' => 'int',
++		'contractid' => 'int',
++		'committed' => 'float',
++		'uncommitted' => 'int',
++        'customerid' => 'int',
++        'personprice' => 'float',
++        'maxpersons' => 'int',
++        'basepersons' => 'int',
++        'baseprice' => 'float'
++	];
++
++    protected $dates = [
++        'from',
++        'to'
++    ];
++
++	protected $fillable = [
++	];
++
++    /*
++     * Return an array with to elements: currencysymbol and rate
++     */
++    function getRate($culture)
++    {
++        $return = [];
++        $culture = Culture::where('culture', $culture)->first();
++        //if (!$culture) throw new Exception('No culture ' .  $culture . ' found, table entry may be deleted.');
++        $customercurrencyid = $culture->currencyid;
++        $customercurrency = Currency::find($customercurrencyid);
++        $r['currencysymbol'] = $customercurrency->currencysymbol;
++
++        $customercurrencyrate = $customercurrency->getRate();
++
++        $housecurrencyid = House::find($this->houseid)->currencyid;
++        $housecurrency = Currency::find($housecurrencyid);
++
++        $housecurrencysymbol = $housecurrency->currencysymbol;
++        $housecurrencyrate = $housecurrency->getRate();
++
++        $r['rate'] = $customercurrencyrate/$housecurrencyrate;
++        return $r;
++    }
++
++    function getContractid()
++    {
++        if (($this->committed > 0) or ($this->prepaid > 0)) {
++            return $this->contractid;
++        }
++        return null;
++    }
++}
+Index: app/Rules/Name.php
+===================================================================
+--- app/Rules/Name.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/_Rules_not_used_anymore/Name.php	(date 1532603806448)
+@@ -1,6 +1,6 @@
+ <?php
+ 
+-namespace App\Rules;
++namespace App\_Rules_not_used_anymore;
+ 
+ use Illuminate\Contracts\Validation\Rule;
+ 
+Index: app/Http/Middleware/SetDefaults.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Http/Middleware/SetDefaults.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Http/Middleware/SetDefaults.php	(date 1533477344544)
+@@ -8,6 +8,7 @@
+ use Event;
+ use App;
+ use Auth;
++use DB;
+ 
+ 
+ 
+@@ -20,7 +21,35 @@
+         $role = 1000;
+         if (Auth::check()) $role = Auth::user()->customertypeid;
+         config(['user.role' => $role]);
++
++
++        //$host is e.g. rentallaravel.consiglia.dk
++        //if (session('config', -1) == 1)
++        {
++            $host = $request->getHost();
++            //TODO: Fix this, gives error class sfConfig not found
++            if ($host == 'xrentallaravel.consiglia.dk') $host = 'cangeroni.hasselbalch.com';
++            $code = 1;
++            $config = DB::table('config')->where('url', $host)->first();
++            if ($config) {
++                $code = $config->index;
++            }
++            if ($code != '1') {
++                if (eval($code . "\nreturn 'OK';") != 'OK')
++                    echo("Code not evaluated OK");
++            }
++            else session(['config' => 1]);
++        }
++
+         return $next($request);
+     }
+ 
+ }
++
++class sfConfig {
++    public static function set($key, $value)
++    {
++        $key = str_replace('sf_', 'app.', $key);
++        config([$key => $value]);
++    }
++}
+\ No newline at end of file
+Index: app/Models/Filters/PeriodcontractFilter.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Models/Filters/PeriodcontractFilter.php	(date 1532333209514)
++++ app/Models/Filters/PeriodcontractFilter.php	(date 1532333209514)
+@@ -0,0 +1,26 @@
++<?php namespace App\Models\Filters;
++
++use EloquentFilter\ModelFilter;
++use Illuminate\Session;
++use Auth;
++
++class PeriodcontractFilter extends ModelFilter
++{
++    /**
++    * Related Models that have ModelFilters as well as the method on the ModelFilter
++    * As [relationMethod => [input_key1, input_key2]].
++    *
++    * @var array
++    */
++    public $relations = [];
++
++    /*
++     * Usually, when this table is used, the defaultHouse will be set.
++     * We may return an error if it is not, not implemented yet.
++     */
++    public function setup()
++    {
++        if (session('defaultHouse' , -1) != -1) return $this->where('houseid', session('defaultHouse'));
++        return $this;
++    }
++}
+Index: app/Providers/AuthServiceProvider.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Providers/AuthServiceProvider.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Providers/AuthServiceProvider.php	(date 1532603492724)
+@@ -4,6 +4,7 @@
+ 
+ use Illuminate\Support\Facades\Gate;
+ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
++use App\Models\Customer;
+ 
+ class AuthServiceProvider extends ServiceProvider
+ {
+@@ -20,13 +21,50 @@
+      * Register any authentication / authorization services.
+      *
+      * @return void
++     *
++     * From Customer model:
++     * public static $customertypes = ['Test' => 0, 'Supervisor' => 1, 'Owner' => 10, 'Administrator' => 100, 'Personel' => 110, 'Customer' => 1000];
+      */
+     public function boot()
+     {
+         $this->registerPolicies();
+-        Gate::define('administrator', function ($user) {
+-            return ($user->customertypeid <= 10);
+-        });
++        foreach (Customer::$customertypes as $typename => $typevalue)
++        {
++            switch ($typevalue) {
++                case 0:
++                    Gate::define($typename, function ($user) {
++                        return ($user->customertypeid <= 0);
++                    });
++                    break;
++                case 1:
++                    Gate::define($typename, function ($user) {
++                        return ($user->customertypeid <= 1);
++                    });
++                    break;
++                case 10:
++                    Gate::define($typename, function ($user) {
++                        return ($user->customertypeid <= 10);
++                    });
++                    break;
++                case 100:
++                    Gate::define($typename, function ($user) {
++                        return ($user->customertypeid <= 100);
++                    });
++                    break;
++                case 110:
++                    Gate::define($typename, function ($user) {
++                        return ($user->customertypeid <= 110);
++                    });
++                    break;
++                case 1000:
++                    Gate::define($typename, function ($user) {
++                        return ($user->customertypeid <= 1000);
++                    });
++                    break;
++            }
++
++        }
++
+         //
+     }
+ }
+Index: app/Http/Controllers/ContractController.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Http/Controllers/ContractController.php	(date 1532019663090)
++++ app/Http/Controllers/ContractController.php	(date 1532019663090)
+@@ -0,0 +1,28 @@
++<?php
++
++namespace App\Http\Controllers;
++
++use Illuminate\Http\Request;
++use Illuminate\Http\Response;
++use App\Helpers\PictureHelpers;
++use App\Helpers\ShowCalendar;
++use Illuminate\Pagination\Paginator;
++use Schema;
++use Gate;
++use ValidationAttributes;
++use App\Models\HouseI18n;
++use App;
++use App\Models\Contract;
++use Carbon\Carbon;
++
++class ContractController extends Controller
++{
++    //TODO: Let the user choose the house
++    private $houseId = 1;
++
++    public function __construct() {
++        parent::__construct(\App\Models\Contract::class);
++    }
++
++
++}
+Index: app/Models/Customer.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Models/Customer.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Models/Customer.php	(date 1533408844823)
+@@ -55,8 +55,10 @@
+  */
+ class Customer extends BaseModel
+ {
++    public static $customertypes = ['Test' => 0, 'Supervisor' => 1, 'Owner' => 10, 'Administrator' => 100, 'Personel' => 110, 'Customer' => 1000];
+ 
+ 	public $sortable = [
++	    'id',
+         'name',
+         'address1',
+         'address2',
+@@ -64,6 +66,7 @@
+         'country',
+         'telephone',
+         'ownerid',
++        'email',
+     ];
+ 
+ 
+@@ -99,6 +102,7 @@
+ 		'email',
+ 		'login',
+ 		'password',
++        'plain_password',
+ 		'notes',
+ 		'customertypeid',
+ 		'ownerid',
+@@ -112,8 +116,55 @@
+         'name' => ['required', 'between:5,30'],
+         'address1' => ['required', 'between:3,40'],
+         'country' => ['required', 'between:3,40'],
+-        'mobile' => ['required', 'between:8,15']
++        'mobile' => ['required', 'between:8,15'],
++        'email' => ['required', 'unique:customer']
+     ];
++
++    /*
++     * This function is used to show the relevant associated
++     * user-friendly value as opposed to showing the id.
++     * Performance: as we are making up to 4 queries, it does take some time.
++     * Measured to around 5 ms.
++     */
++    public function withBelongsTo($fieldname)
++    {
++        switch ($fieldname)
++        {
++            case 'customertypeid':
++                return $this->customertype->customertype;
++            case 'ownerid':
++                return $this->customer->name;
++            case 'cultureid':
++                return $this->culture->culturename;
++            case 'status':
++                return $this->customerstatus->status;
++            default:
++                return $this->$fieldname;
++        }
++    }
++
++    /*
++     * Retuns an array of keys ans values to be used in forms for select boxes. Typical uses
++     * are filters, e.g selection housed owner by a specific owner.
++     *
++     * Retuns null if no select boxes are to be used.
++     */
++    public function withSelect($fieldname)
++    {
++        switch ($fieldname)
++        {
++            case 'customertypeid':
++                return  Customertype::all()->pluck('customertype', 'id')->toArray();
++            case 'ownerid':
++                return Customer::filter()->where('customertypeid', 10)->pluck('name', 'id')->toArray();
++            case 'cultureid':
++                return  Culture::all()->pluck('culturename', 'id')->toArray();
++            case 'status':
++                return  Customerstatus::all()->pluck('status', 'id')->toArray();
++            default:
++                return null;
++        }
++    }
+ 
+ 	public function customertype()
+ 	{
+Index: app/Models/BaseModel.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Models/BaseModel.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Models/BaseModel.php	(date 1532257548510)
+@@ -28,6 +28,8 @@
+ 
+ class BaseModel extends Model
+ {
++    public static $ajax = false;
++
+     use Sortable;
+     use Filterable;
+     use FormAccessible;
+Index: app/Http/Controllers/CustomerController.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Http/Controllers/CustomerController.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Http/Controllers/CustomerController.php	(date 1532714631510)
+@@ -3,9 +3,14 @@
+ namespace App\Http\Controllers;
+ 
+ use Illuminate\Http\Request;
++use Illuminate\Support\Facades\Input;
+ use Schema;
+ use Gate;
+ use ValidationAttributes;
++use Illuminate\Support\Facades\Hash;
++use Illuminate\Support\MessageBag;
++use Auth;
++use App\Models\Customer;
+ 
+ class CustomerController extends Controller
+ {
+@@ -21,26 +26,34 @@
+      */
+     public function index(Request $request)
+     {
+-        //$this->authorize('administrator');
+-        if (Gate::allows('administrator')) {
+-            $customers = $this->model::filter()->sortable()->paginate(10);
+ 
+-            $sortparams = ($request->query('order'))?'&order='.$request->query('order'):'';
+-            $sortparams .= ($request->query('sort'))?'&sort='.$request->query('sort'):'';
++        if (Gate::allows('Owner')) {
++            $customers = $this->model::filter($request->all())->sortable('id')->paginate(10);
+ 
+-            $params['edit'] = "?menupoint=1020";
+-            $params['edit'] .= $sortparams;
++            $params['edit'] = "?menupoint=1020&".session('querystring');
++            $params['show'] = "?menupoint=1030&".session('querystring');
+ 
+-            $params['show'] = "?menupoint=1030";
+-            $params['show'] .= $sortparams;
+-
+-            return view('customer/index', ['models' => $customers, 'params' => $params]);
++            return view('customer/index', ['models' => $customers, 'params' => $params, 'search' => $request->all()]);
+         }
+         else {
+             $request>session()->flash('warning', 'You are now allowed to see the customer list.');
+-            return redirect('customer/index');
++            return redirect('home');
+         }
++
++    }
+ 
++    public function hashpasswords()
++    {
++        //Password hash
++        $customers = $this->model::all();
++        foreach ($customers as $customer)
++        {
++            if ((strlen($customer->password < 20) and (strlen($customer->password) > 3)))
++            {
++                $customer->password = Hash::make($customer->password);
++                $customer->save();
++            }
++        }
+     }
+ 
+     /**
+@@ -50,7 +63,19 @@
+      */
+     public function create()
+     {
+-
++        $models = [new $this->model()];
++        $fields = [
++            'name',
++            'address1',
++            'address2',
++            'country',
++            'telephone',
++            'mobile',
++            'email',
++            'login',
++            'plain_password'
++        ];
++        return view('customer/create', ['models' => $models, 'fields' => $fields, 'vattr' => new ValidationAttributes($models[0])]);
+     }
+ 
+     /**
+@@ -61,7 +86,40 @@
+      */
+     public function store(Request $request)
+     {
+-        //
++        $model = new $this->model();
++
++        $fields = [
++            'name',
++            'address1',
++            'address2',
++            'country',
++            'telephone',
++            'mobile',
++            'email',
++            'login',
++            'plain_password'
++        ];
++        foreach ($fields as $field) $model->$field = $request->get($field);
++
++        //Set structural fields
++        //$model->ownerid = Auth::user()->ownerid;
++        $model->ownerid = 1;
++        $model->password = Hash::make(Input::get('plain_password'));
++        $model->houselicenses = 0;
++        $model->customertypeid = 1000;
++        $model->status = 1;
++        $model->cultureid = 1;
++
++        //We save. The save validates after the Mutators have been used.
++        //$errors = '';
++        $errors = new MessageBag();
++        $success = 'Customer has been updated!';
++        if (!$model->save()) {
++            $errors = $model->getErrors();
++            $success = 'Customer was not updated!';
++        }
++        if ($errors->any()) return redirect('/customer/create')->with('success', $success)->with('errors',$errors)->withInput(Input::except('plain_password'));
++        return redirect('/customer/index?menupoint=1010')->with('success', $success);
+     }
+ 
+     /**
+@@ -74,12 +132,12 @@
+     {
+         //Find page from id
+         if ($request->query('page') == null) {
+-            $models = $this->model::sortable()->pluck('id')->all();
++            $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
+             $page = array_flip($models)[$id]+1;
+             $request->merge(['page' => $page]);
+         }
+ 
+-        $models = $this->model::sortable()->paginate(1);
++        $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
+         $fields = Schema::getColumnListing($models[0]->getTable());
+         return view('customer/show', ['models' => $models, 'fields' => $fields]);
+     }
+@@ -90,16 +148,16 @@
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+-    public function edit(Request $request, $id)
++    public function edit($id)
+     {
+         //Find page from id
+-        if ($request->query('page') == null) {
+-            $models = $this->model::sortable()->pluck('id')->all();
++        if (Input::get('page') == null) {
++            $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
+             $page = array_flip($models)[$id]+1;
+-            $request->merge(['page' => $page]);
++            Input::merge(['page' => $page]);
+         }
+ 
+-        $models = $this->model::sortable()->paginate(1);
++        $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
+         $fields = Schema::getColumnListing($models[0]->getTable());
+         return view('customer/edit', ['models' => $models, 'fields' => $fields, 'vattr' => new ValidationAttributes($models[0])]);
+     }
+@@ -111,13 +169,15 @@
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+-    public function update(Request $request, $id)
++    public function update($id)
+     {
+         $model = (new $this->model)->findOrFail($id);
+         $fields = Schema::getColumnListing($model->getTable());
+ 
+         foreach ($fields as $field){
+-            $model->$field = $request->get($field) ;
++            $model->$field = Input::get($field);
++            if ($field == 'password' and strlen(Input::get('password') < 60)) $model->$field = Hash::make(Input::get('password'));
++            //if ($field == 'cultureid') die("Cultureid: " . Input::get('cultureid'));
+         }
+         //We save. The save validates after the Mutators have been used.
+         $errors = '';
+@@ -126,7 +186,7 @@
+             $errors = $model->getErrors();
+             $success = '';
+         }
+-        if ($errors != '') return redirect('/customer/edit/'.$id)->with('success', $success)->with('errors',$errors);
++        if ($errors != '') return redirect('/customer/edit/'.$id)->with('success', $success)->with('errors',$errors)->withInput(Input::except('plain_password'));
+         return redirect('/customer/index?menupoint=1010')->with('success', 'Customer has been updated!');
+     }
+ 
+@@ -136,7 +196,7 @@
+      * @param  int  $id
+      * @return \Illuminate\Http\Response
+      */
+-    public function destroy($id)
++    public function destroy(Request $request, $id)
+     {
+         $toBeDeleted = (new $this->model)->findOrFail($id);
+         $name = $toBeDeleted->name;
+Index: app/Models/Filters/CustomerFilter.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Models/Filters/CustomerFilter.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Models/Filters/CustomerFilter.php	(date 1532615201022)
+@@ -2,10 +2,9 @@
+ 
+ namespace App\Models\Filters;
+ 
+-use EloquentFilter\ModelFilter;
+ use Auth;
+ 
+-class CustomerFilter extends ModelFilter
++class CustomerFilter extends BaseFilter
+ {
+     /**
+     * Related Models that have ModelFilters as well as the method on the ModelFilter
+@@ -15,11 +14,31 @@
+     */
+     public $relations = [];
+ 
++    /*
++     * The basic filter for viewing customers.
++     * When used by supervisor for chosing ownerid, add ->where('customertypeid', 10)
++     *
++     * For customertypes see Customer:
++     * Customer::$customertypes = ['Test' => 0, 'Supervisor' => 1, 'Owner' => 10, 'Administrator' => 100, 'Personel' => 110, 'Customer' => 1000];
++     *
++     */
+     public function setup()
+     {
++        if (config('user.role', 1000) == 10) return $this->where('ownerid', Auth::user()->id)->where('customertypeid', '>', 10);
++        if (config('user.role', 1000) == 100) return $this->where('ownerid', Auth::user()->ownerid)->where('customertypeid', '>', 100);
++        if (config('user.role', 1000) == 110) return $this->where('ownerid', Auth::user()->ownerid)->where('customertypeid', '>', 110);
+         if (config('user.role', 1000) == 1000) return $this->where('id', Auth::user()->id);
+-        if (config('user.role', 1000) == 100) return $this->where('ownerid', Auth::user()->id);
+-        if (config('user.role', 1000) == 110) return $this->where('ownerid', Auth::user()->ownerid);
+         return $this;
+     }
++
++    public function address1($address1)
++    {
++        return $this->where('address1', 'LIKE', "%$address1%");
++    }
++
++    public function email($email)
++    {
++        return $this->where('email', 'LIKE', "%$email%");
++    }
++
+ }
+Index: app/Models/House.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/Models/House.php	(revision 0b4d1dba6ec048d8be9248b0d64c7e74192a5631)
++++ app/Models/House.php	(date 1532339298928)
+@@ -65,6 +65,11 @@
+ {
+     protected $table = 'house';
+ 
++    public function modelFilter()
++    {
++        return $this->provideFilter(Filters\HouseFilter::class);
++    }
++
+     public $sortable = [
+         'name',
+         'address1',
+@@ -155,18 +160,22 @@
+ 
+ 
+ 	public function getLongitudeAttribute($value) {
++        if (static::$ajax) return $value;
+         return Number::format($value, ['minimum_fraction_digits' => 12, 'maximum_fraction_digits' => 12]);
+     }
+ 
+     public function setLongitudeAttribute($value) {
++	    if (static::$ajax) return $value;
+         $this->attributes['longitude'] = Number::parse($value);
+     }
+ 
+     public function getLatitudeAttribute($value) {
++        if (static::$ajax) return $value;
+         return Number::format($value, ['minimum_fraction_digits' => 12, 'maximum_fraction_digits' => 12]);
+     }
+ 
+     public function setLatitudeAttribute($value) {
++        if (static::$ajax) return $value;
+ 	    $this->attributes['latitude'] = Number::parse($value);
+     }
+ 

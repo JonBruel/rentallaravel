@@ -144,7 +144,7 @@ class Customer extends BaseModel
     }
 
     /*
-     * Retuns an array of keys ans values to be used in forms for select boxes. Typical uses
+     * Retuns an array of keys and values to be used in forms for select boxes. Typical uses
      * are filters, e.g selection housed owner by a specific owner.
      *
      * Retuns null if no select boxes are to be used.

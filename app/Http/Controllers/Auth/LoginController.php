@@ -36,4 +36,27 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+
+    /**
+     * Overwriting function from trait
+     * Send the response after the user was authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+
+    protected function sendLoginResponse(Request $request)
+    {
+    $this->redirectTo = \Session::get('redirectTo', $this->redirectTo);
+    //die(\Session::get('redirectTo', $this->redirectTo));
+    //die('redirectTo: ' . \Session::get('redirectTo', $this->redirectTo));
+
+    $request->session()->regenerate();
+
+    $this->clearLoginAttempts($request);
+
+    return $this->authenticated($request, $this->guard()->user())
+    ?: redirect()->intended($this->redirectPath());
+    }
+     */
 }

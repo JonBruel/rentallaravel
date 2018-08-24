@@ -131,3 +131,10 @@
     text-decoration: none;
     color: white;
 }
+
+/*
+Used for order of weeks among other things
+ */
+.pending {background-color: #FF9191; }
+.occupied {background-color: #FF9191; }
+.family {background-color: #00cc99; }

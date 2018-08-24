@@ -7,6 +7,7 @@
 
 require('./bootstrap');
 require('./sidebar');
+//require('parse-decimal-number');
 //require('globalize');
 //window.Vue = require('vue');
 

@@ -2,6 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
+    <meta name="google-site-verification" content="{{config('app.google-site-verification')}}"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -101,12 +102,8 @@
             @endif
 
             <div class="row">
-
-
-
-
                 <div class="col col-md-12">
-                    <?php echo $__env->yieldContent('content'); ?>
+                    @yield('content')
                     <br />
                     Time lapse: {{\Session::get('ost')}}
                     <br />
@@ -114,10 +111,11 @@
                     <br />
                     Uri: {{\Session::get('uri')}}
                     <br />
-                        sanitizedpath: {{\Session::get('sanitizedpath')}}
-
-                        <br />
-                        App locale: {{App::getLocale()}}
+                    sanitizedpath: {{\Session::get('sanitizedpath')}}
+                    <br />
+                    App locale: {{App::getLocale()}}
+                    <br />
+                    Query: {{\Session::get('querystring', 'Query is empty')}}
                 </div>
 
             </div>
@@ -127,11 +125,11 @@
 
 <script >
     // Add hover effect to menus
-    jQuery('ul.nav li.dropdown').hover(function() {
-        jQuery(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn();
+    $('.dropdown').hover(function() {
+        $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn();
     }, function() {
-        jQuery(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut();
+        $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut();
     });
 </script>
-
+@yield('scripts')
 </html>

@@ -13693,6 +13693,7 @@ module.exports = __webpack_require__(37);
 
 __webpack_require__(12);
 __webpack_require__(36);
+//require('parse-decimal-number');
 //require('globalize');
 //window.Vue = require('vue');
 
@@ -35931,6 +35932,10 @@ $(document).ready(function () {
     $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
     });
+});
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
 /***/ }),

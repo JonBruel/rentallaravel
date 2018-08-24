@@ -7,11 +7,7 @@
 
 namespace App\Models;
 
-use Kyslik\ColumnSortable\Sortable;
-use Collective\Html\Eloquent\FormAccessible;
 use Number;
-
-use EloquentFilter\Filterable;
 
 
 /**
@@ -165,8 +161,8 @@ class House extends BaseModel
     }
 
     public function setLongitudeAttribute($value) {
-	    if (static::$ajax) return $value;
-        $this->attributes['longitude'] = Number::parse($value);
+	    if (static::$ajax) $this->attributes['longitude'] = $value;
+        else $this->attributes['longitude'] = Number::parse($value);
     }
 
     public function getLatitudeAttribute($value) {
@@ -175,8 +171,8 @@ class House extends BaseModel
     }
 
     public function setLatitudeAttribute($value) {
-        if (static::$ajax) return $value;
-	    $this->attributes['latitude'] = Number::parse($value);
+        if (static::$ajax) $this->attributes['latitude'] = $value;
+	    else $this->attributes['latitude'] = Number::parse($value);
     }
 
 	public function currency()

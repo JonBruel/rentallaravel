@@ -7,6 +7,7 @@
 
 namespace App\Models;
 
+use Number;
 
 /**
  * Class Contract
@@ -44,6 +45,11 @@ class Contract extends BaseModel
 {
 	protected $table = 'contract';
 
+    public function modelFilter()
+    {
+        return $this->provideFilter(Filters\ContractFilter::class);
+    }
+
 	protected $casts = [
 		'houseid' => 'int',
 		'ownerid' => 'int',
@@ -80,7 +86,18 @@ class Contract extends BaseModel
 		'status'
 	];
 
-	public function category()
+    public function getFinalpriceAttribute($value) {
+        if (static::$ajax) return $value;
+        return Number::format($value, ['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2]);
+    }
+
+    public function setFinalpriceAttribute($value) {
+        if (static::$ajax) $this->attributes['finalprice'] = $value;
+        else $this->attributes['finalprice'] = Number::parse($value);
+    }
+
+
+    public function category()
 	{
 		return $this->belongsTo(\App\Models\Category::class, 'categoryid');
 	}
@@ -114,4 +131,20 @@ class Contract extends BaseModel
 	{
 		return $this->hasMany(\App\Models\Contractline::class, 'contractid');
 	}
+
+	/*
+	 * Add a period determined by the periodid.
+	 * Retuns 0 if OK.
+	 * Return 1 if the period is alreadu occupied.
+	 */
+	public function addWeek(int $periodid)
+    {
+        if (Contractline::where('periodid', $periodid)->get()->count() > 0) return 1;
+
+        $contractline = new Contractline();
+        $contractline->contractid = $this->id;
+        $contractline->periodid = $periodid;
+        $contractline->save();
+        return 0;
+    }
 }

@@ -1,19 +1,25 @@
-<?php namespace App\Models\Filters;
+<?php
 
-
+namespace App\Models\Filters;
+use Schema;
+use Illuminate\Database\Query\Builder;
 
 class HouseFilter extends BaseFilter
 {
 
     public function setup()
     {
-        //if (session('defaultHouse' , -1) != -1) return $this->where('houseid', session('defaultHouse'));
+        parent::setup();
         return $this;
     }
 
 
     public function address1($address1)
     {
+        if (config('user.role', 1000) >= 10)
+        {
+            if (config('user.ownerid') > -1) $this->where('ownerid', config('user.ownerid'));
+        }
         return $this->where('address1', 'LIKE', "%$address1%");
     }
 

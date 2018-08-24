@@ -19,20 +19,26 @@ class SetDefaults {
     public function handle(Request $request, Closure $next)
     {
         $role = 1000;
-        if (Auth::check()) $role = Auth::user()->customertypeid;
+        $ownerid = -1;
+        if (Auth::check())
+        {
+            $role = Auth::user()->customertypeid;
+            $ownerid = Auth::user()->ownerid;
+        }
         config(['user.role' => $role]);
-
+        config(['user.ownerid' => $ownerid]);
 
         //$host is e.g. rentallaravel.consiglia.dk
         //if (session('config', -1) == 1)
         {
-            $host = $request->getHost();
+            $url = $request->getHost();
             //TODO: Fix this, gives error class sfConfig not found
-            if ($host == 'xrentallaravel.consiglia.dk') $host = 'cangeroni.hasselbalch.com';
+            if ($url == 'rentallaravel.consiglia.dk') $url = 'cangeroni.hasselbalch.com';
             $code = 1;
-            $config = DB::table('config')->where('url', $host)->first();
+            $config = DB::table('config')->where('url', $url)->first();
             if ($config) {
                 $code = $config->index;
+                $code = str_replace('sfConfig::', '$this->', $code);
             }
             if ($code != '1') {
                 if (eval($code . "\nreturn 'OK';") != 'OK')
@@ -44,12 +50,10 @@ class SetDefaults {
         return $next($request);
     }
 
-}
-
-class sfConfig {
     public static function set($key, $value)
     {
         $key = str_replace('sf_', 'app.', $key);
         config([$key => $value]);
     }
+
 }

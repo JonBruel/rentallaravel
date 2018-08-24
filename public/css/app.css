@@ -10544,6 +10544,22 @@ a.text-dark:focus {
   color: white;
 }
 
+/*
+Used for order of weeks among other things
+ */
+
+.pending {
+  background-color: #FF9191;
+}
+
+.occupied {
+  background-color: #FF9191;
+}
+
+.family {
+  background-color: #00cc99;
+}
+
 @media (max-width: 768px) {
   /* 80px and its content aligned to centre. Pushing it off the screen with the
        negative left margin

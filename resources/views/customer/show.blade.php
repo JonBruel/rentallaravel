@@ -8,7 +8,7 @@
                 {{ucfirst($field)}}
             </dt>
             <dd class="col">
-                {{$models[0]->$field}}
+                {{$models[0]->withBelongsTo($field)}}
             </dd>
         </dl>
         @endforeach

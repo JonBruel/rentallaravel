@@ -1,11 +1,10 @@
 <?php
 
-/**
- * Created by Reliese Model.
- * Date: Mon, 18 Jun 2018 10:19:01 +0000.
+/* hand-created from the view
  */
 
 namespace App\Models;
+use Carbon\Carbon;
 
 
 /**
@@ -75,7 +74,7 @@ class Periodcontract extends BaseModel
     {
         $return = [];
         $culture = Culture::where('culture', $culture)->first();
-        //if (!$culture) throw new Exception('No culture ' .  $culture . ' found, table entry may be deleted.');
+        //TODO: if (!$culture) throw new Exception('No culture ' .  $culture . ' found, table entry may be deleted.');
         $customercurrencyid = $culture->currencyid;
         $customercurrency = Currency::find($customercurrencyid);
         $r['currencysymbol'] = $customercurrency->currencysymbol;
@@ -98,5 +97,15 @@ class Periodcontract extends BaseModel
             return $this->contractid;
         }
         return null;
+    }
+
+    /*
+     *  A nice string showing the start and end days using the
+     *  localized day and month names.
+     */
+    public function getEnddays($culture = null)
+    {
+        $r = __('From') . ' ' .Carbon::parse($this->from)->formatLocalized('%a %d %b %Y').' '.__('to').' '.Carbon::parse($this->to)->formatLocalized('%a %d %b %Y');
+        return $r;
     }
 }

@@ -1,4 +1,6 @@
 {
+  "Do yoy really want to delete?": "Ønsker du virkelig at slette?",
+  "No": "Nej",
   "Houses": "Huse",
   "House": "Hus",
   "Customers": "Kunder",
@@ -6,7 +8,11 @@
   "My Account": "Min konto",
   "Cust. Adm.": "Kundeadmin.",
   "House Adm.": "Husadmin.",
-  "Bookings": "Ledighed",
+  "Bookings": "Bookings",
+  "Show route": "Kørevejledning",
+  "Nature": "Naturen",
+  "Find house": "Find huse",
+  "Show details": "Vis det hele",
   "Weather": "Vejret nu",
   "User Admin.": "Brugeradm.",
   "Your username or E-mail": "Dit brugernavn eller e-mail",
@@ -14,6 +20,7 @@
   "Customer name": "For- og efternavn",
   "Customer E-mail": "E-mail adresse",
   "Customer road address": "Vejadresse",
+  "Turquoise days are for private use.": "Turkise dage er reserverede til privat brug.",
   "Home link": "Forside",
   "Displaying results %1% to %2%": "Liste over kundenummer %1% til kundenummer %2%",
   "%1% customers found": "Der er fundet %1% kunder",
@@ -86,6 +93,7 @@
   "Contractamount": "Aftalepris",
   "Paid": "Betalt",
   "Mails": "E-mails",
+  "Please find the house you want to check out!": "Vælg først det hus du er interesseret i!",
   "Tick off the weeks you want and press 'Save'.": "Sæt flueben ved de uger, du ønsker at bestille, og tryk 'Opret'.",
   "When ready, press 'Next'": "Check prisen, og tryk 'Næste'!",
   "Tick!": "Flueben!",
@@ -94,7 +102,7 @@
   "Enter the number of persons.  Remember to press 'Save'": "Angiv antallet af personer, tryk derefter 'Opret'",
   "Number of persons": "Antal personer",
   "Periods & price:": "Perioder & pris",
-  "Price in your preferred currency:": "Pris i den foretrukne valuta",
+  "Price in your preferred currency:": "Pris i den foretrukne valuta:",
   "Commercial house usage over the entire year": "Forretningsmæssigt brug af huset over hele året",
   "Quarter": "Kvartal",
   "Duration": "Varighed",
@@ -114,6 +122,7 @@
   "Location": "Sted",
   "Country": "Land",
   "Check vacancy": "Check ledige perioder",
+  "First vacant period": "Første frie periode",
   "Number of periods": "Antal perioder",
   "Period length": "Periodelængde",
   "Please login": "Login",
@@ -229,7 +238,7 @@
   "for extra persons": "for ekstra personer",
   "Reserved": "Reserveret",
   "To order follow the two steps!": "Gå igennem to trin for at bestille!",
-  "Tick off the weeks you want, enter the number of persons and press 'Next'.": "Sæt flueben ved de uger, du ønsker, vælg antallet af personer og tryk 'Videre'.",
+  "Tick off the weeks you want, enter the number of persons and press \"Next\".": "Sæt flueben ved de uger, du ønsker, vælg antallet af personer og tryk 'Videre'.",
   "When you have cheked the price, press 'Next'": "Når du har checket prisen, så tryk 'Næste'",
   "Check price": "Check prisen",
   "Choose currency": "Vælg valuta",
@@ -863,6 +872,5 @@
   "gallery.1.Ferie Can Geroni 7-14. juli 2007 153": "Badestige i juni, juli, august",
   "gallery.1.IMG 0955": "En olympisk beliggenhed",
   "gallery.1.Can Geroni fra havet Julios foto": "Huset set fra havet"
-
 }
 

@@ -120,6 +120,9 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    //Used for google maps
+    'googlekey' => 'AIzaSyCmXZ5CEhhFY3-qXoHRzs0XFK4a495LyxE',
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

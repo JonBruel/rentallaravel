@@ -6,6 +6,7 @@
  */
 
 namespace App\Models;
+use Carbon\Carbon;
 
 
 /**
@@ -38,4 +39,25 @@ class Currencyrate extends BaseModel
 	{
 		return $this->belongsTo(\App\Models\Currency::class, 'currencyid');
 	}
+
+    static function updateCurrencies()
+    {
+        $currencyidtable = array();
+        foreach (Currency::all() as $currency) $currencyidtable[$currency->currencysymbol] = $currency->id;
+
+        $url = file_get_contents('http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml');
+        $xml =  new \SimpleXMLElement($url) ;
+
+        foreach($xml->Cube->Cube->Cube as $rate){
+            if (array_key_exists((string)$rate["currency"], $currencyidtable))
+            {
+                $currencyrate = new Currencyrate();
+                $currencyrate->currencyid = $currencyidtable[(string)$rate["currency"]];
+                $currencyrate->rate = $rate["rate"];
+                $currencyrate->created_at = Carbon::now()->tz('Europe/Copenhagen');
+                $currencyrate->save();
+            }
+        }
+    }
+
 }

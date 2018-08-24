@@ -334,10 +334,13 @@ class ShowCalendar
         $col = '';
         $th = '';
 
-        $weekdays = ['Ma', 'Ti', 'On', 'To', 'Fr', 'Lø', 'Sø'];
+
+        $monday = Carbon::now()->startOfWeek();
+        $weekdays = [Carbon::now()->startOfWeek(), $monday->copy()->addDays(1), $monday->copy()->addDays(2), $monday->copy()->addDays(3),
+            $monday->copy()->addDays(4), $monday->copy()->addDays(5), $monday->copy()->addDays(6)];
         foreach ($weekdays as  $localized_day_name ){
-            $col .= "<col class=\"" . strtolower($localized_day_name) ."\" />\n";
-            $th .= "\t<th title=\"" . ucfirst($localized_day_name) ."\">" . strtoupper($localized_day_name{0}) ."</th>\n";
+            $col .= "<col />\n";
+            $th .= "\t<th title=\"" . ucfirst($localized_day_name->formatLocalized('%a')) ."\"  data-toggle=\"tooltip\"  class=\"text-center\">" . strtoupper($localized_day_name->formatLocalized('%a'){0}) ."</th>\n";
         }
 
         //------------------------------------------------------- markup columns
