@@ -48,6 +48,11 @@ class Batchtask extends BaseModel
 	protected $table = 'batchtask';
 	public $timestamps = false;
 
+    public function modelFilter()
+    {
+        return $this->provideFilter(Filters\BatchtaskFilter::class);
+    }
+
 	protected $casts = [
 		'posttypeid' => 'int',
 		'emailid' => 'int',
@@ -96,6 +101,71 @@ class Batchtask extends BaseModel
 		'activefrom',
 		'active'
 	];
+
+
+	public $rules = [
+        'name' => ['required', 'between:3,51'],
+        'paymentbelow' => ['required', 'between:-0.991,0.991', 'numeric'],
+    ];
+
+
+     /*
+     * Retuns an array of keys and values to be used in forms for select boxes. Typical uses
+     * are filters, e.g selection housed owner by a specific owner.
+     *
+     * Retuns null if no select boxes are to be used.
+     */
+    public function withSelect($fieldname)
+    {
+        switch ($fieldname)
+        {
+            /**/
+            case 'posttypeid':
+                return  ['' => __('Choose accounttype')] + Posttype::all()->pluck('posttype', 'id')
+                        ->map(function ($item, $key) {return $item = __($item);} )
+                        ->toArray();
+            case 'emailid':
+                return Standardemail::where('houseid', $this->houseid)->pluck('description', 'id')
+                        ->map(function ($item, $key) {return $item = __($item);} )
+                        ->toArray();
+            case 'batchfunctionid':
+                return  Batchfunction::all()->pluck('batchfunction', 'id')
+                        ->map(function ($item, $key) {return $item = __($item);} )
+                        ->toArray();
+            case 'mailto':
+                return  Customertype::all()->pluck('customertype', 'id')
+                        ->map(function ($item, $key) {return $item = __($item);} )
+                        ->toArray();
+            case 'requiredposttypeid':
+                return ['' => __('Choose accounttype')] + Posttype::all()->pluck('posttype', 'id')
+                        ->map(function ($item, $key) {return $item = __($item);} )
+                        ->toArray();
+            case 'dontfireifposttypeid':
+                return  ['' => __('Choose accounttype')] + Posttype::all()->pluck('posttype', 'id')
+                        ->map(function ($item, $key) {return $item = __($item);} )
+                        ->toArray();
+            case 'addposttypeid':
+                return  ['' => __('Choose accounttype')] + Posttype::all()->pluck('posttype', 'id')
+                        ->map(function ($item, $key) {return $item = __($item);} )
+                        ->toArray();
+            case 'ownerid':
+                return  Customer::where('customertype', 10)->pluck('name', 'id')->toArray();
+            case 'houseid':
+                return  House::where('ownerid', $this->ownerid)->pluck('name', 'id')->toArray();
+            default:
+                return null;
+        }
+    }
+
+    public function getPaymentbelowAttribute($value) {
+        if (static::$ajax) return $value;
+        return static::format($value,0, '', ['style' => 'percent']);
+    }
+
+    public function setPaymentbelowAttribute($value) {
+        if (static::$ajax) $this->attributes['paymentbelow'] = $value;
+        else $this->attributes['paymentbelow'] = static::parse($value);
+    }
 
 	public function posttype()
 	{

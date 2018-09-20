@@ -7,7 +7,9 @@ use Illuminate\Http\Response;
 use Schema;
 use ValidationAttributes;
 use App\Models\BaseModel;
-
+use App\Models\Periodcontract;
+use App\Models\Contract;
+use Illuminate\Support\Facades\Input;
 
 
 class AjaxController extends Controller
@@ -26,14 +28,14 @@ class AjaxController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function listhouses(Request $request, Response $response, $x1 = -179.99, $y1 = -179.99, $x2 = 179.99, $y2 = 179.99)
+    public function listhouses($x1 = -179.99, $y1 = -179.99, $x2 = 179.99, $y2 = 179.99)
     {
         //TODO: modify from Symfony to Laravel
 
         //$table = 'house';
         //$customertypeid = $this->user->getAttribute('customertypeid', 1000);
-        $response->header('Cache-Control', 'no-cache, must-revalidate');
-        $defaultHouse = $request->query('defaultHouse',-1);
+
+        $defaultHouse = Input::query('defaultHouse',-1);
 
 
         $housequery = $this->model::whereBetween('latitude', [$x1, $x2])
@@ -108,21 +110,58 @@ class AjaxController extends Controller
         $housefields[0]['y2'] = $y2;
         $coordinates = json_encode($housefields);
 
-        return response()->json($housefields);
+        return response()->json($housefields)
+            ->header('Cache-Control', 'no-cache, must-revalidate');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+
+    /*
+     * This method is used in views where the user has the option
+     * of choosing periods for the contract.
+     * The following
      */
-    public function edit($id)
+    public function getweeks($houseid, $culture, $offset = 0, $periodid = 0, $contractid = 0)
     {
-        $model = (new $this->model)->findOrFail($id);
+        $rate = 1;
 
-        $fields = Schema::getColumnListing($model->getTable());
-        return view('house/edit', ['model' => $model, 'fields' => $fields, 'vattr' => new ValidationAttributes($model)]);
+        if ($periodid != 0)
+        {
+            $period = Periodcontract::find($periodid);
+            $rate = $period->getRate($culture)['rate'];
+            if ($period->contractid != null) $contractid = $period->contractid;
+        }
+
+        // We redefine the period
+        if (($contractid != 0) && ($periodid == 0)) $period = Periodcontract::where('contractid', $contractid)->first();
+
+        //When there is a contract, we us the currency defines in the contract
+        if ($contractid != 0)
+        {
+            $contractid = $period->contractid;
+            $contract = Contract::find($contractid);
+            if ($contract) $rate = $period->getRate($culture, $contract->currencyid)['rate'];
+        }
+
+        //Prepare for showing several weeks, limit to 6 weeks using the paginate method
+        $periodcontracts = Periodcontract::where('houseid', $houseid)
+            ->where('from', '>', $period->from->subDays(15-7*6*$offset))
+            ->orderBy('from')
+            ->paginate(6);
+
+        $forJson = [];
+        foreach ($periodcontracts as $p)
+        {
+            $committed = ($p->committed == 1)?true:false;
+            $chosen = false;
+            if ($periodid == $p->id) $chosen = true;
+            if ($contractid == $p->contractid) $chosen = true;
+            $forJson[] = ['id' => $p->id, 'committed' => $committed, 'periodtext' => $p->getEnddays($culture),
+                'chosen' => $chosen, 'personprice' => $p->personprice, 'maxpersons' => $p->maxpersons,
+                'basepersons' => $p->basepersons, 'baseprice' => $p->baseprice,
+                'rate' => $rate];
+        }
+
+        return response()->json($forJson)
+            ->header('Cache-Control', 'no-cache, must-revalidate');
     }
-
 }

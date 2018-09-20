@@ -5,6 +5,7 @@
 
 namespace App\Models;
 use Carbon\Carbon;
+use App;
 
 
 /**
@@ -43,6 +44,7 @@ class Periodcontract extends BaseModel
         return $this->provideFilter(Filters\PeriodcontractFilter::class);
     }
 
+
 	protected $casts = [
 		'prepaid' => 'float',
 		'id' => 'int',
@@ -68,14 +70,20 @@ class Periodcontract extends BaseModel
 	];
 
     /*
-     * Return an array with to elements: currencysymbol and rate
+     * Return an array with to elements: currencysymbol and rate. The rate calculated
+     * is the rate used to calculate the price in the customer currency from the price
+     * of the period, which is based on the house currency.
      */
-    function getRate($culture)
+    function getRate($cultureid, $customercurrencyid = null)
     {
         $return = [];
-        $culture = Culture::where('culture', $culture)->first();
-        //TODO: if (!$culture) throw new Exception('No culture ' .  $culture . ' found, table entry may be deleted.');
-        $customercurrencyid = $culture->currencyid;
+        if ($customercurrencyid == null)
+        {
+            $culture = Culture::where('culture', $cultureid)->first();
+            //TODO: if (!$culture) throw new Exception('No culture ' .  $culture . ' found, table entry may be deleted.');
+            $customercurrencyid = $culture->currencyid;
+        }
+
         $customercurrency = Currency::find($customercurrencyid);
         $r['currencysymbol'] = $customercurrency->currencysymbol;
 
@@ -105,6 +113,11 @@ class Periodcontract extends BaseModel
      */
     public function getEnddays($culture = null)
     {
+        if ($culture)
+        {
+            setlocale(LC_TIME, $culture);
+            App::setLocale($culture);
+        }
         $r = __('From') . ' ' .Carbon::parse($this->from)->formatLocalized('%a %d %b %Y').' '.__('to').' '.Carbon::parse($this->to)->formatLocalized('%a %d %b %Y');
         return $r;
     }

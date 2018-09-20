@@ -86,9 +86,14 @@ class Customer extends BaseModel
 		'cultureid' => 'int'
 	];
 
-	protected $hidden = [
-		'password'
-	];
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
 
 	protected $fillable = [
 		'name',
@@ -171,6 +176,7 @@ class Customer extends BaseModel
 		return $this->belongsTo(\App\Models\Customertype::class, 'customertypeid');
 	}
 
+
 	public function customer()
 	{
 		return $this->belongsTo(\App\Models\Customer::class, 'ownerid');
@@ -245,4 +251,59 @@ class Customer extends BaseModel
 	{
 		return $this->hasMany(\App\Models\Testimonial::class, 'userid');
 	}
+
+    public function sendPasswordResetNotification($token)
+    {
+        // Your your own implementation.
+        $this->notify(new ResetPasswordNotification($token, $this->getEmailForPasswordReset()));
+    }
+
+    public function verifyUser()
+    {
+        return $this->hasOne('App\Models\VerifyUser', 'customer_id');
+    }
+
+    public function getLogin($culture)
+    {
+
+    }
+
+    public function getLoginlink($culture = '')
+    {
+        //TODO: Modify to the "Laravel way"
+        $r = $this->lasturl.'/user/login?email=' . $this->email . '&token=' . $this->remember_token . '&goto=home';
+        $r = '<a href="' . $r . '">'.__('Login').'</a>';
+        return $r;
+    }
+
+    public function getTestimoniallink($houseid, $culture = '')
+    {
+        $house = House::Find($houseid);
+        //TODO: Modify to the "Laravel way"
+        $r = $house->www.'/login?email=' . $this->email . '&token=' . $this->remember_token . '&goto=testimonial&houseid=' . $houseid;
+        $r = '<a href="' . $r . '">'.__('Your feedback regarding', [], $culture). ' ' . $house->name . '</a>';
+        return $r;
+    }
+
+    public function getTimelink($contractid, $culture = '')
+    {
+        $contract = Contract::Find($contractid);
+        $house = House::Find($contract->houseid);
+        //TODO: Modify to the "Laravel way"
+        $r = $house->www.'/login?email=' . $this->email . '&remember_token=' . $this->remember_token . '&goto=edittime&contractid=' . $contractid;
+        $r = '<a href="' . $r . '">'.__('Our arrival and departure time', [], $culture).'</a>';
+        return $r;
+    }
+
+    public function getCustomerinfo($culture = '')
+    {
+        $r = $this->name . "\r";
+        $r .= $this->address1 . "\r";
+        $r .= $this->address2 . "\r";
+        if ($this->country) $r .= '(' . $this->country . ")\r";
+        $r .= __('Phone', [], $culture).': ' . $this->telephone . "\r";
+        $r .= __('Mobile', [], $culture).': ' . $this->mobile . "\r";
+        return $r;
+    }
+
 }

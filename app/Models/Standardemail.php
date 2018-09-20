@@ -30,6 +30,11 @@ class Standardemail extends BaseModel
 {
 	protected $table = 'standardemail';
 
+    public function modelFilter()
+    {
+        return $this->provideFilter(Filters\StandardemailFilter::class);
+    }
+
 	protected $casts = [
 		'ownerid' => 'int',
 		'houseid' => 'int'
@@ -42,6 +47,24 @@ class Standardemail extends BaseModel
 		'extra'
 	];
 
+    /*
+    * Retuns an array of keys and values to be used in forms for select boxes. Typical uses
+    * are filters, e.g selection housed owner by a specific owner.
+    *
+    * Retuns null if no select boxes are to be used.
+    */
+    public function withSelect($fieldname)
+    {
+        switch ($fieldname)
+        {
+            case 'ownerid':
+                return  Customer::where('customertype', 10)->pluck('name', 'id')->toArray();
+            case 'houseid':
+                return  House::where('ownerid', $this->ownerid)->pluck('name', 'id')->toArray();
+            default:
+                return null;
+        }
+    }
 	public function customer()
 	{
 		return $this->belongsTo(\App\Models\Customer::class, 'ownerid');

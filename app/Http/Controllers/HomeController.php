@@ -11,11 +11,14 @@ use Illuminate\Pagination\Paginator;
 use Schema;
 use Gate;
 use ValidationAttributes;
+use Illuminate\Support\Facades\Mail;
 use App\Models\HouseI18n;
 use App;
+use Auth;
 use App\Models\Periodcontract;
 use Carbon\Carbon;
 use DB;
+use App\Mail\DefaultMail;
 
 class HomeController extends Controller
 {
@@ -28,21 +31,30 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showinfo(Request $request, Response $response, $infotype = 'description')
+    public function showinfo(Request $request, $infotype = 'description')
     {
         $this->checkHouseChoice($request, 'home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
         $defaultHouse = session('defaultHouse' , 1);
 
+
+        //Testing mail.
+        //TODO: Remove it in production version.
+        if (\Auth::check()) {
+            $user = Auth::user();
+            //public function __construct($contents, $fromaddress = 'jbr@consiglia.dk', $fromName = 'testFromName', $toName = '', $attachements = [])
+            //Mail::to('jbr@consiglia.dk')->send(new DefaultMail('<br />Dette er en prøve.<br /><br />', 'jbr@consiglia.dk', 'Jon Brüel', 'Jon'));
+        }
+
         if ($infotype == 'gallery')
         {
-            $response->header('Cache-Control', 'no-cache, must-revalidate');
             $picturearray = PictureHelpers::getPictureArray($defaultHouse, 1, 0);
             $galleryid = session('galleryid', 1);
             $fileinfo = PictureHelpers::getrandompicture($defaultHouse, $galleryid);
             session(['lastran' => $fileinfo['r']]);
             $text = $fileinfo['text'];
             $picture = '<img src="' . $fileinfo['filepath'] . '" alt="' . $fileinfo['text'] . '"/>';
-            return view('home/gallery', ['picturearray' => $picturearray, 'picture' => $picture, 'text' => $text]);
+            return view('home/gallery', ['picturearray' => $picturearray, 'picture' => $picture, 'text' => $text])
+                    ->withHeader('Cache-Control', 'no-cache, must-revalidate');
         }
         else
         {
@@ -62,11 +74,10 @@ class HomeController extends Controller
      * Route::get('/home/listhouses', 'HomeController@listhouses');
      */
 
-    public function checkbookings(Request $request, Response $response)
+    public function checkbookings()
     {
-        $response->header('Cache-Control', 'no-cache, must-revalidate');
 
-        $this->checkHouseChoice($request, 'home/checkbookings'.'?menupoint='.session('menupoint'));
+        $this->checkHouseChoice('home/checkbookings'.'?menupoint='.session('menupoint'));
 
         $defaultHouse = session('defaultHouse' , -1);
 
@@ -77,7 +88,7 @@ class HomeController extends Controller
 
         //Below, we create the pager without a model. This allows us to use tha standard
         //helper to navigate through the months or years
-        $page = $request->get('page', 1);
+        $page = Input::get('page', 1);
         $pager = new Paginator([1,1,1,1],1, (int)$page);
         $path = '/home/checkbookings?menupoint=10020';
         $pager->setPath($path);
@@ -95,17 +106,18 @@ class HomeController extends Controller
             $calendar = new ShowCalendar($starttime);
             $calendar->houseid = $defaultHouse;
             //$calendar->link_to = $this->url . '/contract/choseweeks/houseid/' . $this->houseid . '/cursor/0/restricttohouse/1/periodid/';
-            $calendar->link_to = '/contract/chooseweeks?periodid=';
+            $calendar->link_to = '/contract/adminedit/0/';
             $calendar->culture = App::getLocale();
             $cal[$i] = $calendar->output_calendar();
             $starttime->addMonth();
         }
 
-        return view('home/checkbookings', ['house' => $house, 'cal' => $cal, 'starttime' => $starttime, 'pager' => $pager, 'elements' => $elements, 'offset' => ($yearstart-1)]);
+        return view('home/checkbookings', ['house' => $house, 'cal' => $cal, 'starttime' => $starttime, 'pager' => $pager, 'elements' => $elements, 'offset' => ($yearstart-1)])
+                ->withHeader('Cache-Control', 'no-cache, must-revalidate');
 
     }
 
-    public function listhouses(Request $request)
+    public function listhouses()
     {
         $defaultHouse = Input::get('defaultHouse',-1);
 
@@ -123,12 +135,11 @@ class HomeController extends Controller
     }
 
 
-    public function showmap(Request $request, Response $response)
+    public function showmap()
     {
         $googlekey = config('app.googlekey', 'AIzaSyCmXZ5CEhhFY3-qXoHRzs0XFK4a495LyxE');
-        $response->header('Cache-Control', 'no-cache, must-revalidate');
 
-        $this->checkHouseChoice($request, 'home/showmap'.'?menupoint='.session('menupoint'));
+        $this->checkHouseChoice('home/showmap'.'?menupoint='.session('menupoint'));
 
         $defaultHouse = session('defaultHouse' , -1);
         $this->model::$ajax = true;
@@ -141,7 +152,8 @@ class HomeController extends Controller
         //$gt = new GoogleTranslateWrapper();
         //$gt->selfTest();
 
-        return view('home/showmap', ['house' => $house, 'veryShortDescription'  => $veryShortDescription, 'googlekey' => $googlekey, 'housefields' => json_encode($housefields)]);
+        return view('home/showmap', ['house' => $house, 'veryShortDescription'  => $veryShortDescription, 'googlekey' => $googlekey, 'housefields' => json_encode($housefields)])
+            ->withHeader('Cache-Control', 'no-cache, must-revalidate');
     }
 
 }

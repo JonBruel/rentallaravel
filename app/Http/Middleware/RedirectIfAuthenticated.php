@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class RedirectIfAuthenticated
 {
@@ -17,10 +18,13 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
+        //Changes made from the original Laravel version to handle the flow after
+        //a new customer has registered.
+        if ((Auth::guard($guard)->check()) && (auth()->user()->verified == 1) && (session('isRedirected') != 1)) {
+            Log::notice('Redirecting to \home in RedirectIfAuthenticated middleware.');
             return redirect('/home');
         }
-
+        Log::notice('NOT redirecting to \home in RedirectIfAuthenticated middleware.');
         return $next($request);
     }
 }

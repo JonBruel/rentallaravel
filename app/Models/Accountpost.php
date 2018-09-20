@@ -6,6 +6,7 @@
  */
 
 namespace App\Models;
+use Carbon\Carbon;
 
 
 /**
@@ -27,7 +28,7 @@ namespace App\Models;
  * @property int $posttypeid
  * @property int $postedbyid
  * @property int $passifiedby
- * @property \Carbon\Carbon $returndate
+ * @property \Carbon\Carbon $returndate Dropped 20-09-2018
  * 
  * @property \App\Models\Customer $customer
  * @property \App\Models\Contract $contract
@@ -54,9 +55,6 @@ class Accountpost extends BaseModel
 		'passifiedby' => 'int'
 	];
 
-	protected $dates = [
-		'returndate'
-	];
 
 	protected $fillable = [
 		'houseid',
@@ -71,8 +69,7 @@ class Accountpost extends BaseModel
 		'contractid',
 		'posttypeid',
 		'postedbyid',
-		'passifiedby',
-		'returndate'
+		'passifiedby'
 	];
 
 	public function customer()
@@ -104,4 +101,15 @@ class Accountpost extends BaseModel
 	{
 		return $this->hasMany(\App\Models\Batchlog::class, 'accountpostid');
 	}
+
+	public static function activateAwaitingAccountposts($timeout)
+    {
+        $accountposts = Accountpost::where('posttypeid', 140)->whereDate('updated_at', '<', Carbon::now()->subSeconds($timeout))->get();
+        foreach ($accountposts as $accountpost)
+        {
+            $accountpost->posttypeid = 110;
+            $accountpost->text = 'Order changed';
+            $accountpost->save();
+        }
+    }
 }

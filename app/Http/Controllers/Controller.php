@@ -19,7 +19,7 @@ class Controller extends BaseController
         $this->model = $model;
     }
 
-    public function checkHouseChoice(Request $request, string $returnpath)
+    public function checkHouseChoice(string $returnpath = null)
     {
         if (session('defaultHouse' , -1) != -1) return false;
         if ($this->model::filter()->count() == 1)
@@ -29,7 +29,7 @@ class Controller extends BaseController
         }
         else
         {
-            $request>session()->flash('warning', 'Please find the house you want to check out!');
+            session()->flash('warning', 'Please find the house you want to check out!');
             return redirect('home/listhouses')->with('returnpath', $returnpath);
         }
     }

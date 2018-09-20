@@ -16,7 +16,9 @@ namespace App\Models;
  * @property int $persons
  * @property \Carbon\Carbon $created_at
  * @property float $duration
+ * @property float $price
  * @property float $finalprice
+ * @property float $discount
  * @property int $categoryid
  * @property float $contractamount
  * @property float $paid
@@ -39,6 +41,9 @@ class Contractoverview extends BaseModel
 	protected $table = 'contractoverview';
 	public $timestamps = false;
 
+    public $rules = [
+        'persons' => ['required', 'between:2,30'],
+    ];
 
     public $sortable = [
         'house.name',
@@ -59,7 +64,9 @@ class Contractoverview extends BaseModel
 		'customerid' => 'int',
 		'persons' => 'int',
 		'duration' => 'float',
+        'price' => 'float',
 		'finalprice' => 'float',
+        'discount' => 'float',
         'categoryid' => 'int',
         'contractamount' => 'float',
         'paid' => 'float',
@@ -78,6 +85,58 @@ class Contractoverview extends BaseModel
 	protected $fillable = [
 	];
 
+    /*
+     * This function is used to show the relevant associated
+     * user-friendly value as opposed to showing the id.
+     * Performance: as we are making up to 4 queries, it does take some time.
+     * Measured to around 5 ms.
+     */
+    public function withBelongsTo($fieldname)
+    {
+        switch ($fieldname)
+        {
+            /**/
+            case 'houseid':
+                return $this->house->name;
+            case 'ownerid':
+                return $this->owner->name;
+            case 'customerid':
+                return $this->customer->name;
+            case 'categoryid':
+                return $this->category->name;
+            case 'curencyid':
+                return $this->currency->currencysymbol;
+
+
+            default:
+                return $this->$fieldname;
+        }
+    }
+
+    /*
+     * Retuns an array of keys and values to be used in forms for select boxes. Typical uses
+     * are filters, e.g selection housed owner by a specific owner.
+     *
+     * Retuns null if no select boxes are to be used.
+     */
+    public function withSelect($fieldname)
+    {
+        switch ($fieldname)
+        {
+            /**/
+            case 'customertypeid':
+                return  Customertype::all()->pluck('customertype', 'id')->toArray();
+            case 'ownerid':
+                return Customer::filter()->where('customertypeid', 10)->pluck('name', 'id')->toArray();
+            //case 'customerid':
+            //    return Customer::filter()->where('customertypeid', 1000)->where('ownerid', $this->ownerid)->pluck('name', 'id')->toArray();
+            case 'cultureid':
+                return  Culture::all()->pluck('culturename', 'id')->toArray();
+
+            default:
+                return null;
+        }
+    }
 
     public function customer()
     {

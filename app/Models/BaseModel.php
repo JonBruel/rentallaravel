@@ -26,6 +26,11 @@ use EloquentFilter\Filterable;
  */
 use Collective\Html\Eloquent\FormAccessible;
 
+/* The number helpers are simple conversion methods to cope with international number formats.
+ *
+ */
+use App\Helpers\NumberHelpers;
+
 class BaseModel extends Model
 {
     public static $ajax = false;
@@ -33,4 +38,31 @@ class BaseModel extends Model
     use Sortable;
     use Filterable;
     use FormAccessible;
+    use NumberHelpers;
+
+    public $rules = [];
+
+    /*
+     * This function is used to show the relevant associated
+     * user-friendly value as opposed to showing the id.
+     * Performance: as we are making up to 4 queries, it does take some time.
+     * Measured to around 5 ms.
+     * To be overwritten.
+     */
+    public function withBelongsTo($fieldname)
+    {
+        return $this->$fieldname;
+    }
+
+    /*
+     * Retuns an array of keys and values to be used in forms for select boxes. Typical uses
+     * are filters, e.g selection housed owner by a specific owner.
+     *
+     * Returns null if no select boxes are to be used.
+     * To be overwritten.
+     */
+    public function withSelect($fieldname)
+    {
+        return null;
+    }
 }

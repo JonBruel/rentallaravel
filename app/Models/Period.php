@@ -133,30 +133,5 @@ class Period extends BaseModel
         return null;
     }
 
-    /*
-     * Return an array with to elements: currencysymbol and rate
-     *
-     * TODO: Delete if not used, moved to Periodcontract
-     */
-    function getRate($culture)
-    {
-        $return = [];
-        $culture = Culture::where('culture', $culture)->first();
-        //if (!$culture) throw new Exception('No culture ' .  $culture . ' found, table entry may be deleted.');
-        $customercurrencyid = $culture->currencyid;
-        $customercurrency = Currency::find($customercurrencyid);
-        $r['currencysymbol'] = $customercurrency->currencysymbol;
-
-        $customercurrencyrate = $customercurrency->getRate();
-
-        $housecurrencyid = House::find($this->houseid)->currencyid;
-        $housecurrency = Currency::find($housecurrencyid);
-
-        $housecurrencysymbol = $housecurrency->currencysymbol;
-        $housecurrencyrate = $housecurrency->getRate();
-
-        $r['rate'] = $customercurrencyrate/$housecurrencyrate;
-        return $r;
-    }
 
 }

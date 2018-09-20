@@ -6,8 +6,8 @@
  */
 
 namespace App\Models;
+use Carbon\Carbon;
 
-use Number;
 
 
 /**
@@ -78,7 +78,7 @@ class House extends BaseModel
     public $casts = [
 		'latitude' => 'float',
 		'longitude' => 'float',
-		'lockbatch' => 'bool',
+		'lockbatch' => 'int',
 		'currencyid' => 'int',
 		'ownerid' => 'int',
 		'viewfilter' => 'int',
@@ -157,22 +157,22 @@ class House extends BaseModel
 
 	public function getLongitudeAttribute($value) {
         if (static::$ajax) return $value;
-        return Number::format($value, ['minimum_fraction_digits' => 12, 'maximum_fraction_digits' => 12]);
+        return static::format($value,12);
     }
 
     public function setLongitudeAttribute($value) {
 	    if (static::$ajax) $this->attributes['longitude'] = $value;
-        else $this->attributes['longitude'] = Number::parse($value);
+        else $this->attributes['longitude'] = static::parse($value);
     }
 
     public function getLatitudeAttribute($value) {
         if (static::$ajax) return $value;
-        return Number::format($value, ['minimum_fraction_digits' => 12, 'maximum_fraction_digits' => 12]);
+        return static::format($value,12);
     }
 
     public function setLatitudeAttribute($value) {
         if (static::$ajax) $this->attributes['latitude'] = $value;
-	    else $this->attributes['latitude'] = Number::parse($value);
+	    else $this->attributes['latitude'] = static::parse($value);
     }
 
 	public function currency()
@@ -184,6 +184,11 @@ class House extends BaseModel
 	{
 		return $this->belongsTo(\App\Models\Customer::class, 'ownerid');
 	}
+
+    //public function owner()
+    //{
+    //    return $this->belongsTo(\App\Models\Customer::class, 'ownerid');
+    //}
 
 	public function customertype()
 	{
@@ -234,4 +239,74 @@ class House extends BaseModel
 	{
 		return $this->hasMany(\App\Models\Testimonial::class, 'houseid');
 	}
+
+	public static function copyBatchAndMail($houseid, $overwrite, $cultures = '')
+    {
+        if ($houseid == 0) return;
+
+        $batchtasks = Batchtask::where('ownerid', 0)->where('houseid', 0)->get();
+        if ($cultures == '') $cultures = explode(';', config('app.cultures'));
+        $standardemails = Standardemail::where('ownerid', 0)->where('houseid', 0)->get();
+
+        $houses = House::where('id', $houseid)->get();
+
+        foreach ($houses as $house) {
+            $ownerid = $house->ownerid;
+            $newmailid = [];
+            foreach ($standardemails as $standardemail) {
+                $standardemailid = $standardemail->id;
+
+                //Get contents of the standard emails
+                $standardemailcontents = [];
+                foreach ($cultures as $culture)
+                {
+                    $I18n = StandardemailI18n::where('id', $standardemailid)->where('culture', $culture)->first();
+                    $standardemailcontents[$culture] = ($I18n)?$I18n->contents:'';
+                }
+
+                $existingemail = Standardemail::where('description', $standardemail->description)->where('houseid', $houseid)->first();
+                //We copy the contents of the email belonging to houseid=0 to the new
+                if ($existingemail)
+                {
+                    if ($overwrite == 1) StandardemailI18n::copyContent($existingemail->id, $standardemailcontents);
+                }
+                //We make a new email
+                else
+                {
+                    $existingemail = new Standardemail(['ownerid' => $ownerid, 'houseid' => $houseid, 'description' => $standardemail->description]);
+                    if (!$existingemail->save())
+                    {
+                        $errors = $existingemail->getErrors();
+                        die(var_dump($errors));
+                    }
+                    StandardemailI18n::copyContent($existingemail->id, $standardemailcontents);
+                }
+                $newmailid[$standardemailid] = $existingemail->id;
+            }
+            foreach ($batchtasks as $batchtask)
+            {
+                $existingbatchtask = Batchtask::where('name', $batchtask->name)->where('houseid', $houseid)->first();
+                if ($existingbatchtask)
+                {
+                    if ($overwrite == 1)
+                    {
+                        $id = $existingbatchtask->id;
+                        foreach ($batchtask->toArray() as $field => $value) $existingbatchtask->$field = $value;
+                        $existingbatchtask->id = $id;
+                    }
+                }
+                else
+                {
+                    $existingbatchtask = new Batchtask();
+                    foreach ($batchtask->toArray() as $field => $value) $existingbatchtask->$field = $value;
+                    $existingbatchtask->id = null;
+                }
+                $existingbatchtask->ownerid = $ownerid;
+                $existingbatchtask->houseid = $houseid;
+                $existingbatchtask->activefrom = Carbon::now();
+                $existingbatchtask->emailid = $newmailid[$batchtask->emailid];
+                $existingbatchtask->save();
+            }
+        }
+    }
 }

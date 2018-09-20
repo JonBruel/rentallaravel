@@ -9,7 +9,7 @@ use Kyslik\ColumnSortable\Sortable;
 use App\_Rules_not_used_anymore\Name;
 use ValidationAttributes;
 use App\Models\Customer;
-
+use Illuminate\Support\Facades\Input;
 
 
 class HouseController extends Controller
@@ -24,12 +24,12 @@ class HouseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $models = $this->model::sortable()->filter($request->all())->paginate(10);
+        $models = $this->model::sortable()->filter(Input::all())->paginate(10);
         $owners = ['' => __('Please select owner')] + Customer::filter()->where('customertypeid', 10)->pluck('name', 'id')->toArray();
-        $sortparams = ($request->query('order'))?'&order='.$request->query('order'):'';
-        $sortparams .= ($request->query('sort'))?'&sort='.$request->query('sort'):'';
+        $sortparams = (Input::query('order'))?'&order='.Input::query('order'):'';
+        $sortparams .= (Input::query('sort'))?'&sort='.Input::query('sort'):'';
 
         $params['edit'] = "?menupoint=2120";
         $params['edit'] .= $sortparams;
@@ -37,7 +37,7 @@ class HouseController extends Controller
         $params['show'] = "?menupoint=2130";
         $params['show'] .= $sortparams;
 
-        return view('house/index', ['models' => $models, 'params' => $params, 'search' => $request->all(), 'owners' => $owners]);
+        return view('house/index', ['models' => $models, 'params' => $params, 'search' => Input::all(), 'owners' => $owners]);
     }
 
     /**
@@ -67,13 +67,13 @@ class HouseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
         //Find page from id
-        if ($request->query('page') == null) {
+        if (Input::query('page') == null) {
             $models = $this->model::sortable()->pluck('id')->all();
             $page = array_flip($models)[$id]+1;
-            $request->merge(['page' => $page]);
+            Input::merge(['page' => $page]);
         }
 
         $models = $this->model::sortable()->paginate(1);
@@ -102,14 +102,14 @@ class HouseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id)
     {
         $model = (new $this->model)->findOrFail($id);
 
         //We set the model
         $fields = Schema::getColumnListing($model->getTable());
         foreach ($fields as $field){
-            $model->$field = $request->get($field) ;
+            $model->$field = Input::get($field) ;
         }
 
         //We save. The save validates after the Mutators have been used.
@@ -134,7 +134,7 @@ class HouseController extends Controller
         //
     }
 
-    public function listperiods(Request $request)
+    public function listperiods()
     {
 
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -51,6 +51,11 @@ class User extends Authenticatable
     public function canBeImpersonated()
     {
         // For example
-        return $this->customertypeid > 10;
+        return $this->customertypeid >= 10;
+    }
+
+    public function verifyUser()
+    {
+        return $this->hasOne('App\Models\VerifyUser', 'customer_id');
     }
 }

@@ -23,6 +23,10 @@ class HouseFilter extends BaseFilter
         return $this->where('address1', 'LIKE', "%$address1%");
     }
 
+    public function houseid($id)
+    {
+        return $this->where('id', $id);
+    }
 
     /**
     * Related Models that have ModelFilters as well as the method on the ModelFilter

@@ -28,9 +28,16 @@ class ContractoverviewFilter extends ModelFilter
         return $this;
     }
 
-    public function year($year)
+    public function year($year = null)
     {
+        if ($year == null) $year = date('Y');
         return $this->whereYear('from', $year);
+    }
+
+    public function yearfrom($year = null)
+    {
+        if ($year == null) $year = date('Y');
+        return $this->whereYear('from', '>=', $year);
     }
 
     public function houseid($houseid)

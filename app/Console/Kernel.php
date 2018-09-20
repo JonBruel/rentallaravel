@@ -27,7 +27,10 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
         $schedule->command('command:updaterates')->dailyAt('12:45')->timezone('Europe/Copenhagen');
-        $schedule->command('command:updaterates')->dailyAt('22:45')->timezone('Europe/Copenhagen');;
+        $schedule->command('command:updaterates')->dailyAt('11:35')->timezone('Europe/Copenhagen');
+        $schedule->command('command:updaterates')->dailyAt('22:45')->timezone('Europe/Copenhagen');
+        $schedule->command('command:removeoldnewcontracts')->everyMinute();
+        $schedule->command('command:activateawaitingaccountposts 300')->everyMinute();
     }
 
     /**

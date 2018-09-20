@@ -6,7 +6,7 @@
  */
 
 namespace App\Models;
-
+use App\Traits\CompositeKey;
 
 /**
  * Class HouseI18n
@@ -35,13 +35,16 @@ namespace App\Models;
  */
 class HouseI18n extends BaseModel
 {
-	protected $table = 'house_i18n';
+    use CompositeKey;
+    protected $table = 'house_i18n';
 	public $incrementing = false;
 	public $timestamps = false;
 
 	protected $casts = [
 		'id' => 'int'
 	];
+
+    protected $primaryKey = ['id', 'culture'];
 
 	protected $fillable = [
 		'description',

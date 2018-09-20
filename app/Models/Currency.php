@@ -7,6 +7,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+
 
 /**
  * Class Currency
@@ -70,28 +72,36 @@ class Currency extends BaseModel
 	}
 
 	/*
-	 * Get the rate used when the contract was committed.
+	 * Get the rate used when the contract was committed. If no contract, this
+	 * is the case is we ask for the rate before a contract is committed, we
+	 * get the most present rate. All rates ae agsinst the Euro.
 	 */
     public function getRate($contractid = null)
     {
-        $date = time();
+        $date = Carbon::now();
 
-        //If contractid given, we fint the rate at the time of commiting the contract
+        //If contractid given, we find the rate at the time of commiting the contract
         if ($contractid)
         {
             //Find the date for the commitment
-            $accountpost = Accountposts::where('contractid', $contractid)->where('postypeid', 10)->where('passifiedby', 0)->first();
-            if ($accountpost) $date = strtotime($accountpost->created_at);
+            $accountpost = Accountpost::where('contractid', $contractid)->where('posttypeid', 10)->where('passifiedby', 0)->first();
+            if ($accountpost) $date = $accountpost->created_at;
         }
 
+        //id of 1 is the base currency, Euro
         if ($this->id == 1) return 1;
 
         $query = Currencyrate::where('currencyid', $this->id)->orderBy('created_at', 'desc');
-        $rate1 = $query->first();
-
         $rate2 = $query->where('created_at', '<=', $date)->first();
 
+        //We should have a $rate2, but in the case where no rates were saved for the
+        //specific currency prior to $date, this will be null.
         if ($rate2) return $rate2->rate;
+
+        //This will not happen if rates have been recorded properly. But in the case of
+        //missing $rate2, where fetch the first rate after the $date
+        $query = Currencyrate::where('currencyid', $this->id)->orderBy('created_at', 'asc');
+        $rate1 = $query->where('created_at', '>=', $date)->first();
         return $rate1->rate;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Response;
 use App\Helpers\PictureHelpers;
 use App\Helpers\ShowCalendar;
@@ -14,7 +15,8 @@ use Gate;
 use ValidationAttributes;
 use App\Models\House;
 use App\Models\Contract;
-use App\User;
+use App\Models\Contractline;
+use App\Models\User;
 use App\Models\Currency;
 use App\Models\Period;
 use App\Models\Periodcontract;
@@ -39,6 +41,8 @@ class ContractController extends Controller
         $years = [];
         for ($i = $thisyear-3; $i < $thisyear+3; $i++) $years[$i] = $i;
 
+        if ($request->get('year') == null) $request['year'] = $thisyear;
+
         $houses = House::filter()->pluck('name', 'id')->toArray();
         $houseid = Input::get('houseid', 1);
 
@@ -48,13 +52,17 @@ class ContractController extends Controller
         return view('contract/annualcontractoverview', ['year' => $year, 'years' => $years, 'contractoverview' => $contractoverview, 'houses' => $houses, 'houseid' => $houseid]);
     }
 
-    public function chooseweeks(Request $request) {
+    /*
+     * This is the first landing place after the customer has chosen a week i the calendar.
+     * The method id "periodcontract-excentric", as there is no contract.
+     */
+    public function chooseweeks() {
 
         //$this->getResponse()->setHttpHeader('Cache-Control', 'no-cache, must-revalidate');
         $table = 'Periodcontract';
-        session(['FormSave' => $request->get('FormSave', 'not set')]);
+        $id = Input::get('contractid', 0);
         $returnpath = 'contract/chooseweeks?menupoint='.session('menupoint', 10020);
-        $this->checkHouseChoice($request, $returnpath);
+        $this->checkHouseChoice($returnpath);
         $houseid = session('defaultHouse');
 
         if (session('step', 0) == '0') session(['step' => 1]);
@@ -65,21 +73,13 @@ class ContractController extends Controller
 
         if ($periodid == 0)
         {
-            $request>session()->flash('warning', 'Please click the first week you want to rent!');
+            session()->flash('warning', 'Please click the first week you want to rent!');
             return redirect('home/checkbookings')->with('returnpath', $returnpath);
         }
-        $period = Period::find($periodid);
+        $period = Periodcontract::find($periodid);
         $maxpersons = $period->maxpersons;
 
         $price = 0;
-
-        //The code below takes action when the user goes back from step 2, possibly to change the order
-        if (Input::get('contractid', 0) > 0) {
-            $contract = Contract::find(Input::get('contractid'));
-            if ($contract) $contract->delete();
-            session(['step' => 1]);
-        }
-
 
         $checkedWeeks = array();
 
@@ -108,19 +108,15 @@ class ContractController extends Controller
             $personSelectbox[$i] = $i;
         }
 
-        return view('contract/chooseweeks',['periodcontracts' => $periodcontracts, 'checkedWeeks' => $checkedWeeks, 'personSelectbox' => $personSelectbox]);
+        return view('contract/chooseweeks',['periodcontracts' => $periodcontracts, 'checkedWeeks' => $checkedWeeks, 'contractid' => $id, 'personSelectbox' => $personSelectbox]);
     }
 
-    public function preparecontract(Request $request) {
-        $table = 'periodcontract';
-        $periodids = array();
-
+    public function preparecontract() {
         if (session('step', 0) == '1') session(['step => 2']);
 
         $houseid = Input::get('houseid');
-
+        $contractid = Input::get('contractid', 0);
         //Handle invalid input
-
         $persons = Input::get('persons', 2);
 
         //if not authenticated, we use the temporary user
@@ -145,20 +141,60 @@ class ContractController extends Controller
 
         //We turn off mutators
         Contract::$ajax = true;
-        $contract = new Contract(
-        [
-            'houseid' => $houseid,
-            'ownerid' => House::find($houseid)->ownerid,
-            'status' => 'New',
-            'customerid' => $user->id,
-            'persons' => $persons,
-            'discount' => 0,
-            'categoryid' => 0,
-            'currencyid' => $culture->currencyid,
-        ]);
 
-        //We temporally save to get the id
-        $contract->save();
+        if ($contractid == 0)
+        {
+            try
+            {
+                $contract = new Contract(
+                    [
+                        'houseid' => $houseid,
+                        'ownerid' => House::find($houseid)->ownerid,
+                        'status' => 'New',
+                        'customerid' => $user->id,
+                        'persons' => $persons,
+                        'discount' => 0,
+                        'categoryid' => 0,
+                        'currencyid' => $culture->currencyid
+                    ]);
+
+                //We temporally save to get the id
+                $errors = '';
+                if (!$contract->save()) {
+                    Log::notice('Aborting in ContractController, error during Save(), $contract not saved.');
+                    $errors = $contract->getErrors();
+                }
+            }
+            catch(\Exception $e){
+                Log::warning('There was an exception when saving the $contract: '.$e->getMessage());
+            }
+            if ($errors != '') return back()->withInput()->with('errors',  $errors);
+            $contractid = $contract->id;
+        }
+        else $contract = Contract::Find($contractid);
+
+        //The $contract is now either a new one or an existing. We now delete all existing periods
+        //from the contractlines, allowing for new - and possibly different ones to be added, But before
+        //doing that, we check that the weeks to be added are consecutive.
+
+        // Check for consecutive weeks, go back if not
+        $lastday = null;
+        foreach (Input::get('checkedWeeks') as $periodid) {
+            $period = Periodcontract::find($periodid);
+            $firstday = $period->from->format('Y-m-d');
+            if ($lastday)
+            {
+                if ($lastday != $firstday)
+                {
+                    $weeksnotconsecutive = __('All booked rental periods must be consecutive, but they are not. Please check and reorder.');
+                    return back()->withInput()->with('weeksnotconsecutive',  $weeksnotconsecutive);
+                }
+            }
+            $lastday = $period->to->format('Y-m-d');
+        }
+
+        //Delete old contractlines
+        Contractline::where('contractid', $contractid)->delete();
 
         $price = 0;
         $firstperiodid = 0;
@@ -166,17 +202,18 @@ class ContractController extends Controller
             if (0 != $contract->addWeek($periodid)) {
                 //$request>session()->flash('warning', 'Please clich the first week you want to rent!');
                 session()->flash('warning', 'The chosen period is already booked, please re-order.');
-                return redirect('contract/choseweeks?houseid=' . $houseid);
+                return redirect('contract/choseweeks?houseid='.$houseid.'&id='.$contractid);
             }
             if ($firstperiodid == 0) $firstperiodid = $periodid;
             $period = Periodcontract::find($periodid);
             $price += (max(0, $persons - $period->basepersons))*$period->personprice + $period->baseprice;
         }
+        //Weeks are now added, and the rate(s) below will be the rates of the created_at date of the contract.
 
         //Determine rates, we later use the firstperiod to return to the same form if the user presses "back".
         $period = Periodcontract::find($firstperiodid);
-        $contract->price = $price;
-        $contract->finalprice = $price * $period->getRate($culture->culture)['rate'];;
+        $contract->price = $price * $period->getRate($culture->culture)['rate'];
+        $contract->finalprice = $price * $period->getRate($culture->culture)['rate'];
 
         //Contract is now saved as a proposal, status is "New" and a background service will delete it is the status does
         //not change to "Committed". Anyhow, the periods are now locked to the session/user.
@@ -197,34 +234,555 @@ class ContractController extends Controller
         return view('contract/preparecontract',['contract' => $contract, 'currencySelect' => $currencySelect, 'currencyid' => $culture->currencyid, 'rates' => $rates, 'firstperiodid' => $firstperiodid]);
     }
 
-    public function commitcontract(Request $request)
+    public function commitcontract()
     {
-        die('Finalprice: '.$request->get('finalprice)'));
-
         Contract::$ajax = false;
         $id = Input::get('id');
         $contract = Contract::findOrFail($id);
 
-        //Update relevant fields, only when comin from previous workflow step
+        //Update relevant fields, only when coming from previous workflow step loginredirected
         if (Input::get('loginredirected', 'no') == 'no')
         {
-            die('Finalprice: '.$request->get('finalprice)'));
-            $contract->finalprice = Input::get('finalprice)');
-            $contract->currencyid = Input::get('currencyid)');
-            $contract->discount = Input::get('discount)');
+            $contract->finalprice = Input::get('finalprice');
+            $contract->currencyid = Input::get('currencyid');
+            $contract->discount = Input::get('discount');
+            $contract->message = Input::get('message');
             $contract->save();
-        }
 
-        //After having saved the contract we need to see if the userid is 10, if so it should be replaced before the contract is committed.
-        if ($contract->customerid == 10)
+            //If the user has been autheticated we may save
+            if (\Auth::check())
+            {
+                $user = Auth::user();
+                $message = Contract::commitOrder(10, $user->id, $contract->id, $contract->customerid);
+                Log::info('Contract committed by user: '.$user->id.' for customer: '.$contract->customerid.'. Contractid is: '.$contract->id.'. Message from commitOrder: '.$message );
+            }
+
+            //After having saved the contract we need to see if the userid is 10, if so it should be replaced before the contract is committed.
+            if ($contract->customerid == 10)
+            {
+                session(['redirectTo' => 'contract/commitcontract?loginredirected=yes&id='.$id]);
+                session()->flash('warning', 'Please login or register to finalize the order.');
+                return redirect('login');
+            }
+        }
+        else
         {
-            session(['redirectTo' => 'contract/commitcontract?loginredirected=yes&id='.$id]);
-            $request>session()->flash('warning', 'Please login or register to finalize the order.');
-            return redirect('login');
+            if (\Auth::check())
+            {
+                $user = Auth::user();
+                $message = Contract::commitOrder(10, $user->id, $contract->id, $contract->customerid);
+                Log::info('Contract committed by user: '.$user->id.' for customer: '.$contract->customerid.'. Contractid is: '.$contract->id.'. Message from commitOrder: '.$message );
+            }
+            else
+            {
+                //TODO: Errorhandling
+            }
         }
 
+        //TODO: Create account record
         $mailtext = "This is the mail text generated by the batch system";
         return view('contract/commitcontract', ['mailtext' => $mailtext]);
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //Find page from id
+        if (Input::get('page') == null) {
+            $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
+            $page = array_flip($models)[$id]+1;
+            Input::merge(['page' => $page]);
+        }
+
+        $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
+        $fields = Schema::getColumnListing($models[0]->getTable());
+        $fields = array_diff($fields, ['created_at', 'updated_at', 'theme']);
+        return view('contract/show', ['models' => $models, 'fields' => $fields]);
+    }
+
+    /*
+     * This method creates a new contract. The use case is: Customer hos checked the vacancy
+     * and pressed a period and he ends here, where contract will be created before he is
+     * sent over to the next view, where he can edit the details.
+     *
+     * The contract status is "New" and it will be deleted by a cron if it remains so after
+     * some minutes.
+     */
+    public function newcontract($periodid)
+    {
+        $period = Periodcontract::find($periodid);
+        $houseid = $period->houseid;
+        $maxpersons = $period->maxpersons;
+
+        //Find customerid of logged in user or assign a temporary id id user is not logged in.
+        //In the latter case, we will ask the user to login later. But not now, we want to delay
+        //the hazzle of loggin in to later.
+        if (!(\Auth::check()))
+        {
+            session(['conserveuserinfo' => 1]);
+            $user = User::find(10);
+            //TODO: Modify logic around users not logged in
+            //$this->loginRedirect('temp', 'hX16BvylOmps', 'contract/preparecontract');
+        }
+        else
+        {
+            $user = Auth::user();
+        }
+
+        //We now have a user, a periodid, and we can create an order. Thereby blocking
+        //any other user to book the same period. Byt we don't do it
+        //if it has already been created and still exists.
+        $createNewContract = false;
+        $contractid = session('contractid', 0);
+        if ($contractid == 0) $createNewContract = true;
+        else if (!Contract::Find($contractid)) $createNewContract = true;
+
+        if ($createNewContract){
+            $culture = Culture::find($user->cultureid);
+            try {
+                $contract = new Contract(
+                    [
+                        'houseid' => $houseid,
+                        'ownerid' => House::find($houseid)->ownerid,
+                        'status' => 'New',
+                        'customerid' => $user->id,
+                        'persons' => 2,
+                        'discount' => 0,
+                        'categoryid' => 0,
+                        'currencyid' => $culture->currencyid
+                    ]);
+
+                //We temporally save to get the id
+                $errors = '';
+                if (!$contract->save()) {
+                    Log::notice('Aborting in ContractController, error during Save(), $contract not saved.');
+                    $errors = $contract->getErrors();
+                }
+            } catch (\Exception $e) {
+                Log::warning('There was an exception when saving the $contract: ' . $e->getMessage());
+            }
+            if ($errors != '') return back()->withInput()->with('errors', $errors);
+
+
+            //Add the period, go back if the period is already taken.
+            if (0 != $contract->addWeek($periodid)) {
+                session()->flash('warning', 'The chosen period has in this moment been occupied by another customer, please re-order.');
+                return back();
+            }
+
+            $contractid = $contract->id;
+            session(['contractid' => $contractid]);
+        }
+        $contractid = session('contractid', 0);
+
+        return $this->customeredit($contractid);
+    }
+
+    /*
+   * This method gives the input to the view used by the customer to edit a
+   * new contract.
+   */
+    public function customeredit($contractid)
+    {
+        $model = Contract::Find($contractid);
+        $models = [$model];
+        if (!$model) die('No contract found with id: '.$contractid.' please handle this!');
+        $fields = ['persons', 'finalprice', 'currencyid', 'landingdatetime', 'departuredatetime'];
+
+        //We need the currency rate for the view, calculation based on price and discount:
+        //$rate = $model->finalprice/((1-$model->discount/100)*$model->price);
+        $rate = 1;
+        $contractlines = $model->contractlines();
+        // echo(var_dump($contractlines->get()->first()->periodid));
+
+        //Get max persons
+        $firstperiod = Periodcontract::Find($contractlines->get()->first()->periodid);
+        //Data for persons selectbox
+        $personSelectbox = [];
+        for ($i=$firstperiod->basepersons; $i <= $firstperiod->maxpersons; $i++)
+        {
+            $personSelectbox[$i] = $i;
+        }
+
+        $choosecurrency = true;
+        $rates = [];
+        $currencySelect = [];
+        if ($choosecurrency)
+        {
+            //Calculate the rates as a function of the currencyid
+            //Set the array used for the currencySelect in the view
+            foreach (Culture::all() as $cult)
+            {
+                //$cultuteidToCurrencyid[$cult->culture] = $culture->currencyid;
+                $rates[$cult->currencyid] = $firstperiod->getRate($cult->culture)['rate'];
+                $currencySelect[$cult->currencyid] = $firstperiod->getRate($cult->culture)['currencysymbol'];
+            }
+        }
+
+        return view('contract/customeredit', ['models' => $models, 'rate' => $rate, 'rates' => $rates, 'fields' => $fields,
+            'vattr' => new ValidationAttributes($models[0]), 'personSelectbox' => $personSelectbox,
+            'currencySelect' => $currencySelect]);
+    }
+
+    /*
+     * Based on the input from the previous form, customeredit, the price will be calculated on the server, and the
+     * customer will be presented to the invoice. By going on the customer agrees to the conditions, by which a mail
+     * will be dispatched.
+     *
+     * If the user has not yet logged in, he will be asked to register or login. After that he will be redirected to
+     * the same page.
+     */
+    public function confirmcontract()
+    {
+        Contract::$ajax = false;
+        $contractid = Input::get('id');
+        $contract = Contract::findOrFail($contractid);
+
+        //Update relevant fields, only when coming from previous workflow step loginredirected
+        if (Input::get('loginredirected', 'no') == 'no')
+        {
+            $contract->finalprice = Input::get('finalprice');
+            $contract->currencyid = Input::get('currencyid');
+            $contract->discount = Input::get('discount');
+            $contract->persons = Input::get('persons');
+            $contract->message = Input::get('message');
+            $contract->save();
+
+            // Update bookings and price information
+            // Check for consecutive weeks, go back if not
+            $lastday = null;
+            foreach (Input::get('checkedWeeks') as $periodid) {
+                $period = Periodcontract::find($periodid);
+                $firstday = $period->from->format('Y-m-d');
+                if ($lastday)
+                {
+                    if ($lastday != $firstday)
+                    {
+                        $weeksnotconsecutive = __('All booked rental periods must be consecutive, but they are not. Please check and reorder.');
+                        return back()->withInput()->with('weeksnotconsecutive',  $weeksnotconsecutive);
+                    }
+                }
+                $lastday = $period->to->format('Y-m-d');
+            }
+
+            // Delete old period reservations as they might have been changed
+            Contractline::where('contractid', $contractid)->delete();
+
+            $price = 0;
+            $persons = Input::get('persons');
+            $currencyid = Input::get('currencyid');
+            $firstperiodid = 0;
+            foreach (Input::get('checkedWeeks') as $periodid) {
+                if (0 != $contract->addWeek($periodid)) {
+                    //$request>session()->flash('warning', 'Please clich the first week you want to rent!');
+                    session()->flash('warning', 'The chosen period is already booked, please re-order.');
+                    return redirect('contract/customeredit/'.$periodid);
+                }
+                if ($firstperiodid == 0) $firstperiodid = $periodid;
+                $period = Periodcontract::find($periodid);
+                $price += (max(0, $persons - $period->basepersons))*$period->personprice + $period->baseprice;
+            }
+            //Weeks are now added, and the rate(s) below will be the rates of the created_at date of the contract.
+
+            //Determine rates, we later use the firstperiod to return to the same form if the user presses "back".
+            Contract::$ajax = true; //We want real decimals here
+            $period = Periodcontract::find($firstperiodid);
+            $rate = $period->getRate('', $currencyid)['rate'];
+            $contract->price = $price * $rate;
+            $contract->finalprice = $price * $rate;
+
+            //Contract is now saved based on the server calculations, status is "New" and a background service will delete it is the status does
+            //not change to "Committed". Anyhow, the periods are now locked to the session/user.
+            $contract->save();
+
+            //If the user has been autheticated we may save
+            if (\Auth::check())
+            {
+                $user = Auth::user();
+                $message = Contract::commitOrder(10, $user->id, $contract->id, $contract->customerid);
+                Log::info('Contract committed by user: '.$user->id.' for customer: '.$contract->customerid.'. Contractid is: '.$contract->id.'. Message from commitOrder: '.$message );
+            }
+
+            //After having saved the contract we need to see if the userid is 10, if so it should be replaced before the contract is committed.
+            if ($contract->customerid == 10)
+            {
+                session(['redirectTo' => 'contract/confirmcontract?loginredirected=yes&id='.$contractid]);
+                session()->flash('warning', 'Please login or register to finalize the order.');
+                return redirect('login');
+            }
+        }
+        else
+        {
+            if (\Auth::check())
+            {
+                $user = Auth::user();
+                $contract->customerid = $user->id;
+                $contract->save();
+                //TODO: View
+                //$message = Contract::commitOrder(10, $user->id, $contract->id, $contract->customerid);
+                //Log::info('Contract committed by user: '.$user->id.' for customer: '.$contract->customerid.'. Contractid is: '.$contract->id.'. Message from commitOrder: '.$message );
+            }
+            else
+            {
+                //TODO: Errorhandling
+            }
+        }
+    }
+
+
+    /*
+     * This method gives the input to the view used by the administrator to edit an
+     * exisiting contract.
+     */
+    public function adminedit($contractid, $periodid)
+    {
+        $fromcalendar = false;
+
+        //We have entered this method from the calendar, a new contract will be made
+        if ($contractid == 0)
+        {
+            //No pagination, TODO: remove pagination from view
+            $fromcalendar = true;
+            $period = Periodcontract::find($periodid);
+            $houseid = $period->houseid;
+            $maxpersons = $period->maxpersons;
+
+            //Find customerid of logged in user or assign a temporary id id user is not logged in.
+            //In the latter case, we will ask the user to login later. But not now, we want to delay
+            //the hazzle of loggin in to later.
+            if (!(\Auth::check()))
+            {
+                //TODO: Check if we can do away with this session setting
+                session(['conserveuserinfo' => 1]);
+                $user = User::find(10);
+                //TODO: Modify logic around users not logged in
+                //$this->loginRedirect('temp', 'hX16BvylOmps', 'contract/preparecontract');
+            }
+            else
+            {
+                $user = Auth::user();
+            }
+
+            //Check if any other contracts with the status New exists, delete if so.
+            //This may happen if the user goes back to the calendar
+            Contract::where('status', 'New')->where('houseid', $houseid)->where('customerid', $user->id)->delete();
+
+            //Create contract
+            $culture = Culture::find($user->cultureid);
+            try {
+                $contract = new Contract(
+                    [
+                        'houseid' => $houseid,
+                        'ownerid' => House::find($houseid)->ownerid,
+                        'status' => 'New',
+                        'customerid' => $user->id,
+                        'persons' => 2,
+                        'price' => 0,
+                        'finalprice' => 0,
+                        'discount' => 0,
+                        'categoryid' => 0,
+                        'currencyid' => $culture->currencyid
+                    ]);
+
+                //We temporally save to get the id
+                $errors = '';
+                if (!$contract->save()) {
+                    Log::notice('Aborting in ContractController, error during Save(), $contract not saved.');
+                    $errors = $contract->getErrors();
+                }
+            } catch (\Exception $e) {
+                Log::warning('There was an exception when saving the $contract: ' . $e->getMessage());
+            }
+            if ($errors != '') return back()->withInput()->with('errors', $errors);
+
+
+            //Add the period, go back if the period is already taken.
+            if (0 != $contract->addWeek($periodid)) {
+                return back()->with('warning', 'The chosen period has in this moment been occupied by another customer, please re-order.');;
+            }
+
+            $contractid = $contract->id;
+            session(['contractid' => $contractid]);
+            $model = $contract;
+            $models = [$model];
+        }
+        //Contract with status New is now created, it will need to be committed
+
+        else
+        {
+            //Find page from id, we use the contractoverview her, as it gives us the from and to date.
+            //$this->model = Contractoverview::class;
+            if (Input::get('page') == null)
+            {
+                $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
+                $page = array_flip($models)[$contractid]+1;
+                Input::merge(['page' => $page]);
+            }
+
+            $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
+            $model = $models[0];
+        }
+
+        $fields = ['discount', 'persons', 'finalprice', 'currencyid', 'landingdatetime', 'departuredatetime'];
+        //$fields = Schema::getColumnListing($models[0]->getTable());
+
+        //We need the currency rate for the view, calculation based on price and discount:
+        //$rate = $model->finalprice/((1-$model->discount/100)*$model->price);
+        $rate = 1;
+        $contractlines = $model->contractlines();
+        // echo(var_dump($contractlines->get()->first()->periodid));
+
+        //Get max persons
+        $firstperiod = Periodcontract::Find($contractlines->get()->first()->periodid);
+        //Data for persons selectbox
+        $personSelectbox = [];
+        for ($i=$firstperiod->basepersons; $i <= $firstperiod->maxpersons; $i++)
+        {
+            $personSelectbox[$i] = $i;
+        }
+
+        $choosecurrency = true;
+        $rates = [];
+        $currencySelect = [];
+        if ($choosecurrency)
+        {
+            //Calculate the rates as a function of the currencyid
+            //Set the array used for the currencySelect in the view
+            foreach (Culture::all() as $cult)
+            {
+                //$cultuteidToCurrencyid[$cult->culture] = $culture->currencyid;
+                $rates[$cult->currencyid] = $firstperiod->getRate($cult->culture)['rate'];
+                $currencySelect[$cult->currencyid] = $firstperiod->getRate($cult->culture)['currencysymbol'];
+            }
+        }
+
+        return view('contract/adminedit', ['models' => $models, 'rate' => $rate, 'rates' => $rates, 'fields' => $fields,
+                                            'vattr' => new ValidationAttributes($models[0]), 'personSelectbox' => $personSelectbox,
+                                            'fromcalendar' => $fromcalendar,
+                                            'currencySelect' => $currencySelect]);
+    }
+
+    /*
+     * This method is for the administrator, owner or supervisor. The finalprice is recalculated
+     * to avoid possible attempts to inject javascript to fiddle with the price
+     * TODO: set access filter
+     */
+    public function admincontractupdate($contractid)
+    {
+        //TODO: should we handle the situation where there is no existing contract?
+        $contract = Contract::Find($contractid);
+        Contract::$ajax = true;
+        $oldfinalprice = $contract->finalprice;
+        Contract::$ajax = false;
+
+        //The following code is nearly identical to the code for updating customer orders
+        $contract->finalprice = Input::get('finalprice');
+        if ($contract->status == 'New') $currencyid = Input::get('currencyid');
+        else $currencyid = $contract->currencyid;
+        $contract->currencyid = $currencyid;
+        $contract->discount = Input::get('discount');
+        $contract->persons = Input::get('persons');
+        $contract->message = Input::get('message');
+        //$contract->save();
+
+        // Update bookings and price information
+        // Check for consecutive weeks, go back if not
+        $lastday = null;
+        foreach (Input::get('checkedWeeks') as $periodid) {
+            $period = Periodcontract::find($periodid);
+            $firstday = $period->from->format('Y-m-d');
+            if ($lastday)
+            {
+                if ($lastday != $firstday)
+                {
+                    $weeksnotconsecutive = __('All booked rental periods must be consecutive, but they are not. Please check and reorder.');
+                    return back()->withInput()->with('weeksnotconsecutive',  $weeksnotconsecutive);
+                }
+            }
+            $lastday = $period->to->format('Y-m-d');
+        }
+
+        // Delete old period reservations as they might have been changed
+        Contractline::where('contractid', $contractid)->delete();
+
+        $price = 0;
+        $persons = Input::get('persons');
+
+        $firstperiodid = 0;
+        foreach (Input::get('checkedWeeks') as $periodid) {
+            if (0 != $contract->addWeek($periodid)) {
+                //$request>session()->flash('warning', 'Please clich the first week you want to rent!');
+                session()->flash('warning', 'The chosen period is already booked, please re-order.');
+                return redirect('contract/adminedit/'.$contractid); //There is a difference here
+            }
+            if ($firstperiodid == 0) $firstperiodid = $periodid;
+            $period = Periodcontract::find($periodid);
+            $price += (max(0, $persons - $period->basepersons))*$period->personprice + $period->baseprice;
+        }
+        //Weeks are now added, and the rate(s) below will be the rates of the created_at date of the contract.
+
+        //Determine rates, we later use the firstperiod to return to the same form if the user presses "back".
+        Contract::$ajax = true;
+        $period = Periodcontract::find($firstperiodid);
+        $rate = $period->getRate('', $currencyid)['rate'];
+        $contract->price = $price * $rate;
+        $newfinalprice = $price * $rate * (1-$contract->discount/100);
+
+        //We are administrating the contract
+        if (Input::get('fromcalendar', 1) == 0)
+        {
+            //Check if we want to ignore the change, be sure we don't divide with 0
+            if ($oldfinalprice == 0) $oldfinalprice = 1;
+            if (abs(($oldfinalprice - $newfinalprice)/$oldfinalprice) > 0.001)
+            {
+                $contract->finalprice = $newfinalprice;
+                $contract->status = 'AwaitsUpdate';
+                Contract::commitOrder(140, Auth::user()->id, $contractid, $contract->customerid);
+                $contract->save();
+                $success = __('Contract updated').'.';
+            }
+            //Identical code stop
+            else $success = __('Contract not updated  as new final price is within 1 o/oo of old final price').'.';
+            $success .= ($currencyid != Input::get('currencyid'))?' '.__('Currency cannot be changed for a committed order!'):'';
+            return redirect('contract/adminedit/'.$contractid)->with('success', $success);
+        }
+        else
+        {
+            die('Code to commit contract missing.');
+        }
+    }
+
+
+    public function listcontractoverview()
+    {
+
+        return view('contract/listcontractoverview', ['contracts' => $contracts]);
+    }
+
+    public function listcontractoverviewforowners(Request $request)
+    {
+        $this->model = \App\Models\Contract::class;
+        $thisyear = date('Y');
+        $years = [];
+        for ($i = $thisyear-10; $i < $thisyear+3; $i++) $years[$i] = $i;
+
+        if ($request->get('yearfrom') == null) $request['year'] = $thisyear;
+
+        $houses = House::filter()->pluck('name', 'id')->toArray();
+        $houseid = Input::get('houseid', 1);
+
+        $year = Input::get('yearfrom', $thisyear);
+        $contractquery = Contractoverview::filter($request->all())->sortable()->orderBy('from')->with('customer')->with('house');
+        $contractoverview = $contractquery->get();
+        return view('contract/listcontractoverviewforowners', ['year' => $year, 'years' => $years, 'contractoverview' => $contractoverview, 'houses' => $houses, 'houseid' => $houseid]);
+    }
+
+
+
 
 }

@@ -16,6 +16,24 @@ class CreateValidationAttributes
         if ($model->getCasts()) $this->casts = $model->getCasts();
     }
 
+    public function getCasts()
+    {
+        return $this->casts;
+    }
+
+    public function setCast($field, $type)
+    {
+        if (array_key_exists($field, $this->casts)) $this->casts[$field] = $type;
+        else $this->casts = $this->casts + [$field => $type];
+        return $this;
+    }
+
+    public function getCast($field)
+    {
+        if (!array_key_exists($field, $this->casts)) return 'text';
+        else return $this->casts[$field];
+    }
+
     public function validationOptions($name, $options = []) {
 
         //Modifications for jquery unobtrusive validation

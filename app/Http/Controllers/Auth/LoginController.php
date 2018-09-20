@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -38,25 +40,25 @@ class LoginController extends Controller
     }
 
 
+
     /**
-     * Overwriting function from trait
-     * Send the response after the user was authenticated.
+     * The user has been authenticated, overwrite from trait.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-
-    protected function sendLoginResponse(Request $request)
-    {
-    $this->redirectTo = \Session::get('redirectTo', $this->redirectTo);
-    //die(\Session::get('redirectTo', $this->redirectTo));
-    //die('redirectTo: ' . \Session::get('redirectTo', $this->redirectTo));
-
-    $request->session()->regenerate();
-
-    $this->clearLoginAttempts($request);
-
-    return $this->authenticated($request, $this->guard()->user())
-    ?: redirect()->intended($this->redirectPath());
-    }
+     * @param  mixed  $user
+     * @return mixed
      */
+    protected function authenticated(Request $request, $user)
+    {
+        $this->redirectTo = $request->session()->get('redirectTo', $this->redirectTo);
+        Log::notice('Redirecting to: '.$this->redirectTo);
+        if (!$user->verified) {
+            auth()->logout();
+            //$request->session(['redirectTo' => $this->redirectTo]);
+            return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
+        }
+        return redirect()->intended($this->redirectPath());
+    }
+
+
 }

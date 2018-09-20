@@ -24,19 +24,19 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
 
         if (Gate::allows('Owner')) {
-            $customers = $this->model::filter($request->all())->sortable('id')->paginate(10);
+            $customers = $this->model::filter(Input::all())->sortable('id')->paginate(10);
 
             $params['edit'] = "?menupoint=1020&".session('querystring');
             $params['show'] = "?menupoint=1030&".session('querystring');
 
-            return view('customer/index', ['models' => $customers, 'params' => $params, 'search' => $request->all()]);
+            return view('customer/index', ['models' => $customers, 'params' => $params, 'search' => Input::all()]);
         }
         else {
-            $request>session()->flash('warning', 'You are now allowed to see the customer list.');
+            session()->flash('warning', 'You are now allowed to see the customer list.');
             return redirect('home');
         }
 
@@ -84,7 +84,7 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store()
     {
         $model = new $this->model();
 
@@ -99,7 +99,7 @@ class CustomerController extends Controller
             'login',
             'plain_password'
         ];
-        foreach ($fields as $field) $model->$field = $request->get($field);
+        foreach ($fields as $field) $model->$field = Input::get($field);
 
         //Set structural fields
         //$model->ownerid = Auth::user()->ownerid;
@@ -128,13 +128,13 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
         //Find page from id
-        if ($request->query('page') == null) {
+        if (Input::get('page') == null) {
             $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
             $page = array_flip($models)[$id]+1;
-            $request->merge(['page' => $page]);
+            Input::merge(['page' => $page]);
         }
 
         $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
@@ -158,8 +158,8 @@ class CustomerController extends Controller
         }
 
         $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
-        $fields = Schema::getColumnListing($models[0]->getTable());
-        return view('customer/edit', ['models' => $models, 'fields' => $fields, 'vattr' => new ValidationAttributes($models[0])]);
+        $fields = array_diff(Schema::getColumnListing($models[0]->getTable()), ['created_at', 'updated_at', 'remember_token', 'plain_password']);
+        return view('customer/edit', ['models' => $models, 'fields' => $fields, 'vattr' => (new ValidationAttributes($models[0]))->setCast('notes', 'textarea')]);
     }
 
     /**
@@ -196,7 +196,7 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy($id)
     {
         $toBeDeleted = (new $this->model)->findOrFail($id);
         $name = $toBeDeleted->name;
