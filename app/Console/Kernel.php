@@ -31,6 +31,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:updaterates')->dailyAt('22:45')->timezone('Europe/Copenhagen');
         $schedule->command('command:removeoldnewcontracts')->everyMinute();
         $schedule->command('command:activateawaitingaccountposts 300')->everyMinute();
+        $schedule->command('command:addtoqueue')->everyMinute();
+        $schedule->command('command:execute')->everyMinute();
     }
 
     /**

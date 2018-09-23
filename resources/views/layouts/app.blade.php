@@ -20,7 +20,7 @@
 
 </head>
 <body>
-    <div class="wrapper" style="background-color: #cccccc; min-height: 1000px">
+    <div class="wrapper" style="background-color: #eeeee8; min-height: 1000px">
         <div class="row">
             <div class="container" style="text-align: center">Test system - under construction!</div>
         </div>
@@ -94,28 +94,28 @@
         </nav>
 
         <main class="container" style="margin-top: 5px">
-            @if(\Session::get('warning'))
-                <div class="alert alert-warning border border-primary"">{{\Session::get('warning')}}</div>
+            @if(session('warning'))
+                <div class="alert alert-warning border border-primary">{{session('warning')}}</div>
             @endif
-            @if(\Session::get('success'))
-                <div class="alert alert-success border border-primary"">{{\Session::get('success')}}</div>
+            @if(session('success'))
+                <div class="alert alert-success border border-primary">{{session('success')}}</div>
             @endif
 
             <div class="row">
                 <div class="col col-md-12">
                     @yield('content')
                     <br />
-                    Time lapse: {{\Session::get('ost')}}
+                    Time lapse: {{session('ost')}}
                     <br />
-                        Culture: {{\Session::get('culture')}}
+                        Culture: {{session('culture')}}
                     <br />
-                    Uri: {{\Session::get('uri')}}
+                    Uri: {{session('uri')}}
                     <br />
-                    sanitizedpath: {{\Session::get('sanitizedpath')}}
+                    sanitizedpath: {{session('sanitizedpath')}}
                     <br />
                     App locale: {{App::getLocale()}}
                     <br />
-                    Query: {{\Session::get('querystring', 'Query is empty')}}
+                    Query: {{session('querystring', 'Query is empty')}}
                 </div>
 
             </div>
@@ -130,6 +130,15 @@
     }, function() {
         $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut();
     });
+
+
+    function redirectLogin()
+    {
+        //window.location.href = "/login"
+        window.location.href = "/"
+    };
+
+    setTimeout(redirectLogin,1801000);
 </script>
 @yield('scripts')
 </html>

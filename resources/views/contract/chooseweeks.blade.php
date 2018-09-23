@@ -26,13 +26,29 @@ use Illuminate\Support\Facades\App;
                         {!! Form::label('persons', __('Number of persons')) !!}
                     </th>
                     <td>
-                        {!! Form::select('persons', $personSelectbox, \Session::get('selectedpersons',2), ['onChange' => 'newPrice()']) !!}
+                        @if($errors->first('persons'))
+                            <div class="alert alert-danger row">
+                                <div class="alert alert-danger row">
+                                    {{ $errors->first('persons') }}
+                                </div>
+                            </div>
+                        @endif
+                        {!! Form::select('persons', $personSelectbox, \Session::get('selectedpersons',2), ['onChange' => 'newPrice()','class' => 'col-md-2 form-control', 'style' => 'padding: 1px 0 3px 10px;']) !!}
                     </td>
                 </tr>
                 <tr>
                     <th>{{ __('Tick!') }}</th>
                     <th>{{ __('Period') }}</th>
                 </tr>
+                @if(session('weeksnotconsecutive'))
+                    <tr>
+                        <td colspan="2">
+                            <div class="alert alert-danger row">
+                                {{ session('weeksnotconsecutive') }}
+                            </div>
+                        </td>
+                    </tr>
+                @endif
                 @foreach($periodcontracts as $key => $periodcontract)
                 <tr style="{{ ($periodcontract->committed > 0)?'background-color: #FF9191;':'' }}">
                     <td>
@@ -52,6 +68,7 @@ use Illuminate\Support\Facades\App;
                     <th>
                         {!! __('Price in your preferred currency:') . ' ' . $periodcontract->getRate(App::getLocale())['currencysymbol'] . '&nbsp;&nbsp;<span id="price"></span>' !!}
                         {!! Form::hidden('houseid', $periodcontract->houseid) !!}
+                        {!! Form::hidden('contractid', $contractid) !!}
                     </th>
                 </tr>
             </table>

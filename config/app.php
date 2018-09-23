@@ -4,6 +4,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Testmessage
+    |--------------------------------------------------------------------------
+    |
+    | This value is used to indicate that the system is under construction
+    | and no messages will be sent to anyone but jbr@consiglia.dk
+    |
+    */
+    'testmessage' =>  'This is a testsystem for demo only. No mails will be sent.',
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Name
     |--------------------------------------------------------------------------
     |

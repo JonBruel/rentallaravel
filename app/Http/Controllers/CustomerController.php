@@ -171,7 +171,7 @@ class CustomerController extends Controller
      */
     public function update($id)
     {
-        $model = (new $this->model)->findOrFail($id);
+        $model =  $this->model::findOrFail($id);
         $fields = Schema::getColumnListing($model->getTable());
 
         foreach ($fields as $field){

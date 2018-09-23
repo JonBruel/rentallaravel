@@ -25,7 +25,6 @@ $factory->define(App\Models\Accountpost::class, function (Faker\Generator $faker
         },
         'postedbyid' => $faker->randomNumber(),
         'passifiedby' => $faker->randomNumber(),
-        'returndate' => $faker->dateTimeBetween(),
     ];
 });
 

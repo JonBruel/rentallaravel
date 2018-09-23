@@ -1,6 +1,6 @@
 @if ($paginator->hasPages())
     <?php if(!isset($offset)) $offset = 0;?>
-    <ul class="pagination" role="navigation">
+    <ul class="pagination justify-content-center" role="navigation">
         {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
             <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
@@ -23,6 +23,7 @@
             @if (is_array($element))
                 @foreach ($element as $page => $url)
                     @if ($page-$offset == $paginator->currentPage())
+                        <li class="page-item"><a class="page-link" href="<?php echo str_replace("https", "https", $url) ?>"><strong>{{ $page }}</strong></a></li>
                     @else
                         <li class="page-item"><a class="page-link" href="<?php echo str_replace("https", "https", $url) ?>">{{ $page }}</a></li>
                     @endif

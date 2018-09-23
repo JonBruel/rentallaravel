@@ -49,6 +49,7 @@ class SetDefaults {
 
         config(['app.host' => 'rentallaravel.consiglia.dk']);
         session(['host' => 'rentallaravel.consiglia.dk']);
+
         return $next($request);
     }
 

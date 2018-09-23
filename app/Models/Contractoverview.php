@@ -4,6 +4,7 @@
  */
 
 namespace App\Models;
+use App;
 
 
 /**
@@ -106,7 +107,8 @@ class Contractoverview extends BaseModel
                 return $this->category->name;
             case 'curencyid':
                 return $this->currency->currencysymbol;
-
+            case 'from':
+                return $this->contract->getPeriodtext(App::getLocale());
 
             default:
                 return $this->$fieldname;
@@ -151,5 +153,10 @@ class Contractoverview extends BaseModel
     public function house()
     {
         return $this->belongsTo(\App\Models\House::class, 'houseid');
+    }
+
+    public function contract()
+    {
+        return $this->belongsTo(\App\Models\Contract::class, 'id');
     }
 }

@@ -24,6 +24,7 @@ class HomeController extends Controller
 {
     public function __construct() {
         parent::__construct(\App\Models\House::class);
+
     }
 
     /**
@@ -33,10 +34,11 @@ class HomeController extends Controller
      */
     public function showinfo(Request $request, $infotype = 'description')
     {
+        //if (!Auth::check()) return redirect('/login');
         $this->checkHouseChoice($request, 'home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
         $defaultHouse = session('defaultHouse' , 1);
 
-
+        if (Auth::viaRemember()) echo("The user is authenticated via remember");
         //Testing mail.
         //TODO: Remove it in production version.
         if (\Auth::check()) {
@@ -79,8 +81,7 @@ class HomeController extends Controller
 
         $this->checkHouseChoice('home/checkbookings'.'?menupoint='.session('menupoint'));
 
-        $defaultHouse = session('defaultHouse' , -1);
-
+        $defaultHouse = session('defaultHouse' , config('app.default_house'));
         $house = $this->model::findOrFail($defaultHouse);
         $months = 12;
         $yearstart = Carbon::now()->year;

@@ -114,14 +114,21 @@ class Batchlog extends BaseModel
 
         $lockbatch = [];
         foreach (House::all() as $house) $lockbatch[$house->id] = $house->lockbatch;
+
         /*
          * Lockbatch values
          *
          * The lock applies to each house, default value is 0
          *  0 no lock
-         *  1 the queue is populated, testmails are send, but the queue status remains as not executed.
+         *  1 the queue is populated, testmails are send, but the queue status remains as not executed (statusid = 1).
          *  2 the queue is populated, no mails are send, maillog not updated, but the queue status is updated
          *  3 the queue is not populated, the queue is not executed
+         *
+         * Statusid values
+         *  0 test
+         *  1 queued
+         *  2 dispatched
+         *
          */
 
         if ($batchid === null) $batchlogs = Batchlog::where('statusid', 1)->get();
@@ -262,9 +269,13 @@ class Batchlog extends BaseModel
                 $from = $owner->email;
                 $subject = $emaildescription;
 
-
-                if (1 != config('app.mailactive', false)) $subject = 'Testmail only test: ' . $emaildescription;
-                   if (((1 == config('app.mailactive', true)) OR ( substr($emailaddress, -12) == 'consiglia.dk')) AND ($lockbatchvalue < 2))
+                // The Middleware used in web part is not used here, so the config is the "raw" config
+                if ('' != config('app.testmessage', ''))
+                {
+                    $subject = 'Testmail only test from new rental system: ' . $emaildescription;
+                    $emailaddress = 'jbr@consiglia.dk';
+                }
+                if (((1 == config('app.mailactive', true)) || ( substr($emailaddress, -12) == 'consiglia.dk')) && ($lockbatchvalue < 2))
                 {
                     //public function __construct($contents, $subject = '', $fromaddress = 'jbr@consiglia.dk', $fromName = 'testFromName', $toName = '', $attachements = [])
                     Mail::to($emailaddress)
@@ -325,10 +336,11 @@ class Batchlog extends BaseModel
         $batchviews = DB::table('batchview')->where('created_at', '>', Carbon::parse('2009-01-01'))->get();
         foreach ($batchviews as $batchview)
         {
-            echo 'Looking at batchtask: ' . $batchview->id . "\n";
+            echo 'Looking at accountpostid: ' . $batchview->id . ' using batchtaskid: ' . $batchview->batchtaskid . "\n";
             $triggerpaymessage = Carbon::now()->subSeconds(300);
             $contractid = $batchview->contractid;
             $posttypeid = $batchview->posttypeid;
+            //The one below is the only datatime in batchview
             $contractdate = Carbon::parse($batchview->created_at);
             $balance = $batchview->balance;
             $contractamount = $batchview->amount;
@@ -363,7 +375,8 @@ class Batchlog extends BaseModel
             if ($batchview->usetimedelaystart== 1)
             {
                 //$TimeFromOrderCondition = ((time() - $contractdate) / $secondsperday > $batchview->getTimedelaystart());
-                $TimeFromOrderCondition = $contractdate->addDays($batchview->timedelaystart)->gt(Carbon::now());
+                $TimeFromOrderCondition = $contractdate->addDays($batchview->timedelaystart)->lt(Carbon::now());
+                echo("TimeFromOrderCondition: $TimeFromOrderCondition \n");
             }
             //Time to period start
             $TimeToStartCondition = true;
@@ -373,11 +386,11 @@ class Batchlog extends BaseModel
                 if ($timeto > 0)
                 {
                     //$TimeToStartCondition = (($periodstart - time()) / $secondsperday < $timeto);
-                    $TimeToStartCondition = $periodstart->subDays($timeto)->gt(Carbon::now());
+                    $TimeToStartCondition = $periodstart->subDays($timeto)->lt(Carbon::now());
                 }
                 else
                 {
-                    $TimeToStartCondition = $periodend->addDays(-$timeto)->gt(Carbon::now());
+                    $TimeToStartCondition = $periodend->addDays(-$timeto)->lt(Carbon::now());
                 }
             }
 

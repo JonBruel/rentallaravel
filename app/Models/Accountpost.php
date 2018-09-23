@@ -28,8 +28,7 @@ use Carbon\Carbon;
  * @property int $posttypeid
  * @property int $postedbyid
  * @property int $passifiedby
- * @property \Carbon\Carbon $returndate Dropped 20-09-2018
- * 
+ * @property \Carbon\Carbon $returndate
  * @property \App\Models\Customer $customer
  * @property \App\Models\Contract $contract
  * @property \App\Models\Posttype $posttype
@@ -69,8 +68,11 @@ class Accountpost extends BaseModel
 		'contractid',
 		'posttypeid',
 		'postedbyid',
-		'passifiedby'
+		'passifiedby',
+        'returndate'
 	];
+
+    protected $dates = ['returndate'];
 
 	public function customer()
 	{

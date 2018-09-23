@@ -353,9 +353,11 @@ class Contract extends BaseModel
                     $accountpost->passifiedby = $oldcommitment->id;
                     $accountpost->text = 'Cancelled after order re-committed';
                     $accountpost->amount = 0;
-                    $accountpost->save();
+                    $accountpost->returndate = $contract->getReturndate();
+                    if (!$accountpost->save()) die(var_dump($accountpost->errors));
 
                     $contract->status = 'Committed';
+                    $contract->customerid = $customerid;
                     $contract->save();
                     static::$ajax = false;
                     return 'Order re-committed';
@@ -368,6 +370,7 @@ class Contract extends BaseModel
             //Check if already saved, only proceed if contract not already committed
             if ($contract->status == 'Committed')
             {
+
                 $message = "Already committed";
                 //For repair reasons, we set the used rate
                 //Record will be updated, there should only be one record!
@@ -378,7 +381,8 @@ class Contract extends BaseModel
                     $accountpost->currencyid = $accountcurrencyid;
                     $accountpost->customercurrencyid = $customercurrencyid;
                     $accountpost->usedrate = $usedrate;
-                    $accountpost->save();
+                    $accountpost->returndate = $contract->getReturndate();
+                    if (!$accountpost->save()) die(var_dump($accountpost->errors));
                 }
             }
             //New accountpost is created
@@ -389,7 +393,7 @@ class Contract extends BaseModel
                 $accountpost->customerid = $contract->customerid;
                 $accountpost->ownerid = $ownerid;
                 $accountpost->houseid = $houseid;
-                $accountpost->postsource = 'method commitOrder()';
+                $accountpost->postsource = 'method commitOrder';
                 $accountpost->amount = $finalprice;
                 $accountpost->currencyid = $accountcurrencyid;
                 $accountpost->customercurrencyid = $customercurrencyid;
@@ -399,8 +403,8 @@ class Contract extends BaseModel
                 $accountpost->posttypeid = $posttypeid;
                 $accountpost->postedbyid = $userid;
                 $accountpost->passifiedby = 0;
-
-                $accountpost->save();
+                $accountpost->returndate = $contract->getReturndate();
+                if (!$accountpost->save()) die(var_dump($accountpost->errors));
                 $contract->status = 'Committed';
                 $contract->save();
                 $message = "Order committed OK";
@@ -453,6 +457,7 @@ class Contract extends BaseModel
                 $accountpost->posttypeid = $posttypeid;
                 $accountpost->postedbyid = $userid;
                 $accountpost->passifiedby = 0;
+                $accountpost->returndate = $contract->getReturndate();
                 $accountpost->save();
                 $message = "Order adjusted OK";
             }
@@ -516,7 +521,7 @@ class Contract extends BaseModel
         if (($moretodo)) {
             //New accountpost with contractid=0 is created
             $moretodo = false;
-            $accountpost = new Accountposts();
+            $accountpost = new Accountpost();
 
             $accountpost->customerid = $contract->customerid;
             $accountpost->ownerid = $ownerid;
@@ -531,6 +536,7 @@ class Contract extends BaseModel
             $accountpost->posttypeid = $posttypeid;
             $accountpost->postedbyid = 0;
             $accountpost->passifiedby = 0;
+            $accountpost->returndate = $contract->getReturndate();
             $accountpost->save();
             $newid = $accountpost->id;
             $message = "Created " . $text[$posttypeid];
@@ -548,7 +554,7 @@ class Contract extends BaseModel
     //Get relevant accountposts
     public function getAccountposts($culture = '') {
         $sum = 0;
-        $r = '<table>';
+        $r = '<table class="table">';
         $customercurrencysymbol = $this->convertCurrencyAccountToCustomer('currencysymbol');
         $usedrate = $this->convertCurrencyAccountToCustomer();
         $first = true;
@@ -635,18 +641,16 @@ class Contract extends BaseModel
 
     public function getArrival($culture = '')
     {
-        return static::formatDateTimeToString($this->landingdatetime, $culture);
+        if ($this->landingdatetime) return static::formatDateTimeToString($this->landingdatetime, $culture);
+        return __('Not known', [], $culture);
     }
 
     public function getDeparture($culture = '')
     {
-        return static::formatDateTimeToString($this->departuredatetime, $culture);
+        if ($this->departuredatetime) return static::formatDateTimeToString($this->departuredatetime, $culture);
+        return __('Not known', [], $culture);
     }
 
-    public function getCustomerinfo()
-    {
-
-    }
 
     public function getOrder($culture)
     {
@@ -682,7 +686,7 @@ class Contract extends BaseModel
                     if ($key == 'persons')
                         $listedvalue = $this->persons;
                     if ($key == 'personsprice')
-                        $listedvalue = static::format($usedrate * ($pp = $period->personprice * max(0, ($this->persons - $period->pasepersons))), 2, $culture);
+                        $listedvalue = static::format($usedrate * ($pp = $period->personprice * max(0, ($this->persons - $period->basepersons))), 2, $culture);
                     if ($key == 'total')
                         $listedvalue = static::format($usedrate * ($bp + $pp), 2, $culture);
                     $r .= '<td align="right">&nbsp;&nbsp;' . $listedvalue . '</td>';
@@ -704,15 +708,31 @@ class Contract extends BaseModel
 
     public function getPeriodtext($culture)
     {
-
         $contractlines = Contractline::where('contractid', $this->id)->get();
-        //TODO: Check order, check if you need to order after "period.from"
         if (sizeof($contractlines) > 0) {
             $from = $contractlines[0]->period->from;
-            $to = $contractlines[sizeof($contractlines) - 1]->period->to;
-            $period = __('From',[], $culture) . ' ' . static::formatDateToString($from, $culture) . ' ' . __('to', [], $culture) . ' ' . static::formatDateToString($to, $culture);
+            $to = $contractlines[0]->period->to;
+            foreach ($contractlines as $contractline)
+            {
+                if ($from->gt($contractline->period->from)) $from = $contractline->period->from;
+                if ($to->lt($contractline->period->to)) $to = $contractline->period->to;
+            }
+            $periodtext = __('From',[], $culture) . ' ' . static::formatDateToString($from, $culture) . ' ' . __('to', [], $culture) . ' ' . static::formatDateToString($to, $culture);
         }
-        return $period;
+        return $periodtext;
+    }
+
+    public function getReturndate()
+    {
+        $contractlines = Contractline::where('contractid', $this->id)->get();
+        if (sizeof($contractlines) > 0) {
+            $to = $contractlines[0]->period->to;
+            foreach ($contractlines as $contractline)
+            {
+                if ($to->lt($contractline->period->to)) $to = $contractline->period->to;
+            }
+        }
+        return $to;
     }
 
     public function getPrepaymentamount()

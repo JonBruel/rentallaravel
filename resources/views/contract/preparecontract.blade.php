@@ -65,12 +65,18 @@ use Illuminate\Support\Facades\App;
 @endsection
 @section('scripts')
     <script type="text/javascript">
+        /*
+        NB: The discount and the finalprice fields are represented using I18N decemal points.
+        The other fields use standard american decimal points.
+         */
+
         culture = "{{App::getLocale()}}";
         culture = culture.replace("_", "-");
         Formatter = new Intl.NumberFormat(culture,{ minimumFractionDigits: 2,  maximumFractionDigits: 2});
         decimalseparator = Formatter.format(1.01).substring(1,2);
         thousandsseparator = Formatter.format(1000).substring(1,2);
         blockexecution = false;
+
 
         /*
         This function converts a string representation of a number to a number
@@ -81,11 +87,15 @@ use Illuminate\Support\Facades\App;
             return Number(string);
         }
 
-        //Create rates object
+
+        //Create rates object as a conversion from PHP
         rates = [];
-        @foreach($rates as $currencyid => $rate)
-            rates[{{$currencyid}}] = {{$rate}}
+        @foreach($rates as $cid => $rate)
+            rates[{{$cid}}] = {{$rate}};
         @endforeach
+
+        //Initialize oldrate
+        oldrate = rates[{{$currencyid}}];
 
         //Triggered when final price changed
         function setDiscount()
@@ -105,8 +115,14 @@ use Illuminate\Support\Facades\App;
             blockexecution = true;
             if ($('#discount').val() == '') $('#discount').val('0');
             discount = ParseString($('#discount').val());
+
+            //The price field value must be changed when the currency is changed, as
+            //we want that field to be the non-discounted price in the selected currency.
             rate = rates[$('#currencyid').val()];
-            finalprice = ParseString($('#hiddenprice').val())*rate*(100-discount)/100;
+            $('#hiddenprice').val(rate*$('#hiddenprice').val()/oldrate);
+            oldrate = rate;
+
+            finalprice = $('#hiddenprice').val()*(100-discount)/100;
             $('#finalprice').val(Formatter.format(finalprice));
             blockexecution = false;
         }

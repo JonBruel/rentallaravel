@@ -16,7 +16,7 @@ return [
 
     9000 => [
         'text' => 'My Account',
-        'path' => 'customer/registration?menupoint=9010',
+        'path' => 'myaccount/registration?menupoint=9010',
         'parentid' => 9000,
         'cssclass' => 'menulevel1',
         'role' => 10001,  //Only show to loggedin
@@ -26,7 +26,7 @@ return [
     ],
     9010 => [
         'text' => 'Registration',
-        'path' => 'customer/registration',
+        'path' => 'myaccount/registration',
         'parentid' => 9000,
         'cssclass' => 'menulevel2',
         'role' => 10001,
@@ -36,7 +36,7 @@ return [
     ],
     9020 => [
         'text' => 'Bookings',
-        'path' => 'customer/listbookings',
+        'path' => 'myaccount/listbookings',
         'parentid' => 9000,
         'cssclass' => 'menulevel2',
         'role' => 10001,
@@ -46,7 +46,7 @@ return [
     ],
     9030 => [
         'text' => 'Account',
-        'path' => 'customer/listaccountposts',
+        'path' => 'myaccount/listaccountposts',
         'parentid' => 9000,
         'cssclass' => 'menulevel2',
         'role' => 10001,
@@ -56,7 +56,7 @@ return [
     ],
     9040 => [
         'text' => 'Mails',
-        'path' => 'customer/listmails',
+        'path' => 'myaccount/listmails',
         'parentid' => 9000,
         'cssclass' => 'menulevel2',
         'role' => 10001,
@@ -66,7 +66,7 @@ return [
     ],
     9050 => [
         'text' => 'Itenery',
-        'path' => 'customer/edittime',
+        'path' => 'myaccount/edittime',
         'parentid' => 9000,
         'cssclass' => 'menulevel2',
         'role' => 10001,
@@ -259,23 +259,23 @@ return [
         'childrenmap' => []
     ],
     11020 => [
-        'text' => 'Customer Edit',
-        'path' => 'customer/edit',
+        'text' => 'Rental overview',
+        'path' => 'contract/listcontractoverviewforowners',
         'parentid' => 11000,
         'cssclass' => 'menulevel2',
         'role' => 1,
         'level' => 2,
-        'show' => 'select',
+        'show' => 'hide',
         'childrenmap' => []
     ],
     11030 => [
-        'text' => 'Customer Details',
-        'path' => 'customer/show',
+        'text' => 'Arrivals',
+        'path' => 'contract/listcontractoverview',
         'parentid' => 11000,
         'cssclass' => 'menulevel2',
         'role' => 1,
         'level' => 2,
-        'show' => 'select',
+        'show' => 'hide',
         'childrenmap' => []
     ],
     12000 => [
@@ -291,7 +291,7 @@ return [
     12010 => [
         'text' => 'Create periods',
         'path' => 'house/createperiods',
-        'parentid' => 12100,
+        'parentid' => 12000,
         'cssclass' => 'menulevel2',
         'role' => 100,
         'level' => 2,
@@ -311,7 +311,7 @@ return [
     12030 => [
         'text' => 'List houses - administrator',
         'path' => 'house/listhouses',
-        'parentid' => 12100,
+        'parentid' => 12000,
         'cssclass' => 'menulevel2',
         'role' => 100,
         'level' => 2,
@@ -321,7 +321,7 @@ return [
     12040 => [
         'text' => 'Statistics',
         'path' => 'customer/statistics',
-        'parentid' => 12100,
+        'parentid' => 12000,
         'cssclass' => 'menulevel2',
         'role' => 100,
         'level' => 2,
@@ -331,67 +331,26 @@ return [
     12050 => [
         'text' => 'Annual overview',
         'path' => 'contract/annualcontractoverview',
-        'parentid' => 12100,
+        'parentid' => 12000,
         'cssclass' => 'menulevel2',
         'role' => 100,
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => []
     ],
-    13000 => [
-        'text' => 'User Admin.',
-        'path' => 'manage/index?menupoint=3010',
-        'parentid' => 13000,
-        'cssclass' => 'menulevel1',
-        'role' => 1,
-        'level' => 1,
-        'show' => 'show',
-        'childrenmap' => [13010, 13020, 13030]
-    ],
-    13010 => [
-        'text' => 'User list',
-        'path' => 'manage/index',
-        'parentid' => 13000,
-        'cssclass' => 'menulevel2',
-        'role' => 1,
-        'level' => 2,
-        'show' => 'hide',
-        'childrenmap' => []
-    ],
-    13020 => [
-        'text' => 'Same..',
-        'path' => 'manage/index',
-        'parentid' => 13000,
-        'cssclass' => 'menulevel2',
-        'role' => 1,
-        'level' => 2,
-        'show' => 'select',
-        'childrenmap' => []
-    ],
-    13030 => [
-        'text' => 'Changeme..',
-        'path' => 'manage/index',
-        'parentid' => 13000,
-        'cssclass' => 'menulevel2',
-        'role' => 1,
-        'level' => 2,
-        'show' => 'select',
-        'childrenmap' => []
-    ],
-
     14000 => [
         'text' => 'Setup',
-        'path' => 'manage/index?menupoint=3010',
+        'path' => 'setup/listowners?menupoint=14010',
         'parentid' => 14000,
         'cssclass' => 'menulevel1',
-        'role' => 1,
+        'role' => 10,
         'level' => 1,
         'show' => 'show',
-        'childrenmap' => [14010, 14020, 14030]
+        'childrenmap' => [14010, 14020, 14030, 14040, 14050, 14060, 14070, 14080]
     ],
     14010 => [
-        'text' => 'User list',
-        'path' => 'manage/index',
+        'text' => 'List personnel',
+        'path' => 'setup/listowners',
         'parentid' => 14000,
         'cssclass' => 'menulevel2',
         'role' => 1,
@@ -400,23 +359,123 @@ return [
         'childrenmap' => []
     ],
     14020 => [
-        'text' => 'Same..',
-        'path' => 'manage/index',
+        'text' => 'Make batch',
+        'path' => 'setup/makebatch1',
         'parentid' => 14000,
         'cssclass' => 'menulevel2',
         'role' => 1,
         'level' => 2,
-        'show' => 'select',
+        'show' => 'hide',
+        'childrenmap' => [14021]
+    ],
+    14021 => [
+        'text' => 'Batch details',
+        'path' => 'setup/makebatch2',
+        'parentid' => 14020,
+        'cssclass' => 'menulevel3',
+        'role' => 1,
+        'level' => 2,
+        'show' => 'hide',
         'childrenmap' => []
     ],
     14030 => [
-        'text' => 'Changeme..',
-        'path' => 'manage/index',
+        'text' => 'List batch tasks',
+        'path' => 'setup/listbatchtasks',
+        'parentid' => 14000,
+        'cssclass' => 'menulevel2',
+        'role' => 10,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    14040 => [
+        'text' => 'Standard E-mails',
+        'path' => 'setup/liststandardemails',
+        'parentid' => 14000,
+        'cssclass' => 'menulevel2',
+        'role' => 10,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    14050 => [
+        'text' => 'Bounties',
+        'path' => 'setup/listbounties',
+        'parentid' => 14000,
+        'cssclass' => 'menulevel2',
+        'role' => 10,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    14060 => [
+        'text' => 'Batch status',
+        'path' => 'setup/listqueue',
+        'parentid' => 14000,
+        'cssclass' => 'menulevel2',
+        'role' => 10,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    14070 => [
+        'text' => 'First setup',
+        'path' => 'setup/firstsetup',
+        'parentid' => 14000,
+        'cssclass' => 'menulevel2',
+        'role' => 10,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    14080 => [
+        'text' => 'Gallery',
+        'path' => 'setup/editcaptions',
         'parentid' => 14000,
         'cssclass' => 'menulevel2',
         'role' => 1,
         'level' => 2,
-        'show' => 'select',
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    15000 => [
+        'text' => 'System',
+        'path' => 'setup/listerrorlogs?menupoint=15010',
+        'parentid' => 13000,
+        'cssclass' => 'menulevel1',
+        'role' => 0,
+        'level' => 1,
+        'show' => 'show',
+        'childrenmap' => [15010, 15020, 15030]
+    ],
+    15010 => [
+        'text' => 'User list',
+        'path' => 'setup/listerrorlogs',
+        'parentid' => 15000,
+        'cssclass' => 'menulevel2',
+        'role' => 1,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    15020 => [
+        'text' => 'Configs',
+        'path' => 'setup/listconfigs',
+        'parentid' => 15000,
+        'cssclass' => 'menulevel2',
+        'role' => 1,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    15030 => [
+        'text' => 'Batch wizard',
+        'path' => 'wizards/workflow',
+        'parentid' => 15000,
+        'cssclass' => 'menulevel2',
+        'role' => 1,
+        'level' => 2,
+        'show' => 'hide',
         'childrenmap' => []
     ],
 ]

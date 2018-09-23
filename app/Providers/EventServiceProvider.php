@@ -31,14 +31,14 @@ class EventServiceProvider extends ServiceProvider
         //the same house as the supervisor.
         Event::listen('Lab404\Impersonate\Events\TakeImpersonation', function($event)
         {
-            session(['previousDefaultHouse' => session('defaultHouse', -1)]);
-            session(['defaultHouse' => -1]);
+            session(['previousDefaultHouse' => session('defaultHouse', config('app.default_house'))]);
+            session(['defaultHouse' => config('app.default_house')]);
         });
 
         //We go back using the defaultHouse value for the impersonating user.
         Event::listen('Lab404\Impersonate\Events\LeaveImpersonation', function($event)
         {
-            session(['defaultHouse' => session('previousDefaultHouse', -1)]);
+            session(['defaultHouse' => session('previousDefaultHouse', config('app.default_house'))]);
         });
     }
 }

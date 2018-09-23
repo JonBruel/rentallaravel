@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Batchlog;
+use App\Models\BaseModel;
 
 class addtoqueue extends Command
 {
@@ -38,7 +39,7 @@ class addtoqueue extends Command
      */
     public function handle()
     {
-        App/Models/BaseModel::$ajax = true;
+        BaseModel::$ajax = true;
         Batchlog::addtoqueue();
     }
 }
