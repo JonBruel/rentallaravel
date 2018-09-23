@@ -113,7 +113,6 @@ class ShowCalendar
         //Drop the "time of day part" in starttime, starttime is now just a start data, e.g. 2018-07-01
         $starttime =  Carbon::parse($starttime->toDateString());
 
-
         $apckey = Carbon::now()->toDateString().'_'.$starttime->toDateString().'_'.$houseid.'_'.$culture.'.cache';
         $vdays = static::cache_get($apckey);
 

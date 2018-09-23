@@ -30,6 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
         foreach (Customer::$customertypes as $typename => $typevalue)
         {
+
             switch ($typevalue) {
                 case 0:
                     Gate::define($typename, function ($user) {

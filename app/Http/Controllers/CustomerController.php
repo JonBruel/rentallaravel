@@ -36,8 +36,7 @@ class CustomerController extends Controller
             return view('customer/index', ['models' => $customers, 'params' => $params, 'search' => Input::all()]);
         }
         else {
-            session()->flash('warning', 'You are now allowed to see the customer list.');
-            return redirect('home');
+            return redirect('home')->with('warning', 'You are now allowed to see the customer list.');
         }
 
     }

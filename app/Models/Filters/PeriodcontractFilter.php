@@ -20,7 +20,6 @@ class PeriodcontractFilter extends ModelFilter
      */
     public function setup()
     {
-        if (session('defaultHouse' , config('app.default_house')) != -1) return $this->where('houseid', session('defaultHouse'));
-        return $this;
+        return $this->where('houseid', session('defaultHouse', config('app.default_house')));
     }
 }

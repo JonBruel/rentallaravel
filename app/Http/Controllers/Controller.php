@@ -8,7 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-
+use Gate;
 
 class Controller extends BaseController
 {
@@ -43,5 +43,13 @@ class Controller extends BaseController
             return $testvalue;
         }
         return session($parameter, $default);
+    }
+
+    //Does not work
+    protected function setRights($usertype, $message = null)
+    {
+        if (!$message) $message = 'Somehow you the system tried to let you do something which is not allowed. So you are sent home!';
+        if (!Gate::allows($usertype)) return redirect('/home')->with('warning', __($message));
+        return null;
     }
 }

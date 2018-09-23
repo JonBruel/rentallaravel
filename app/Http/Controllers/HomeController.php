@@ -107,7 +107,7 @@ class HomeController extends Controller
             $calendar = new ShowCalendar($starttime);
             $calendar->houseid = $defaultHouse;
             //$calendar->link_to = $this->url . '/contract/choseweeks/houseid/' . $this->houseid . '/cursor/0/restricttohouse/1/periodid/';
-            $calendar->link_to = '/contract/adminedit/0/';
+            $calendar->link_to = '/contract/contractedit/0/';
             $calendar->culture = App::getLocale();
             $cal[$i] = $calendar->output_calendar();
             $starttime->addMonth();

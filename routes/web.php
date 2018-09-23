@@ -57,21 +57,14 @@ Route::get('/house/listperiods', 'HouseController@listperiods');
 Route::get('/house/listhouses', 'HouseController@listhouses');
 Route::get('/house/listperiods', 'HouseController@listperiods');
 
-Route::get('/contract/choseweeks', 'ContractController@chooseweeks');
-Route::get('/contract/chooseweeks', 'ContractController@chooseweeks');
-Route::post('/contract/preparecontract', 'ContractController@preparecontract');
-Route::get('/contract/preparecontract', 'ContractController@chooseweeks');
-Route::post('/contract/commitcontract', 'ContractController@commitcontract');
-Route::get('/contract/commitcontract', 'ContractController@commitcontract');
-
 
 Route::get('/contract/listcontractoverview', 'ContractController@listcontractoverview');
 Route::get('/contract/listcontractoverviewforowners', 'ContractController@listcontractoverviewforowners');
 Route::get('/contract/show/{id}', 'ContractController@show');
 Route::get('/contract/contractedit/{id}/{periodid}', 'ContractController@contractedit');
-Route::get('/contract/newcontract/{periodid}', 'ContractController@newcontract');
-Route::get('/contract/confirmcontract', 'ContractController@confirmcontract');
-Route::post('/contract/confirmcontract', 'ContractController@confirmcontract');
+Route::get('/contract/commitcontract/{id}', 'ContractController@commitcontract');
+Route::post('/contract/commitcontract', 'ContractController@commitcontract');
+Route::post('/contract/commitcontract/{id}', 'ContractController@commitcontract');
 Route::post('/contract/contractupdate/{id}', 'ContractController@contractupdate');
 
 
