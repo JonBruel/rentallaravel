@@ -374,9 +374,6 @@ class ContractController extends Controller
         }
     }
 
-
-
-
     public function listcontractoverview(Request $request)
     {
         //'Personel'

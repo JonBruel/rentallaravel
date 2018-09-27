@@ -1,3 +1,6 @@
+<?php
+ if (!$params) $params = ['show' => '', 'edit' => ''];
+?>
 <form class="delete" action="/{{$path}}/destroy/{{ $id }}" method="POST" id="delete{{ $id }}">
     <a href="/{{$path}}/show/{{ $id }}{{ $params['show'] }}" title="{{__('Show details')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-list'></span></a>
     <a href="/{{$path}}/edit/{{ $id }}{{ $params['edit'] }}" title="{{__('Edit')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-pencil'></span></a>

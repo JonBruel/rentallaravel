@@ -23,7 +23,7 @@
         {
             var mytext = {!!  $housefields !!} ;
             veryshortdescription = mytext.veryShortDescription;
-            id = mytext.Id;
+            id = mytext.id;
             housename = mytext.name;
             latitude = mytext.latitude;
             longitude = mytext.longitude;

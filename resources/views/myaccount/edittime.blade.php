@@ -3,7 +3,7 @@
     <h3>{{__('My arrival and departure times')}}</h3>
     <div class="table-responsive">
         {!! Form::model($models[0], ['action' => ['MyAccountController@updatetime', $models[0]]]) !!}
-        {!! Form::submit(__('Save changes'),['class' => "btn btn-success"]); !!}
+        {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
         <br /><br />
         <table class="table table-striped">
             @foreach($models as $model)

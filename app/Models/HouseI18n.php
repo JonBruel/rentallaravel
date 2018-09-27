@@ -68,4 +68,6 @@ class HouseI18n extends BaseModel
 	{
 		return $this->belongsTo(\App\Models\House::class, 'id');
 	}
+
+
 }

@@ -12,7 +12,7 @@
     <h3>{{ __('Batchtask for').' '.$models[0]->house->name }}</h3>
     <div class="table-responsive">
         {!! Form::model($models[0], ['action' => ['SetupController@updatebatchtask', $models[0]]]) !!}
-        {!! Form::submit(__('Save changes'),['class' => "btn btn-success"]); !!}
+        {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
         <br />
         <br />
         @if ($errors->any())
@@ -127,7 +127,7 @@
         {!! Form::hidden('id', $models[0]->id) !!}
         {!! Form::hidden('houseid', $models[0]->houseid) !!}
         {!! Form::hidden('ownerid', $models[0]->ownerid) !!}
-        {!! Form::submit(__('Save changes'),['class' => "btn btn-success"]); !!}
+        {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
         {!! Form::close() !!}
         <br />
         {!! $models->appends(\Request::except('page'))->render() !!}

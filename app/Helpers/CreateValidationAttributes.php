@@ -28,6 +28,12 @@ class CreateValidationAttributes
         return $this;
     }
 
+    public function setCasts($casts)
+    {
+        foreach ($casts as $field => $cast) $this->setCast($field, $cast);
+        return $this;
+    }
+
     public function getCast($field)
     {
         if (!array_key_exists($field, $this->casts)) return 'text';

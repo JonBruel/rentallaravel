@@ -31,6 +31,17 @@ class Testimonial extends BaseModel
 		'userid' => 'int'
 	];
 
+    public function modelFilter()
+    {
+        return $this->provideFilter(Filters\TestimonialFilter::class);
+    }
+
+    public $sortable = [
+        'created_at',
+        'userid',
+        'text'
+    ];
+
 	protected $fillable = [
 		'houseid',
 		'userid',

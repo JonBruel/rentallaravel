@@ -32,6 +32,11 @@ class SetupController extends Controller
         parent::__construct(\App\Models\Batchtask::class);
     }
 
+    public function showphpinfo()
+    {
+        return view('/setup/phpinfo', ['phpinfo' => phpinfo()]);
+    }
+
     public function listbatchtasks()
     {
         $models = Batchtask::filter(Input::all())->orderBy('id')->get();
@@ -105,10 +110,13 @@ class SetupController extends Controller
     {
         $models = Standardemail::filter(Input::all())->orderBy('id')->get();
 
+
+
         $owners = ['' => __('Please select owner')] + Customer::filter()->where('customertypeid', 10)->pluck('name', 'id')->toArray();
         $houses = ['' => __('Please select house')] + House::filter(Input::all())->pluck('name', 'id')->toArray();
 
-        return view('/setup/liststandardemails', ['models' => $models, 'houses' => $houses, 'owners' => $owners, 'ownerid' => Input::get('ownerid', ''), 'search' => Input::all()]);
+        return view('/setup/liststandardemails', ['models' => $models, 'houses' => $houses, 'owners' => $owners,
+            'ownerid' => Input::get('ownerid', ''), 'search' => Input::all()]);
     }
 
     public function editstandardemail($id)
@@ -121,7 +129,9 @@ class SetupController extends Controller
         }
 
         $models = Standardemail::filter(Input::all())->sortable('id')->paginate(1);
-
+        $cultures = Culture::all();
+        $languages = [];
+        foreach($cultures as $culture) $languages[$culture->culture] = $culture->culturename;
         //Get email text
         $standardemailcontents = [];
         $cultures = explode(';', config('app.cultures'));
@@ -137,6 +147,7 @@ class SetupController extends Controller
 
         return view('setup/editstandardemail', ['models' => $models,
             'vattr' => new ValidationAttributes($models[0]),
+            'languages' => $languages,
             'standardemailcontents' => $standardemailcontents]);
     }
 

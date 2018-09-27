@@ -35,7 +35,7 @@ class AjaxController extends Controller
         //$table = 'house';
         //$customertypeid = $this->user->getAttribute('customertypeid', 1000);
 
-        $defaultHouse = Input::query('defaultHouse',-1);
+        $defaultHouse = Input::query('defaultHouse',config('app.default_house', -1));
 
 
         $housequery = $this->model::whereBetween('latitude', [$x1, $x2])

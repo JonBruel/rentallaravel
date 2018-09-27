@@ -16,10 +16,6 @@ class HouseFilter extends BaseFilter
 
     public function address1($address1)
     {
-        if (config('user.role', 1000) >= 10)
-        {
-            if (config('user.ownerid') > -1) $this->where('ownerid', config('user.ownerid'));
-        }
         return $this->where('address1', 'LIKE', "%$address1%");
     }
 

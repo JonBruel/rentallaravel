@@ -441,12 +441,12 @@ return [
     15000 => [
         'text' => 'System',
         'path' => 'setup/listerrorlogs?menupoint=15010',
-        'parentid' => 13000,
+        'parentid' => 15000,
         'cssclass' => 'menulevel1',
-        'role' => 0,
+        'role' => 1,
         'level' => 1,
         'show' => 'show',
-        'childrenmap' => [15010, 15020, 15030]
+        'childrenmap' => [15010, 15020, 15030, 15040]
     ],
     15010 => [
         'text' => 'User list',
@@ -471,6 +471,16 @@ return [
     15030 => [
         'text' => 'Batch wizard',
         'path' => 'wizards/workflow',
+        'parentid' => 15000,
+        'cssclass' => 'menulevel2',
+        'role' => 1,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    15040 => [
+        'text' => 'PHP Info',
+        'path' => 'setup/showphpinfo',
         'parentid' => 15000,
         'cssclass' => 'menulevel2',
         'role' => 1,

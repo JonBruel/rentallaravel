@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Input;
 use App\Helpers\PictureHelpers;
 use App\Helpers\ShowCalendar;
+use App\Helpers\CreateValidationAttributes;
 use Illuminate\Pagination\Paginator;
 use Schema;
 use Gate;
@@ -16,6 +17,8 @@ use App\Models\HouseI18n;
 use App;
 use Auth;
 use App\Models\Periodcontract;
+use App\Models\Testimonial;
+use App\Models\House;
 use Carbon\Carbon;
 use DB;
 use App\Mail\DefaultMail;
@@ -75,6 +78,46 @@ class HomeController extends Controller
      * Route::get('/home/checkbookings', 'HomeController@checkbookings');
      * Route::get('/home/listhouses', 'HomeController@listhouses');
      */
+
+    public function listtestimonials()
+    {
+        $houseid = session('defaultHouse' , 1);
+        $house = House::Find($houseid);
+        $testimonials = Testimonial::where('houseid', $houseid)->sortable(['created_at' => 'desc'])->get();
+        return view('home/listtestimonials', ['models' => $testimonials, 'administrator' => Gate::allows('Administrator'), 'house' => $house, 'houseid' => $houseid])->with('search', Input::all());
+    }
+
+    public function createtestimonial()
+    {
+        if (!Auth::check()) return redirect('/login');
+        $user = Auth::user();
+        $testimonial = (new Testimonial(['houseid' => Input::get('houseid'),
+            'userid' => $user->id,
+            'text' => Input::get('text')]))->save();
+        return redirect('home/listtestimonials')->with('success', __('Your testimonial is now included.'));
+    }
+
+    public function destroytestimonial($id)
+    {
+        (Testimonial::Find($id))->delete();
+        return redirect('home/listtestimonials')->with('success', __('The testimonial is now deleted.'));
+    }
+
+    public function edittestimonial($id)
+    {
+        $testimonial = Testimonial::Find($id);
+        $fields = ['text', 'houseid', 'id', 'userid'];
+        $vattr = (new CreateValidationAttributes($testimonial))->setCast('text', 'textarea')->setCast('id', 'hidden')->setCast('houseid', 'hidden')->setCast('userid', 'hidden');
+        return view('home/edittestimonial', ['testimonial' => $testimonial, 'fields' => $fields, 'vattr' => $vattr]);
+    }
+
+    public function updatetestimonial($id)
+    {
+        $testimonial = Testimonial::Find($id);
+        $testimonial->text = Input::get('text');
+        $testimonial->save();
+        return redirect('home/listtestimonials')->with('success', __('The testimonial is now updated.'));
+    }
 
     public function checkbookings()
     {

@@ -71,7 +71,7 @@
             </div>
         </div>
         <br />
-        {!! Form::submit('Save changes',['class' => "btn btn-success"]); !!}
+        {!! Form::submit('Save changes',['class' => "btn btn-primary"]); !!}
         {!! Form::close() !!}
         <br />
         @if(!$fromcalendar)

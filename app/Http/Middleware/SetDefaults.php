@@ -20,10 +20,17 @@ class SetDefaults {
     {
         $role = 1000;
         $ownerid = -1;
+        $_SESSION['user'] = null;
         if (Auth::check())
         {
             $role = Auth::user()->customertypeid;
             $ownerid = Auth::user()->ownerid;
+
+            //The SESSION is used for the tinymce MyPlugin authentication functions
+            $userarray = Auth::user()->toArray();
+            $userarray['general.language'] = substr(Auth::user()->culture->culture,0,2);
+            $_SESSION['user'] = $userarray;
+            //die($_SESSION['user']['name']);
         }
         config(['user.role' => $role]);
         config(['user.ownerid' => $ownerid]);

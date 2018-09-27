@@ -58,4 +58,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\VerifyUser', 'customer_id');
     }
+
+    public function culture()
+    {
+        return $this->belongsTo(\App\Models\Culture::class, 'cultureid');
+    }
 }

@@ -11,7 +11,7 @@ class BaseFilter extends ModelFilter
     public function setup()
     {
         //General scope limit to owner of house. If the field ownerid does not exist, NO exception is thrown.
-        if ((config('user.role', 1000) >= 10) and (config('app.restrictscopetoowner', -1) > -1)) {
+        if ((config('user.role', 1000) >= 10) && (config('app.restrictscopetoowner', -1) > -1)) {
             return $this->where('ownerid', config('app.restrictscopetoowner', -1));
         }
     }

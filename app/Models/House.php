@@ -124,6 +124,13 @@ class House extends BaseModel
 		'pets'
 	];
 
+    public $rules = [
+        'name' => ['required', 'between:3,30'],
+        'address1' => ['required', 'between:3,30'],
+        'latitude' => ['required', 'between:-180,180', 'numeric'],
+        'longitude' => ['required', 'between:-180,180', 'numeric']
+    ];
+
     /**
      * Formats a number.
      *
@@ -146,15 +153,6 @@ class House extends BaseModel
      *
      * @return string The formatted number.
      */
-
-    public $rules = [
-        'name' => ['required', 'between:3,30'],
-        'address1' => ['required', 'between:3,30'],
-        'latitude' => ['required', 'between:-180,180', 'numeric'],
-        'longitude' => ['required', 'between:-180,180', 'numeric']
-    ];
-
-
 	public function getLongitudeAttribute($value) {
         if (static::$ajax) return $value;
         return static::format($value,12);
@@ -175,7 +173,49 @@ class House extends BaseModel
 	    else $this->attributes['latitude'] = static::parse($value);
     }
 
-	public function currency()
+    /*
+     * This function is used to show the relevant associated
+     * user-friendly value as opposed to showing the id.
+     * Performance: as we are making up to 4 queries, it does take some time.
+     * Measured to around 5 ms.
+     */
+    public function withBelongsTo($fieldname)
+    {
+        switch ($fieldname)
+        {
+            case 'ownerid':
+                return $this->customer->name;
+            case 'currencyid':
+                return $this->currency->currency;
+            case 'maidid':
+                return $this->maid->name;
+            default:
+                return $this->$fieldname;
+        }
+    }
+
+    /*
+     * Retuns an array of keys and values to be used in forms for select boxes. Typical uses
+     * are filters, e.g selection housed owner by a specific owner.
+     *
+     * Retuns null if no select boxes are to be used.
+     */
+    public function withSelect($fieldname)
+    {
+        switch ($fieldname)
+        {
+            case 'maidid':
+                return  Customer::where('ownerid', $this->ownerid)->where('customertypeid', 110)->pluck('name', 'id')->toArray();
+            case 'currencyid':
+                return Currency::all()->pluck('currencysymbol', 'id')->toArray();
+            default:
+                return null;
+        }
+    }
+
+
+
+    public function currency()
 	{
 		return $this->belongsTo(\App\Models\Currency::class, 'currencyid');
 	}
@@ -184,6 +224,11 @@ class House extends BaseModel
 	{
 		return $this->belongsTo(\App\Models\Customer::class, 'ownerid');
 	}
+
+    public function maid()
+    {
+        return $this->belongsTo(\App\Models\Customer::class, 'maidid');
+    }
 
     //public function owner()
     //{

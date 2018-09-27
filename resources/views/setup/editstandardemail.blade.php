@@ -17,13 +17,11 @@
         #exTab1 .nav-pills > li > a {
             border-radius: 4px;
         }
-
-
     </style>
     <h3>{{ __('Standardemail  for').' '.$models[0]->house->name }}</h3>
     <div class="table-responsive">
         {!! Form::model($models[0], ['action' => ['SetupController@updatestandardemail', $models[0]]]) !!}
-        {!! Form::submit(__('Save changes'),['class' => "btn btn-success"]); !!}
+        {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
         <br />
         <br />
         @if ($errors->any())
@@ -42,14 +40,16 @@
             {!! Form::text('descriptionI18n', __($models[0]->description), ['class' => 'col-md-6 col form-control']) !!}
         </div>
         <div id="exTab1" clasxs="container">
+            <?php $first = true; ?>
             <ul class="nav nav-pills">
                 @foreach($standardemailcontents as $key => $standardemailcontent)
-                    <li class="nav-item"><a class="nav-link {{($key=='da_DK')?'active':''}}" href="#section{{$key}}"  role="tab" data-toggle="tab">{{$key}}</a></li>
+                    <?php if ($first) $firstkey = $key; $first = false; ?>
+                    <li class="nav-item"><a class="nav-link {{($key==$firstkey)?'active':''}}" href="#section{{$key}}"  role="tab" data-toggle="tab">{{__($languages[$key])}}</a></li>
                 @endforeach
             </ul>
             <div class="tab-content">
                 @foreach($standardemailcontents as $key => $standardemailcontent)
-                    <div id="section{{$key}}" class="tab-pane {{($key=='da_DK')?'active':''}}">
+                    <div id="section{{$key}}" class="tab-pane {{($key==$firstkey)?'active':''}}">
                         <div class="form-group row">
                             {!! Form::textarea('contents['.$key.']', $standardemailcontent, ['class' => 'col-md-12 col form-control', 'style' => 'margin: 5px; max-width: 99%']) !!}
                         </div>
@@ -64,7 +64,7 @@
         {!! Form::hidden('description', $models[0]->description) !!}
         {!! Form::hidden('houseid', $models[0]->houseid) !!}
         {!! Form::hidden('ownerid', $models[0]->ownerid) !!}
-        {!! Form::submit(__('Save changes'),['class' => "btn btn-success"]); !!}
+        {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
         {!! Form::close() !!}
         <br />
         {!! $models->appends(\Request::except('page'))->render() !!}
