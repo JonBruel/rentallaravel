@@ -93,7 +93,7 @@
             </div>
         </nav>
 
-        <main class="container" style="margin-top: 5px">
+        <main class="container" style="margin-top: 5px; max-width:1800px">
             @if(session('warning'))
                 <div class="alert alert-warning border border-primary">{{session('warning')}}</div>
             @endif
@@ -101,9 +101,11 @@
                 <div class="alert alert-success border border-primary">{{session('success')}}</div>
             @endif
 
+
             <div class="row">
                 <div class="col col-md-12">
                     @yield('content')
+                    @if(\Gate::allows('Supervisor'))
                     <br />
                     Time lapse: {{session('ost')}}
                     <br />
@@ -116,9 +118,10 @@
                     App locale: {{App::getLocale()}}
                     <br />
                     Query: {{session('querystring', 'Query is empty')}}
+                    @endif
                 </div>
-
             </div>
+
         </main>
     </div>
 </body>
@@ -131,14 +134,13 @@
         $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut();
     });
 
-
     function redirectLogin()
     {
         //window.location.href = "/login"
         window.location.href = "/"
     };
 
-    setTimeout(redirectLogin,1801000);
+    setTimeout(redirectLogin,1700000);
 </script>
 @yield('scripts')
 </html>

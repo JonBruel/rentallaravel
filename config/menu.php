@@ -243,7 +243,7 @@ return [
         'path' => 'customer/index?menupoint=11010',
         'parentid' => 11000,
         'cssclass' => 'menulevel1',
-        'role' => 1,
+        'role' => 110,
         'level' => 1,
         'show' => 'show',
         'childrenmap' => [11010, 11020, 11030]
@@ -253,7 +253,7 @@ return [
         'path' => 'customer/index',
         'parentid' => 11000,
         'cssclass' => 'menulevel2',
-        'role' => 1,
+        'role' => 110,
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => []
@@ -263,7 +263,7 @@ return [
         'path' => 'contract/listcontractoverviewforowners',
         'parentid' => 11000,
         'cssclass' => 'menulevel2',
-        'role' => 1,
+        'role' => 110,
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => []
@@ -273,7 +273,7 @@ return [
         'path' => 'contract/listcontractoverview',
         'parentid' => 11000,
         'cssclass' => 'menulevel2',
-        'role' => 1,
+        'role' => 110,
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => []
@@ -353,7 +353,7 @@ return [
         'path' => 'setup/listowners',
         'parentid' => 14000,
         'cssclass' => 'menulevel2',
-        'role' => 1,
+        'role' => 0,
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => []
@@ -373,7 +373,7 @@ return [
         'path' => 'setup/makebatch2',
         'parentid' => 14020,
         'cssclass' => 'menulevel3',
-        'role' => 1,
+        'role' => 0,
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => []
@@ -403,7 +403,7 @@ return [
         'path' => 'setup/listbounties',
         'parentid' => 14000,
         'cssclass' => 'menulevel2',
-        'role' => 10,
+        'role' => 0,
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => []
@@ -423,7 +423,7 @@ return [
         'path' => 'setup/firstsetup',
         'parentid' => 14000,
         'cssclass' => 'menulevel2',
-        'role' => 10,
+        'role' => 0,
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => []
@@ -449,7 +449,7 @@ return [
         'childrenmap' => [15010, 15020, 15030, 15040]
     ],
     15010 => [
-        'text' => 'User list',
+        'text' => 'List Errors',
         'path' => 'setup/listerrorlogs',
         'parentid' => 15000,
         'cssclass' => 'menulevel2',
@@ -460,7 +460,7 @@ return [
     ],
     15020 => [
         'text' => 'Configs',
-        'path' => 'setup/listconfigs',
+        'path' => 'setup/editconfig',
         'parentid' => 15000,
         'cssclass' => 'menulevel2',
         'role' => 1,

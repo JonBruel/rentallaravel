@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <h3>{{__('Emails sent to me')}}</h3>
+    <h3>{{ $title }}</h3>
     <div class="table-responsive">
         <table class="table table-striped">
             @foreach($models as $model)

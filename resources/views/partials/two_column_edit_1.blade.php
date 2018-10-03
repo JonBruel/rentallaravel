@@ -16,7 +16,6 @@
                         <div class="alert alert-danger row">
                             {{ $errors->first($field) }}
                         </div>
-
                     </td>
                 </tr>
             @endif

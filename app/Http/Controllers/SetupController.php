@@ -18,8 +18,9 @@ use App\Models\Customer;
 use App\Models\House;
 use App\Models\Standardemail;
 use App\Models\StandardemailI18n;
-use App\Models\Period;
-use App\Models\Periodcontract;
+use App\Models\Config;
+use App\Models\Errorlog;
+use App\Models\Batchlog;
 use App\Models\Culture;
 use App;
 use App\Models\Contractoverview;
@@ -34,7 +35,11 @@ class SetupController extends Controller
 
     public function showphpinfo()
     {
-        return view('/setup/phpinfo', ['phpinfo' => phpinfo()]);
+        ob_start();
+        phpinfo();
+        $phpinfo = ob_get_clean();
+
+        return view('/setup/phpinfo', ['phpinfo' => $phpinfo]);
     }
 
     public function listbatchtasks()
@@ -224,4 +229,186 @@ class SetupController extends Controller
         if ((Input::get('answer', 'nothing') == 'nothing') && ($houseid > 0)) return view('setup/copybatch', ['houseid' => $houseid, 'overwrite' => $overwrite, 'batchexists' => $batchexists]);
         return redirect('setup/makebatch1')->with('success', $success);
     }
+
+    public function editcaptions(Request $request)
+    {
+        $this->checkHouseChoice($request, 'setup/editcaptions/?menupoint='.session('menupoint', 14080));
+        $id = session('defaultHouse');
+        $prefix = 'gallery.'.$id.'.';
+        $cultures = explode(';', config('app.cultures'));
+        $translations = [];
+        foreach ($cultures as $culture)
+        {
+            $contents = file_get_contents(base_path().'/resources/lang/'.$culture.'.json');
+            $translations[$culture] = array_filter(json_decode($contents, true),
+                function($key) use ($prefix) { return (substr($key,0, strlen($prefix)) == $prefix);} ,ARRAY_FILTER_USE_KEY);
+        }
+
+        //Turn it ar ound so the key becomes the main entry
+        $translationstartkey = [];
+        $startculture = $cultures[0];
+        foreach ($translations[$startculture] as $key => $notused)
+        {
+            foreach ($cultures as $culture)
+            {
+                $translation = $translations[$culture];
+                if (array_key_exists($key, $translation))
+                {
+                    $translationstartkey[$key] = (array_key_exists($key,$translationstartkey))?$translationstartkey[$key] + [$culture => $translation[$key]]:[$culture => $translation[$key]];
+                }
+            }
+        }
+        $culturenames = [];
+        foreach ($cultures as $culture)
+        {
+            $culturenames[$culture] = Culture::where('culture', $culture)->first()->culturename;
+        }
+        return view('/setup/editcaptions', ['translationstartkey' => $translationstartkey, 'prefix' => $prefix, 'cultures' => $cultures, 'id' => $id, 'culturenames' => $culturenames]);
+    }
+
+    public function updatecaptions($id)
+    {
+        $cultures = explode(';', config('app.cultures'));
+        $prefix = 'gallery.'.$id.'.';
+        $success = '';
+        $keys = Input::get('key', []);
+        $deletes = Input::get('delete', []);
+        if (sizeof($keys) > 0) foreach($keys as $key)
+        {
+            $translations = Input::get('translation')[$key];
+            if ($key == 'jkuuasg7892g')
+            {
+                $key = $prefix.Input::get('jkuuasg7892g');
+            }
+            static::updateTranslations($key, $translations);
+            $success .= ' '.__('Translation with key').' '.$key.' '.__('updated').'.';
+        }
+        elseif (sizeof($deletes) > 0) foreach($deletes as $key)
+        {
+            $translations = Input::get('translation')[$key];
+            static::destroyTranslations($key, $translations);
+            $success .= ' '.__('Translation with key').' '.$key.' '.__('deleted').'.';
+        }
+        else $success = __('Nothing changed, did you tick off to indicate changes?');
+        return redirect ('/setup/editcaptions')->with('success', $success);
+    }
+
+    public static function updateTranslations($key, $culturetranslation)
+    {
+        //TODO: Safeguard against non-existing cultures
+        foreach($culturetranslation as $culture => $translation)
+        {
+            $contents = file_get_contents(base_path().'/resources/lang/'.$culture.'.json');
+            $json = json_decode($contents, true);
+            $key = str_replace('_', ' ', $key); //We don't want underscores in picture captions, they are allowed in picture names.
+            $json[$key] = $translation;
+            uksort($json, function ($a, $b) {
+                $a = mb_strtolower($a);
+                $b = mb_strtolower($b);
+                return strcmp($a, $b);
+            });
+            $contents = json_encode($json, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+            file_put_contents(base_path().'/resources/lang/'.$culture.'.json', $contents);
+        }
+    }
+
+    public static function destroyTranslations($key, $culturetranslation)
+    {
+        //TODO: Safeguard against non-existing cultures
+        foreach($culturetranslation as $culture => $translation)
+        {
+            $contents = file_get_contents(base_path().'/resources/lang/'.$culture.'.json');
+            $json = json_decode($contents, true);
+            unset($json[$key]);
+            $contents = json_encode($json, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+            file_put_contents(base_path().'/resources/lang/'.$culture.'.json', $contents);
+        }
+    }
+
+    public function editconfig()
+    {
+        $models = Config::filter(Input::all())->paginate(1);
+        $fields = ['id', 'url', 'index'];
+        $vattr = '';
+        if ($models) $vattr = (new ValidationAttributes($models[0]))->setCast('id', 'hidden')->setCast('index', 'textarea');
+
+        return view('/setup/editconfig', ['models' => $models, 'fields' => $fields, 'vattr' => $vattr]);
+    }
+
+    public function updateconfig()
+    {
+        $id = Input::get('id');
+        $model =  Config::findOrFail($id);
+        $fields = ['id', 'url', 'index'];
+
+        foreach ($fields as $field){
+            $model->$field = Input::get($field);
+        }
+        //We save. The save validates after the Mutators have been used.
+        $errors = '';
+        $success = __('Configuration has been updated');
+        if (!$model->save()) {
+            $errors = $model->getErrors();
+            $success = '';
+        }
+        return redirect('/setup/editconfig?url='.Input::get('url'))->with('success', $success)->with('errors', $errors);
+    }
+
+    public function firstsetup()
+    {
+        //TODO: implement it
+        return view('/setup/firstsetup', []);
+    }
+
+    public function listerrorlogs()
+    {
+        $models = Errorlog::filter(Input::all())->orderBy('created_at', 'desc')->paginate(1);
+        $fields = ['created_at', 'stack', 'customermessage', 'situation'];
+
+        return view('/setup/listerrorlogs', ['models' => $models, 'fields' => $fields, 'search' => Input::all()]);
+    }
+
+    /*
+     * Method is for showing the batchlog
+     */
+    public function listqueue()
+    {
+
+        $models = Batchlog::filter(Input::all())->orderBy('created_at', 'desc')->with(['posttype', 'batchtask', 'house'])->paginate(20);
+        $model = new Batchlog();
+        $fields = ['created_at', 'statusid', 'posttypeid', 'batchtaskid', 'contractid', 'emailid', 'houseid'];
+        $params = ['edit' => '', 'show' => ''];
+
+        return view('/setup/listqueue', ['models' => $models, 'model' => $model, 'fields' => $fields, 'search' => Input::all(), 'params' => $params]);
+    }
+
+    public function editbatchlog($id)
+    {
+        $model = Batchlog::Find($id);
+        $fields = ['id', 'created_at', 'statusid', 'posttypeid', 'batchtaskid', 'contractid', 'emailid', 'houseid'];
+        $vattr = (new ValidationAttributes($model))->setCast('id', 'hidden');
+
+        return view('/setup/editbatchlog', ['models' => [$model],  'fields' => $fields, 'search' => Input::all(), 'vattr' => $vattr]);
+    }
+
+    public function updatebatchlog($id)
+    {
+        $model = Batchlog::Find($id);
+        $fields = ['created_at', 'statusid', 'posttypeid', 'batchtaskid', 'contractid', 'emailid', 'houseid'];
+        foreach ($fields as $field) $model->$field = Input::Get($field);
+        $success = __('Batchlog record changed.');
+        $errors = '';
+        if (!$model->save())
+        {
+            $errors = $model->getErrors();
+            $success = '';
+        }
+        return redirect('/setup/listqueue')->with('success', $success)->with('errors', $errors);
+    }
+
+    public function destroybatchlog($id)
+    {
+
+    }
+
 }

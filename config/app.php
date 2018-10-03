@@ -170,8 +170,8 @@ return [
         Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
         Lab404\Impersonate\ImpersonateServiceProvider::class,
         Illuminate\Session\SessionServiceProvider::class,
-        //Illuminate\Translation\TranslationServiceProvider::class, jbr 27-9-2018
-        Spatie\TranslationLoader\TranslationServiceProvider::class,
+        Illuminate\Translation\TranslationServiceProvider::class, //jbr 27-9-2018
+        //Spatie\TranslationLoader\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Kyslik\ColumnSortable\ColumnSortableServiceProvider::class,

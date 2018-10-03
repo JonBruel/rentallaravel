@@ -69,6 +69,11 @@ class Periodcontract extends BaseModel
 	protected $fillable = [
 	];
 
+    public function house()
+    {
+        return $this->belongsTo(\App\Models\House::class, 'houseid');
+    }
+
     /*
      * Return an array with to elements: currencysymbol and rate. The rate calculated
      * is the rate used to calculate the price in the customer currency from the price

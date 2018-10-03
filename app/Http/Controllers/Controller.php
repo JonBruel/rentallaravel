@@ -21,7 +21,7 @@ class Controller extends BaseController
 
     public function checkHouseChoice(string $returnpath = null)
     {
-        if (session('defaultHouse' , config('app.default_house')) != -1) return false;
+        if (session('defaultHouse') !== null) return false;
         if ($this->model::filter()->count() == 1)
         {
             session(['defaultHouse' => $this->model::filter()->first()->id]);

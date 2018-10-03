@@ -17,10 +17,11 @@ use App\Models\House;
 use App\Models\Contract;
 use App\Models\Contractline;
 use App\Models\User;
-use App\Models\Currency;
-use App\Models\Period;
+use App\Models\Accountpost;
+use App\Models\Emaillog;
 use App\Models\Periodcontract;
 use App\Models\Culture;
+use App\Models\Customer;
 use App;
 use App\Models\Contractoverview;
 use Carbon\Carbon;
@@ -392,7 +393,7 @@ class ContractController extends Controller
     public function listcontractoverviewforowners(Request $request)
     {
         //Set rights
-        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
+        if (!Gate::allows('Personel')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
 
         $this->model = \App\Models\Contract::class;
         $thisyear = date('Y');
@@ -410,7 +411,17 @@ class ContractController extends Controller
         return view('contract/listcontractoverviewforowners', ['year' => $year, 'years' => $years, 'contractoverview' => $contractoverview, 'houses' => $houses, 'houseid' => $houseid]);
     }
 
+    public function listaccountposts($contractid)
+    {
+        $currencysymbol = 'DKK';
+        $models =  Accountpost::where('contractid', $contractid)->where('amount', "!=", 0)->get();
+        if ($models) $currencysymbol = $models[0]->currency->currencysymbol;
+        return view('contract/listaccountposts', ['models' => $models,'currencysymbol' => $currencysymbol]);
+    }
 
-
-
+    public function listmails($customerid)
+    {
+        $emails = Emaillog::where('customerid', $customerid)->get();
+        return view('myaccount/listmails', ['models' => $emails, 'title' => __('Emails')]);
+    }
 }

@@ -91,8 +91,8 @@ class MyAccountController extends Controller
     {
         if (!Auth::check()) return redirect('/login');
         $user = Auth::user();
-        $emails = Emaillog::where('to', $user->email)->where('customerid', $user->id)->get();
-        return view('myaccount/listmails', ['models' => $emails]);
+        $emails = Emaillog::where('to', $user->email)->get();
+        return view('myaccount/listmails', ['models' => $emails, 'title' => __('My emails')]);
     }
 
     public function edittime()

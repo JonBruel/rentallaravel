@@ -72,6 +72,16 @@ class Accountpost extends BaseModel
         'returndate'
 	];
 
+    public function getAmountAttribute($value) {
+        if (static::$ajax) return $value;
+        return static::format($value,2);
+    }
+
+    public function setAmountAttribute($value) {
+        if (static::$ajax) $this->attributes['amount'] = $value;
+        else $this->attributes['amount'] = static::parse($value);
+    }
+
     protected $dates = ['returndate'];
 
 	public function customer()

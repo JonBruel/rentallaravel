@@ -24,16 +24,19 @@ class SetDefaults {
         if (Auth::check())
         {
             $role = Auth::user()->customertypeid;
-            $ownerid = Auth::user()->ownerid;
+            $ownerid = ($role > 10)?Auth::user()->ownerid:Auth::user()->id;
 
             //The SESSION is used for the tinymce MyPlugin authentication functions
             $userarray = Auth::user()->toArray();
             $userarray['general.language'] = substr(Auth::user()->culture->culture,0,2);
             $_SESSION['user'] = $userarray;
+            session(['customerid' => Auth::user()->id]);
             //die($_SESSION['user']['name']);
+            config(['user.role' => $role]);
+            config(['user.ownerid' => $ownerid]);
+            session(['customerid' => Auth::user()->id]);
         }
-        config(['user.role' => $role]);
-        config(['user.ownerid' => $ownerid]);
+
 
         //$host is e.g. rentallaravel.consiglia.dk
         //if (session('config', -1) == 1)

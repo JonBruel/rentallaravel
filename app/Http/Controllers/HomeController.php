@@ -22,9 +22,11 @@ use App\Models\House;
 use Carbon\Carbon;
 use DB;
 use App\Mail\DefaultMail;
+//use Spatie\TranslationLoader\LanguageLine;
 
 class HomeController extends Controller
 {
+
     public function __construct() {
         parent::__construct(\App\Models\House::class);
 

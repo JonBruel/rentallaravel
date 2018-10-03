@@ -10,7 +10,8 @@ use App\Models\BaseModel;
 use App\Models\Periodcontract;
 use App\Models\Contract;
 use Illuminate\Support\Facades\Input;
-
+use Auth;
+use Illuminate\Support\Facades\Log;
 
 class AjaxController extends Controller
 {
@@ -32,8 +33,10 @@ class AjaxController extends Controller
     {
         //TODO: modify from Symfony to Laravel
 
-        //$table = 'house';
-        //$customertypeid = $this->user->getAttribute('customertypeid', 1000);
+        $username = 'Not logged in';
+        if (Auth::check())  $username = Auth::user()->name;
+
+        Log::notice("User ".$username." has made an ajax request to listhouses.");
 
         $defaultHouse = Input::query('defaultHouse',config('app.default_house', -1));
 

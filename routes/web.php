@@ -53,6 +53,9 @@ Route::get('/house/create', 'HouseController@create');
 Route::post('/house/store', 'HouseController@store');
 //From rental:
 Route::get('/house/createperiods', 'HouseController@createperiods');
+Route::post('/house/createperiods', 'HouseController@createperiods');
+
+Route::post('/house/insertcreatedperiods', 'HouseController@insertcreatedperiods');
 Route::get('/house/listperiods', 'HouseController@listperiods');
 Route::get('/house/listhouses', 'HouseController@listhouses');
 Route::get('/house/listperiods', 'HouseController@listperiods');
@@ -60,6 +63,9 @@ Route::get('/house/edithousehtml/{id}', 'HouseController@edithousehtml');
 Route::post('/house/updatehousehtml/{id}', 'HouseController@updatehousehtml');
 Route::get('/house/browse/{id}', 'HouseController@browse');
 Route::post('/house/deletefiles/{id}', 'HouseController@deletefiles');
+Route::get('/house/editperiod/{id}', 'HouseController@editperiod');
+Route::post('/house/updateperiod/{id}', 'HouseController@updateperiod');
+Route::post('/house/updateperiods', 'HouseController@updateperiods');
 
 Route::get('/contract/listcontractoverview', 'ContractController@listcontractoverview');
 Route::get('/contract/listcontractoverviewforowners', 'ContractController@listcontractoverviewforowners');
@@ -69,8 +75,8 @@ Route::get('/contract/commitcontract/{id}', 'ContractController@commitcontract')
 Route::post('/contract/commitcontract', 'ContractController@commitcontract');
 Route::post('/contract/commitcontract/{id}', 'ContractController@commitcontract');
 Route::post('/contract/contractupdate/{id}', 'ContractController@contractupdate');
-
-
+Route::get('/contract/listaccountposts/{contractid}', 'ContractController@listaccountposts');
+Route::get('/contract/listmails/{customerid}', 'ContractController@listmails');
 Route::get('/contract/annualcontractoverview', 'ContractController@annualcontractoverview');
 
 
@@ -100,6 +106,21 @@ Route::post('/setup/updatestandardemail/{id}', 'SetupController@updatestandardem
 Route::get('/setup/makebatch1', 'SetupController@makebatch1');
 Route::get('/setup/copybatch/{houseid}/{overwrite}/{batchexists}', 'SetupController@copybatch');
 Route::get('/setup/showphpinfo', 'SetupController@showphpinfo');
+
+Route::get('/setup/editcaptions', 'SetupController@editcaptions');
+Route::post('/setup/updatecaptions/{id}', 'SetupController@updatecaptions');
+
+Route::get('/setup/editconfig', 'SetupController@editconfig');
+Route::post('/setup/updateconfig', 'SetupController@updateconfig');
+
+Route::get('/setup/listqueue', 'SetupController@listqueue');
+Route::get('/batchlog/edit/{id}', 'SetupController@editbatchlog');
+Route::delete('/batchlog/destroy/{id}', 'SetupController@destroybatchlog');
+Route::post('/batchlog/update/{id}', 'SetupController@updatebatchlog');
+
+Route::get('/setup/firstsetup', 'SetupController@firstsetup');
+
+Route::get('/setup/listerrorlogs', 'SetupController@listerrorlogs');
 
 //From rental:
 Route::get('/contract/annualcontractoverview', 'ContractController@annualcontractoverview');

@@ -202,4 +202,29 @@ class CustomerController extends Controller
         $toBeDeleted->delete();
         return redirect('/customer/index?menupoint=1010')->with('success', 'Customer ' . $name . ' has been deleted!');
     }
+
+    public function statistics()
+    {
+        /*
+         *  # Set your primary language.
+            # Possible value:
+            # Albanian=al, Bosnian=ba, Bulgarian=bg,
+            # Chinese (Taiwan)=tw, Chinese (Simpliefied)=cn, Czech=cz,
+            # Danish=dk, Dutch=nl, English=en, Estonian=et, Finnish=fi, French=fr,
+            # German=de, Greek=gr, Hebrew=he, Hungarian=hu, Indonesian=id, Italian=it,
+            # Japanese=jp, Korean=kr, Latvian=lv, Norwegian (Nynorsk)=nn,
+            # Norwegian (Bokmal)=nb, Polish=pl, Portuguese=pt, Portuguese (Brazilian)=br,
+            # Romanian=ro, Russian=ru, Serbian=sr, Slovak=sk, Spanish=es,
+            # Spanish (Catalan)=es_cat, Swedish=se, Turkish=tr, Ukrainian=ua, Welsh=wlk.
+            # First available language accepted by browser=auto
+            # Default: "auto"
+         */
+
+        $awlanguage = substr(\App::getLocale(),0,2);
+        if ($awlanguage == 'da') $awlanguage = 'dk';
+        //TODO: make general
+        $url = 'http://cangeroni.hasselbalch.com';
+        $awurl = "http://awstat.consiglia.dk/awstats/awstats.pl?lang=".$awlanguage."&config=" . substr($url,7);
+        return view('customer/statistics', ['awurl' => $awurl]);
+    }
 }

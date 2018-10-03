@@ -77,6 +77,10 @@ class Period extends BaseModel
 		'extra2'
 	];
 
+    public $rules = [
+        'basepersons' => ['required', 'between:0,100','numeric'],
+    ];
+
 	public function house()
 	{
 		return $this->belongsTo(\App\Models\House::class, 'houseid');
