@@ -43,6 +43,9 @@ Route::get('/customer/create', 'CustomerController@create');
 Route::post('/customer/store', 'CustomerController@store');
 //From rental:
 Route::get('/customer/statistics', 'CustomerController@statistics');
+Route::get('/customer/merge/{id}', 'CustomerController@merge');
+Route::post('/customer/merge', 'CustomerController@merge');
+Route::get('/customer/checkaccount/{id}', 'CustomerController@checkaccount');
 
 
 Route::get('/house/show/{id}', 'HouseController@show');
@@ -78,6 +81,10 @@ Route::post('/contract/contractupdate/{id}', 'ContractController@contractupdate'
 Route::get('/contract/listaccountposts/{contractid}', 'ContractController@listaccountposts');
 Route::get('/contract/listmails/{customerid}', 'ContractController@listmails');
 Route::get('/contract/annualcontractoverview', 'ContractController@annualcontractoverview');
+Route::post('/contract/registerpayment/{contractid}', 'ContractController@registerpayment');
+Route::get('/accountpost/edit/{id}', 'ContractController@accountpostedit');
+Route::delete('/accountpost/destroy/{id}', 'ContractController@accountpostdestroy');
+Route::post('/accountpost/update/{id}', 'ContractController@accountpostupdate');
 
 
 Route::get('/home/showinfo/{infotype}', 'HomeController@showinfo');
@@ -85,8 +92,9 @@ Route::get('/home/listtestimonials', 'HomeController@listtestimonials');
 Route::post('/home/createtestimonial', 'HomeController@createtestimonial');
 Route::get('/home/showmap', 'HomeController@showmap');
 Route::get('/home/checkbookings', 'HomeController@checkbookings');
+Route::get('/home/search', 'HomeController@search');
+Route::post('/home/search', 'HomeController@search');
 Route::get('/home/listhouses', 'HomeController@listhouses');
-Route::delete('/testimonial/destroy/{id}', 'HomeController@destroytestimonial');
 Route::delete('/testimonial/destroy/{id}', 'HomeController@destroytestimonial');
 Route::get('/testimonial/edit/{id}', 'HomeController@edittestimonial');
 Route::post('/testimonial/edit/{id}', 'HomeController@updatetestimonial');
@@ -113,14 +121,20 @@ Route::post('/setup/updatecaptions/{id}', 'SetupController@updatecaptions');
 Route::get('/setup/editconfig', 'SetupController@editconfig');
 Route::post('/setup/updateconfig', 'SetupController@updateconfig');
 
+
 Route::get('/setup/listqueue', 'SetupController@listqueue');
 Route::get('/batchlog/edit/{id}', 'SetupController@editbatchlog');
 Route::delete('/batchlog/destroy/{id}', 'SetupController@destroybatchlog');
 Route::post('/batchlog/update/{id}', 'SetupController@updatebatchlog');
 
+Route::get('/wizards/workflow', 'SetupController@workflow');
+
 Route::get('/setup/firstsetup', 'SetupController@firstsetup');
 
 Route::get('/setup/listerrorlogs', 'SetupController@listerrorlogs');
+
+Route::get('/setup/edittranslations', 'SetupController@edittranslations');
+Route::post('/setup/edittranslations', 'SetupController@edittranslations');
 
 //From rental:
 Route::get('/contract/annualcontractoverview', 'ContractController@annualcontractoverview');
@@ -128,3 +142,9 @@ Route::get('/contract/annualcontractoverview', 'ContractController@annualcontrac
 //AJAX
 Route::get('/ajax/ajaxlisthouses/x1/{x1}/y1/{y1}/x2/{x2}/y2/{y2}', 'AjaxController@listhouses');
 Route::get('/ajax/getweeks/{houseid}/{culture}/{offset}/{periodid}/{contractid}', 'AjaxController@getweeks');
+Route::get('/ajax/getmonths/{houseid}', 'AjaxController@getmonths');
+Route::get('/ajax/getimportstatus', 'AjaxController@getImportStatus');
+
+//For the migration from the old version of rental
+Route::get('/import/importfromrental', 'ImportController@importfromrental');
+Route::post('/import/importfromrental', 'ImportController@importfromrental');

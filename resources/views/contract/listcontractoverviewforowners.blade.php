@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\App;
                 <tr>
                     @if(Gate::allows('Administrator'))
                         <td>
-                            <a href="/contract/contractedit/{{$model->id}}/0" title="{{__('Show contract')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-list'></span></a>
+                            <a href="/contract/contractedit/{{$model->id}}/0" title="{{__('Show contract')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-home'></span></a>
                             <a href="/contract/listaccountposts/{{$model->id}}" title="{{__('Show account')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-euro'></span></a>
                             <a href="/contract/listmails/{{$model->customerid}}" title="{{__('Show mail')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-envelope'></span></a>
                         </td>

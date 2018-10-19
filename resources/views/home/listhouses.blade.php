@@ -7,7 +7,7 @@
             @foreach($models as $model)
                 <tr>
                     <td>
-                       <a href="/home/listhouses?defaultHouse={{$model->id}}">{{$model->id}}</a>
+                       <a href="/home/listhouses?defaultHouse={{$model->id}}&returnpath={{$returnpath}}">{{$model->id}}</a>
                     </td>
                     <td>{{ $model->name }}</td>
                 </tr>

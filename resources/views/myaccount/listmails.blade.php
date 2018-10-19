@@ -4,10 +4,17 @@
     <div class="table-responsive">
         <table class="table table-striped">
             @foreach($models as $model)
+                <?php
+                    $rentalinfo = '';
+                    if ($model->contractid != 0)
+                    {
+                        $rentalinfo = $model->contract->house->name.__('for the period').': '.$model->contract->getPeriodtext();
+                    }
+                ?>
                 <thead>
                     <tr>
                         <td class="border border-dark ">
-                            <strong>{{ $model->created_at }}. {{__('From')}}: {{$model->from}}:</strong>
+                            <strong>{{ $model->created_at }}. {{__('From')}}: {{$model->from}} {{($rentalinfo != '')?__('regarding rental of').' '.$rentalinfo:''}}</strong>
                         </td>
                     </tr>
                 </thead>

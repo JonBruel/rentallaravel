@@ -10,29 +10,28 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>@sortablelink('id')</th>
-                <th></th>
+                <th colspan="2">{{__('Customer type')}}</th>
                 <th>@sortablelink('name')</th>
                 <th>@sortablelink('address1')</th>
                 <th>@sortablelink('email')</th>
-                <th>Actions</th>
             </tr>
             <tr>
                 <form id="Filter" action="{{Session::get('sanitizedpath')}}" method="get">
-                    <td>
-                        {!! Form::submit(__('Search'),['class' => 'form-control']) !!}
+                    <td colspan="2">
+                        {!! Form::select('customertypeid',$customertypeselect,array_key_exists('customertypeid',
+                        $search)?$search['customertypeid']:'',['class' => 'form-control col-md-11', 'style' => 'padding: 1px 0 3px 10px;', 'onChange' => 'this.form.submit();'])  !!}
+
                         <input type="hidden" name="sort" value="{{(array_key_exists('sort', $search))?$search['sort']:''}}" />
                         <input type="hidden" name="order" value="{{(array_key_exists('order', $search))?$search['order']:''}}" />
                     </td>
-                    <td></td>
                     <td>
-                        {!! Form::text('name',(array_key_exists('name', $search))?$search['name']:'',null,['class' => 'form-control']) !!}
+                        {!! Form::text('name',(array_key_exists('name', $search))?$search['name']:'',['id' => 'name', 'class' => 'form-control', 'onChange' => 'this.form.submit();', 'onfocus' => 'changeField(this, fldChanged);']) !!}
                     </td>
                     <td>
-                        {!! Form::text('address1',(array_key_exists('address1', $search))?$search['address1']:'',null,['class' => 'form-control']) !!}
+                        {!! Form::text('address1',(array_key_exists('address1', $search))?$search['address1']:'',['class' => 'form-control', 'onChange' => 'this.form.submit();', 'onfocus' => 'changeField(this, fldChanged);']) !!}
                     </td>
                     <td>
-                        {!! Form::text('email',(array_key_exists('email', $search))?$search['email']:'',null,['class' => 'form-control']) !!}
+                        {!! Form::text('email',(array_key_exists('email', $search))?$search['email']:'',['class' => 'form-control', 'onChange' => 'this.form.submit();', 'onfocus' => 'changeField(this, fldChanged);']) !!}
                     </td>
                 </form>
             </tr>
@@ -41,10 +40,13 @@
             @foreach($models as $model)
                 <tr>
                     <td>
-                        @include('partials.detail_edit_delete', ['path' => 'customer', 'id' => $model->id, 'params' => $params])
+                        @include('partials.detail_edit_delete', ['path' => 'customer', 'id' => $model->id])
                     </td>
                     <td>
-                        <a href="/impersonate/take/{{ $model->id }}"  title="{{__('See site as: ')}} {{$model->name}}"  data-toggle="tooltip"><span class='glyphicon glyphicon-user'></span></a>
+                        <a href="/contract/listmails/{{ $model->id }}"  title="{{__('Check mails send from system').': '}} {{$model->name}}"  data-toggle="tooltip"><span class='glyphicon glyphicon-envelope'></span></a>
+                        <a href="/customer/checkaccount/{{ $model->id }}"  title="{{__('Account posts').': '}} {{$model->name}}"  data-toggle="tooltip"><span class='glyphicon glyphicon-euro'></span></a>
+                        <a href="/customer/merge/{{ $model->id }}"  title="{{__('Move customer accounts to the present user on the system').': '}} {{$model->name}}"  data-toggle="tooltip"><span class='glyphicon glyphicon-transfer'></span></a>
+                        <a href="/impersonate/take/{{ $model->id }}"  title="{{__('See site as').': '}} {{$model->name}}"  data-toggle="tooltip"><span class='glyphicon glyphicon-user'></span></a>
                     </td>
                     <td>{{ $model->name }}</td>
                     <td>{{ $model->address1 }}</td>
@@ -56,4 +58,30 @@
         {!! $models->appends(\Request::except('page'))->render() !!}
     </div>
 
+@endsection
+@section('scripts')
+    <script type="text/javascript">
+        function changeField(elm, after){
+            var old, to, val,
+                chk = function(){
+                    val = elm.value;
+                    if(!old && val === elm.defaultValue){
+                        old = val;
+                    }else if(old !== val){
+                        old = val;
+                        after(elm);
+                    }
+                };
+            chk();
+            to = setInterval(chk, 2000);
+            elm.onblur = function(){
+                to && clearInterval(to);
+                elm.onblur = null;
+            };
+        };
+        function fldChanged(elm){
+            console.log('changed to:' + elm.value);
+            $('#Filter').submit();
+        }
+    </script>
 @endsection

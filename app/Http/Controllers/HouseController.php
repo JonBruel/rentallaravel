@@ -38,18 +38,12 @@ class HouseController extends Controller
         $sortparams = (Input::query('order'))?'&order='.Input::query('order'):'';
         $sortparams .= (Input::query('sort'))?'&sort='.Input::query('sort'):'';
 
-        $params['edit'] = "?menupoint=12030";
-        $params['edit'] .= $sortparams;
-
-        $params['show'] = "?menupoint=12030";
-        $params['show'] .= $sortparams;
-
         if (sizeof($models) == 1)
         {
             return redirect('house/edit/'.$models[0]->id);
         }
 
-        return view('house/index', ['models' => $models, 'params' => $params, 'search' => Input::all(), 'owners' => $owners]);
+        return view('house/index', ['models' => $models, 'search' => Input::all(), 'owners' => $owners]);
     }
 
     public function checkAccess($id)

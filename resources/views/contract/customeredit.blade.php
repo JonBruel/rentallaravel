@@ -100,7 +100,7 @@
 
 
 
-        offserminus = 0;
+        offsetminus = 0;
         offsetplus = 0;
         periodchunk = [];
         baseprice = [];
@@ -113,8 +113,8 @@
                 return offsetplus;
             }
             if (changeoffset < 0) {
-                offserminus--;
-                return offserminus;
+                offsetminus--;
+                return offsetminus;
             }
             if (changeoffset == 0) {
                 return 0;
@@ -180,7 +180,7 @@
 
         function lessWeeks()
         {
-            offserminus = 0;
+            offsetminus = 0;
             offsetplus = 0;
             periodchunk = [];
             getWeeks(0);

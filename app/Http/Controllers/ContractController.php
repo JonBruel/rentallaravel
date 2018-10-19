@@ -222,8 +222,8 @@ class ContractController extends Controller
             if (!$model->departuredatetime) $model->departuredatetime = Carbon::parse($departuredatetime);
         }
 
-        $fields = ['persons', 'discount', 'finalprice', 'currencyid', 'landingdatetime', 'departuredatetime', 'message'];
-        //$fields = Schema::getColumnListing($models[0]->getTable());
+        if  (Gate::allows('Administrator')) $fields = ['persons', 'discount', 'finalprice', 'currencyid', 'landingdatetime', 'departuredatetime', 'message'];
+        else $fields = $fields = ['persons', 'discount', 'finalprice', 'currencyid'];
 
         //We need the currency rate for the view, calculation based on price and discount:
         //$rate = $model->finalprice/((1-$model->discount/100)*$model->price);
@@ -271,6 +271,13 @@ class ContractController extends Controller
     {
         //TODO: should we handle the situation where there is no existing contract?
         $contract = Contract::Find($contractid);
+
+        if (Input::get('Delete'))
+        {
+            $contract->delete();
+            return redirect('contract/listcontractoverviewforowners?menupoint=11020')->with('success', __('Contract deleted').'.');
+        }
+
         Contract::$ajax = true;
         $oldfinalprice = $contract->finalprice;
         Contract::$ajax = false;
@@ -287,6 +294,7 @@ class ContractController extends Controller
         // Update bookings and price information
         // Check for consecutive weeks, go back if not
         $lastday = null;
+        if (!Input::get('checkedWeeks')) return back()->withInput()->with('warning',  __('Please choose at least one period').'.');
         foreach (Input::get('checkedWeeks') as $periodid) {
             $period = Periodcontract::find($periodid);
             $firstday = $period->from->format('Y-m-d');
@@ -295,7 +303,7 @@ class ContractController extends Controller
                 if ($lastday != $firstday)
                 {
                     $weeksnotconsecutive = __('All booked rental periods must be consecutive, but they are not. Please check and reorder.');
-                    return back()->withInput()->with('weeksnotconsecutive',  $weeksnotconsecutive);
+                    return back()->withInput()->with('warning',  $weeksnotconsecutive);
                 }
             }
             $lastday = $period->to->format('Y-m-d');
@@ -309,6 +317,7 @@ class ContractController extends Controller
 
         //We add the periods
         $firstperiodid = 0;
+
         foreach (Input::get('checkedWeeks') as $periodid) {
             if (0 != $contract->addWeek($periodid)) {
                 //$request>session()->flash('warning', 'Please clich the first week you want to rent!');
@@ -400,7 +409,7 @@ class ContractController extends Controller
         $years = [];
         for ($i = $thisyear-10; $i < $thisyear+3; $i++) $years[$i] = $i;
 
-        if ($request->get('yearfrom') == null) $request['year'] = $thisyear;
+        if ($request->get('yearfrom') == null) $request['yearfrom'] = $thisyear;
 
         $houses = House::filter()->pluck('name', 'id')->toArray();
         $houseid = Input::get('houseid', 1);
@@ -424,4 +433,90 @@ class ContractController extends Controller
         $emails = Emaillog::where('customerid', $customerid)->get();
         return view('myaccount/listmails', ['models' => $emails, 'title' => __('Emails')]);
     }
+
+    public function registerpayment($contractid)
+    {
+
+        //Set defaults for the created accountpost
+        $contract = Contract::Find($contractid);
+        $defaults = ['customerid' => $contract->customerid,
+            'ownerid' => $contract->ownerid,
+            'postsource' => 'Manually entered',
+            'currencyid' => $contract->owner->culture->currencyid,
+            'customercurrencyid' => $contract->currencyid,
+            'contractid' => $contractid,
+            'postedbyid' => Auth::user()->id,
+            'passifiedby' => 0,
+            'houseid' => $contract->houseid,
+            'returndate' => $contract->getReturndate(),
+            'usedrate' => 1];
+        $accountpost = new Accountpost($defaults);
+
+        $fields = ['amount', 'text', 'posttypeid'];
+        foreach($fields as $field) $accountpost->$field = Input::get($field);
+        $test = '';
+        Contract::$ajax = true;
+        $accountpost->amount = -$accountpost->amount;
+
+        $success = __('New accountpost saved.');
+        $errors = '';
+
+        if (!$accountpost->save())
+        {
+            $success = __('Accountpost was not made');
+            $errors = $accountpost->getErrors();
+            return redirect('contract/listaccountposts/'.$contractid)->with('errors', $errors)->with('success', $success);
+        }
+
+        //Check if we want to insert rounding accountpost
+        elseif (Input::get('round') == 1)
+        {
+            $contract = Contract::Find($contractid);
+            Contract::$ajax = true;
+            $contractamount = $contract->finalprice;
+            $paid = 0;
+            $accountposts = Accountpost::where('contractid', $contractid)->get();
+            foreach ($accountposts as $accountpost)
+            {
+                $paid += -$accountpost->amount;
+            }
+            //die('Paid: '.$paid.' contractamount: '.$contractamount);
+            if (abs(($paid/$contractamount)) < 0.001)
+            {
+                $accountpost = new Accountpost($defaults);
+                $accountpost->posttypeid = 300;
+                $accountpost->text = 'Automatic rounding';
+                $accountpost->amount = $paid;
+            }
+            if (!$accountpost->save())
+            {
+                $success = __('Payment saved, but the rounding adjustment failed.');
+                $errors = $accountpost->getErrors();
+                return redirect('contract/listaccountposts/'.$contractid)->with('errors', $errors)->with('success', $success);
+            }
+        }
+        return redirect('contract/listaccountposts/'.$contractid)->with('errors', $errors)->with('success', $success);
+    }
+
+    //Common accountpost actions
+    public function accountpostedit($id)
+    {
+        return $this->generaledit($id, Accountpost::class, 'contract/accountpostedit', null, null, ['updated_at'], ['id' => 'hidden', 'contractid' => 'hidden']);
+    }
+
+    public function accountpostupdate($id)
+    {
+        //generalupdate($id, $modelclass, $okMessage, $redirectOk, $redirectError = null, $onlyFields = null, $plusFields = null, $minusFields = null)
+        return $this->generalupdate($id, Accountpost::class, 'Accountpost updated', '/accountpost/edit/'.$id.'?contractid='.Input::get('contractid'), null, null, null, ['updated_at']);
+    }
+
+
+    public function accountpostdestroy($id)
+    {
+        $model =  Accountpost::findOrFail($id);
+        $contractid = $model->contractid;
+        $model->delete();
+        return redirect('contract/listaccountposts/'.$contractid);
+    }
+
 }

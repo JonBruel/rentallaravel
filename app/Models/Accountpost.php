@@ -72,6 +72,11 @@ class Accountpost extends BaseModel
         'returndate'
 	];
 
+    public function modelFilter()
+    {
+        return $this->provideFilter(Filters\AccountpostFilter::class);
+    }
+
     public function getAmountAttribute($value) {
         if (static::$ajax) return $value;
         return static::format($value,2);
@@ -83,6 +88,35 @@ class Accountpost extends BaseModel
     }
 
     protected $dates = ['returndate'];
+
+    /*
+     * Retuns an array of keys and values to be used in forms for select boxes. Typical uses
+     * are filters, e.g selection housed owner by a specific owner.
+     *
+     * Retuns null if no select boxes are to be used.
+     */
+    public function withSelect($fieldname)
+    {
+        switch ($fieldname)
+        {
+            case 'posttypeid':
+                return Posttype::all()->pluck('posttype', 'id')->map(function ($item, $key) {return $item = __($item);} )->toArray();
+            case 'ownerid':
+                return Customer::filter()->where('customertypeid', 10)->pluck('name', 'id')->toArray();
+            case 'customerid':
+                return Customer::filter()->where('ownerid', $this->ownerid)->pluck('name', 'id')->toArray();
+            case 'postedbyid':
+                return Customer::where('ownerid', config('user.ownerid'))->pluck('name', 'id')->toArray();
+            case 'houseid':
+                return House::where('ownerid', $this->ownerid)->pluck('name', 'id')->toArray();
+            case 'currencyid':
+                return Currency::all()->pluck('currencysymbol', 'id')->toArray();
+            case 'customercurrencyid':
+                return Currency::all()->pluck('currencysymbol', 'id')->toArray();
+            default:
+                return null;
+        }
+    }
 
 	public function customer()
 	{

@@ -67,7 +67,7 @@ class MenuService {
 
 
     /*
-     * This function changes the css classes, used for experimenting with the manu
+     * This function changes the css classes, used for experimenting with the menu
      * structure. The aim is the create a "nice collapsable menu".
      */
     private function changecss(Array &$value, $key) {
@@ -88,6 +88,8 @@ class MenuService {
         $level = 0;
 
         $userMenu = static::$userMenu;
+        foreach ($userMenu as $menupoint => $entry) if (strpos($entry['path'],'?') === false) $userMenu[$menupoint]['path'] .= "?menupoint=". $menupoint;
+
         if (!array_key_exists($menuclicked, $userMenu)) $menuclicked =  0;
         if ($menuclicked > 0) {
 
@@ -96,9 +98,7 @@ class MenuService {
                     if (($userMenu[$menupoint]['level'] > 1) && ($userMenu[$menupoint]['show'] != 'select')) {
                         $userMenu[$menupoint]['show'] = 'hide';
                     }
-                    if (strpos($entry['path'],'?') === false) $userMenu[$menupoint]['path'] .= "?menupoint=". $menupoint;
             }
-
 
             $level = $userMenu[$menuclicked]['level'];
             $presentnum = $menuclicked;
@@ -109,6 +109,7 @@ class MenuService {
 
             //We show the structure below
             foreach ($userMenu[$presentnum]['childrenmap'] as $child => $value) {
+                if (!array_key_exists($child, $userMenu)) continue;
                 if ($userMenu[$child]['show'] != 'select') {
                     $userMenu[$child]['show'] = 'show';
                 }
@@ -121,6 +122,7 @@ class MenuService {
 
                 //We set the siblings to show  $userMenu[$parentid]['childrenmap']
                 foreach ($userMenu[$userMenu[$presentnum]['parentid']]['childrenmap'] as $child) {
+                    if (!array_key_exists($child, $userMenu)) continue;
                     if ($userMenu[$child]['show'] != 'select') {
                         $userMenu[$child]['show'] = 'show';
                     }

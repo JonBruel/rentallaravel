@@ -13,6 +13,7 @@ class CreateValidationAttributes
 
     public function setModel($model) {
         $this->model = $model;
+        if (!$model) return;
         if ($model->getCasts()) $this->casts = $model->getCasts();
     }
 
@@ -43,6 +44,7 @@ class CreateValidationAttributes
     public function validationOptions($name, $options = []) {
 
         //Modifications for jquery unobtrusive validation
+        if (!$this->model) return null;
         $prefix = 'data-val';
         if ($this->model) {
             $cast = 'string';

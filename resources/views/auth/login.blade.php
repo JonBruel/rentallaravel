@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+                <div class="card-header">{{ __('Login') }} {{ __('or') }} {{__('register as new customer')}}.</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
@@ -54,14 +54,15 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
+                                <a class="btn btn-primary" href="{{ route('register') }}">
+                                    {{ __('New customer') }}
+                                </a>
 
                                 <a class="btn btn-link" href="{{ route('password.request') }}">
                                     {{ __('Forgot Your Password?') }}
                                 </a>
 
-                                <a class="btn btn-link" href="{{ route('register') }}">
-                                    {{ __('Register') }}
-                                </a>
+
                             </div>
                         </div>
                     </form>

@@ -2,6 +2,7 @@
 @section('content')
     <h3>{{__('My arrival and departure times')}}</h3>
     <div class="table-responsive">
+        @if(sizeof($models) > 0)
         {!! Form::model($models[0], ['action' => ['MyAccountController@updatetime', $models[0]]]) !!}
         {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
         <br /><br />
@@ -23,6 +24,7 @@
             @endforeach
             </tbody>
         </table>
+        @endif
         {!! Form::close() !!}
     </div>
 @endsection

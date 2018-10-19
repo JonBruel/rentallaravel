@@ -19,7 +19,7 @@
             <tr>
                 <form id="Filter" action="{{Session::get('sanitizedpath')}}" method="get">
                     <td>
-                        {!! Form::submit(__('Search'),['class' => 'form-control']) !!}
+                        <button type="submit" class="btn btn-success glyphicon glyphicon-search" name="Search" value="Search"></button>
                     </td>
                     @foreach($fields as $field)
                         <td>
@@ -38,7 +38,7 @@
             @foreach($models as $model)
                 <tr>
                     <td>
-                        @include('partials.edit_delete', ['path' => 'batchlog', 'id' => $model->id, 'params' => $params])
+                        @include('partials.edit_delete', ['path' => 'batchlog', 'id' => $model->id])
                     </td>
                     @foreach($fields as $field)
                         <td>{{ $model->withBelongsTo($field) }}</td>

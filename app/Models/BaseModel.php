@@ -34,6 +34,7 @@ use App\Helpers\NumberHelpers;
 class BaseModel extends Model
 {
     public static $ajax = false;
+    public static $norules = false;
 
     use Sortable;
     use Filterable;

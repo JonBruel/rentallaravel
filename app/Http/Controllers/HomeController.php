@@ -43,7 +43,7 @@ class HomeController extends Controller
         $this->checkHouseChoice($request, 'home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
         $defaultHouse = session('defaultHouse' , 1);
 
-        if (Auth::viaRemember()) echo("The user is authenticated via remember");
+        if (Auth::viaRemember()) session()->flash('success', __('You are logged on.'));
         //Testing mail.
         //TODO: Remove it in production version.
         if (\Auth::check()) {
@@ -163,21 +163,25 @@ class HomeController extends Controller
 
     }
 
+    public function search()
+    {
+        return view('home/search');
+    }
+
     public function listhouses()
     {
         $defaultHouse = Input::get('defaultHouse',-1);
+        $returnpath = Input::get('returnpath', 'home/showinfo/description?menupoint=10010');
 
         //When user has chosen we redirect to house
         if ($defaultHouse != -1)
         {
             session(['defaultHouse' => $defaultHouse]);
-            return redirect(session('returnpath', 'home/showinfo/description?menupoint=10010'));
+            return redirect(Input::get('returnpath', 'home/showinfo/description?menupoint=10010'));
         }
 
-        if (session('returnpath')) session()->keep(['returnpath']);
-
         $models = $this->model::filter()->sortable()->paginate(10);
-        return view('home/listhouses', ['models' => $models]);
+        return view('home/listhouses', ['models' => $models, 'returnpath' => $returnpath]);
     }
 
 

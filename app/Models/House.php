@@ -289,9 +289,9 @@ class House extends BaseModel
     {
         if ($houseid == 0) return;
 
-        $batchtasks = Batchtask::where('ownerid', 0)->where('houseid', 0)->get();
+        $batchtasks = Batchtask::where('ownerid', 1)->where('houseid', 0)->get();
         if ($cultures == '') $cultures = explode(';', config('app.cultures'));
-        $standardemails = Standardemail::where('ownerid', 0)->where('houseid', 0)->get();
+        $standardemails = Standardemail::where('ownerid', 1)->where('houseid', 0)->get();
 
         $houses = House::where('id', $houseid)->get();
 

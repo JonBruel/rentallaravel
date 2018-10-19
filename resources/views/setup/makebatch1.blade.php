@@ -15,10 +15,10 @@
                         {{($batchexistss[$house->id] == 1)?__('Workflow made'):__('Workflow not made') }}
                     </td>
                     <td>
-                        <a href="/setup/copybatch/{{$house->id}}/1/{{$batchexistss[$house->id]}}" class="btn btn-primary btn-lg" role="button">{{($batchexistss[$house->id] == 1)?__('Overwrite batchjobs'):__('Copy batch')}}</a>
+                        <a href="/setup/copybatch/{{$house->id}}/1/{{$batchexistss[$house->id]}}" class="btn btn-primary" role="button">{{($batchexistss[$house->id] == 1)?__('Overwrite batchjobs'):__('Copy batch')}}</a>
                     </td>
                     <td>
-                        <a href="/setup/copybatch/{{$house->id}}/0/{{$batchexistss[$house->id]}}" class="btn btn-primary btn-lg" role="button">{{($batchexistss[$house->id] == 1)?__('Copy missing batchjobs'):__('Copy batch')}}</a>
+                        <a href="/setup/copybatch/{{$house->id}}/0/{{$batchexistss[$house->id]}}" class="btn btn-primary" role="button">{{($batchexistss[$house->id] == 1)?__('Copy missing batchjobs'):__('Copy batch')}}</a>
                     </td>
                 </tr>
             @endforeach

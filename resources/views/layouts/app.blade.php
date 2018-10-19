@@ -19,8 +19,8 @@
 
 
 </head>
-<body>
-    <div class="wrapper" style="background-color: #eeeee8; min-height: 1000px">
+<body stylexx="overflow: hidden">
+    <div class="wrapper" style="background-color: #ffffff; min-height: 1000px; width: 99%">
         <div class="row">
             <div class="container" style="text-align: center">Test system - under construction!</div>
         </div>
@@ -93,7 +93,7 @@
             </div>
         </nav>
 
-        <main class="container" style="margin-top: 5px; max-width:1800px">
+        <main class="container" style="margin-top: 5px; max-width: 100%">
             @if(session('warning'))
                 <div class="alert alert-warning border border-primary">{{session('warning')}}</div>
             @endif
@@ -125,13 +125,15 @@
         </main>
     </div>
 </body>
-
+<div class="modal"><!-- Place at bottom of page --></div>
 <script >
     // Add hover effect to menus
     $('.dropdown').hover(function() {
         $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn();
+        $(this).find('.dropdown-menu').css('margin-left', '50px');
     }, function() {
-        $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut();
+        $(this).find('.dropdown-menu').stop(true, true).delay(300).fadeOut();
+
     });
 
     function redirectLogin()

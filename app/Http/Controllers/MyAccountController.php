@@ -98,7 +98,9 @@ class MyAccountController extends Controller
     public function edittime()
     {
         $contracts = $this->getContracts(Carbon::now());
-        $contract = $contracts[0];
+        $contract = null;
+        if (sizeof($contracts) > 0) $contract = $contracts[0];
+        else session()->flash('warning', __('There are no constacts to show.'));
         return view('myaccount/edittime', ['models' => $contracts, 'vattr' => new ValidationAttributes($contract)]);
     }
 

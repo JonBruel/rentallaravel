@@ -12,6 +12,8 @@ use App\Models\Contract;
 use Illuminate\Support\Facades\Input;
 use Auth;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use DB;
 
 class AjaxController extends Controller
 {
@@ -117,6 +119,44 @@ class AjaxController extends Controller
             ->header('Cache-Control', 'no-cache, must-revalidate');
     }
 
+    public function getImportStatus()
+    {
+        $filename = base_path().'/storage/logs/migration.txt';
+        $contents['text'] = str_replace("\n", '<br />',file_get_contents($filename));
+        return response()->json($contents);
+    }
+
+    /*
+     * This method is used in views where the user has the option
+     * of scrolling through months and find some with vacancies and
+     * within the month chosen by the user.
+     * The following
+    */
+    public function getmonths($houseid)
+    {
+        // Takes around 120 ms, a clean SQL might be faster
+        // $counts = Periodcontract::all()->where('houseid', $houseid)->where('from', '>', Carbon::now())
+        //                             ->groupBy(function ($record) {return $record->from->format('Y-m');})
+        //                             ->map(function ($month) { return $month->where('committed', null)->count();});
+
+        //This one takes 45 ms.
+        $months = DB::select(DB::raw("SELECT SUM(ISNULL(committed)) as vacancies, 'text' as text, MIN(id*(1000-999*ISNULL(committed))) as id,  DATE_FORMAT(`from`, '%Y-%m-01') as month FROM periodcontract
+                                   WHERE (`from` > '".Carbon::now()->format('Y-m-d')."')  AND (houseid = ".$houseid.") GROUP BY month;"));
+
+        foreach($months as $month)
+        {
+            if ($month->vacancies > 0)
+            {
+               $text = Carbon::parse($month->month)->formatLocalized('%B %Y').": ".__('There are vacancies').'!';
+            }
+            else
+            {
+               $text = Carbon::parse($month->month)->formatLocalized('%B %Y').": ".__('Sold out').'!';
+            }
+            $month->text = $text;
+        }
+        return response()->json($months);
+    }
 
     /*
      * This method is used in views where the user has the option
@@ -126,6 +166,7 @@ class AjaxController extends Controller
     public function getweeks($houseid, $culture, $offset = 0, $periodid = 0, $contractid = 0)
     {
         $rate = 1;
+        $warning = '';
 
         if ($periodid != 0)
         {
@@ -146,23 +187,40 @@ class AjaxController extends Controller
         }
 
         //Prepare for showing several weeks, limit to 6 weeks using the paginate method
+        $fromdate = $period->from->subDays(15-7*6*$offset);
         $periodcontracts = Periodcontract::where('houseid', $houseid)
-            ->where('from', '>', $period->from->subDays(15-7*6*$offset))
+            ->whereDate('from', '>', $fromdate)
+            ->whereDate('to', '>', Carbon::now())
             ->orderBy('from')
             ->paginate(6);
 
+        //We check if some record are not included due to the to requirement
+        $expelledperiods = Periodcontract::where('houseid', $houseid)
+            ->whereDate('from', '>', $fromdate)
+            ->whereDate('to', '<=', Carbon::now())
+            ->orderBy('from')->count();
+
+        if ($expelledperiods > 0) $warning = 'lower limit reached';
+
+        //if ($fromdate->lt(Carbon::now())) $periodcontracts = null;
+
         $forJson = [];
-        foreach ($periodcontracts as $p)
+        if (!$periodcontracts) $forJson = ['warning' => 'no records'];
+        else
         {
-            $committed = ($p->committed == 1)?true:false;
-            $chosen = false;
-            if ($periodid == $p->id) $chosen = true;
-            if ($contractid == $p->contractid) $chosen = true;
-            $forJson[] = ['id' => $p->id, 'committed' => $committed, 'periodtext' => $p->getEnddays($culture),
-                'chosen' => $chosen, 'personprice' => $p->personprice, 'maxpersons' => $p->maxpersons,
-                'basepersons' => $p->basepersons, 'baseprice' => $p->baseprice,
-                'rate' => $rate];
+            foreach ($periodcontracts as $p)
+            {
+                $committed = ($p->committed == 1)?true:false;
+                $chosen = false;
+                if ($periodid == $p->id) $chosen = true;
+                if ($contractid == $p->contractid) $chosen = true;
+                $forJson[] = ['id' => $p->id, 'committed' => $committed, 'periodtext' => $p->getEnddays($culture),
+                    'chosen' => $chosen, 'personprice' => $p->personprice, 'maxpersons' => $p->maxpersons,
+                    'basepersons' => $p->basepersons, 'baseprice' => $p->baseprice, 'warning' => $warning,
+                    'rate' => $rate, 'from' => $p->from->format('Y-m-d'), 'to' => $p->to->format('Y-m-d')];
+            }
         }
+
 
         return response()->json($forJson)
             ->header('Cache-Control', 'no-cache, must-revalidate');

@@ -64,5 +64,5 @@
         </table>
     </div>
     {!! Form::close() !!}
-    {{__('gallery.1.20160119_120353')}}
+
 @endsection

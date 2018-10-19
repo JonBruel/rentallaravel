@@ -553,10 +553,13 @@ class Contract extends BaseModel
 
     //Get relevant accountposts
     public function getAccountposts($culture = '') {
+        static::$ajax = true;
         $sum = 0;
         $r = '<table class="table">';
         $customercurrencysymbol = $this->convertCurrencyAccountToCustomer('currencysymbol');
         $usedrate = $this->convertCurrencyAccountToCustomer();
+        //die('Used rate: '. $usedrate);
+        if ($usedrate == 0) $usedrate = 1;
         $first = true;
         $columns = array('created_at' => 'Date', 'text' => 'Text', 'amount' => 'Movement');
         foreach (Accountpost::where('contractid', $this->id)->where('amount' ,'<>', 0)->get() as $accountpost) {
@@ -578,7 +581,9 @@ class Contract extends BaseModel
                     if ($key == 'created_at')
                         $listedvalue = $listedvalue->format('Y-m-d');
                     if ($key == 'text')
+                    {
                         $listedvalue = __($listedvalue, [], $culture);
+                    }
                     if ($key == 'amount') {
                         $sum = $sum - ($listedvalue / $usedrate);
                         $listedvalue = static::format(-$listedvalue / $usedrate, 2);
@@ -592,6 +597,7 @@ class Contract extends BaseModel
             $sum = 0;
         $r .= '<tr><td></td><td>&nbsp;&nbsp;' . __('Balance', [], $culture) . ': </td><td>&nbsp;&nbsp;' . static::format($sum, 2, $culture) . '&nbsp;&nbsp;&nbsp;</td></tr>';
         $r .= '</table>';
+        static::$ajax = false;
         return $r;
     }
 

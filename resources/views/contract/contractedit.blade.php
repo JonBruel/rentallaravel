@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('content')
-    <h4>{{$models[0]->house->name}}, {{$models[0]->house->address1}}, {{$models[0]->house->country}}</h4>
-    <h4>{{$models[0]->customer->name}}, {{__('Contract').': '.$models[0]->id}}</h4>
+    <h4 style="text-align: center">{{$models[0]->house->name}}</h4>
+    @if(Gate::allows('Administrator'))<h4>{{$models[0]->customer->name}}, {{__('Contract').': '.$models[0]->id}}</h4>@endif
     <div class="table">
-        {!! Form::model($models[0], ['action' => ['ContractController@contractupdate', $models[0]], 'class' => 'form-horizontal']) !!}
+        {!! Form::open(['action' => ['ContractController@contractupdate', $models[0]], 'class' => 'form-horizontal']) !!}
         <br />
         <br />
         @if ($errors->any())
@@ -37,16 +37,22 @@
                          @endif
                      @endif
                      @if($field == 'finalprice')
-                         {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-3 col form-control', 'onChange' => 'setDiscount()', 'style' => 'height: 35px;'])) !!}
+                        @if(Gate::allows('Administrator'))
+                            {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-4 col form-control', 'onChange' => 'setDiscount()', 'style' => 'height: 35px;'])) !!}
+                        @else
+                            {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-4 col form-control', 'readonly' => true, 'style' => 'font-weight: bold; height: 35px;'])) !!}
+                        @endif
                         @if(sizeof($currencySelect) > 0)
-                            {!! Form::select('currencyid', $currencySelect, $models[0]->currencyid, ['class' => 'col-2 form-control', 'onChange' => 'setFinalprice()', 'id' => 'currencyid', 'style' => 'padding: 1px 0 3px 10px; height:35px']) !!}
+                            {!! Form::select('currencyid', $currencySelect, $models[0]->currencyid, ['class' => 'col-4 form-control', 'onChange' => 'setFinalprice()', 'id' => 'currencyid', 'style' => 'padding: 1px 0 3px 10px; height:35px']) !!}
                         @endif
                     @endif
                     @if($field == 'persons')
-                            {!! Form::select($field, $personSelectbox, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-2 form-control', 'onChange' => 'setFinalprice()', 'style' => 'padding: 1px 0 3px 10px;'])) !!}
+                        {!! Form::select($field, $personSelectbox, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-2 form-control', 'onChange' => 'setFinalprice()', 'style' => 'padding: 1px 0 3px 10px;', 'id' => 'persons'])) !!}
+                        <button class="glyphicon glyphicon-plus rounded-circle" style="margin-left: 10px" onclick="addPersons(1);return false;"></button>
+                        <button class="glyphicon glyphicon-minus rounded-circle"  style="margin-left: 10px" onclick="addPersons(-1);return false;"></button>
                     @endif
                     @if($field == 'message')
-                        {!! Form::textarea($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-8 col form-control clearfix'])) !!}
+                        {!! Form::textarea($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-9 col form-control clearfix', 'style' => 'max-width: 73%'])) !!}
                     @endif
             </div>
         @endforeach
@@ -54,32 +60,57 @@
         {!! Form::hidden('periodid', $periodid) !!}
         {!! Form::hidden('id', $models[0]->id) !!}
         {!! Form::hidden('price', $models[0]->price, ['id' => 'hiddenprice']) !!}
-        <div class="border border-primary rounded">
 
-            <div>
-                <button class='btn btn-success' onclick='getWeeks(offchange(-1));return false'>{{__('More')}}</button>
-                <button class='btn btn-success' onclick='getWeeks(lessWeeks());return false'>{{__('Less')}}</button>
+        <div class="border border-primary rounded col col-md-12" >
+            <div style="text-align: right;">
+                <!--<button class='btn btn-success' onclick='getWeeks(lessWeeks(0));return false'>{{__('Reset')}}</button>-->
             </div>
+            <div class="modal" id="notAdjecent">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close glyphicon glyphicon-remove" data-dismiss="modal" aria-hidden="Close"></button>
+                        </div>
+                        <div style="margin: 10px">
+                            <h4>{{ __('The periods chosen must be adjacent without other periods in between').'.' }}</h4>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" type="button" data-dismiss="modal" class="btn btn-primary">{{ __('Close') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="max-height: 230px; overflow-y: scroll;" id="calendar">
+
 
             <div id="showweeks" class="row col-12" style="margin-left: 0">
                 <h3>{{__('Please wait until the weeks are shown!')}}</h3>
+                <div style="background: rgba( 255, 255, 255, .8 ) url('/images/ajax-loader.gif') 50% 50%  no-repeat;"></div>
             </div>
 
-            <div>
-                <button class='btn btn-success' onclick='getWeeks(offchange(1));return false;'>{{__('More')}}</button>
-                <button class='btn btn-success' onclick='getWeeks(lessWeeks());return false'>{{__('Less')}}</button>
             </div>
         </div>
         <br />
-        {!! Form::submit('Save changes',['class' => "btn btn-primary"]); !!}
+        @if(Gate::allows('Administrator'))
+            {!! Form::submit(__('Save changes'),['class' => "btn btn-primary col col-md-2", 'name' => 'Book']); !!}
+        @else
+            {!! Form::submit(__('Book house'),['class' => "btn btn-primary col col-md-12", 'name' => 'Book']); !!}
+         @endif
+        @if(Gate::allows('Owner'))
+            {!! Form::submit(__('Delete booking'),['class' => "btn btn-primary", 'name' => 'Delete']); !!}
+        @endif
         {!! Form::close() !!}
         <br />
         @if(!$fromcalendar)
             {!! $models->appends(\Request::except('page'))->render() !!}
         @endif
+
     </div>
+
     @include('partials.client_validation')
 @endsection
+
 @section('scripts')
     <link href="{{ asset('/vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css', true)}}" rel="stylesheet">
     <script type="text/javascript" src="{{ asset('/vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js', true)}}"></script>
@@ -109,12 +140,18 @@
 
 
 
-        offserminus = 0;
+        offsetminus = 0;
         offsetplus = 0;
+        adjustOffsetMinus = true;
         periodchunk = [];
         baseprice = [];
         personprice = [];
         basepersons = [];
+        checkedstatus = [];
+        from = [];
+        to = [];
+        basepersonscommon = 2;
+        maxpersonscommon = 8;
         function offchange(changeoffset)
         {
             if (changeoffset > 0) {
@@ -122,15 +159,53 @@
                 return offsetplus;
             }
             if (changeoffset < 0) {
-                offserminus--;
-                return offserminus;
+                if (adjustOffsetMinus) offsetminus--;
+                return offsetminus;
             }
             if (changeoffset == 0) {
                 return 0;
             }
         }
 
-        $(document).ready(getWeeks(0));
+
+        $(document).ready(function(){
+            getWeeks(0);
+        });
+
+        $("#calendar").scrollTop(20);
+        usedheight = $("#calendar").height();
+        cont = true;
+        $('#calendar').scroll(function() {
+            if (cont)
+            {
+
+                percentage = 100*$( "#calendar" ).scrollTop()/usedheight;
+                console.log('percentage: '+percentage);
+                console.log('usedheight: '+usedheight);
+                if (percentage > 85)
+                {
+                    cont = false;
+                    usedheight = Math.max($("#showweeks").height(), $("#calendar").height());
+                    setTimeout(function(){cont = true; }, 2000);
+                    console.log("Scroll relative position: " + percentage + "\n actual position " + $("#calendar").scrollTop() +  "\n usedheight height: " + usedheight + "\n weeks height: " + $("#showweeks").height() + "." );
+                    getWeeks(offchange(1));
+                }
+                if (percentage == 0)
+                {
+                    if (adjustOffsetMinus)
+                    {
+                        cont = false;
+                        usedheight = Math.max($("#showweeks").height(), $("#calendar").height());
+                        setTimeout(function(){cont = true; }, 2000);
+                        console.log("Scroll relative position: " + percentage + "\n actual position " + $("#calendar").scrollTop() +  "\n usedheight height: " + usedheight + "\n weeks height: " + $("#showweeks").height() + "." );
+                        getWeeks(offchange(-1));
+                        $("#calendar").scrollTop(10);
+                    }
+                }
+            }
+        });
+
+        //$(document).ready(getWeeks(0));
         $(function() {
             $('#landingdatetime').datetimepicker({ language: '{{str_replace('_', '-', App::getLocale())}}',
                 format: 'yyyy-mm-dd hh:ii',
@@ -153,6 +228,7 @@
          */
         function getWeeks(offset)
         {
+            cont = false;
             culture = '{{App::getLocale()}}';
             contractid = {{$models[0]->id}};
             periodid = 0;
@@ -162,37 +238,69 @@
             {
                 content = '<table class="table table-striped"><tr><th>{{__('Tick period')}}</th><th>{{__('Period')}}</th></tr>';
                 //We add a large number to ensure the index is positive
+                if (periods.warning == 'no records') alert('nothing found');
                 periodchunk[offset+1000] = periods;
                 periodchunk.forEach(periods => {
                     periods.forEach(period => {
+                        if (period.warning == 'lower limit reached') adjustOffsetMinus  = false;
                         rate = period.rate;
                         baseprice[period.id] = period.baseprice;
                         personprice[period.id] = period.personprice;
-                        basepersons[period.id] = period.basepersons;
+                        basepersonscommon = basepersons[period.id] = period.basepersons;
+                        maxpersonscommon = period.maxpersons;
+                        from[period.id] = period.from;
+                        to[period.id] = period.to;
                         checked = '';
                         style = '';
+                        if (checkedstatus[period.id] != undefined) period.chosen = checkedstatus[period.id];
                         if (period.chosen) checked = ' checked = "checked"';
-                        free = '<input onClick="setFinalprice()"' + checked + ' name="checkedWeeks[' + period.id + ']" type="checkbox" value="'+period.id+'">';
+                        free = '<input onClick="setFinalprice()"' + checked + ' name="checkedWeeks[' + period.id + ']" id="checkedWeeks_' + period.id + '" type="checkbox" value="'+period.id+'">';
                         if (period.committed && !period.chosen) {
                             free = '{{__('Occupied')}}';
-                            style = ' style = "background-color: #FF9191;"';
+                            style = ' style = "opacity: 0.40"';
+                            content += '<tr' + style + '><td colspan="2">' + free + ': ' + period.periodtext + '</td></tr>';
                         }
-                        content += '<tr' + style + '><td>' + free + '</td><td>' + period.periodtext + '</td></tr>';
+                        //content += '<tr' + style + '><td colspan="2">' + free + period.periodtext + '</td></tr>';
+                        else content += '<tr' + style + '><td>' + free + '</td><td onclick="togglecheck('+period.id+');">' + period.periodtext + '</td></tr>';
                     });
                 });
                 content += '</tr>';
-
                 $('#showweeks').html(content);
                 if ($('#hiddenprice').val() == 0) setFinalprice();
+                setTimeout(function(){cont = true; }, 1000);
+                if ($("#calendar").scrollTop() < 10)  $("#calendar").scrollTop(10);
             });
+        }
+
+        function togglecheck(id)
+        {
+            checkbox = $('#checkedWeeks_' + id);
+            if (checkbox.prop('checked')) $('#checkedWeeks_' + id).prop("checked", false);
+            else checkbox.prop("checked", true);
+            setFinalprice();
+            checkedstatus[id] = checkbox.prop('checked');
+        }
+
+        function addPersons(increment)
+        {
+            persons = Number($('#persons').val());
+            persons = persons + increment;
+            persons = Math.min(persons, maxpersonscommon);
+            persons = Math.max(persons, basepersonscommon);
+            $('#persons').val(persons);
+            setFinalprice();
         }
 
         function lessWeeks()
         {
-            offserminus = 0;
+            offsetminus = 0;
             offsetplus = 0;
             periodchunk = [];
-            getWeeks(0);
+            usedheight = 50;
+            console.log('Usedheight: '+usedheight);
+            console.log(100*$( "#calendar" ).scrollTop()/usedheight);
+            $("#calendar").scrollTop(10);
+            return 0;
         }
 
         //Triggered when discount changed or cuurency changes
@@ -225,8 +333,25 @@
             //Get chosen number of persons
             persons = $('#persons').val();
 
-            //Calculate the price in the house currency
-            $("input:checked").each(function() {price += baseprice[this.value] + (persons - basepersons[this.value])*personprice[this.value]});
+            //Calculate the price in the house currency, check consequtive periods and revert if not consequtive
+            periodfrom = [];
+            periods = 0;
+            lastto = 0;
+            $("input:checked").each(function() {
+                price += baseprice[this.value] + (persons - basepersons[this.value])*personprice[this.value];
+                periods = periods + 1;
+                if (periods > 1)
+                {
+                    if (lastto != from[this.value])
+                    {
+                        $('#notAdjecent').modal('show');
+                        togglecheck(this.value);
+                        newPrice();
+                    }
+
+                }
+                lastto = to[this.value];
+            });
 
             @if(sizeof($currencySelect) > 0)
                 rate = rates[$('#currencyid').val()];

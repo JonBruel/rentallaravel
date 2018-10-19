@@ -7,6 +7,7 @@
 
 namespace App\Models;
 use Number;
+use Auth;
 
 
 
@@ -56,6 +57,9 @@ use Number;
 class Customer extends BaseModel
 {
     public static $customertypes = ['Test' => 0, 'Supervisor' => 1, 'Owner' => 10, 'Administrator' => 100, 'Personel' => 110, 'Customer' => 1000];
+
+    //$table->integer('id');
+    //$table->primary('id');
 
 	public $sortable = [
 	    'id',
@@ -125,6 +129,8 @@ class Customer extends BaseModel
         'email' => ['required', 'unique:customer']
     ];
 
+
+
     /*
      * This function is used to show the relevant associated
      * user-friendly value as opposed to showing the id.
@@ -159,7 +165,7 @@ class Customer extends BaseModel
         switch ($fieldname)
         {
             case 'customertypeid':
-                return  Customertype::all()->pluck('customertype', 'id')->toArray();
+                return  Customertype::where('id', '>', Auth::user()->customertypeid)->pluck('customertype', 'id')->toArray();
             case 'ownerid':
                 return Customer::filter()->where('customertypeid', 10)->pluck('name', 'id')->toArray();
             case 'cultureid':

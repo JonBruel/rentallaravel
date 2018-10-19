@@ -94,7 +94,7 @@ return [
         'role' => 1000,
         'level' => 1,
         'show' => 'show',
-        'childrenmap' => [10010,10020,10030,10040,10050,10060,10070,10080,10090,10100,10110,10120,10130,10140]
+        'childrenmap' => [10010,10020,10025,10030,10040,10050,10060,10070,10080,10090,10100,10110,10120,10130,10140]
     ],
     10010 => [
         'text' => 'Description',
@@ -107,8 +107,18 @@ return [
         'childrenmap' => []
     ],
     10020 => [
-        'text' => 'Bookings',
+        'text' => 'Vacancies',
         'path' => 'home/checkbookings',
+        'parentid' => 10000,
+        'cssclass' => 'menulevel2',
+        'role' => 1000,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    10025 => [
+        'text' => 'Book',
+        'path' => 'home/search',
         'parentid' => 10000,
         'cssclass' => 'menulevel2',
         'role' => 1000,
@@ -346,17 +356,7 @@ return [
         'role' => 10,
         'level' => 1,
         'show' => 'show',
-        'childrenmap' => [14010, 14020, 14030, 14040, 14050, 14060, 14070, 14080]
-    ],
-    14010 => [
-        'text' => 'List personnel',
-        'path' => 'setup/listowners',
-        'parentid' => 14000,
-        'cssclass' => 'menulevel2',
-        'role' => 0,
-        'level' => 2,
-        'show' => 'hide',
-        'childrenmap' => []
+        'childrenmap' => [14020, 14030, 14040, 14050, 14060, 14080, 14090]
     ],
     14020 => [
         'text' => 'Make batch',
@@ -367,16 +367,6 @@ return [
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => [14021]
-    ],
-    14021 => [
-        'text' => 'Batch details',
-        'path' => 'setup/makebatch2',
-        'parentid' => 14020,
-        'cssclass' => 'menulevel3',
-        'role' => 0,
-        'level' => 2,
-        'show' => 'hide',
-        'childrenmap' => []
     ],
     14030 => [
         'text' => 'List batch tasks',
@@ -418,19 +408,19 @@ return [
         'show' => 'hide',
         'childrenmap' => []
     ],
-    14070 => [
-        'text' => 'First setup',
-        'path' => 'setup/firstsetup',
+    14080 => [
+        'text' => 'Gallery',
+        'path' => 'setup/editcaptions',
         'parentid' => 14000,
         'cssclass' => 'menulevel2',
-        'role' => 0,
+        'role' => 1,
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => []
     ],
-    14080 => [
-        'text' => 'Gallery',
-        'path' => 'setup/editcaptions',
+    14090 => [
+        'text' => 'Translations',
+        'path' => 'setup/edittranslations',
         'parentid' => 14000,
         'cssclass' => 'menulevel2',
         'role' => 1,
@@ -446,7 +436,7 @@ return [
         'role' => 1,
         'level' => 1,
         'show' => 'show',
-        'childrenmap' => [15010, 15020, 15030, 15040]
+        'childrenmap' => [15010, 15020, 15030, 15040, 15050]
     ],
     15010 => [
         'text' => 'List Errors',
@@ -481,6 +471,16 @@ return [
     15040 => [
         'text' => 'PHP Info',
         'path' => 'setup/showphpinfo',
+        'parentid' => 15000,
+        'cssclass' => 'menulevel2',
+        'role' => 1,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    15050 => [
+        'text' => 'Import from old system',
+        'path' => 'import/importfromrental?startnow=1',
         'parentid' => 15000,
         'cssclass' => 'menulevel2',
         'role' => 1,

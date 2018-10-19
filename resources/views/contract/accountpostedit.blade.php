@@ -1,9 +1,9 @@
 
 @extends('layouts.app')
 @section('content')
-    <h3>{{__('Edit customer')}}</h3>
+    <h3>{{__('Edit accountpost')}}</h3>
     <div class="table-responsive">
-        {!! Form::model($models[0], ['action' => ['CustomerController@update', $models[0]]]) !!}
+        {!! Form::model($models[0], ['action' => ['ContractController@accountpostupdate', $models[0]]]) !!}
         {!! Form::submit('Save changes',['class' => "btn btn-primary"]); !!}
         <br />
         <br />

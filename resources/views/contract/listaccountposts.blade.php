@@ -2,59 +2,102 @@
 @section('content')
     <h3>{{__('Account posts')}}</h3>
     <br /><br />
-    <div class="table-responsive">
+    <div class="table-responsive col-md-12">
 
         <table class="table table-striped">
-        <tr>
-            <td>
-                <strong>{{ __('Date') }}</strong>
-            </td>
-            <td>
-                <strong>{{ __('Text') }}</strong>
-            </td>
-            <td>
-                <strong>{{ __('Amount') }} {{$currencysymbol}}</strong>
-            </td>
-        </tr>
-        <?php App\Models\Accountpost::$ajax=false;?>
-        @foreach($models as $model)
             <tr>
                 <td>
-                    {{ $model->created_at->format('Y-m-d') }}
+                    <strong>{{ __('Actions') }}</strong>
                 </td>
                 <td>
-                    {{__($model->posttype->posttype)}}
+                    <strong>{{ __('Date') }}</strong>
                 </td>
-                <td id="{{$model->id}}">
-                    @if(substr($model->amount,0,1) == '-')
-                        {{substr($model->amount,1,10)}}
-                    @else
-                    -{{$model->amount}}
-                    @endif
+                <td>
+                    <strong>{{ __('Text') }}</strong>
+                </td>
+                <td>
+                    <strong>{{ __('Text') }}</strong>
+                </td>
+                <td>
+                    <strong>{{ __('Amount') }} {{$currencysymbol}}</strong>
                 </td>
             </tr>
-        @endforeach
-        <tr>
-            <td>
-                {{ __('Payment') }}
-            </td>
-            <td>
-                <strong>Selectbox</strong>
-            </td>
-            <td>
-                <strong id="suggested"></strong>
-            </td>
-        </tr>
-        <tr>
-            <td>
-            </td>
-            <td>
-                <strong>{{ __('Total') }}</strong>
-            </td>
-            <td>
-                <strong id="total"></strong>
-            </td>
-        </tr>
+            <?php App\Models\Accountpost::$ajax=false;?>
+            @foreach($models as $model)
+                <tr>
+                    <td>
+                        @include('partials.edit_delete', ['path' => 'accountpost', 'id' => $model->id, 'deleteallowed' => Gate::allows('Supervisor')])
+                    </td>
+                    <td>
+                        {{ $model->created_at->format('Y-m-d') }}
+                    </td>
+                    <td>
+                        {{__($model->text)}}
+                    </td>
+                    <td>
+                        {{__($model->posttype->posttype)}}
+                    </td>
+                    <td id="{{$model->id}}">
+                        @if(substr($model->amount,0,1) == '-')
+                            {{substr($model->amount,1,10)}}
+                        @else
+                        -{{$model->amount}}
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+
+            <tr>
+                <td colspan="3">
+                </td>
+                <td>
+                    <strong>{{ __('Total') }}</strong>
+                </td>
+                <td>
+                    <strong id="total"></strong>
+                </td>
+            </tr>
+            {!! Form::open(['url' => '/contract/registerpayment/'.$models[0]->contractid]) !!}
+                <tr style="border-style: solid solid none solid; border-width:4px 4px 0px 4px; border-color:red;">
+                    <td colspan="2">
+                        {!! Form::label('text', __('Text').':') !!}
+                    </td>
+                    <td>
+                        {!! Form::text('text', __('Registration of bank account post'), ['class' => 'form-control col-md-11', 'style' => "height: 28px", 'id' => 'text']) !!}
+                    </td>
+                    <td>
+                        {!! Form::label('amount', __('Amount').':') !!}
+
+                    </td>
+                    <td>
+                        {!! Form::text('amount', '', ['class' => 'form-control col-md-11', 'style' => "height: 28px", 'id' => 'suggested']) !!}
+                    </td>
+                </tr>
+            <tr style="border-style: none solid none solid; border-width:4px; border-color:red;">
+                <td colspan="2">
+                    {!! Form::label('posttypeid', __('Posttype').':') !!}
+                </td>
+                <td>
+                    {!! Form::select('posttypeid',[50 => __('Prepayment'), 100 => __('Final payment received'), 300 => __('Rounding and currency adjustments')],'',['class' => 'form-control col-md-11', 'style' => 'padding: 1px 0 3px 10px;']) !!}
+                </td>
+                <td>
+                    {!! Form::label('round', __('Tick if you want to make balance zero').':') !!}
+                </td>
+                <td>
+                    {!! Form::checkbox('round', 1, false, ['class' => 'form-control col-md-1']) !!}
+                </td>
+            </tr>
+                <tr style="border-style:none solid solid solid; border-width:4px; border-color:red;">
+                    <td colspan="4">
+
+                    </td>
+
+                    <td>
+                        {!! Form::hidden('contractid', $models[0]->contractid) !!}
+                        {!! Form::submit(__('Save payment registration'),['class' => "btn btn-primary"]); !!}
+                    </td>
+                </tr>
+            {!! Form::close() !!}
         </table>
     </div>
 @endsection
@@ -89,16 +132,7 @@
         function showBalance()
         {
             $('#total').html(Formatter.format(-total));
-            $('#suggested').html(Formatter.format(total));
-        }
-
-        //Triggered when final price changed
-        function setDiscount()
-        {
-        }
-
-        function newPrice()
-        {
+            $('#suggested').val(Formatter.format(total));
         }
 
     </script>

@@ -13,7 +13,7 @@
             <tr>
                 <form id="Filter" action="{{Session::get('sanitizedpath')}}" method="get">
                     <td>
-                        {!! Form::submit(__('Search'),['class' => 'form-control']) !!}
+                        <button type="submit" class="btn btn-success glyphicon glyphicon-search" name="Search" value="Search"></button>
                         <input type="hidden" name="sort" value="{{(array_key_exists('sort', $search))?$search['sort']:''}}" />
                         <input type="hidden" name="order" value="{{(array_key_exists('order', $search))?$search['order']:''}}" />
                     </td>
@@ -34,7 +34,7 @@
             @foreach($models as $model)
                 <tr>
                     <td>
-                        @include('partials.detail_edit_delete', ['path' => 'house', 'id' => $model->id, 'params' => $params])
+                        @include('partials.detail_edit_delete', ['path' => 'house', 'id' => $model->id])
                     </td>
                     <td>{{ $model->name }}</td>
                     <td>{{ $model->address1 }}</td>

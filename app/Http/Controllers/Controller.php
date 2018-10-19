@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Gate;
+use Schema;
+use ValidationAttributes;
 
 class Controller extends BaseController
 {
@@ -30,7 +32,7 @@ class Controller extends BaseController
         else
         {
             session()->flash('warning', 'Please find the house you want to check out!');
-            return redirect('home/listhouses')->with('returnpath', $returnpath);
+            return redirect('home/listhouses?returnpath='.$returnpath);
         }
     }
 
@@ -51,5 +53,52 @@ class Controller extends BaseController
         if (!$message) $message = 'Somehow you the system tried to let you do something which is not allowed. So you are sent home!';
         if (!Gate::allows($usertype)) return redirect('/home')->with('warning', __($message));
         return null;
+    }
+
+    protected function generaledit($id, $modelclass, $view, $onlyFields = null, $plusFields = null, $minusFields = null, $casts = null)
+    {
+        //Find page from id
+        if (Input::get('page') == null) {
+            $models = $modelclass::filter(Input::all())->sortable('id')->pluck('id')->all();
+            $page = array_flip($models)[$id]+1;
+            Input::merge(['page' => $page]);
+        }
+
+        $models = $modelclass::filter(Input::all())->sortable('id')->paginate(1);
+
+        if ($onlyFields) $fields = $onlyFields;
+        else $fields = Schema::getColumnListing($models[0]->getTable());
+        if ($minusFields) $fields = array_diff($fields, $minusFields);
+        if ($plusFields) $fields = $fields + $plusFields;
+
+        $vattr = new ValidationAttributes($models[0]);
+        if ($casts) $vattr->setCasts($casts);
+
+        return view($view, ['models' => $models, 'fields' => $fields, 'vattr' => $vattr]);
+    }
+
+    protected function generalupdate($id, $modelclass, $okMessage, $redirectOk, $redirectError = null, $onlyFields = null, $plusFields = null, $minusFields = null)
+    {
+        $model =  $modelclass::findOrFail($id);
+
+        if ($onlyFields) $fields = $onlyFields;
+        else $fields = Schema::getColumnListing($model->getTable());
+        if ($minusFields) $fields = array_diff($fields, $minusFields);
+        if ($plusFields) $fields = $fields + $plusFields;
+
+        if (!$redirectError) $redirectError = $redirectOk;
+
+        foreach ($fields as $field){
+            $model->$field = Input::get($field);
+        }
+        //We save. The save validates after the Mutators have been used.
+        $errors = '';
+        $success = __($okMessage).'!';
+        if (!$model->save()) {
+            $errors = $model->getErrors();
+            $success = '';
+        }
+        if ($errors != '') return redirect($redirectError)->with('success', $success)->with('errors',$errors)->withInput();
+        return redirect($redirectOk)->with('success', $success)->withInput();
     }
 }

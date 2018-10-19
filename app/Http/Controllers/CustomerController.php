@@ -10,7 +10,14 @@ use ValidationAttributes;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\MessageBag;
 use Auth;
+use App\Models\Customertype;
+use App\Models\Emaillog;
+use App\Models\Batchlog;
+use App\Models\Accountpost;
+use App\Models\Contract;
 use App\Models\Customer;
+
+//$relatedmodels = [Emaillog::class, Batchlog::class, Accountpost::class, Contract::class];
 
 class CustomerController extends Controller
 {
@@ -27,18 +34,20 @@ class CustomerController extends Controller
     public function index()
     {
 
-        if (Gate::allows('Owner')) {
+        if (Gate::allows('Owner'))
+        {
             $customers = $this->model::filter(Input::all())->sortable('id')->paginate(10);
 
-            $params['edit'] = "?menupoint=1020&".session('querystring');
-            $params['show'] = "?menupoint=1030&".session('querystring');
+            $customertypeselect = ['' => __('All')]+Customertype::where('id', '>', Auth::user()->customertypeid)->pluck('customertype', 'id')
+                    ->map(function ($item, $key) {return $item = __($item);} )
+                    ->toArray();
 
-            return view('customer/index', ['models' => $customers, 'params' => $params, 'search' => Input::all()]);
+            return view('customer/index', ['models' => $customers,  'search' => Input::all(), 'customertypeselect' => $customertypeselect]);
         }
-        else {
+        else
+        {
             return redirect('home')->with('warning', 'You are now allowed to see the customer list.');
         }
-
     }
 
     public function hashpasswords()
@@ -130,6 +139,7 @@ class CustomerController extends Controller
     public function show($id)
     {
         //Find page from id
+
         if (Input::get('page') == null) {
             $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
             $page = array_flip($models)[$id]+1;
@@ -227,4 +237,62 @@ class CustomerController extends Controller
         $awurl = "http://awstat.consiglia.dk/awstats/awstats.pl?lang=".$awlanguage."&config=" . substr($url,7);
         return view('customer/statistics', ['awurl' => $awurl]);
     }
+
+    public function tools($id)
+    {
+        return view('customer/tools', ['id' => $id]);
+    }
+
+    public function merge($id = 0)
+    {
+        $input1 = Input::get('input1', []);
+        $input2 = Input::get('input2', []);
+
+        if ($id != 0)
+        {
+            $input1['from'] = $id;
+        }
+        $success = '';
+        if (Input::get('action') == 'merge')
+        {
+            $id1 = (array_key_exists('from', $input1))?$input1['from']:false;
+            $id2 = (array_key_exists('to', $input2))?$input2['to']:false;
+            if (($id1) && ($id2)) $this->domerge($id1, $id2);
+            else $success = __('From or to not ticked off.');
+        }
+        $customers1 = $this->model::filter($input1)->paginate(10);
+        if ($id != 0) $customers1 = $this->model::where('id', $id)->paginate();
+        $customers2 = $this->model::filter($input2)->paginate(10);
+        session()->flash('warning', $success);
+        return view('customer/merge', ['customers1' => $customers1, 'customers2' => $customers2, 'input1' => $input1, 'input2' => $input2]);
+    }
+
+    public function domerge($tobedeleted, $remaining)
+    {
+        $relatedmodels = [Emaillog::class, Batchlog::class, Accountpost::class, Contract::class];
+        foreach($relatedmodels as $relatedmodel)
+        {
+            foreach ($relatedmodel::where('customerid', $tobedeleted)->get() as $model)
+            {
+                $model->customerid = $remaining;
+                $model->save();
+            }
+
+        }
+        foreach (Accountpost::where('postedbyid', $tobedeleted)->get() as $model)
+        {
+            $model->postedbyid = $remaining;
+            $model->save();
+        }
+        Customer::Find($tobedeleted)->delete();
+        return;
+    }
+
+    public function checkaccount($id)
+    {
+        $customername = Customer::Find($id)->name;
+        $accountposts = Accountpost::where('customerid', $id)->orderBy('contractid')->orderBy('created_at')->get();
+        return view('customer/listaccountposts', ['models' => $accountposts, 'customername' => $customername]);
+    }
+
 }

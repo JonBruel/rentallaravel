@@ -230,21 +230,49 @@ class SetupController extends Controller
         return redirect('setup/makebatch1')->with('success', $success);
     }
 
-    public function editcaptions(Request $request)
+    public function edittranslations()
     {
-        $this->checkHouseChoice($request, 'setup/editcaptions/?menupoint='.session('menupoint', 14080));
-        $id = session('defaultHouse');
-        $prefix = 'gallery.'.$id.'.';
+
+        if (Input::get('Save'))  $this->savetranslations();
+
         $cultures = explode(';', config('app.cultures'));
+        //$cultures = ['da_DK'];
+        $searchkey = strtolower(Input::get('searchkey', 'search'));
+        $id = session('defaultHouse');
         $translations = [];
         foreach ($cultures as $culture)
         {
+            $defaultsearch[$culture] = '';
             $contents = file_get_contents(base_path().'/resources/lang/'.$culture.'.json');
-            $translations[$culture] = array_filter(json_decode($contents, true),
-                function($key) use ($prefix) { return (substr($key,0, strlen($prefix)) == $prefix);} ,ARRAY_FILTER_USE_KEY);
+            $translations[$culture] = json_decode($contents, true);
+            if ($searchkey != '') $translations[$culture] = array_filter(json_decode($contents, true),
+                function($key) use ($searchkey) { return (strpos(strtolower($key), $searchkey) !== false);} ,ARRAY_FILTER_USE_KEY);
         }
 
-        //Turn it ar ound so the key becomes the main entry
+        $textsearches = Input::get('text', $defaultsearch);
+
+        //The text search is somewhat tricky: We search the first language listed, subsequent ones will be ignored. When we har found
+        //matches, the other arrays are limited to contain the same keys as the keys found.
+        foreach($textsearches as $culture => $textsearch)
+        {
+            if ($textsearch != '')
+            {
+                $textsearch = strtolower($textsearch);
+                $translations[$culture] = array_filter($translations[$culture],
+                    function($value, $key) use ($textsearch) { return (strpos(strtolower($value), $textsearch) !== false);} ,ARRAY_FILTER_USE_BOTH);
+
+                $keys = array_keys($translations[$culture]);
+                $othercultures = array_diff($cultures, [$culture]);
+                foreach ($othercultures as $cult)
+                {
+                    $translations[$cult] = array_filter($translations[$cult],
+                        function($key) use ($keys) { return (in_array($key, $keys));} ,ARRAY_FILTER_USE_KEY);
+                }
+                break;
+            }
+        }
+
+        //Turn it around so the key becomes the main entry
         $translationstartkey = [];
         $startculture = $cultures[0];
         foreach ($translations[$startculture] as $key => $notused)
@@ -263,22 +291,104 @@ class SetupController extends Controller
         {
             $culturenames[$culture] = Culture::where('culture', $culture)->first()->culturename;
         }
-        return view('/setup/editcaptions', ['translationstartkey' => $translationstartkey, 'prefix' => $prefix, 'cultures' => $cultures, 'id' => $id, 'culturenames' => $culturenames]);
+
+        return view('/setup/edittranslations', ['translationstartkey' => $translationstartkey, 'textsearches' => $textsearches,
+            'searchkey' => $searchkey, 'cultures' => $cultures, 'id' => $id, 'culturenames' => $culturenames]);
     }
 
-    public function updatecaptions($id)
+    protected function savetranslations()
     {
+        $success = 'ABC';
+        Input::merge(['Search' => 'Search']);
+        Input::merge(['Save' => null]);
+        $newkeytexts = Input::get('keytexts', []);
         $cultures = explode(';', config('app.cultures'));
-        $prefix = 'gallery.'.$id.'.';
+
         $success = '';
         $keys = Input::get('key', []);
         $deletes = Input::get('delete', []);
         if (sizeof($keys) > 0) foreach($keys as $key)
         {
             $translations = Input::get('translation')[$key];
+            //New key
             if ($key == 'jkuuasg7892g')
             {
-                $key = $prefix.Input::get('jkuuasg7892g');
+                $key = Input::get('jkuuasg7892g');
+            }
+            static::updateTranslations($key, $translations);
+            $success .= ' '.__('Translation with key').' '.$key.' '.__('updated').'.';
+
+            //Check if key has been changed, then delete old and create new
+            if (array_key_exists($key, $newkeytexts))
+            {
+                $newkey =  $newkeytexts[$key];
+                if ($key != $newkey);
+                static::destroyTranslations($key, $translations);
+                static::updateTranslations($newkey, $translations);
+            }
+        }
+        elseif (sizeof($deletes) > 0) foreach($deletes as $key)
+        {
+            $translations = Input::get('translation')[$key];
+            static::destroyTranslations($key, $translations);
+            $success .= ' '.__('Translation with key').' '.$key.' '.__('deleted').'.';
+        }
+        else $success = __('Nothing changed, did you tick off to indicate changes?');
+
+       // return redirect ('/setup/edittranslations')->with('success', $success)->withInput(Input::all());
+    }
+
+
+    public function editcaptions()
+    {
+        $this->checkHouseChoice('setup/editcaptions/?menupoint='.session('menupoint', 14080));
+        $id = session('defaultHouse');
+        $searchkey = 'gallery.'.$id.'.';
+        $cultures = explode(';', config('app.cultures'));
+        $translations = [];
+        foreach ($cultures as $culture)
+        {
+            $contents = file_get_contents(base_path().'/resources/lang/'.$culture.'.json');
+            $translations[$culture] = array_filter(json_decode($contents, true),
+                function($key) use ($searchkey) { return (substr($key,0, strlen($searchkey)) == $searchkey);} ,ARRAY_FILTER_USE_KEY);
+        }
+
+        //Turn it around so the key becomes the main entry
+        $translationstartkey = [];
+        $startculture = $cultures[0];
+        foreach ($translations[$startculture] as $key => $notused)
+        {
+            foreach ($cultures as $culture)
+            {
+                $translation = $translations[$culture];
+                if (array_key_exists($key, $translation))
+                {
+                    $translationstartkey[$key] = (array_key_exists($key,$translationstartkey))?$translationstartkey[$key] + [$culture => $translation[$key]]:[$culture => $translation[$key]];
+                }
+            }
+        }
+        $culturenames = [];
+        foreach ($cultures as $culture)
+        {
+            $culturenames[$culture] = Culture::where('culture', $culture)->first()->culturename;
+        }
+        return view('/setup/editcaptions', ['translationstartkey' => $translationstartkey, 'searchkey' => $searchkey, 'cultures' => $cultures, 'id' => $id, 'culturenames' => $culturenames]);
+    }
+
+    public function updatecaptions($id)
+    {
+        $cultures = explode(';', config('app.cultures'));
+        $searchkey = 'gallery.'.$id.'.';
+        $success = '';
+        $keys = Input::get('key', []);
+        $deletes = Input::get('delete', []);
+        $keytexts = Input::get('keytexts', []);
+        if (sizeof($keys) > 0) foreach($keys as $key)
+        {
+            $translations = Input::get('translation')[$key];
+            if ($key == 'jkuuasg7892g')
+            {
+                $key = $searchkey.Input::get('jkuuasg7892g');
             }
             static::updateTranslations($key, $translations);
             $success .= ' '.__('Translation with key').' '.$key.' '.__('updated').'.';
@@ -377,9 +487,8 @@ class SetupController extends Controller
         $models = Batchlog::filter(Input::all())->orderBy('created_at', 'desc')->with(['posttype', 'batchtask', 'house'])->paginate(20);
         $model = new Batchlog();
         $fields = ['created_at', 'statusid', 'posttypeid', 'batchtaskid', 'contractid', 'emailid', 'houseid'];
-        $params = ['edit' => '', 'show' => ''];
 
-        return view('/setup/listqueue', ['models' => $models, 'model' => $model, 'fields' => $fields, 'search' => Input::all(), 'params' => $params]);
+        return view('/setup/listqueue', ['models' => $models, 'model' => $model, 'fields' => $fields, 'search' => Input::all()]);
     }
 
     public function editbatchlog($id)
@@ -409,6 +518,11 @@ class SetupController extends Controller
     public function destroybatchlog($id)
     {
 
+    }
+
+    public function workflow()
+    {
+        return view('/general/notimplemented');
     }
 
 }

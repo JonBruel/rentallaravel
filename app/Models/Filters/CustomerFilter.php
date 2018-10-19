@@ -47,4 +47,9 @@ class CustomerFilter extends BaseFilter
         return $this->where('email', 'LIKE', "%$email%");
     }
 
+    public function customertypeid($customertypeid)
+    {
+        return $this->where('customertypeid',  $customertypeid);
+    }
+
 }

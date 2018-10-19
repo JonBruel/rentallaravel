@@ -1,13 +1,18 @@
-<?php
- if (!$params) $params = ['show' => '', 'edit' => ''];
-?>
-<form class="delete" action="/{{$path}}/destroy/{{ $id }}" method="POST" id="delete{{ $id }}">
-    <a href="/{{$path}}/edit/{{ $id }}{{ $params['edit'] }}" title="{{__('Edit')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-pencil'></span></a>
-    <input type="hidden" name="_method" value="DELETE">
-    <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-    <a href="#" id="btn-confirm{{ $id }}"  title="{{__('Delete')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-remove' onclick='//$("#delete{{ $id }}").submit();return false;'></span></a>
+@php
+   if (!isset($params)) $params = '?'.session('querystring');
+   $params = str_replace('page=', 'previouspage =', $params);
+   if (!isset($deleteallowed)) $deleteallowed = true;
+@endphp
 
+<form class="delete" action="/{{$path}}/destroy/{{ $id }}" method="POST" id="delete{{ $id }}">
+    <a href="/{{$path}}/edit/{{ $id }}{{(isset($id2))?'/'.$id2:''}}{{ $params }}" title="{{__('Edit')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-pencil'></span></a>
+    @if($deleteallowed)
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+        <a href="#" id="btn-confirm{{ $id }}"  title="{{__('Delete')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-remove' onclick='//$("#delete{{ $id }}").submit();return false;'></span></a>
+    @endif
 </form>
+
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="my-modal{{ $id }}">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">

@@ -36,7 +36,7 @@
             <tr>
                 <form id="Filter" action="{{Session::get('sanitizedpath')}}" method="get">
                     <td>
-                        {!! Form::submit(__('Search'),['class' => 'form-control btn btn-primary']) !!}
+                        <button type="submit" class="btn btn-success glyphicon glyphicon-search" name="Search" value="Search"></button>
                     </td>
                     <td>
                         {!! Form::text('created_at',(array_key_exists('created_at', $search))?$search['created_at']:'',null,['class' => 'form-control']) !!}

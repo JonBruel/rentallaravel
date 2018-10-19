@@ -1,9 +1,10 @@
 <?php
- if (!$params) $params = ['show' => '', 'edit' => ''];
+ if (!isset($params)) $params = '?'.session('querystring');
+ $params = str_replace('page=', 'previouspage =', $params);
 ?>
 <form class="delete" action="/{{$path}}/destroy/{{ $id }}" method="POST" id="delete{{ $id }}">
-    <a href="/{{$path}}/show/{{ $id }}{{ $params['show'] }}" title="{{__('Show details')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-list'></span></a>
-    <a href="/{{$path}}/edit/{{ $id }}{{ $params['edit'] }}" title="{{__('Edit')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-pencil'></span></a>
+    <a href="/{{$path}}/show/{{ $id }}{{ $params }}" title="{{__('Show details')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-list'></span></a>
+    <a href="/{{$path}}/edit/{{ $id }}{{ $params }}" title="{{__('Edit')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-pencil'></span></a>
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
     <a href="#" id="btn-confirm{{ $id }}"  title="{{__('Delete')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-remove' onclick='//$("#delete{{ $id }}").submit();return false;'></span></a>
