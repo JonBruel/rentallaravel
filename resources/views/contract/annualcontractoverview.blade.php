@@ -56,12 +56,11 @@ use Illuminate\Support\Facades\App;
                 </tr>
             @endforeach
             <tr>
+                @if(sizeof($houses) > 1)
                 <td>
                 </td>
-                <td></td>
-                <td></td>
-                <td colspan="2"></td>
-                <td></td>
+                @endif
+                <td colspan="5"></td>
                 <td>{{ __('Totals') }}:</td>
                 <td><strong id="contractamount">{{ $contractamount }}</strong></td>
                 <td><strong id="paid">{{ $paid }}</strong></td>

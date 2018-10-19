@@ -48,7 +48,7 @@ class ContractController extends Controller
         $houseid = Input::get('houseid', 1);
 
         $year = Input::get('year', $thisyear);
-        $contractquery = Contractoverview::filter($request->all())->sortable()->orderBy('from')->with('customer')->with('house');
+        $contractquery = Contractoverview::filter($request->all())->where('categoryid', 0)->sortable()->orderBy('from')->with('customer')->with('house');
         $contractoverview = $contractquery->get();
         return view('contract/annualcontractoverview', ['year' => $year, 'years' => $years, 'contractoverview' => $contractoverview, 'houses' => $houses, 'houseid' => $houseid]);
     }
