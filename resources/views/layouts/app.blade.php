@@ -100,9 +100,8 @@
             @if(session('success'))
                 <div class="alert alert-success border border-primary">{{session('success')}}</div>
             @endif
-
-
-            <div class="row">
+            @include('cookieConsent::index')
+                <div class="row">
                 <div class="col col-md-12">
                     @yield('content')
                     @if(\Gate::allows('Supervisor'))

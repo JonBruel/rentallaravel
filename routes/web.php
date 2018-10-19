@@ -29,6 +29,7 @@ Route::get('/myaccount/listaccountposts', 'MyAccountController@listaccountposts'
 Route::get('/myaccount/listmails', 'MyAccountController@listmails');
 Route::get('/myaccount/edittime', 'MyAccountController@edittime');
 Route::post('/myaccount/updatetime', 'MyAccountController@updatetime');
+Route::get('/myaccount/gdpr', 'MyAccountController@gdpr');
 
 
 

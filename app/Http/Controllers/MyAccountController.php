@@ -25,6 +25,12 @@ class MyAccountController extends Controller
         parent::__construct(\App\Models\Customer::class);
     }
 
+     public function gdpr()
+     {
+         return view('home/gdpr');
+     }
+
+
     /**
      * Display a listing of the resource.
      *

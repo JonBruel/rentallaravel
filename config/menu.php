@@ -22,7 +22,7 @@ return [
         'role' => 10001,  //Only show to loggedin
         'level' => 1,
         'show' => 'show',
-        'childrenmap' => [9010,9020,9030,9040,9050,9060]
+        'childrenmap' => [9010,9020,9030,9040,9050,9060,9070]
     ],
     9010 => [
         'text' => 'Registration',
@@ -75,6 +75,16 @@ return [
         'childrenmap' => []
     ],
     9060 => [
+        'text' => 'GDPR',
+        'path' => 'myaccount/gdpr',
+        'parentid' => 9000,
+        'cssclass' => 'menulevel2',
+        'role' => 10001,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    9070 => [
         'text' => 'Logout',
         'path' => 'logout',
         'parentid' => 9000,
