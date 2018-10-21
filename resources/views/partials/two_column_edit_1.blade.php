@@ -25,7 +25,7 @@
                         {!! Form::label($field, __(ucfirst($field)).':', ['class' => 'col-md-11']) !!}
                     </td>
                     <td>
-                        <div class="text-danger col-md-8 field-validation-valid row" data-valmsg-for="{{$field}}" data-valmsg-replace="true"></div>
+                        <div class="text-danger col-md-8 field-validation-valid row" data-valmsg-for="{{$field}}" data-valmsg-replace="true" style="margin-bottom: 8px"></div>
                         @if($model->withSelect($field))
                             {!! Form::select($field,$model->withSelect($field),$model->$field,['class' => 'form-control col-md-11', 'style' => 'padding: 1px 0 3px 10px;']) !!}
                         @elseif($vattr->getCast($field) == 'textarea')

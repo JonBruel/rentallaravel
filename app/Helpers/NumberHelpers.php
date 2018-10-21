@@ -12,6 +12,11 @@ use Propaganistas\LaravelIntl\Facades\Number;
 use Carbon\Carbon;
 use App;
 
+/**
+ * Trait NumberHelpers includes static functions to format and parse numbers and dates according to the
+ * 5 character $culture code which can be supplied as a parameter.
+ * @package App\Helpers
+ */
 trait NumberHelpers
 {
     /*
@@ -30,10 +35,13 @@ trait NumberHelpers
         return number()->format($number, $style);
     }
 
-
-    /*
+    /**
      * Parses a string to a number according to the culture. If no culture is
      * given the application defined culture will be used.
+     *
+     * @param $string
+     * @param null $culture
+     * @return float
      */
     static function parse($string, $culture = null)
     {
@@ -46,8 +54,12 @@ trait NumberHelpers
         return number()->parse($string);
     }
 
-    /*
+    /**
      * Converts Carbon date to a I18N string.
+     *
+     * @param Carbon $date
+     * @param null $culture
+     * @return string
      */
     static function formatDateToString(Carbon $date, $culture = null)
     {
@@ -58,9 +70,13 @@ trait NumberHelpers
         return $date->formatLocalized('%a %d %b %Y');
     }
 
-    /*
- * Converts Carbon datetime to a I18N string.
- */
+    /**
+     * Converts Carbon datetime to a I18N string.
+     *
+     * @param Carbon $date
+     * @param null $culture
+     * @return string
+     */
     static function formatDateTimeToString(Carbon $date, $culture = null)
     {
         if ($culture) {
