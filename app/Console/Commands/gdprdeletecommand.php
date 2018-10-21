@@ -8,29 +8,28 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Batchlog;
+use App\Models\BaseModel;
+use App\Helpers\GDPRDelete;
 
 /**
- * Class executequeue runs the queued basktasks which are stored in the batcklog
- * table.
- *
+ * Class gdprdeletecommand is used to remove old customers from the database.
  * @package App\Console\Commands
  */
-class executequeue extends Command
+class gdprdeletecommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:executequeue {batchid?}';
+    protected $signature = 'command:gdprdelete';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Goes through all batchlog entries with status=1 and executes them, setting status to 2.';
+    protected $description = 'Deletes or annonymises customers with no recent activity.';
 
     /**
      * Create a new command instance.
@@ -49,8 +48,7 @@ class executequeue extends Command
      */
     public function handle()
     {
-        $batchid = null;
-        if ($this->argument('batchid')) $batchid = $this->argument('batchid');
-        Batchlog::executequeue($batchid);
+        BaseModel::$ajax = true;
+        GDPRDelete::gdprdelete();
     }
 }

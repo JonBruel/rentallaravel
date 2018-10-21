@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -25,7 +30,13 @@ use App\Models\Culture;
 use App;
 use App\Models\Contractoverview;
 use Carbon\Carbon;
+use Symfony\Component\Process\Process;
 
+
+/**
+ * Class SetupController
+ * @package App\Http\Controllers
+ */
 class SetupController extends Controller
 {
 
@@ -56,12 +67,12 @@ class SetupController extends Controller
     {
         //Find page from id
         if (Input::get('page') == null) {
-            $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
+            $models = Batchtask::filter(Input::all())->sortable('id')->pluck('id')->all();
             $page = array_flip($models)[$id]+1;
             Input::merge(['page' => $page]);
         }
 
-        $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
+        $models = Batchtask::filter(Input::all())->sortable('id')->paginate(1);
 
         $lockbatch = $models[0]->house->lockbatch;
         $lockbatchpossibilities = [ 0 => __('Batchtask system activated'),
@@ -78,7 +89,7 @@ class SetupController extends Controller
 
     public function updatebatchtask($id)
     {
-        $original = $this->model::Find($id);
+        $original = Batchtask::Find($id);
 
         //Lock batchtask
         $original->house->lockbatch = Input::get('lockbatch', 3);
@@ -206,7 +217,10 @@ class SetupController extends Controller
         {
             $id = $house->id;
             $batchexistss[$id] = 0;
-            if ((Batchtask::where('houseid', $id)->first()) && (Standardemail::where('houseid', $id))->first()) $batchexistss[$id] = 1;
+            if ((Batchtask::where('houseid', $id)->first()) && (Standardemail::where('houseid', $id)->first()))
+            {
+                $batchexistss[$id] = 1;
+            }
         }
         return view('/setup/makebatch1', ['houses' => $houses, 'batchexistss' => $batchexistss, 'search' => Input::all()]);
     }
@@ -517,7 +531,31 @@ class SetupController extends Controller
 
     public function destroybatchlog($id)
     {
+        return view('/general/notimplemented');
+    }
 
+    public function gdprdelete()
+    {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
+
+        $process = new Process('php artisan command:gdprdelete > /dev/null 2>&1 &', '/var/www/html/rentallaravel');
+        $process->start();
+        return view('/setup/gdprdelete');
+    }
+
+    public function updatephpdoc()
+    {
+        if (!Gate::allows('Supervisor')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
+        $process = new Process('php artisan command:updatedocumentation > /dev/null 2>&1 &', '/var/www/html/rentallaravel');
+        $process->start();
+        return view('/setup/showdoc');
+        //return redirect('/doc/index.html');
+    }
+
+    public function showdocumentation()
+    {
+        if (!Gate::allows('Supervisor')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
+        return view('/setup/showdoc');
     }
 
     public function workflow()

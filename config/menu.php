@@ -446,7 +446,7 @@ return [
         'role' => 1,
         'level' => 1,
         'show' => 'show',
-        'childrenmap' => [15010, 15020, 15030, 15040, 15050]
+        'childrenmap' => [15010, 15020, 15030, 15040, 15050, 15070, 15080]
     ],
     15010 => [
         'text' => 'List Errors',
@@ -498,5 +498,35 @@ return [
         'show' => 'hide',
         'childrenmap' => []
     ],
+    15060 => [
+        'text' => 'DGPR-delete customers',
+        'path' => 'setup/gdprdelete',
+        'parentid' => 15000,
+        'cssclass' => 'menulevel2',
+        'role' => 1,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    15070 => [
+        'text' => 'Documentation',
+        'path' => 'setup/showdocumentation',
+        'parentid' => 15000,
+        'cssclass' => 'menulevel2',
+        'role' => 1,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ],
+    15080 => [
+        'text' => 'Update documentation',
+        'path' => 'setup/updatephpdoc',
+        'parentid' => 15000,
+        'cssclass' => 'menulevel2',
+        'role' => 1,
+        'level' => 2,
+        'show' => 'hide',
+        'childrenmap' => []
+    ]
 ]
 ];

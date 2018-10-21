@@ -1,10 +1,20 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Accountpost;
 
+/**
+ * Class activateawaitingaccountposts has the function to activate
+ * temporary account post after a while where they have not been changed.
+ * @package App\Console\Commands
+ */
 class activateawaitingaccountposts extends Command
 {
     /**

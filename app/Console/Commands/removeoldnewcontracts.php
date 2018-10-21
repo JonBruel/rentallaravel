@@ -1,10 +1,21 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Contract;
 
+/**
+ * Class removeoldnewcontracts removed contracts with status: New.
+ * This will happen when a user for some reason abandons the order
+ * process.
+ * @package App\Console\Commands
+ */
 class removeoldnewcontracts extends Command
 {
     /**

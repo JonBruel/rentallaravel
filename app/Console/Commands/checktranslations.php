@@ -1,10 +1,20 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Accountpost;
 
+/**
+ * Class checktranslations ensures that the translation files all have the same keys
+ * and that they are ordered alphabethically.
+ * @package App\Console\Commands
+ */
 class checktranslations extends Command
 {
     /**

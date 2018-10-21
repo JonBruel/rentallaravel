@@ -1,10 +1,19 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Currencyrate;
 
+/**
+ * Class updaterates is run a a cron to update the rates of the active currencies.
+ * @package App\Console\Commands
+ */
 class updaterates extends Command
 {
     /**

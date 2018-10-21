@@ -20,6 +20,7 @@ use App\Models\Period;
 use App\Models\Accountpost;
 use App\Models\Standardemail;
 use App\Models\StandardemailI18n;
+use App\Models\Emaillog;
 use App\Models\Batchlog;
 use App\Models\Testimonial;
 
@@ -88,6 +89,7 @@ class ImportFromRental
             static::copyTable('standardemail_i18n', StandardemailI18n::class, $handle);
             static::copyTable('testimonials', Testimonial::class, $handle);
             static::copyTable('batchtask', Batchtask::class, $handle);
+            static::copyTable('emaillog', Emaillog::class, $handle);
             //die('Name of last customer in rental: '.var_dump($new));
         }
         catch(Exception $e)

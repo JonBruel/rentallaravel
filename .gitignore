@@ -1,8 +1,10 @@
 /node_modules
 /public/hot
 /public/storage
+/public/doc
 /storage/*.key
 /vendor
+/phpDocumentor
 /public/vendor
 /.idea
 /.vagrant

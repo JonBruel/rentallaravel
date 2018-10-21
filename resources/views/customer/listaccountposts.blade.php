@@ -41,7 +41,7 @@
             <?php
                 App\Models\Accountpost::$ajax=false;
             ?>
-
+            @if(sizeof($models) > 0)
             @foreach($models as $model)
             <?php
                 $headline = false;
@@ -50,6 +50,7 @@
                     $startcontractnumber = $model->contractid;
                     $headline = true;
                 }
+                if(!isset($subtotalid)) $subtotalid = $model->id;
             ?>
             @if($headline)
                     <tr>
@@ -126,6 +127,13 @@
                     <strong id="total"></strong>
                 </td>
             </tr>
+            @else
+                    <tr>
+                        <td colspan="6">
+                            {{__('No account post found.')}}
+                        </td>
+                    </tr>
+            @endif
         </table>
     </div>
 @endsection

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 
 namespace App\Http\Controllers;
 
@@ -18,7 +24,10 @@ use App\Models\HouseI18n;
 use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
 
-
+/**
+ * Class HouseController
+ * @package App\Http\Controllers
+ */
 class HouseController extends Controller
 {
 
@@ -33,7 +42,7 @@ class HouseController extends Controller
      */
     public function listhouses()
     {
-        $models = $this->model::sortable()->filter(Input::all())->paginate(10);
+        $models = House::sortable()->filter(Input::all())->paginate(10);
         $owners = ['' => __('Please select owner')] + Customer::filter()->where('customertypeid', 10)->pluck('name', 'id')->toArray();
         $sortparams = (Input::query('order'))?'&order='.Input::query('order'):'';
         $sortparams .= (Input::query('sort'))?'&sort='.Input::query('sort'):'';
@@ -84,12 +93,12 @@ class HouseController extends Controller
     {
         //Find page from id
         if (Input::query('page') == null) {
-            $models = $this->model::sortable()->pluck('id')->all();
+            $models = House::sortable()->pluck('id')->all();
             $page = array_flip($models)[$id]+1;
             Input::merge(['page' => $page]);
         }
 
-        $models = $this->model::sortable()->paginate(1);
+        $models = House::sortable()->paginate(1);
         $fields = Schema::getColumnListing($models[0]->getTable());
         return view('customer/show', ['models' => $models, 'fields' => $fields]);
     }
@@ -102,7 +111,7 @@ class HouseController extends Controller
      */
     public function edit($id)
     {
-        $model = (new $this->model)->findOrFail($id);
+        $model = (new House)->findOrFail($id);
 
         $fields = array_diff(Schema::getColumnListing($model->getTable()), ['created_at', 'updated_at', 'lockbatch', 'viewfilter']);
         $vattr = (new ValidationAttributes($model))->setCast('id', 'hidden');
@@ -246,7 +255,7 @@ class HouseController extends Controller
      */
     public function update($id)
     {
-        $model = (new $this->model)->findOrFail($id);
+        $model = (new House)->findOrFail($id);
 
         //We set the model
         $fields = Schema::getColumnListing($model->getTable());
@@ -437,7 +446,8 @@ class HouseController extends Controller
             for($i=0;$i<$seasons;$i++)
             {
                 $from = clone($seasonstart[$i]);
-                $to = (clone($from))->addDays($periodlength);
+                $to = clone($from);
+                $to->addDays($periodlength);
                 $counter = 0;
                 //die("Periodlength: $periodlength from: ".$from." to: ".$to);
                 while ($to->lte($seasonend[$i]))

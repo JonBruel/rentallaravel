@@ -1,4 +1,11 @@
 <?php
+/**
+* Created by PhpStorm.
+* User: jbr
+* Date: 20-10-2018
+* Time: 17:05
+*/
+
 
 namespace App\Http\Controllers;
 
@@ -15,6 +22,10 @@ use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use DB;
 
+/**
+ * Class AjaxController
+ * @package App\Http\Controllers
+ */
 class AjaxController extends Controller
 {
 
@@ -43,7 +54,7 @@ class AjaxController extends Controller
         $defaultHouse = Input::query('defaultHouse',config('app.default_house', -1));
 
 
-        $housequery = $this->model::whereBetween('latitude', [$x1, $x2])
+        $housequery = House::whereBetween('latitude', [$x1, $x2])
                             ->whereBetween('longitude', [$y1, $y2]);
 
         if ($defaultHouse != -1) $housequery->where('id', $defaultHouse);
@@ -61,7 +72,7 @@ class AjaxController extends Controller
         if ($defaultHouse == -2)
         {
             //We have a new house not yet given coordinates
-            $house = new $this->model;
+            $house = new House;
             $house->latitude = 0;
             $house->longitude = 0;
             $house->id = -2;
@@ -122,6 +133,14 @@ class AjaxController extends Controller
     public function getImportStatus()
     {
         $filename = base_path().'/storage/logs/migration.txt';
+        $contents['text'] = str_replace("\n", '<br />',file_get_contents($filename));
+        return response()->json($contents);
+    }
+
+
+    public function getGdprDeleteStatus()
+    {
+        $filename = base_path().'/storage/logs/gdprdelete.txt';
         $contents['text'] = str_replace("\n", '<br />',file_get_contents($filename));
         return response()->json($contents);
     }

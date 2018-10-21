@@ -1,11 +1,21 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Batchlog;
 use App\Models\BaseModel;
 
+/**
+ * Class addtoqueue creates a batchtask queue, which can be executed by executequeue. Should
+ * be run regularily. This is a part of the workflow system.
+ * @package App\Console\Commands
+ */
 class addtoqueue extends Command
 {
     /**

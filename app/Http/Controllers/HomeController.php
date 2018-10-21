@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -24,6 +29,10 @@ use DB;
 use App\Mail\DefaultMail;
 //use Spatie\TranslationLoader\LanguageLine;
 
+/**
+ * Class HomeController
+ * @package App\Http\Controllers
+ */
 class HomeController extends Controller
 {
 
@@ -101,7 +110,7 @@ class HomeController extends Controller
 
     public function destroytestimonial($id)
     {
-        (Testimonial::Find($id))->delete();
+        Testimonial::Find($id)->delete();
         return redirect('home/listtestimonials')->with('success', __('The testimonial is now deleted.'));
     }
 
@@ -127,7 +136,7 @@ class HomeController extends Controller
         $this->checkHouseChoice('home/checkbookings'.'?menupoint='.session('menupoint'));
 
         $defaultHouse = session('defaultHouse' , config('app.default_house'));
-        $house = $this->model::findOrFail($defaultHouse);
+        $house = House::findOrFail($defaultHouse);
         $months = 12;
         $yearstart = Carbon::now()->year;
         $thismonthstart = Carbon::parse('first day of this month');
@@ -180,7 +189,7 @@ class HomeController extends Controller
             return redirect(Input::get('returnpath', 'home/showinfo/description?menupoint=10010'));
         }
 
-        $models = $this->model::filter()->sortable()->paginate(10);
+        $models = House::filter()->sortable()->paginate(10);
         return view('home/listhouses', ['models' => $models, 'returnpath' => $returnpath]);
     }
 
@@ -192,8 +201,8 @@ class HomeController extends Controller
         $this->checkHouseChoice('home/showmap'.'?menupoint='.session('menupoint'));
 
         $defaultHouse = session('defaultHouse' , -1);
-        $this->model::$ajax = true;
-        $house = $this->model::findOrFail($defaultHouse);
+        House::$ajax = true;
+        $house = House::findOrFail($defaultHouse);
         $housefields = $house->toArray();
         $veryShortDescription = HouseI18n::where('id', $defaultHouse)->where('culture', App::getLocale())->first()->veryshortdescription;
         $housefields['veryShortDescription'] = $veryShortDescription;

@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -26,6 +31,10 @@ use App;
 use App\Models\Contractoverview;
 use Carbon\Carbon;
 
+/**
+ * Class ContractController
+ * @package App\Http\Controllers
+ */
 class ContractController extends Controller
 {
     //TODO: Let the user choose the house
@@ -37,7 +46,6 @@ class ContractController extends Controller
 
     public function annualcontractoverview(Request $request)
     {
-        $this->model = \App\Models\Contractoverview::class;
         $thisyear = date('Y');
         $years = [];
         for ($i = $thisyear-3; $i < $thisyear+3; $i++) $years[$i] = $i;
@@ -66,12 +74,12 @@ class ContractController extends Controller
 
         //Find page from id
         if (Input::get('page') == null) {
-            $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
+            $models = Contract::filter(Input::all())->sortable('id')->pluck('id')->all();
             $page = array_flip($models)[$id]+1;
             Input::merge(['page' => $page]);
         }
 
-        $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
+        $models = Contract::filter(Input::all())->sortable('id')->paginate(1);
         $fields = Schema::getColumnListing($models[0]->getTable());
         $fields = array_diff($fields, ['created_at', 'updated_at', 'theme']);
         return view('contract/show', ['models' => $models, 'fields' => $fields]);
@@ -205,12 +213,12 @@ class ContractController extends Controller
             //Find contract from id
             if (Input::get('page') == null)
             {
-                $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
+                $models = Contract::filter(Input::all())->sortable('id')->pluck('id')->all();
                 $page = array_flip($models)[$contractid]+1;
                 Input::merge(['page' => $page]);
             }
 
-            $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
+            $models = Contract::filter(Input::all())->sortable('id')->paginate(1);
             $model = $models[0];
 
             //Set default arrival and departure times if not set
@@ -389,7 +397,6 @@ class ContractController extends Controller
         //'Personel'
         if (!Gate::allows('Personel')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
 
-        $this->model = \App\Models\Contractoverview::class;
 
         $houses = House::filter()->pluck('name', 'id')->toArray();
         $houseid = Input::get('houseid', 1);
@@ -404,7 +411,7 @@ class ContractController extends Controller
         //Set rights
         if (!Gate::allows('Personel')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
 
-        $this->model = \App\Models\Contract::class;
+
         $thisyear = date('Y');
         $years = [];
         for ($i = $thisyear-10; $i < $thisyear+3; $i++) $years[$i] = $i;

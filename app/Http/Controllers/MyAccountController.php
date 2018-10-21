@@ -1,4 +1,10 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 
 namespace App\Http\Controllers;
 
@@ -16,7 +22,10 @@ use App\Models\Contractoverview;
 use App\Models\Emaillog;
 use Carbon\Carbon;
 
-
+/**
+ * Class MyAccountController
+ * @package App\Http\Controllers
+ */
 class MyAccountController extends Controller
 {
 
@@ -40,7 +49,7 @@ class MyAccountController extends Controller
     {
         if (!Auth::check()) return redirect('/login');
         $user = Auth::user();
-        $customer = $this->model::Find($user->id);
+        $customer = Customer::Find($user->id);
         $fields = array_diff(Schema::getColumnListing($customer->getTable()), ['id', 'created_at', 'updated_at', 'remember_token', 'plain_password', 'password', 'ownerid', 'status', 'verified', 'houselicenses', 'customertypeid', 'lasturl', 'login' ]);
         //$fields = Schema::getColumnListing($customer->getTable());
         $vattr = (new ValidationAttributes($customer))->setCast('notes', 'textarea');

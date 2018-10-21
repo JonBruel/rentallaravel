@@ -1,11 +1,21 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\BaseModel;
 use App\Helpers\ImportFromRental;
 
+/**
+ * Class importfromrentalsystem is used to import all the active data from the old Symphony 1.4 version
+ * of the rental system to the new, this one, version based on Laravel.
+ * @package App\Console\Commands
+ */
 class importfromrentalsystem extends Command
 {
     /**

@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -11,7 +16,12 @@ use Illuminate\Support\Facades\Input;
 use Gate;
 use Schema;
 use ValidationAttributes;
+use App\Models\House;
 
+/**
+ * Class Controller
+ * @package App\Http\Controllers
+ */
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -24,9 +34,9 @@ class Controller extends BaseController
     public function checkHouseChoice(string $returnpath = null)
     {
         if (session('defaultHouse') !== null) return false;
-        if ($this->model::filter()->count() == 1)
+        if (House::filter()->count() == 1)
         {
-            session(['defaultHouse' => $this->model::filter()->first()->id]);
+            session(['defaultHouse' => House::filter()->first()->id]);
             return false;
         }
         else

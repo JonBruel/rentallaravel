@@ -31,6 +31,10 @@ use Collective\Html\Eloquent\FormAccessible;
  */
 use App\Helpers\NumberHelpers;
 
+/**
+ * Class BaseModel
+ * @package App\Models
+ */
 class BaseModel extends Model
 {
     public static $ajax = false;

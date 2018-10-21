@@ -200,7 +200,7 @@ class Customer extends BaseModel
 
 	public function accountposts()
 	{
-		return $this->hasMany(\App\Models\Accountpost::class, 'ownerid');
+		return $this->hasMany(\App\Models\Accountpost::class, 'customerid');
 	}
 
 	public function batchlogs()
@@ -225,7 +225,7 @@ class Customer extends BaseModel
 
 	public function contracts()
 	{
-		return $this->hasMany(\App\Models\Contract::class, 'ownerid');
+		return $this->hasMany(\App\Models\Contract::class, 'customerid');
 	}
 
 	public function customers()
@@ -235,7 +235,7 @@ class Customer extends BaseModel
 
 	public function emaillogs()
 	{
-		return $this->hasMany(\App\Models\Emaillog::class, 'ownerid');
+		return $this->hasMany(\App\Models\Emaillog::class, 'customerid');
 	}
 
 	public function houses()

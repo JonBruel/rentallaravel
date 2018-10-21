@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -19,6 +24,10 @@ use App\Models\Customer;
 
 //$relatedmodels = [Emaillog::class, Batchlog::class, Accountpost::class, Contract::class];
 
+/**
+ * Class CustomerController
+ * @package App\Http\Controllers
+ */
 class CustomerController extends Controller
 {
 
@@ -36,7 +45,7 @@ class CustomerController extends Controller
 
         if (Gate::allows('Owner'))
         {
-            $customers = $this->model::filter(Input::all())->sortable('id')->paginate(10);
+            $customers = Customer::filter(Input::all())->where('status', 1)->sortable('id')->paginate(10);
 
             $customertypeselect = ['' => __('All')]+Customertype::where('id', '>', Auth::user()->customertypeid)->pluck('customertype', 'id')
                     ->map(function ($item, $key) {return $item = __($item);} )
@@ -53,7 +62,7 @@ class CustomerController extends Controller
     public function hashpasswords()
     {
         //Password hash
-        $customers = $this->model::all();
+        $customers = Customer::all();
         foreach ($customers as $customer)
         {
             if ((strlen($customer->password < 20) and (strlen($customer->password) > 3)))
@@ -71,7 +80,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        $models = [new $this->model()];
+        $models = [new Customer()];
         $fields = [
             'name',
             'address1',
@@ -94,7 +103,7 @@ class CustomerController extends Controller
      */
     public function store()
     {
-        $model = new $this->model();
+        $model = new Customer();
 
         $fields = [
             'name',
@@ -141,12 +150,12 @@ class CustomerController extends Controller
         //Find page from id
 
         if (Input::get('page') == null) {
-            $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
+            $models = Customer::filter(Input::all())->sortable('id')->pluck('id')->all();
             $page = array_flip($models)[$id]+1;
             Input::merge(['page' => $page]);
         }
 
-        $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
+        $models = Customer::filter(Input::all())->sortable('id')->paginate(1);
         $fields = Schema::getColumnListing($models[0]->getTable());
         return view('customer/show', ['models' => $models, 'fields' => $fields]);
     }
@@ -161,12 +170,12 @@ class CustomerController extends Controller
     {
         //Find page from id
         if (Input::get('page') == null) {
-            $models = $this->model::filter(Input::all())->sortable('id')->pluck('id')->all();
+            $models = Customer::filter(Input::all())->sortable('id')->pluck('id')->all();
             $page = array_flip($models)[$id]+1;
             Input::merge(['page' => $page]);
         }
 
-        $models = $this->model::filter(Input::all())->sortable('id')->paginate(1);
+        $models = Customer::filter(Input::all())->sortable('id')->paginate(1);
         $fields = array_diff(Schema::getColumnListing($models[0]->getTable()), ['created_at', 'updated_at', 'remember_token', 'plain_password']);
         return view('customer/edit', ['models' => $models, 'fields' => $fields, 'vattr' => (new ValidationAttributes($models[0]))->setCast('notes', 'textarea')]);
     }
@@ -180,7 +189,7 @@ class CustomerController extends Controller
      */
     public function update($id)
     {
-        $model =  $this->model::findOrFail($id);
+        $model =  Customer::findOrFail($id);
         $fields = Schema::getColumnListing($model->getTable());
 
         foreach ($fields as $field){
@@ -207,7 +216,7 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        $toBeDeleted = (new $this->model)->findOrFail($id);
+        $toBeDeleted = (new Customer)->findOrFail($id);
         $name = $toBeDeleted->name;
         $toBeDeleted->delete();
         return redirect('/customer/index?menupoint=1010')->with('success', 'Customer ' . $name . ' has been deleted!');
@@ -260,9 +269,9 @@ class CustomerController extends Controller
             if (($id1) && ($id2)) $this->domerge($id1, $id2);
             else $success = __('From or to not ticked off.');
         }
-        $customers1 = $this->model::filter($input1)->paginate(10);
-        if ($id != 0) $customers1 = $this->model::where('id', $id)->paginate();
-        $customers2 = $this->model::filter($input2)->paginate(10);
+        $customers1 = Customer::filter($input1)->paginate(10);
+        if ($id != 0) $customers1 = Customer::where('id', $id)->paginate();
+        $customers2 = Customer::filter($input2)->paginate(10);
         session()->flash('warning', $success);
         return view('customer/merge', ['customers1' => $customers1, 'customers2' => $customers2, 'input1' => $input1, 'input2' => $input2]);
     }

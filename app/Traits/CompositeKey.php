@@ -1,6 +1,11 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: jbr
+ * Date: 20-10-2018
+ * Time: 17:05
+ */
 namespace App\Traits;
-
 use Illuminate\Database\Eloquent\Builder;
 
 trait CompositeKey {

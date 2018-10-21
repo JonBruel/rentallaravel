@@ -31,7 +31,7 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Report or log an exception.
+     * Report or log an exception: Not implemented here but included in the render function.
      *
      * @param  \Exception  $exception
      * @return void
@@ -42,7 +42,9 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * Render an exception into an HTTP response.
+     * Render an exception into an HTTP response. The function alerts the user with some relatively limited
+     * summary information. In addition, a much more elaborate error description is logged in the errorlog
+     * table and a message is sent to the supervisor.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
@@ -51,7 +53,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
 
-        if (($exception) && (false))
+        if (($exception) && (true))
         {
             //Count number of incident from same ipaddress from same session:
             $counter = session($_SERVER['HTTP_X_FORWARDED_FOR'],0) + 1;

@@ -122,6 +122,8 @@ Route::post('/setup/updatecaptions/{id}', 'SetupController@updatecaptions');
 Route::get('/setup/editconfig', 'SetupController@editconfig');
 Route::post('/setup/updateconfig', 'SetupController@updateconfig');
 
+Route::get('setup/gdprdelete', 'SetupController@gdprdelete');
+
 
 Route::get('/setup/listqueue', 'SetupController@listqueue');
 Route::get('/batchlog/edit/{id}', 'SetupController@editbatchlog');
@@ -136,6 +138,9 @@ Route::get('/setup/listerrorlogs', 'SetupController@listerrorlogs');
 
 Route::get('/setup/edittranslations', 'SetupController@edittranslations');
 Route::post('/setup/edittranslations', 'SetupController@edittranslations');
+Route::get('/setup/updatephpdoc', 'SetupController@updatephpdoc');
+Route::get('/setup/showdocumentation', 'SetupController@showdocumentation');
+
 
 //From rental:
 Route::get('/contract/annualcontractoverview', 'ContractController@annualcontractoverview');
@@ -145,6 +150,7 @@ Route::get('/ajax/ajaxlisthouses/x1/{x1}/y1/{y1}/x2/{x2}/y2/{y2}', 'AjaxControll
 Route::get('/ajax/getweeks/{houseid}/{culture}/{offset}/{periodid}/{contractid}', 'AjaxController@getweeks');
 Route::get('/ajax/getmonths/{houseid}', 'AjaxController@getmonths');
 Route::get('/ajax/getimportstatus', 'AjaxController@getImportStatus');
+Route::get('/ajax/getgdprdeletestatus', 'AjaxController@getGdprDeleteStatus');
 
 //For the migration from the old version of rental
 Route::get('/import/importfromrental', 'ImportController@importfromrental');
