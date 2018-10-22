@@ -40,7 +40,11 @@
             @foreach($models as $model)
                 <tr>
                     <td>
-                        @include('partials.detail_edit_delete', ['path' => 'customer', 'id' => $model->id])
+                        @if($allowdeletes[$model->id])
+                            @include('partials.detail_edit_delete', ['path' => 'customer', 'id' => $model->id])
+                        @else
+                            @include('partials.detail_edit', ['path' => 'customer', 'id' => $model->id])
+                        @endif
                     </td>
                     <td>
                         <a href="/contract/listmails/{{ $model->id }}"  title="{{__('Check mails send from system').': '}} {{$model->name}}"  data-toggle="tooltip"><span class='glyphicon glyphicon-envelope'></span></a>

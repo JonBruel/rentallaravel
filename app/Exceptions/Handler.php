@@ -53,7 +53,7 @@ class Handler extends ExceptionHandler
     public function render($request, Exception $exception)
     {
 
-        if (($exception) && (true))
+        if (($exception) && (false))
         {
             //Count number of incident from same ipaddress from same session:
             $counter = session($_SERVER['HTTP_X_FORWARDED_FOR'],0) + 1;

@@ -12,9 +12,20 @@ use App\Models\Customer;
 use Carbon\Carbon;
 use Schema;
 
+/**
+ * Class GDPRDelete aiming at deleting customer data not required.
+ * @package App\Helpers
+ */
 class GDPRDelete
 {
 
+    /**
+     * In the present solutions we delete in the following way:
+     *
+     * 1) Customers with no contracts are completely deleted after 1 year.
+     * 2) Customers with contracts older than 6 years will be partially where all customer data will be deleted, but the id will remain as well as the contracts and accountposts. The mails, which will include the customer name will also be deleted.
+     * At this stage possible backups are not deleted. Also the log, which stores changes, is not deleted.
+     */
     public static function gdprdelete()
     {
         $filename = base_path().'/storage/logs/gdprdelete.txt';

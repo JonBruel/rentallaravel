@@ -43,20 +43,30 @@ class CustomerController extends Controller
     public function index()
     {
 
-        if (Gate::allows('Owner'))
-        {
-            $customers = Customer::filter(Input::all())->where('status', 1)->sortable('id')->paginate(10);
+        if (!Gate::allows('Owner')) return redirect('home')->with('warning', 'You are now allowed to see the customer list.');
 
-            $customertypeselect = ['' => __('All')]+Customertype::where('id', '>', Auth::user()->customertypeid)->pluck('customertype', 'id')
-                    ->map(function ($item, $key) {return $item = __($item);} )
-                    ->toArray();
+        $customers = Customer::filter(Input::all())->where('status', 1)->sortable('id')->with('accountposts')->paginate(10);
 
-            return view('customer/index', ['models' => $customers,  'search' => Input::all(), 'customertypeselect' => $customertypeselect]);
-        }
-        else
+        $customertypeselect = ['' => __('All')]+Customertype::where('id', '>', Auth::user()->customertypeid)->pluck('customertype', 'id')
+                ->map(function ($item, $key) {return $item = __($item);} )
+                ->toArray();
+
+        //Check if customers are allowed to be deleted
+        $allowdeletes = [];
+        foreach($customers as $customer)
         {
-            return redirect('home')->with('warning', 'You are now allowed to see the customer list.');
+            $allowdeletes[$customer->id] = false;
+            $accountposts = $customer->accountposts();
+            $count = $accountposts->where('posttypeid', 10)->count();
+            $allowdeletes[$customer->id] = ($count == 0);
+
+            //Special cases:
+            if ($customer->customertypeid <= 10) $allowdeletes[$customer->id] = false;
+            if ($customer->id == 10) $allowdeletes[$customer->id] = false;
         }
+
+        return view('customer/index', ['models' => $customers,  'search' => Input::all(), 'customertypeselect' => $customertypeselect, 'allowdeletes' => $allowdeletes]);
+
     }
 
     public function hashpasswords()

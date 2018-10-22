@@ -30,7 +30,7 @@ Route::get('/myaccount/listmails', 'MyAccountController@listmails');
 Route::get('/myaccount/edittime', 'MyAccountController@edittime');
 Route::post('/myaccount/updatetime', 'MyAccountController@updatetime');
 Route::get('/myaccount/gdpr', 'MyAccountController@gdpr');
-
+Route::post('/myaccount/destroycustomer/{id}', 'MyAccountController@destroycustomer');
 
 
 Route::get('/customer/index', 'CustomerController@index');

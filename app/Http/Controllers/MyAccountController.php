@@ -53,13 +53,49 @@ class MyAccountController extends Controller
         $fields = array_diff(Schema::getColumnListing($customer->getTable()), ['id', 'created_at', 'updated_at', 'remember_token', 'plain_password', 'password', 'ownerid', 'status', 'verified', 'houselicenses', 'customertypeid', 'lasturl', 'login' ]);
         //$fields = Schema::getColumnListing($customer->getTable());
         $vattr = (new ValidationAttributes($customer))->setCast('notes', 'textarea');
-        return view('myaccount/registration', ['models' => [$customer], 'fields' => $fields, 'vattr' => $vattr]);
+
+
+        //Check if customer is allowed to be deleted
+        $allowdelete = false;
+        $accountposts = $customer->accountposts();
+        $count = $accountposts->where('posttypeid', 10)->count();
+        $allowdelete = ($count == 0);
+
+        return view('myaccount/registration', ['models' => [$customer], 'fields' => $fields, 'vattr' => $vattr, 'allowdelete' => $allowdelete]);
+    }
+
+    public function destroycustomer($id)
+    {
+        if (!Auth::check()) return redirect('/login');
+        $user = Auth::user();
+        if ($user->id != $id) return redirect('/login');
+
+        //Check if customer is allowed to be deleted
+        $customer = Customer::Find($user->id);
+        $allowdelete = false;
+        $accountposts = $customer->accountposts();
+        $count = $accountposts->where('posttypeid', 10)->count();
+        $allowdelete = ($count == 0);
+
+        if ($allowdelete)
+        {
+            $manager = app('impersonate');
+            if ($manager->isImpersonating())
+            {
+                $manager->leave();
+            }
+            else auth()->logout();
+            $customer->delete();
+        }
+        return redirect('/home')->with('warning',  __('All data about you is now deleted. Before you book next time, you must register anew.'));
     }
 
     public function updateregistration()
     {
         //Todo: Handle change and check of email address.
         if (!Auth::check()) return redirect('/login');
+        if (Input::get('delete')) return $this->destroycustomer(Input::get('id'));
+
         $customer = Customer::Find(Input::get('id'));
 
         $fields = array_diff(Schema::getColumnListing($customer->getTable()), ['id', 'created_at', 'updated_at', 'remember_token', 'plain_password', 'password', 'ownerid', 'status', 'verified', 'houselicenses', 'customertypeid', 'lasturl', 'login' ]);
@@ -75,7 +111,7 @@ class MyAccountController extends Controller
             $errors = $customer->getErrors();
             $success = '';
         }
-        if ($errors != '') return redirect('/customer/registration')->with('success', $success)->with('errors',$errors)->withInput(Input::except('plain_password'));
+        if ($errors != '') return redirect('/myaccount/registration')->with('success', $success)->with('errors',$errors)->withInput(Input::except('plain_password'));
         return redirect('/myaccount/registration?menupoint=9010')->with('success', 'Customer has been updated!');
     }
 

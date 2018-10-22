@@ -33,9 +33,9 @@
 
                 @guest
                 @else
-                    @if(\Session::get('impersonate'))
-                        <a class="nav-link" href="/impersonate/leave">Stop impersonation </a>
-                    @endif
+                    @impersonating
+                    <a class="nav-link" href="/impersonate/leave">{{__('Stop impersonation as')}}:</br >{{Auth::user()->name}}</a>
+                    @endImpersonating
                 @endguest
 
             <!-- Menu -->

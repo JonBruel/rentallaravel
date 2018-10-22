@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\ResetPassword as ResetPasswordNotification;
+use Lab404\Impersonate\Models\Impersonate;
 
 class User extends Authenticatable
 {
     use Notifiable;
-
+    use Impersonate;
     protected $table = 'customer';
 
     /**
