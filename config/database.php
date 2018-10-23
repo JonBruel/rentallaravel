@@ -41,11 +41,11 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '192.168.160.43'),
+            'host' => env('TEST_DB_HOST', ''),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'rental'),
-            'username' => env('DB_USERNAME', 'asterisk'),
-            'password' => env('DB_PASSWORD', '24hollsid'),
+            'database' => env('TEST_DB_NAME', ''),
+            'username' => env('DB_USERNAME', ''),
+            'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
@@ -56,11 +56,11 @@ return [
 
         'rental' => [
             'driver' => 'mysql',
-            'host' => '192.168.160.54',
+            'host' => env('RENTAL_DB_HOST', ''),
             'port' => env('DB_PORT', '3306'),
-            'database' => 'rental',
-            'username' => env('DB_USERNAME', 'asterisk'),
-            'password' => env('DB_PASSWORD', '24hollsid'),
+            'database' => env('RENTAL_DB_NAME', ''),
+            'username' => env('DB_USERNAME', ''),
+            'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
