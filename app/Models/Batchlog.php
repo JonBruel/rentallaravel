@@ -12,6 +12,7 @@ use App\Mail\DefaultMail;
 use Illuminate\Support\Facades\Mail;
 
 
+
 /**
  * Class Batchlog
  * 
@@ -215,7 +216,7 @@ class Batchlog extends BaseModel
             //Determine who to send to
             //The code below is not very elegant, due to my lack of understanding of Criteria
             //which gave an error when I tried to combine several criteria: $c->add($d).
-            $recipients = array();
+            $recipients = [];
             if (!($onereceipient)) {
                 if (sizeof($sendto) > 0) {
                     foreach ($sendto as $customertypeid)
@@ -232,11 +233,7 @@ class Batchlog extends BaseModel
                         if ($customertypeid == 1000) $recipients[] = Customer::Find($customerid);
                         if ($customertypeid == 110)
                         {
-                            foreach ($house->getMaidid() as $maidid)
-                            {
-                                $maidid = Customer::Find($maidid);
-                                $recipients[] = $maidid;
-                            }
+                            foreach ($house->getMaidid() as $maidid) $recipients[] = $maidid;
                         }
                     }
                 }

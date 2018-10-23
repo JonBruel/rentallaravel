@@ -343,6 +343,7 @@ class ContractController extends Controller
         $rate = $period->getRate('', $currencyid)['rate'];
         $contract->price = $price * $rate;
         $newfinalprice = $price * $rate * (1-$contract->discount/100);
+        $contract->finalprice = $newfinalprice;
 
         //We are administrating the contract
         if (Input::get('fromcalendar', 1) == 0)

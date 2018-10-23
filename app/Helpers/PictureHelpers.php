@@ -8,7 +8,10 @@
 
 namespace App\Helpers;
 
-
+/**
+ * Class PictureHelpers, used in HomeController.
+ * @package App\Helpers
+ */
 class PictureHelpers
 {
     static function getrandompicture($houseid, $galleryid)

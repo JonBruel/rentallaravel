@@ -148,6 +148,10 @@ class MyAccountController extends Controller
 
     public function edittime()
     {
+        //Following if used for edittiemelink
+        $res = $this->checkToken();
+        if($res) return redirect($res);
+
         $contracts = $this->getContracts(Carbon::now());
         $contract = null;
         if (sizeof($contracts) > 0) $contract = $contracts[0];

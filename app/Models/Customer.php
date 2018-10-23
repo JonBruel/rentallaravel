@@ -8,7 +8,7 @@
 namespace App\Models;
 use Number;
 use Auth;
-
+use Illuminate\Support\Str;
 
 
 /**
@@ -269,15 +269,17 @@ class Customer extends BaseModel
         return $this->hasOne('App\Models\VerifyUser', 'customer_id');
     }
 
-    public function getLogin($culture)
-    {
-
-    }
 
     public function getLoginlink($culture = '')
     {
-        //TODO: Modify to the "Laravel way"
-        $r = $this->lasturl.'/user/login?email=' . $this->email . '&token=' . $this->remember_token . '&goto=home';
+        $remember_token = $this->remember_token;
+        if (is_null($remember_token))
+        {
+            $remember_token = Str::random(60);
+            $this->remember_token = $remember_token;
+            $this->save();
+        }
+        $r = $this->lasturl.'/home/tokenlogin?email=' . $this->email . '&remember_token=' . $remember_token . '&redirectTo=/home/showinfo/description';
         $r = '<a href="' . $r . '">'.__('Login').'</a>';
         return $r;
     }
@@ -285,8 +287,14 @@ class Customer extends BaseModel
     public function getTestimoniallink($houseid, $culture = '')
     {
         $house = House::Find($houseid);
-        //TODO: Modify to the "Laravel way"
-        $r = $house->www.'/login?email=' . $this->email . '&token=' . $this->remember_token . '&goto=testimonial&houseid=' . $houseid;
+        $remember_token = $this->remember_token;
+        if (is_null($remember_token))
+        {
+            $remember_token = Str::random(60);
+            $this->remember_token = $remember_token;
+            $this->save();
+        }
+        $r = $house->www.'/home/listtestimonials?email=' . $this->email . '&remember_token=' . $remember_token . '&redirectTo=/home/listtestimonials&houseid=' . $houseid.'&menupoint=10080';
         $r = '<a href="' . $r . '">'.__('Your feedback regarding', [], $culture). ' ' . $house->name . '</a>';
         return $r;
     }
@@ -295,8 +303,15 @@ class Customer extends BaseModel
     {
         $contract = Contract::Find($contractid);
         $house = House::Find($contract->houseid);
-        //TODO: Modify to the "Laravel way"
-        $r = $house->www.'/login?email=' . $this->email . '&remember_token=' . $this->remember_token . '&goto=edittime&contractid=' . $contractid;
+        $remember_token = $this->remember_token;
+        if (is_null($remember_token))
+        {
+            $remember_token = Str::random(60);
+            $this->remember_token = $remember_token;
+            $this->save();
+        }
+
+        $r = $house->www.'/myaccount/edittime?contractid='.$contractid.'&email='.$this->email.'&remember_token='.$this->remember_token.'&redirectTo=/myaccount/edittime&contractid='.$contractid.'&menupoint=9050';
         $r = '<a href="' . $r . '">'.__('Our arrival and departure time', [], $culture).'</a>';
         return $r;
     }

@@ -96,6 +96,7 @@ Route::get('/home/checkbookings', 'HomeController@checkbookings');
 Route::get('/home/search', 'HomeController@search');
 Route::post('/home/search', 'HomeController@search');
 Route::get('/home/listhouses', 'HomeController@listhouses');
+Route::get('/home/tokenlogin', 'HomeController@tokenlogin');
 Route::delete('/testimonial/destroy/{id}', 'HomeController@destroytestimonial');
 Route::get('/testimonial/edit/{id}', 'HomeController@edittestimonial');
 Route::post('/testimonial/edit/{id}', 'HomeController@updatetestimonial');

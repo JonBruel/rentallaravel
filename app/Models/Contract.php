@@ -9,6 +9,7 @@ namespace App\Models;
 
 use Number;
 use Carbon\Carbon;
+use App\Events\ContractUpdated;
 use DB;
 
 /**
@@ -117,6 +118,10 @@ class Contract extends BaseModel
         'currencyid',
         'categoryid',
         'status'
+    ];
+
+    protected $dispatchesEvents = [
+        'updated' => ContractUpdated::class,
     ];
 
     public function getFinalpriceAttribute($value) {
@@ -553,7 +558,6 @@ class Contract extends BaseModel
 
     //Get relevant accountposts
     public function getAccountposts($culture = '') {
-        static::$ajax = true;
         $sum = 0;
         $r = '<table class="table">';
         $customercurrencysymbol = $this->convertCurrencyAccountToCustomer('currencysymbol');
@@ -597,7 +601,6 @@ class Contract extends BaseModel
             $sum = 0;
         $r .= '<tr><td></td><td>&nbsp;&nbsp;' . __('Balance', [], $culture) . ': </td><td>&nbsp;&nbsp;' . static::format($sum, 2, $culture) . '&nbsp;&nbsp;&nbsp;</td></tr>';
         $r .= '</table>';
-        static::$ajax = false;
         return $r;
     }
 

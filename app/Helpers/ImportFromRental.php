@@ -8,7 +8,6 @@
 
 namespace App\Helpers;
 
-
 use DB;
 use App\Models\Batchtask;
 use App\Models\Customer;
@@ -26,7 +25,26 @@ use App\Models\Testimonial;
 
 use Illuminate\Support\Facades\Hash;
 
-
+/**
+ * Class ImportFromRental takes all relevant tables from the old rental system and copies it to
+ * the new system. Structural tables such as customertype are not imported. Currency tables are not imported.
+ *
+ * Presently the following tables are imported:
+ * * customer
+ * * house
+ * * house_i18n
+ * * period
+ * * contract
+ * * contractlines
+ * * accountposts
+ * * batchlog
+ * * standardemail
+ * * standardemail_i18n
+ * * testimonials
+ * * batchtask
+ * * emaillog
+ * @package App\Helpers
+ */
 class ImportFromRental
 {
 

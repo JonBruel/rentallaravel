@@ -531,7 +531,8 @@ class SetupController extends Controller
 
     public function destroybatchlog($id)
     {
-        return view('/general/notimplemented');
+        Batchlog::Find($id)->delete();
+        return $this->listqueue();
     }
 
     public function gdprdelete()

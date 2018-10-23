@@ -17,6 +17,8 @@ use Gate;
 use Schema;
 use ValidationAttributes;
 use App\Models\House;
+use App\Models\Customer;
+use Auth;
 
 /**
  * Class Controller
@@ -111,4 +113,40 @@ class Controller extends BaseController
         if ($errors != '') return redirect($redirectError)->with('success', $success)->with('errors',$errors)->withInput();
         return redirect($redirectOk)->with('success', $success)->withInput();
     }
+
+    /**
+     * Check if user is logged in. If not we check the remember_token and login based on that.
+     * The function is used for the links sent to the customers, allowing them to get directly
+     * to the itenary or testimonial page without logging in. It may not always succees as the
+     * remember_token might have been changed. This happens if the customer logs out before the
+     * link is used.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    protected function checkToken()
+    {
+        //Following if used for testimoniallink
+        if (!Auth::check())
+        {
+            if (Input::get('houseid', -1) != -1) {
+                $houseid = Input::get('houseid');
+                session(['houseid' > $houseid]);
+            }
+
+            //Check of token
+            if (Input::get('remember_token')) {
+                $customer = Customer::where('remember_token', Input::get('remember_token'))->first();
+                if ($customer)
+                {
+                    Auth::loginUsingId($customer->id);
+                    return Input::get('redirectTo');
+                }
+                else {
+                    session(['redirectTo' => Input::get('redirectTo')]);
+                    return redirect('\login')->withInput();
+                }
+            }
+        }
+    }
+
 }

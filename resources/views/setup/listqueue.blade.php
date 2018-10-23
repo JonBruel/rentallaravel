@@ -2,9 +2,6 @@
 @section('content')
     <h3>{{ __('Batchlog') }}</h3>
     <br />
-    <a href='/customer/create'>
-        <span class='glyphicon glyphicon-plus'></span>
-    </a>
     <br /><br />
     <div class="table-responsive">
         <table class="table table-striped">

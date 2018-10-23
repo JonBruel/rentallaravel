@@ -354,4 +354,12 @@ class House extends BaseModel
             }
         }
     }
+
+    /**
+     *  Return a list of maids belonging to the owner
+     */
+    public function getMaidid()
+    {
+        return Customer::where('ownerid', $this->ownerid)->where('customertypeid', 110)->get();
+    }
 }

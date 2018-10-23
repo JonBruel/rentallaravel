@@ -55,7 +55,12 @@ trait NumberHelpers
     }
 
     /**
-     * Converts Carbon date to a I18N string.
+     * Converts Carbon date to a I18N string. The format is the long one, e.g.
+     * in English: Fri 26 Oct 2018. It uses Carbon formatLocalized and may require
+     * to be changes when Laravel uses Carbon 2.
+     *
+     * [For other formats check]: /https://carbon.nesbot.com/docs/
+     * [For other formats check]
      *
      * @param Carbon $date
      * @param null $culture
@@ -71,7 +76,12 @@ trait NumberHelpers
     }
 
     /**
-     * Converts Carbon datetime to a I18N string.
+     * Converts Carbon datetime to a I18N string. The format is the long one, e.g.
+     * in English: Fri 26 Oct 2018 13:45. It uses Carbon formatLocalized and may require
+     * to be changes when Laravel uses Carbon 2.
+     *
+     * [For other formats check]: /https://carbon.nesbot.com/docs/
+     * [For other formats check]
      *
      * @param Carbon $date
      * @param null $culture

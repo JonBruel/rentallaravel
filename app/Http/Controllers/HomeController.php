@@ -24,6 +24,7 @@ use Auth;
 use App\Models\Periodcontract;
 use App\Models\Testimonial;
 use App\Models\House;
+use App\Models\Customer;
 use Carbon\Carbon;
 use DB;
 use App\Mail\DefaultMail;
@@ -83,6 +84,13 @@ class HomeController extends Controller
         }
     }
 
+
+    public function tokenlogin()
+    {
+        $this->checkToken();
+        return redirect('/home/showinfo/description');
+    }
+
     /*
      * Route::get('/home/listtestimonials', 'HomeController@listtestimonials');
      * Route::get('/home/showmap', 'HomeController@showmap');
@@ -93,10 +101,16 @@ class HomeController extends Controller
     public function listtestimonials()
     {
         $houseid = session('defaultHouse' , 1);
+
+        //Following if used for testimoniallink
+        $res = $this->checkToken();
+        if($res) return redirect($res);
+
         $house = House::Find($houseid);
         $testimonials = Testimonial::where('houseid', $houseid)->sortable(['created_at' => 'desc'])->get();
         return view('home/listtestimonials', ['models' => $testimonials, 'administrator' => Gate::allows('Administrator'), 'house' => $house, 'houseid' => $houseid])->with('search', Input::all());
     }
+
 
     public function createtestimonial()
     {

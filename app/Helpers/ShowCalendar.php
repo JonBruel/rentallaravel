@@ -23,6 +23,14 @@ use Carbon\Carbon;
 use Number;
 use DB;
 
+/**
+ * Class ShowCalendar has a set of methods used to show the calendar of a house showing the
+ * availability of the periods.
+ *
+ * TODO: Delete cache when a contract is changed.
+ *
+ * @package App\Helpers
+ */
 class ShowCalendar
 {
     private $date;
@@ -80,12 +88,20 @@ class ShowCalendar
         rename($tmp, "/tmp/$key");
     }
 
-    static function cache_delete($extension) {
+    /**
+     * The cache_delete is used every time the calendar is set (setVdays) where
+     * old cached information is deleted in order to tidy up in the set of files. As
+     * default it deletes files more than 24 hours old, but it may be called
+     * with a second parameter set to 0 to delete all cache files.
+     *
+     * @param $extension
+     */
+    static function cache_delete($extension, $hours = 24) {
         $files = glob("/tmp/*.".$extension);
         $now   = time();
         foreach ($files as $file) {
             if (is_file($file)) {
-                if ($now - filemtime($file) >= 60 * 60 * 24 * 1) { // 1 day
+                if ($now - filemtime($file) >= 60 * 60 * $hours * 1) { // 1 day
                     unlink($file);
                 }
             }

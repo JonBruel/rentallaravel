@@ -39,7 +39,7 @@
                     <td>
                         <a href="/setup/editbatchtask/{{ $model->id }}?ownerid={{ $ownerid }}" title="{{__('Edit')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-pencil'></span></a>
                     </td>
-                    <td>{{ $model->name }}</td>
+                    <td>{{ $model->name }} ({{$model->id}})</td>
                     <td>{{ $model->posttypeid }}</td>
                     <td>{{ $model->customer->name }}</td>
                     <td>{{ $model->house->name }}</td>

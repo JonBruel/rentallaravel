@@ -38,7 +38,7 @@
                     <td>
                         <a href="/setup/editstandardemail/{{ $model->id }}?ownerid={{ $ownerid }}" title="{{__('Edit')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-pencil'></span></a>
                     </td>
-                    <td>{{ $model->description }}</td>
+                    <td>{{ $model->description }} ({{$model->id}})</td>
                     <td>{{ $model->customer->name }}</td>
                     <td>{{ $model->house->name }}</td>
                 </tr>
