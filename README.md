@@ -18,11 +18,11 @@ The original purpose of this repository is to get acquainted with Laravel and im
   o Translation of database stored data
 - Handling of Session (OK)
 - Handling of REST with security token (not tested)
-- Unit testing 
+- Unit testing (OK)
 - Interface testing (not tested)
 - Compare performance with similar systems using Symfony or Asp.net Core 2.1 (OK)
 
-This has been accomplished. The performance of Lavarel is somewhat better that Symfony, but not much. When compared to Asp.net core the response time is typically 2-3 times higher, but we are talking about 40 ms as opposed to 15 ms, so the main delay is still in the client rendering and in the network.
+This has been accomplished. The performance of Lavarel is somewhat better that the one of Symfony, but not much. When compared to Asp.net core the response time is typically 2-3 times higher, but we are talking about 40 ms as opposed to 15 ms, so the main delay is still in the client rendering and in the network. The main advantage of Laravel, as I see it, is the similarity with other frameworks, including RoR. 
 
 The present purpose is the replace the old version of the rental system with this one.
 
