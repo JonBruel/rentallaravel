@@ -27,7 +27,8 @@ use DB;
  * Class ShowCalendar has a set of methods used to show the calendar of a house showing the
  * availability of the periods.
  *
- * TODO: Delete cache when a contract is changed.
+ * The chache is deleted when a contract is updated. This deletes all cache files and will not
+ * be optimal in a system with many houses.
  *
  * @package App\Helpers
  */
@@ -63,7 +64,10 @@ class ShowCalendar
 
     private $test = '';
 
-    /* CONSTRUCTOR */
+    /**
+     * ShowCalendar constructor.
+     * @param Carbon $starttime
+     */
     function __construct(Carbon $starttime){
         $this->date = $starttime->format('Y-m-d');
         $this->month = $starttime->format('m');
@@ -71,7 +75,12 @@ class ShowCalendar
     }
 
 
-    //Used for callbacks
+    /**
+     * Not implemented, could be used for callbacks.
+     *
+     * @param $object
+     * @param $con
+     */
     function resetVdays($object, $con)
     {
         //Not implemented, see the old rental implementations
@@ -114,7 +123,17 @@ class ShowCalendar
         return isset($val) ? $val : false;
     }
 
-    //Fills in the calander details based on houseid
+    /**
+     * Fills in the calendar days. If there is a chache file this one is taken. If not it is
+     * calculated, which takes around 1 second.
+     *
+     * @param $houseid
+     * @param \Illuminate\Database\Eloquent\Builder $periodcontractquery
+     * @param null $culture
+     * @param Carbon|NULL $starttime
+     * @param null $months
+     * @return bool
+     */
     static function setVdays($houseid, \Illuminate\Database\Eloquent\Builder $periodcontractquery, $culture = NULL, Carbon $starttime = NULL, $months = NULL)
     {
         function addOneday($time)
@@ -300,11 +319,6 @@ class ShowCalendar
         return $vdays;
     }
 
-    function set_date_parts_from_date($date){
-        $this->year		= date("Y", strtotime($date));
-        $this->month	= date("m", strtotime($date));
-        $this->day		= date("d", strtotime($date));
-    }
 
     function day_of_week($date){
         $day_of_week = date("N", $date);
@@ -317,6 +331,14 @@ class ShowCalendar
         return $day_of_week;
     }
 
+    /**
+     * The function renders the calendar.
+     *
+     * @param null $year
+     * @param null $month
+     * @param string $calendar_class
+     * @return string
+     */
     function output_calendar($year = NULL, $month = NULL, $calendar_class = 'calendar'){
 
         $culture = $this->culture;

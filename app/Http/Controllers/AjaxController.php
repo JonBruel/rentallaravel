@@ -23,7 +23,12 @@ use Carbon\Carbon;
 use DB;
 
 /**
- * Class AjaxController
+ * Class AjaxController is used for a limited set of ajax functions.
+ *
+ * For authentication we use the existing cookie based authentication used the the
+ * non-ajax. In the ajax functions we set BaseModel::$ajax = true to avoid decimal
+ * field to be changed to i18n strings.
+ *
  * @package App\Http\Controllers
  */
 class AjaxController extends Controller
@@ -34,7 +39,6 @@ class AjaxController extends Controller
         //We turn off mutators, we want . as decimal separator!
         BaseModel::$ajax = true;
     }
-
 
     /**
      * Display the specified resource.

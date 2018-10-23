@@ -1,6 +1,4 @@
 <?php
-namespace App\Helpers;
-
 /**
  * GoogleTranslateWrapper: PHP wrapper for Google Translation services
  * Copyright (C) 2010  Sameer Borate
@@ -24,6 +22,7 @@ namespace App\Helpers;
  * @author      Sameer Borate
  * @copyright   2010 Sameer Borate
  */
+namespace App\Helpers;
 
 
 /**
@@ -36,10 +35,6 @@ namespace App\Helpers;
  * @copyright   2010 Sameer Borate
  * @version     1.7
  */
-//Google API key: AIzaSyDLdpjckXTlb_AtW1KGPR-SIzfhIIS6jZ4
-
-//Changed to work with Google API v2, only the required places are changed on a minimum work basis.
-//Jon 14-08-2012
 class GoogleTranslateWrapper
 {
     /**
@@ -174,6 +169,7 @@ class GoogleTranslateWrapper
     /**
      * Build a POST url to query Google
      *
+     * @param $type
      */
     private function _composeUrl($type)
     {
@@ -304,6 +300,7 @@ class GoogleTranslateWrapper
      * Set credentials (optional) when accessing Google translation services
      *
      * @param string $apiKey your google api key
+     * @param string $ip your ip address out from your router
      */
     public function setCredentials($apiKey, $ip)
     {

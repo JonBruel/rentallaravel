@@ -59,7 +59,14 @@ class Controller extends BaseController
         return session($parameter, $default);
     }
 
-    //Does not work
+    /**
+     * The intention of the function is to be a general tool which checks if the user has the right
+     * to proceed. But it does not work as the calling code continues as this one has redirected.
+     *
+     * @param $usertype
+     * @param null $message
+     * @return \Illuminate\Http\RedirectResponse|null
+     */
     protected function setRights($usertype, $message = null)
     {
         if (!$message) $message = 'Somehow you the system tried to let you do something which is not allowed. So you are sent home!';

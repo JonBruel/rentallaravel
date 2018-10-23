@@ -32,7 +32,11 @@ use App\Models\Contractoverview;
 use Carbon\Carbon;
 
 /**
- * Class ContractController
+ * Class ContractController. This is a controller with contains a wast amount of logic
+ * in relation to the order process. In addition to this the generation of accountposts
+ * is delegated to the Contract model, and we have tries to separate this from the order
+ * process flow, which is implemented in this class.
+ *
  * @package App\Http\Controllers
  */
 class ContractController extends Controller
@@ -44,27 +48,33 @@ class ContractController extends Controller
         parent::__construct(\App\Models\Contract::class);
     }
 
-    public function annualcontractoverview(Request $request)
+    /**
+     * Used to show the booking for the year, they year can be selected in the view. The view is trimmed to omit
+     * the house (and the house select) if there is only one house.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function annualcontractoverview()
     {
         $thisyear = date('Y');
         $years = [];
-        for ($i = $thisyear-3; $i < $thisyear+3; $i++) $years[$i] = $i;
+        for ($i = $thisyear-10; $i < $thisyear+3; $i++) $years[$i] = $i;
 
-        if ($request->get('year') == null) $request['year'] = $thisyear;
+        if (Input::get('year') == null) Input::merge(['year' => $thisyear]);
 
         $houses = House::filter()->pluck('name', 'id')->toArray();
         $houseid = Input::get('houseid', 1);
 
         $year = Input::get('year', $thisyear);
-        $contractquery = Contractoverview::filter($request->all())->where('categoryid', 0)->sortable()->orderBy('from')->with('customer')->with('house');
+        $contractquery = Contractoverview::filter(Input::all())->where('categoryid', 0)->sortable()->orderBy('from')->with('customer')->with('house');
         $contractoverview = $contractquery->get();
         return view('contract/annualcontractoverview', ['year' => $year, 'years' => $years, 'contractoverview' => $contractoverview, 'houses' => $houses, 'houseid' => $houseid]);
     }
 
     /**
-     * Display the specified resource.
+     * Display a specific contract. Presently not a part of the functions accessible via the menu system.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -85,11 +95,14 @@ class ContractController extends Controller
         return view('contract/show', ['models' => $models, 'fields' => $fields]);
     }
 
-    /*
-     * Based on the input from the previous form, contractupdate, we commit the contract after having checked for
+
+    /**
+     * Based on the input from the previous form, contractupdate, we commit the contract. If the user has not yet logged in,
+     * he will be asked to register or login. After that he will be redirected back to this function. Eventually the user
+     * will see a confirmation page with the contract which can be printed out.
      *
-     * If the user has not yet logged in, he will be asked to register or login. After that he will be redirected to
-     * the same page.
+     * @param int $contractid
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function commitcontract($contractid)
     {
@@ -119,16 +132,22 @@ class ContractController extends Controller
     }
 
 
-    /*
+
+    /**
      * This method gives the input to the view used by the administrator to edit an
-     * existing contract. Two usercases are handled here:
+     * existing contract.
      *
-     * 1) We edit an existing contract, $contractid is then not 0
-     * 2) We cheate a new contract, typically when the user has seen the calendar and
+     * Two use cases are handled here:
+     * * We edit an existing contract, $contractid is then not 0
+     * * We cheate a new contract, typically when the user has seen the calendar and
      *    presses a period. In this case $constratid is 0 and a non-zero $periodid is
      *    included in the argument.
      *
-     * The view created has @if's which depend on the use case.
+     * The view, which is used for the booking, is has @if's which depend on the use case.
+     *
+     * @param int $contractid
+     * @param int $periodid
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function contractedit($contractid, $periodid)
     {
@@ -271,9 +290,13 @@ class ContractController extends Controller
                                             'currencySelect' => $currencySelect]);
     }
 
-    /*
+
+    /**
      * This method is for the customer, administrator, owner or supervisor. The finalprice is recalculated
-     * to avoid possible attempts to inject javascript to fiddle with the price
+     * to avoid possible attempts to inject javascript to fiddle with the price.
+     *
+     * @param $contractid
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function contractupdate($contractid)
     {
@@ -393,7 +416,12 @@ class ContractController extends Controller
         }
     }
 
-    public function listcontractoverview(Request $request)
+    /**
+     * The focus of this is to feed a view which shows the arrivals times of the customers.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function listcontractoverview()
     {
         //'Personel'
         if (!Gate::allows('Personel')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
@@ -402,12 +430,19 @@ class ContractController extends Controller
         $houses = House::filter()->pluck('name', 'id')->toArray();
         $houseid = Input::get('houseid', 1);
 
-        $contractoverview = Contractoverview::filter($request->all())->sortable()->orderBy('houseid')->whereDate('from', '>', Carbon::now())->orderBy('from')->with('customer')->with('house')->get();
+        $contractoverview = Contractoverview::filter(Input::all())->sortable()->orderBy('houseid')->whereDate('from', '>', Carbon::now())->orderBy('from')->with('customer')->with('house')->get();
 
         return view('contract/listcontractoverview', ['contractoverview' => $contractoverview, 'houses' => $houses, 'houseid' => $houseid]);
     }
 
-    public function listcontractoverviewforowners(Request $request)
+    /**
+     * This controller is used for the rentaloverview, which as a default shows bookings from the present year and forward.
+     * The view has several @ifs which controls the level of details shown to the user. Less is shown for the housekeeper than
+     * fro the owner.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function listcontractoverviewforowners()
     {
         //Set rights
         if (!Gate::allows('Personel')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
@@ -417,17 +452,24 @@ class ContractController extends Controller
         $years = [];
         for ($i = $thisyear-10; $i < $thisyear+3; $i++) $years[$i] = $i;
 
-        if ($request->get('yearfrom') == null) $request['yearfrom'] = $thisyear;
+        if (Input::get('yearfrom') == null) Input::merge(['yearfrom' => $thisyear]);
 
         $houses = House::filter()->pluck('name', 'id')->toArray();
         $houseid = Input::get('houseid', 1);
 
         $year = Input::get('yearfrom', $thisyear);
-        $contractquery = Contractoverview::filter($request->all())->sortable()->orderBy('from')->with('customer')->with('house');
+        $contractquery = Contractoverview::filter(Input::all())->sortable()->orderBy('from')->with('customer')->with('house');
         $contractoverview = $contractquery->get();
         return view('contract/listcontractoverviewforowners', ['year' => $year, 'years' => $years, 'contractoverview' => $contractoverview, 'houses' => $houses, 'houseid' => $houseid]);
     }
 
+    /**
+     * Used to prepare a list of accountpost for a specific contract, feeding a view
+     * which can be used to register payments.
+     *
+     * @param int $contractid
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function listaccountposts($contractid)
     {
         $currencysymbol = 'DKK';
@@ -436,12 +478,24 @@ class ContractController extends Controller
         return view('contract/listaccountposts', ['models' => $models,'currencysymbol' => $currencysymbol]);
     }
 
+    /**
+     * Used to feed a view showing the all mails submitted to the specified customer.
+     *
+     * @param int $customerid
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function listmails($customerid)
     {
         $emails = Emaillog::where('customerid', $customerid)->get();
         return view('myaccount/listmails', ['models' => $emails, 'title' => __('Emails')]);
     }
 
+    /**
+     * This function takes the input from the listaccountposts form and created accountpost accordingly.
+     *
+     * @param int $contractid
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function registerpayment($contractid)
     {
 
@@ -506,19 +560,38 @@ class ContractController extends Controller
         return redirect('contract/listaccountposts/'.$contractid)->with('errors', $errors)->with('success', $success);
     }
 
-    //Common accountpost actions
+    /**
+     * This feed the view for editing accountposts, which should not be allowed for anyone, but the supervisor.
+     * TODO: Determined if it should be allowed at all.
+     *
+     * @param int $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function accountpostedit($id)
     {
         return $this->generaledit($id, Accountpost::class, 'contract/accountpostedit', null, null, ['updated_at'], ['id' => 'hidden', 'contractid' => 'hidden']);
     }
 
+    /**
+     * Updates accountposts.
+     * TODO: Determined if it should be allowed at all.
+     *
+     * @param int $id
+     * @return ContractController
+     */
     public function accountpostupdate($id)
     {
         //generalupdate($id, $modelclass, $okMessage, $redirectOk, $redirectError = null, $onlyFields = null, $plusFields = null, $minusFields = null)
         return $this->generalupdate($id, Accountpost::class, 'Accountpost updated', '/accountpost/edit/'.$id.'?contractid='.Input::get('contractid'), null, null, null, ['updated_at']);
     }
 
-
+    /**
+     * Destroys accountpost.
+     * TODO: Determined if it should be allowed at all.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function accountpostdestroy($id)
     {
         $model =  Accountpost::findOrFail($id);

@@ -122,10 +122,10 @@ class Customer extends BaseModel
 
 
     public $rules = [
-        'name' => ['required', 'between:5,30'],
-        'address1' => ['required', 'between:3,40'],
-        'country' => ['required', 'between:3,40'],
-        'mobile' => ['required', 'between:8,15'],
+        'name' => ['required', 'between:5,51'],
+        'address1' => ['required', 'between:3,51'],
+        'country' => ['required', 'between:3,51'],
+        'mobile' => ['required', 'between:8,21'],
         'email' => ['required', 'unique:customer']
     ];
 

@@ -14,6 +14,13 @@ namespace App\Helpers;
  */
 class PictureHelpers
 {
+    /**
+     * Collect the pictures for a house with a certain id returns an array, which can be used in a view.
+     *
+     * @param int $houseid
+     * @param int $galleryid
+     * @return array
+     */
     static function getrandompicture($houseid, $galleryid)
     {
         $h = array();
@@ -44,6 +51,12 @@ class PictureHelpers
         return $h;
     }
 
+    /**
+     * @param $houseid
+     * @param $galleryid
+     * @param int $size
+     * @return array
+     */
     static function getPictureArray($houseid, $galleryid, $size = 0)
     {
         $h = array();
