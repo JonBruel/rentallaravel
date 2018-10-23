@@ -1,6 +1,6 @@
 "# rentallaravel" 
 
-The purpose of this repository is to get acquainted with Laravel and implement the following standards features:
+The original purpose of this repository is to get acquainted with Laravel and implement the following standards features:
 
 - Database connection and scaffolding from database first (OK)
 - Authentication (OK)
@@ -17,10 +17,12 @@ The purpose of this repository is to get acquainted with Laravel and implement t
   o Translation of user interface (OK)
   o Translation of database stored data
 - Handling of Session (OK)
-- Handling of REST with security token
-- Unit testing
-- Interface testing
+- Handling of REST with security token (not tested)
+- Unit testing 
+- Interface testing (not tested)
 - Compare performance with similar systems using Symfony or Asp.net Core 2.1 (OK)
 
+This has been accomplished. The performance of Lavarel is somewhat better that Symfony, but not much. When compared to Asp.net core the response time is typically 2-3 times higher, but we are talking about 40 ms as opposed to 15 ms, so the main delay is still in the client rendering and in the network.
 
+The present purpose is the replace the old version of the rental system with this one.
 
