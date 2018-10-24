@@ -21,9 +21,6 @@
 </head>
 <body stylexx="overflow: hidden">
     <div class="wrapper" style="background-color: #ffffff; min-height: 1000px; width: 99%">
-        <div class="row">
-            <div class="container" style="text-align: center">Test system - under construction!</div>
-        </div>
         <nav class="navbar navbar-expand-md navbar-light row" style="border-style: solid; border-width: 0 0 2px 0 ; border-color: black">
             <div class="container">
 
