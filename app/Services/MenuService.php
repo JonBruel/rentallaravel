@@ -2,6 +2,9 @@
 namespace App\Services;
 use Auth;
 use Illuminate\Support\Facades\Response;
+use App\Models\HouseI18n;
+use App\Models\House;
+use App;
 
 
 
@@ -24,16 +27,44 @@ use Illuminate\Support\Facades\Response;
  */
 class MenuService {
 
-    private $fullMenu = Array();
+    private $fullMenu = [];
     public static $userMenu;
-
+    private $keepinfo = [];
+    private $houses = -1;
 
     /**
      * Construction of the MenuStructure.
      */
     public function __construct() {
         $this->fullMenu = config('menu.menustructure');
-       $userMenu = $this->fullMenu;
+        $userMenu = $this->fullMenu;
+
+        //Determine active information part for the house
+        $defaultHouse = session('defaultHouse', config('app.default_house', -1));
+        $this->keepinfo = session($defaultHouse.App::getLocale(), []);
+        if (sizeof($this->keepinfo) == 0)
+        {
+            $keepinfo = [];
+            $infofieldstocheck = ['route', 'carrental', 'conditions', 'plan', 'nature', 'sports', 'shopping', 'environment', 'weather'];
+            $info = HouseI18n::where('id', $defaultHouse)->where('culture', App::getLocale())->first();
+            if ($info)
+            {
+                foreach ($infofieldstocheck as $infofield)
+                {
+                    $keepinfo['home/showinfo/'.$infofield] = ($info->$infofield != '');
+                }
+            }
+            session([$defaultHouse.App::getLocale() => $keepinfo]);
+            $this->keepinfo = $keepinfo;
+        }
+
+        //Determine if home/listhouses should be shown
+        $this->houses = session('houses', -1);
+        if ($this->houses = -1) {
+            $this->houses = House::filter()->count();
+            session(['houses' => $this->houses]);
+        }
+
         array_walk($userMenu, [$this,'menufilter']);
         foreach ($userMenu as $key => $value) if ($value == null) unset($userMenu[$key]);
         static::$userMenu = $userMenu;
@@ -63,6 +94,15 @@ class MenuService {
         $value['strenght'] = false;
         $value['key'] = $key;
         if ($deletekey) $value = null;
+
+        //For the deletion of information fields which have not been given a value
+        if (array_key_exists($value['path'], $this->keepinfo))
+        {
+           if ($this->keepinfo[$value['path']] == false) $value = null;
+        }
+
+        if (($this->houses == 1) && $value['path'] == 'home/listhouses') $value = null;
+
     }
 
 
