@@ -1,7 +1,6 @@
 <?php
 namespace App\Services;
 use Auth;
-use Illuminate\Support\Facades\Response;
 use App\Models\HouseI18n;
 use App\Models\House;
 use App;
@@ -9,27 +8,39 @@ use App;
 
 
 /**
- * The MenuStructure services has several purposes. First of all it generates the menustructure
+ * The MenuStructure services has several purposes. First of all it generates the menu structure
  * based on the /app/config/menu.json file. It supports several levels and parent<->child relation-
  * ships, allowing the children to be shown when the parent is clicked. The MenuStructure only
- * dispalys menus the user has right to accourding to his ROLE and the ROLES heirarchy. The menu
- * item show may also depend on the type (site, hub, maindatabase) of the machine this application
- * runs on, and this dependency is included in the class.
+ * dispalys menus the user has right to according to his customertypeid.
  *
  * The rendered menu is rendered as an array with menu names, numbers, CSS class information,
- * etc., but the html format and translation should be handled by the view. The The content
- * is only updated when the menu structure in meny.yml has been changed, we use md5 for
- * a fast check of changes. When there is no change, we reuse the previous MenuSructure instance
- * which is saved in the session.
+ * etc., but the html format and translation should be handled by the view. The content
+ * which is based on the configuration file menu.cfg is checked everytime. We could cash the information,
+ * but the speed is very high and we would only save around 1 ms by doing so.
  *
  * @category  Rentallaravel
  * @author    Jon Brüel
  */
 class MenuService {
 
+    /**
+     * @var array is the unfiltered menu from the menu.cfg file.
+     */
     private $fullMenu = [];
+
+    /**
+     * @var array $userMenu is created from the full menu but only includes the menu points available for the user according to his rights, etc.
+     */
     public static $userMenu;
+
+    /**
+     * @var array $keepinfo hold information about the menu points which we want to omit because they are about information not filled in in the table house_i18n.
+     */
     private $keepinfo = [];
+
+    /**
+     * @var int $houses will be given the number of houses existing under the realm of the site.
+     */
     private $houses = -1;
 
     /**
@@ -71,8 +82,13 @@ class MenuService {
     }
 
 
-    //Contructs the menu based on the customertypeid, very simple
-    //where lower values has the same plus more access than the higher values.
+    /**
+     * Contructs the menu based on the customertypeid, using a rather simple method
+     * where (in general) lower values have the same and more rights than higher values.
+     *
+     * @param array $value
+     * @param int $key being the menupoint
+     */
     private function menufilter(Array &$value, $key) {
         $deletekey = false;
 
@@ -101,27 +117,29 @@ class MenuService {
            if ($this->keepinfo[$value['path']] == false) $value = null;
         }
 
+        //Hide home/listhouses menu point if there only is one house
         if (($this->houses == 1) && $value['path'] == 'home/listhouses') $value = null;
-
     }
 
 
-    /*
-     * This function changes the css classes, used for experimenting with the menu
-     * structure. The aim is the create a "nice collapsable menu".
+    /**
+     * Not implemented
+     *
+     * @param array $value
+     * @param int $key
      */
     private function changecss(Array &$value, $key) {
        //TODO Implement it.
     }
 
+
     /**
-     * When the user click a menu item, the request will be intercepted by the
-     * Middleware, which will
-     * call this method, which will set the appropriate variables and render
-     * the menu. The rendered menu will be stores in a sessions variable, menu_rendered,
-     * which will be used in the view for the generation of the html code.
+     * When the user clicks a menu item, the request will be intercepted by the Middleware,
+     * MenupointGetter, which calls this method at every request. The returned value will in the
+     * veiw be rendered as the menu.
      *
-     * @param type $menuclicked, the menuitem number clicked
+     * @param int $menuclicked
+     * @return array with the menu structure where the clicked menupoint and its parrent and children has been marked in order to show it differently
      */
     public function setClicked($menuclicked) {
 

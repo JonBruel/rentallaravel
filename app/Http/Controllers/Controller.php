@@ -33,6 +33,15 @@ class Controller extends BaseController
         $this->model = $model;
     }
 
+    /**
+     * The purpose of this is to lead the customer to a page where he can select the house he wants
+     * to investigate. This is required in a number of situations. For most sistuations where the
+     * system is used by an end user or an owner, we only have one house and we set the session parameter
+     * defaultHouse to the id of that house.
+     *
+     * @param string|null $returnpath
+     * @return bool|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function checkHouseChoice(string $returnpath = null)
     {
         if (session('defaultHouse') !== null) return false;
@@ -48,6 +57,15 @@ class Controller extends BaseController
         }
     }
 
+    /**
+     * Function used to save input in the session. This was used a lot in the old version of
+     * the rental system, but I have avoided it in this version as it is against best practice
+     * to use the session provided the information can be kept in query parameters.
+     *
+     * @param string $parameter
+     * @param null $default
+     * @return \Illuminate\Session\SessionManager|\Illuminate\Session\Store|mixed
+     */
     protected function doSaveAndRetrieve(string $parameter, $default = null)
     {
         $testvalue = Input::get($parameter);
@@ -74,6 +92,20 @@ class Controller extends BaseController
         return null;
     }
 
+    /**
+     * The function defines a general method for editing tables which are "filterable". These have the function modelFilter() defined and
+     * this function will point to a class in App/Models/Filter directory. Not all tables are filterable.
+     *
+     * @param int $id of the record to be edited.
+     * @param \App\Models\BaseModel $modelclass name of the model
+     * @param string $view name of the view to be used
+     * @param array|null $onlyFields when not empty these are the only fields to be shown, when empty we start out with all the fields but may
+     * add or remove some of them
+     * @param array|null $plusFields are fields to be added
+     * @param array|null $minusFields finally, we may want to delete some fields
+     * @param array|null $casts are extra cast we want to apply to fields such as [['id' => 'hidden'], ['description' => 'textarea']]
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     protected function generaledit($id, $modelclass, $view, $onlyFields = null, $plusFields = null, $minusFields = null, $casts = null)
     {
         //Find page from id
@@ -96,6 +128,20 @@ class Controller extends BaseController
         return view($view, ['models' => $models, 'fields' => $fields, 'vattr' => $vattr]);
     }
 
+    /**
+     *
+     *
+     * @param int $id of the record to be edited.
+     * @param \App\Models\BaseModel $modelclass name of the model
+     * @param string $okMessage the message to be show to the user when the save succeeded.
+     * @param string $redirectOk the url to go to after a succesfull save
+     * @param string|null $redirectError the url o go to after an unsuccessful save
+     * @param array|null $onlyFields when not empty these are the only fields to be shown, when empty we start out with all the fields but may
+     * add or remove some of them
+     * @param array|null $plusFields are fields to be added
+     * @param array|null $minusFields finally, we may want to delete some fields
+     * @return \Illuminate\Http\RedirectResponse
+     */
     protected function generalupdate($id, $modelclass, $okMessage, $redirectOk, $redirectError = null, $onlyFields = null, $plusFields = null, $minusFields = null)
     {
         $model =  $modelclass::findOrFail($id);

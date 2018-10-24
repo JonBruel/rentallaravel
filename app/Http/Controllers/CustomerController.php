@@ -25,7 +25,11 @@ use App\Models\Customer;
 //$relatedmodels = [Emaillog::class, Batchlog::class, Accountpost::class, Contract::class];
 
 /**
- * Class CustomerController
+ * Class CustomerController with the main focus of working with the customer table. In this implementations customers
+ * are not just end customer - people who rent houses - but also personnel, administrators, owner, supervisor  and the one
+ * highest in the hierarchy.
+ *
+ *
  * @package App\Http\Controllers
  */
 class CustomerController extends Controller
@@ -36,14 +40,14 @@ class CustomerController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display the customers the user is allowed to see.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-
-        if (!Gate::allows('Owner')) return redirect('home')->with('warning', 'You are now allowed to see the customer list.');
+        //Set rights
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
 
         $customers = Customer::filter(Input::all())->where('status', 1)->sortable('id')->with('accountposts')->paginate(10);
 
@@ -69,27 +73,17 @@ class CustomerController extends Controller
 
     }
 
-    public function hashpasswords()
-    {
-        //Password hash
-        $customers = Customer::all();
-        foreach ($customers as $customer)
-        {
-            if ((strlen($customer->password < 20) and (strlen($customer->password) > 3)))
-            {
-                $customer->password = Hash::make($customer->password);
-                $customer->save();
-            }
-        }
-    }
-
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new customer. This is likely only to be used by the owner or higher.
+     * The registration for will do the same, and will also start be workflow for checking if the new
+     * customer responds to the email given. This one does not do that.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
+        //Set rights
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $models = [new Customer()];
         $fields = [
             'name',
@@ -99,20 +93,22 @@ class CustomerController extends Controller
             'telephone',
             'mobile',
             'email',
-            'login',
+            'ownerid',
             'plain_password'
         ];
         return view('customer/create', ['models' => $models, 'fields' => $fields, 'vattr' => new ValidationAttributes($models[0])]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created customer.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store()
     {
+        //Set rights
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $model = new Customer();
 
         $fields = [
@@ -123,15 +119,14 @@ class CustomerController extends Controller
             'telephone',
             'mobile',
             'email',
-            'login',
+            'ownerid',
             'plain_password'
         ];
         foreach ($fields as $field) $model->$field = Input::get($field);
 
         //Set structural fields
-        //$model->ownerid = Auth::user()->ownerid;
-        $model->ownerid = 1;
         $model->password = Hash::make(Input::get('plain_password'));
+        $model->plain_password = '';
         $model->houselicenses = 0;
         $model->customertypeid = 1000;
         $model->status = 1;
@@ -150,7 +145,7 @@ class CustomerController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified customer.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -158,6 +153,8 @@ class CustomerController extends Controller
     public function show($id)
     {
         //Find page from id
+        //Set rights
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
 
         if (Input::get('page') == null) {
             $models = Customer::filter(Input::all())->sortable('id')->pluck('id')->all();
@@ -171,7 +168,8 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the customer. This form allows the Administrator or higher to set the password, but it
+     * will not be saved an plain text.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -179,6 +177,8 @@ class CustomerController extends Controller
     public function edit($id)
     {
         //Find page from id
+        //Set rights
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         if (Input::get('page') == null) {
             $models = Customer::filter(Input::all())->sortable('id')->pluck('id')->all();
             $page = array_flip($models)[$id]+1;
@@ -186,12 +186,12 @@ class CustomerController extends Controller
         }
 
         $models = Customer::filter(Input::all())->sortable('id')->paginate(1);
-        $fields = array_diff(Schema::getColumnListing($models[0]->getTable()), ['created_at', 'updated_at', 'remember_token', 'plain_password']);
+        $fields = array_diff(Schema::getColumnListing($models[0]->getTable()), ['created_at', 'updated_at', 'remember_token']);
         return view('customer/edit', ['models' => $models, 'fields' => $fields, 'vattr' => (new ValidationAttributes($models[0]))->setCast('notes', 'textarea')]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the customer. The plain_password is deleted in this process. No mails are sent at this stage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -199,23 +199,29 @@ class CustomerController extends Controller
      */
     public function update($id)
     {
+        //Set rights
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $model =  Customer::findOrFail($id);
         $fields = Schema::getColumnListing($model->getTable());
 
         foreach ($fields as $field){
             $model->$field = Input::get($field);
-            if ($field == 'password' and strlen(Input::get('password') < 60)) $model->$field = Hash::make(Input::get('password'));
-            //if ($field == 'cultureid') die("Cultureid: " . Input::get('cultureid'));
+            $plain_password = Input::get('plain_password');
+            if ($field == 'plain_password' && (strlen($plain_password) < 60) && (strlen($plain_password > 5)))
+            {
+                $model->$field = Hash::make($plain_password);
+            }
+            $model->plain_password = '';
         }
         //We save. The save validates after the Mutators have been used.
         $errors = '';
-        $success = 'House has been updated!';
+        $success = __('Customer has been updated!');
         if (!$model->save()) {
             $errors = $model->getErrors();
             $success = '';
         }
         if ($errors != '') return redirect('/customer/edit/'.$id)->with('success', $success)->with('errors',$errors)->withInput(Input::except('plain_password'));
-        return redirect('/customer/index?menupoint=1010')->with('success', 'Customer has been updated!');
+        return redirect('/customer/index?menupoint=11010')->with('success', 'Customer has been updated!');
     }
 
     /**
@@ -226,6 +232,8 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
+        //Set rights
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $toBeDeleted = (new Customer)->findOrFail($id);
         $name = $toBeDeleted->name;
         $toBeDeleted->delete();
@@ -288,6 +296,8 @@ class CustomerController extends Controller
 
     public function domerge($tobedeleted, $remaining)
     {
+        //Set rights
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $relatedmodels = [Emaillog::class, Batchlog::class, Accountpost::class, Contract::class];
         foreach($relatedmodels as $relatedmodel)
         {

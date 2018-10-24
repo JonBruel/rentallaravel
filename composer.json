@@ -27,8 +27,7 @@
         "nunomaduro/collision": "^2.0",
         "phpunit/phpunit": "^7.0",
         "reliese/laravel": "^0.0.13",
-        "xethron/migrations-generator": "^2.0",
-        "phpdocumentor/phpdocumentor": "2.*"
+        "xethron/migrations-generator": "^2.0"
     },
     "autoload": {
         "classmap": [
