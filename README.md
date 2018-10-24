@@ -22,9 +22,9 @@ The original purpose of this repository is to get acquainted with Laravel and im
 - Interface testing (not tested)
 - Compare performance with similar systems using Symfony or Asp.net Core 2.1 (OK)
 
-The execution time of Lavarel is somewhat longer that the one of Symfony 1.4, but not much. 70 ms instead of 50 ms.
+The execution time of Lavarel is possible a bit faster than Symfony 1.4, but not much. 30 ms for Laravel as compared to 35 ms for Symfony 1.4.
 
-When compared to Asp.net core the response time is typically 2-4 times higher, but we are talking about 60 ms as opposed to 15 ms, so the main delay is still in the client rendering and in the network. The main advantage of Laravel, as I see it, is the similarity with other frameworks, including RoR. I havn't compared it against Symfony 2, 3 or 4, but the tendency has been that these frameworks get slower the older they are.
+When compared to Asp.net core the response time is typically 2-4 times higher, but we are talking about 30 ms as opposed to 15 ms, so the main delay is still in the client rendering and in the network. The main advantage of Laravel, as I see it, is the similarity with other frameworks, including RoR. I havn't compared it against Symfony 2, 3 or 4, but the tendency has been that these frameworks get slower the older they are.
 
 The present purpose is the replace the old version of the rental system with this one.
 

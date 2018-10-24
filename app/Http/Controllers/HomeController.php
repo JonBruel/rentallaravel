@@ -76,11 +76,7 @@ class HomeController extends Controller
         else
         {
             $info = HouseI18n::where('id', $defaultHouse)->where('culture', App::getLocale())->first()->$infotype;
-
-            //Find first vacant week
-            $freeperiod = Periodcontract::filter()->where('from', '>', Carbon::now())->whereNull('committed')->orderBy('from')->first();
-            $firstFree = ($freeperiod)?Carbon::parse($freeperiod->from)->toDateString('Y-m-d') . ' ' . __('to') . ' ' . Carbon::parse($freeperiod->to)->toDateString('Y-m-d'):'';
-            return view('home/showinfo', ['info' => $info, 'firstFree' => $firstFree]);
+            return view('home/showinfo', ['info' => $info]);
         }
     }
 

@@ -12,10 +12,10 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts-->
-    <script src="{{ asset('js/app.js', true) }}" ></script>
+    <script src="{{ asset('js/app.js', false) }}" ></script>
 
     <!-- Styles-->
-    <link href="{{ asset('css/app.css', true) }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css', false) }}" rel="stylesheet">
 
 
 </head>
