@@ -329,7 +329,7 @@ return [
         'childrenmap' => []
     ],
     12030 => [
-        'text' => 'List houses - administrator',
+        'text' => 'List houses',
         'path' => 'house/listhouses',
         'parentid' => 12000,
         'cssclass' => 'menulevel2',
@@ -409,7 +409,7 @@ return [
         'childrenmap' => []
     ],
     14060 => [
-        'text' => 'Batch status',
+        'text' => 'Batchtask status',
         'path' => 'setup/listqueue',
         'parentid' => 14000,
         'cssclass' => 'menulevel2',

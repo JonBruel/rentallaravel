@@ -8,10 +8,10 @@ return [
     |--------------------------------------------------------------------------
     |
     | This value is used to indicate that the system is under construction
-    | and no messages will be sent to anyone but jbr@consiglia.dk
-    |
+    | and no messages will be sent to anyone but jbr@consiglia.dk. This information
+    | may also be retrieved from the config table.
     */
-    'testmessage' =>  'This is a testsystem for demo only. No mails will be sent.',
+    'testmessage' =>  '',
 
     /*
     |--------------------------------------------------------------------------
@@ -133,6 +133,8 @@ return [
 
     //Used for google maps
     'googlekey' => 'AIzaSyCmXZ5CEhhFY3-qXoHRzs0XFK4a495LyxE',
+
+    'host' => 'rentallaravel.consiglia.dk',
 
 
     /*

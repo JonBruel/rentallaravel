@@ -77,20 +77,19 @@ class SetDefaults {
                 foreach(HouseI18n::where('id', $defaultHouse)->get() as $des) $housedescriptions[$des->culture] = $des;
                 session([$defaultHouse.'housedescriptions' => $housedescriptions]);
             }
+
+            //Store information used for meta tags in the session
+            $housedescriptions = session($defaultHouse.'housedescriptions');
+            if (array_key_exists($culture, $housedescriptions))
+            {
+                session(['keywords' => $housedescriptions[$culture]->keywords]);
+                $descriptions = explode('|', $housedescriptions[$culture]->seo);
+                $ran = random_int(0, sizeof($descriptions)-1);
+                session(['description' => $descriptions[$ran]]);
+            }
         }
 
-        //Store information used for meta tags in the session
-        $housedescriptions = session($defaultHouse.'housedescriptions');
-        if (array_key_exists($culture, $housedescriptions))
-        {
-            session(['keywords' => $housedescriptions[$culture]->keywords]);
-            $descriptions = explode('|', $housedescriptions[$culture]->seo);
-            $ran = random_int(0, sizeof($descriptions)-1);
-            session(['description' => $descriptions[$ran]]);
-        }
-
-        config(['app.host' => 'rentallaravel.consiglia.dk']);
-        session(['host' => 'rentallaravel.consiglia.dk']);
+        session(['host' => config('app.host')]);
 
         return $next($request);
     }
