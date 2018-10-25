@@ -4,7 +4,7 @@
     <h3>{{ __('Create periods') }}</h3>
     <div class="table-responsive">
         <table class="table table-striped">
-            {!! Form::open(['name' => 'start', 'url' => '/house/createperiods']) !!}
+            {!! Form::open(['name' => 'start', 'url' => '/house/createperiods', 'autocomplete' => 'off']) !!}
             <tr>
                 <td colspan="7">
                     <p>{{ __('createperiods.explaintext')}}</p>

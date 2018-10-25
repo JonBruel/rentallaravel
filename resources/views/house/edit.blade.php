@@ -9,9 +9,9 @@
         <br />
 
         @include('partials.two_column_edit_1', ['model' => $models[0], 'errors' => $errors, 'fields' => $fields, 'vattr' => $vattr])
-        {!! Form::submit('Save changes',['class' => "btn btn-primary"]); !!}
+        {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
         <a href="/house/edithousehtml/{{$models[0]->id}}" class="btn btn-success" role="button">{{__('Add/edit text/pictures')}}</a>
-
+        {!! Form::submit(__('Copy to new'),['class' => "btn btn-success", 'name' => 'Newhouse']); !!}
         {!! Form::close() !!}
         <br />
         <br />

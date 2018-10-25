@@ -34,7 +34,7 @@
             @foreach($models as $model)
                 <tr>
                     <td>
-                        @include('partials.detail_edit_delete', ['path' => 'house', 'id' => $model->id])
+                        @include('partials.edit_delete', ['path' => 'house', 'id' => $model->id, 'deleteallowed' => Gate::allows('Supervisor')])
                     </td>
                     <td>{{ $model->name }}</td>
                     <td>{{ $model->address1 }}</td>

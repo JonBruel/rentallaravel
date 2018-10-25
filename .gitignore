@@ -6,6 +6,7 @@
 /vendor
 /phpDocumentor
 /public/vendor
+!/public/vendor/tiny_mce/*
 /.idea
 /.vagrant
 Homestead.json

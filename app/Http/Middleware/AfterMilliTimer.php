@@ -30,9 +30,9 @@ class AfterMilliTimer
         * Custom cache headers for js and css files, disables with "x"
         */
 
-        //$response = $response->header('X-Through-Controller','Yes');
-        //$response->header("pragma", "no-cache");
-        //$response->header("Cache-Control", "no-store,no-cache, must-revalidate, post-check=0, pre-check=0");
+        $response = $response->header('X-Through-Controller','Yes');
+        $response->header("pragma", "no-cache");
+        $response->header("Cache-Control", "no-store,no-cache, must-revalidate, post-check=0, pre-check=0");
 
         return $response;
     }

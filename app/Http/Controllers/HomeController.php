@@ -28,10 +28,10 @@ use App\Models\Customer;
 use Carbon\Carbon;
 use DB;
 use App\Mail\DefaultMail;
-//use Spatie\TranslationLoader\LanguageLine;
+
 
 /**
- * Class HomeController
+ * Class HomeController which is used for showing information about houses where the user is not required to be logged in.
  * @package App\Http\Controllers
  */
 class HomeController extends Controller
@@ -43,24 +43,16 @@ class HomeController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Displays information about the house.
      *
      * @return \Illuminate\Http\Response
      */
-    public function showinfo(Request $request, $infotype = 'description')
+    public function showinfo($infotype = 'description')
     {
         //if (!Auth::check()) return redirect('/login');
-        $this->checkHouseChoice($request, 'home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
+        $this->checkHouseChoice('home/showinfo/'.$infotype.'?menupoint='.session('menupoint', 10010));
         $defaultHouse = session('defaultHouse' , 1);
-
         if (Auth::viaRemember()) session()->flash('success', __('You are logged on.'));
-        //Testing mail.
-        //TODO: Remove it in production version.
-        if (\Auth::check()) {
-            $user = Auth::user();
-            //public function __construct($contents, $fromaddress = 'jbr@consiglia.dk', $fromName = 'testFromName', $toName = '', $attachements = [])
-            //Mail::to('jbr@consiglia.dk')->send(new DefaultMail('<br />Dette er en prøve.<br /><br />', 'jbr@consiglia.dk', 'Jon Brüel', 'Jon'));
-        }
 
         if ($infotype == 'gallery')
         {
@@ -81,20 +73,24 @@ class HomeController extends Controller
         }
     }
 
-
+    /**
+     * The tokenLogin allows the user to login without password provided a remember_token is included in the query parameter.
+     * The remember_token may expire and the user will be redirected to a login view.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function tokenlogin()
     {
         $this->checkToken();
         return redirect('/home/showinfo/description');
     }
 
-    /*
-     * Route::get('/home/listtestimonials', 'HomeController@listtestimonials');
-     * Route::get('/home/showmap', 'HomeController@showmap');
-     * Route::get('/home/checkbookings', 'HomeController@checkbookings');
-     * Route::get('/home/listhouses', 'HomeController@listhouses');
+    /**
+     * Feed the listtestimonials view, which if the user is logged in, allows for new testimonials. House owners will be given the option
+     * of editing existing testimonials.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
-
     public function listtestimonials()
     {
         $houseid = session('defaultHouse' , 1);
@@ -108,7 +104,11 @@ class HomeController extends Controller
         return view('home/listtestimonials', ['models' => $testimonials, 'administrator' => Gate::allows('Administrator'), 'house' => $house, 'houseid' => $houseid])->with('search', Input::all());
     }
 
-
+    /**
+     * This function is for the normal logged in customer to create a new testimonial.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function createtestimonial()
     {
         if (!Auth::check()) return redirect('/login');
@@ -119,28 +119,56 @@ class HomeController extends Controller
         return redirect('home/listtestimonials')->with('success', __('Your testimonial is now included.'));
     }
 
+    /**
+     * The owner and above is allowed to delete testimonials.
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroytestimonial($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         Testimonial::Find($id)->delete();
         return redirect('home/listtestimonials')->with('success', __('The testimonial is now deleted.'));
     }
 
+    /**
+     * The owner and above is allowed to edit and update testimonials.
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function edittestimonial($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $testimonial = Testimonial::Find($id);
         $fields = ['text', 'houseid', 'id', 'userid'];
         $vattr = (new CreateValidationAttributes($testimonial))->setCast('text', 'textarea')->setCast('id', 'hidden')->setCast('houseid', 'hidden')->setCast('userid', 'hidden');
         return view('home/edittestimonial', ['testimonial' => $testimonial, 'fields' => $fields, 'vattr' => $vattr]);
     }
 
+    /**
+     * The owner and above is allowed to edit and update testimonials.
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatetestimonial($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $testimonial = Testimonial::Find($id);
         $testimonial->text = Input::get('text');
         $testimonial->save();
         return redirect('home/listtestimonials')->with('success', __('The testimonial is now updated.'));
     }
 
+    /**
+     * The function feeds the view which shows the calender of the present and next two years.
+     * The pager function has been used on a simple array to trick is to use the convenient paging functions in the view.
+     * The view also shows the private usage of the house.
+     *
+     * @return mixed
+     */
     public function checkbookings()
     {
 
@@ -183,6 +211,12 @@ class HomeController extends Controller
 
     }
 
+    /**
+     * The menupoint leading to this function and view will not always be shown. If there only is one house, it will be hidden.
+     * The view itself is much simpler than the case of the old rental system, and could be improved in the future.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function search()
     {
         return view('home/search');
@@ -204,7 +238,12 @@ class HomeController extends Controller
         return view('home/listhouses', ['models' => $models, 'returnpath' => $returnpath]);
     }
 
-
+    /**
+     * Feeds the information for the Google map for the house. The view itself has ajax calls back to
+     * the AjaxController.
+     *
+     * @return mixed
+     */
     public function showmap()
     {
         $googlekey = config('app.googlekey', 'AIzaSyCmXZ5CEhhFY3-qXoHRzs0XFK4a495LyxE');

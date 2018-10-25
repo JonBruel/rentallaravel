@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 use Schema;
 use Gate;
 use Kyslik\ColumnSortable\Sortable;
-use App\_Rules_not_used_anymore\Name;
 use ValidationAttributes;
 use App\Models\Customer;
 use App\Models\Culture;
@@ -36,7 +35,8 @@ class HouseController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * List houses using filter and sorter. The scope depends on the ownership relations with the user. If there is only one
+     * house the user will be redirected to house/edit.
      *
      * @return \Illuminate\Http\Response
      */
@@ -52,9 +52,16 @@ class HouseController extends Controller
             return redirect('house/edit/'.$models[0]->id);
         }
 
-        return view('house/index', ['models' => $models, 'search' => Input::all(), 'owners' => $owners]);
+        return view('house/listhouses', ['models' => $models, 'search' => Input::all(), 'owners' => $owners]);
     }
 
+    /**
+     * A helper function which uses the filter to check that the user has the right to see that house.
+     * This may not be the case if the house belong to another site.
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function checkAccess($id)
     {
         $house = House::filter()->where('id', $id)->first();
@@ -63,54 +70,14 @@ class HouseController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Feeds the view for editing specific information about the house, things which are not translated.
      *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //Find page from id
-        if (Input::query('page') == null) {
-            $models = House::sortable()->pluck('id')->all();
-            $page = array_flip($models)[$id]+1;
-            Input::merge(['page' => $page]);
-        }
-
-        $models = House::sortable()->paginate(1);
-        $fields = Schema::getColumnListing($models[0]->getTable());
-        return view('customer/show', ['models' => $models, 'fields' => $fields]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
+     * @param  int  $id house id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $model = (new House)->findOrFail($id);
 
         $fields = array_diff(Schema::getColumnListing($model->getTable()), ['created_at', 'updated_at', 'lockbatch', 'viewfilter']);
@@ -120,8 +87,15 @@ class HouseController extends Controller
         return view('house/edit', ['models' => [$model], 'fields' => $fields, 'vattr' => $vattr, 'administrator' => Gate::allows('administrator'), 'housefields' => json_encode($housefields), 'googlekey' => $googlekey]);
     }
 
+    /**
+     * Feeds the view to edit things which are translated into different languages.
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function edithousehtml($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $cultures = Culture::where('culturename', '<>', 'Test')->get();
 
         $languages = [];
@@ -187,8 +161,15 @@ class HouseController extends Controller
             'id' => $id]);
     }
 
+    /**
+     * Updates information about the house which is translated into different languages.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatehousehtml($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $chosenfield = Input::get('field');
         //We save. The save validates after the Mutators have been used.
         $errors = '';
@@ -206,8 +187,15 @@ class HouseController extends Controller
         return redirect('house/edithousehtml/'.$id.'?field='.$chosenfield)->with('success', $success)->with('errors',$errors);
     }
 
+    /**
+     *
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function browse($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $house = $this->checkAccess($id);
 
         $myfiles = [];
@@ -227,6 +215,7 @@ class HouseController extends Controller
 
     public function deletefiles($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $this->checkAccess($id);
 
         $uploaddir = [];
@@ -255,17 +244,24 @@ class HouseController extends Controller
      */
     public function update($id)
     {
-        $model = (new House)->findOrFail($id);
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
+        $success = __('House has been updated!');
+        if (Input::get('Newhouse'))
+        {
+            $model = new House();
+            $success = __('A new house has been created!');
+        }
+        else $model = House::findOrFail($id);
 
         //We set the model
         $fields = Schema::getColumnListing($model->getTable());
         foreach ($fields as $field){
-            $model->$field = Input::get($field) ;
+            if ($field != 'id') $model->$field = Input::get($field) ;
         }
+        $model->viewfilter = 1000;
 
         //We save. The save validates after the Mutators have been used.
         $errors = '';
-        $success = 'House has been updated!';
         if (!$model->save()) {
             $errors = $model->getErrors();
             $success = '';
@@ -282,7 +278,10 @@ class HouseController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (!Gate::allows('Supervisor')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
+
+        House::Find($id)->delete();
+        return redirect('/house/listhouses?menupoint=12030');
     }
 
     /*
@@ -291,6 +290,7 @@ class HouseController extends Controller
      */
     public function listperiods()
     {
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $year = Carbon::now()->year;
         $search = Input::all();
         $models = Periodcontract::filter(Input::all())->orderBy('from')->whereDate('from', '>', Carbon::createFromDate($year,1,1))->with('house')->paginate(26);
@@ -302,6 +302,7 @@ class HouseController extends Controller
 
     public function editperiod($id)
     {
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $model = Period::Find($id);
         $fields = ['id', 'baseprice','basepersons', 'maxpersons','personprice'];
         $vattr = (new ValidationAttributes($model))->setCast('id', 'hidden');
@@ -310,6 +311,7 @@ class HouseController extends Controller
 
     public function updateperiod($id)
     {
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $model = Period::Find($id);
         $fields = ['baseprice','basepersons', 'maxpersons','personprice'];
 
@@ -336,6 +338,7 @@ class HouseController extends Controller
     {
         //echo('test:'.Input::get('test', 'nothing') );
         //die(var_dump($request->get('data')));
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         if (Input::get('test') == 'yes') return $this->insertcreatedperiods();
 
         $houses = House::filter(Input::all())->pluck('name', 'id')->toArray();
@@ -391,7 +394,7 @@ class HouseController extends Controller
 
     public function insertcreatedperiods()
     {
-
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         Input::merge(['test' => 'redirected']);
         $seasons = Input::get('seasons', 5);
         $periodlength = Input::get('periodlength', 7);

@@ -14,6 +14,7 @@ use Illuminate\Http\Response;
 use Schema;
 use ValidationAttributes;
 use App\Models\BaseModel;
+use App\Models\House;
 use App\Models\Periodcontract;
 use App\Models\Contract;
 use Illuminate\Support\Facades\Input;

@@ -3,7 +3,7 @@
     <h4 style="text-align: center">{{$models[0]->house->name}}</h4>
     @if(Gate::allows('Administrator'))<h4>{{$models[0]->customer->name}}, {{__('Contract').': '.$models[0]->id}}</h4>@endif
     <div class="table">
-        {!! Form::open(['action' => ['ContractController@contractupdate', $models[0]], 'class' => 'form-horizontal']) !!}
+        {!! Form::open(['action' => ['ContractController@contractupdate', $models[0]], 'class' => 'form-horizontal', 'autocomplete' => 'off']) !!}
         <br />
         <br />
         @if ($errors->any())
@@ -47,7 +47,7 @@
                         @endif
                     @endif
                     @if($field == 'persons')
-                        {!! Form::select($field, $personSelectbox, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-2 form-control', 'onChange' => 'setFinalprice()', 'style' => 'padding: 1px 0 3px 10px;', 'id' => 'persons'])) !!}
+                        {!! Form::select($field, $personSelectbox, $models[0]->$field, $vattr->validationOptions($field, ['autocomplete' => 'off', 'class' => 'col-2 form-control', 'onChange' => 'setFinalprice()', 'style' => 'padding: 1px 0 3px 10px;', 'id' => 'persons'])) !!}
                         <button class="glyphicon glyphicon-plus rounded-circle" style="margin-left: 10px" onclick="addPersons(1);return false;"></button>
                         <button class="glyphicon glyphicon-minus rounded-circle"  style="margin-left: 10px" onclick="addPersons(-1);return false;"></button>
                     @endif

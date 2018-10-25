@@ -52,9 +52,9 @@ Route::get('/customer/checkaccount/{id}', 'CustomerController@checkaccount');
 Route::get('/house/show/{id}', 'HouseController@show');
 Route::get('/house/edit/{id}', 'HouseController@edit');
 Route::post('/house/update/{id}', 'HouseController@update');
-Route::get('/house/destroy/{id}', 'HouseController@destroy');
-Route::get('/house/create', 'HouseController@create');
-Route::post('/house/store', 'HouseController@store');
+Route::delete('/house/destroy/{id}', 'HouseController@destroy');
+//Route::get('/house/create', 'HouseController@create');
+//Route::post('/house/store', 'HouseController@store');
 //From rental:
 Route::get('/house/createperiods', 'HouseController@createperiods');
 Route::post('/house/createperiods', 'HouseController@createperiods');

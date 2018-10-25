@@ -129,7 +129,7 @@ class Controller extends BaseController
     }
 
     /**
-     *
+     * The function is the update-sister to the generaledit function.
      *
      * @param int $id of the record to be edited.
      * @param \App\Models\BaseModel $modelclass name of the model
