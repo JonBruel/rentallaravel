@@ -1,16 +1,16 @@
-<script type="text/javascript" src="{{ asset('vendor/jquery/dist/jquery.validate.js', true)}}"></script>
-<script type="text/javascript" src="{{ asset('vendor/jquery/dist/jquery.validate.unobtrusive.js', true)}}"></script>
+<script type="text/javascript" src="{{ asset('vendor/jquery/dist/jquery.validate.js', config('app.secure', false))}}"></script>
+<script type="text/javascript" src="{{ asset('vendor/jquery/dist/jquery.validate.unobtrusive.js', config('app.secure', false))}}"></script>
 
 <!-- cldr scripts (needed for globalize)-->
-<script src="{{ asset('vendor/cldrjs/dist/cldr.js', true) }}"></script>
-<script src="{{ asset('vendor/cldrjs/dist/cldr/event.js', true) }}"></script>
-<script src="{{ asset('vendor/cldrjs/dist/cldr/supplemental.js', true) }}"></script>
+<script src="{{ asset('vendor/cldrjs/dist/cldr.js', config('app.secure', false)) }}"></script>
+<script src="{{ asset('vendor/cldrjs/dist/cldr/event.js', config('app.secure', false)) }}"></script>
+<script src="{{ asset('vendor/cldrjs/dist/cldr/supplemental.js', config('app.secure', false)) }}"></script>
 
-<script type="text/javascript" src="{{ asset('vendor/globalize/js/globalize.js', true)}}"></script>
-<script type="text/javascript" src="{{ asset('vendor/globalize/js/globalize/number.js', true)}}"></script>
-<script type="text/javascript" src="{{ asset('vendor/globalize/js/globalize/date.js', true)}}"></script>
+<script type="text/javascript" src="{{ asset('vendor/globalize/js/globalize.js', config('app.secure', false))}}"></script>
+<script type="text/javascript" src="{{ asset('vendor/globalize/js/globalize/number.js', config('app.secure', false))}}"></script>
+<script type="text/javascript" src="{{ asset('vendor/globalize/js/globalize/date.js', config('app.secure', false))}}"></script>
 
-<script type="text/javascript" src="{{ asset('vendor/globalize/js/jquery.validate.globalize.js', true)}}"></script>
+<script type="text/javascript" src="{{ asset('vendor/globalize/js/jquery.validate.globalize.js', config('app.secure', false))}}"></script>
 <script type="text/javascript">
     var culture = "{{App::getLocale()}}";
     culture = culture.replace("_", "-");

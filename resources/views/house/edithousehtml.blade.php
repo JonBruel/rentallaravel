@@ -84,9 +84,9 @@
 @include('partials.client_validation')
 @endsection
 @section('scripts')
-    <script type="text/javascript" src="{{ asset('vendor/tiny_mce/tiny_mce.js', config('secure', false))}}"></script>
-    <script type="text/javascript" src="{{ asset('vendor/tiny_mce/plugins/filemanager/js/mcfilemanager.js', config('secure', false))}}"></script>
-    <script  type="text/javascript" src="{{ asset('vendor/tiny_mce/plugins/imagemanager/js/mcimagemanager.js', config('secure', false))}}"></script><p class="header" onclick="jQuery('#fileform').toggle()">
+    <script type="text/javascript" src="{{ asset('vendor/tiny_mce/tiny_mce.js', config('spp.secure', false))}}"></script>
+    <script type="text/javascript" src="{{ asset('vendor/tiny_mce/plugins/filemanager/js/mcfilemanager.js', config('app.secure', false))}}"></script>
+    <script  type="text/javascript" src="{{ asset('vendor/tiny_mce/plugins/imagemanager/js/mcimagemanager.js', config('app.secure', false))}}"></script><p class="header" onclick="jQuery('#fileform').toggle()">
 
     <script type="text/javascript">
         elementnew = "{{$field}}_da_DK";
@@ -135,8 +135,6 @@
             });
 
         }
-
-
 
         contents = [];
         @foreach($cultures as $culture)
