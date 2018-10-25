@@ -7,7 +7,7 @@
  */
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Input;
 use Schema;
 use Gate;
@@ -21,6 +21,7 @@ use App\Models\Batchlog;
 use App\Models\Accountpost;
 use App\Models\Contract;
 use App\Models\Customer;
+use App\Models\House;
 
 //$relatedmodels = [Emaillog::class, Batchlog::class, Accountpost::class, Contract::class];
 
@@ -259,8 +260,8 @@ class CustomerController extends Controller
 
         $awlanguage = substr(\App::getLocale(),0,2);
         if ($awlanguage == 'da') $awlanguage = 'dk';
-        //TODO: make general
-        $url = 'http://cangeroni.hasselbalch.com';
+        $defaultHouse = session('defaultHouse' , 1);
+        $url = House::Find($defaultHouse)->www;
         $awurl = "http://awstat.consiglia.dk/awstats/awstats.pl?lang=".$awlanguage."&config=" . substr($url,7);
         return view('customer/statistics', ['awurl' => $awurl]);
     }

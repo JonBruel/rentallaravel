@@ -76,7 +76,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Europe/Copenhagen',
 
     /*
     |--------------------------------------------------------------------------
@@ -133,6 +133,19 @@ return [
 
     //Used for google maps
     'googlekey' => 'AIzaSyCmXZ5CEhhFY3-qXoHRzs0XFK4a495LyxE',
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Secure
+    |--------------------------------------------------------------------------
+    |
+    | This key determines if links to assets should be with https of http.
+    | If secure is set to true, https is used.
+    |
+    */
+
+    'secure' => env('APP_SECURE', false),
 
     /*
     |--------------------------------------------------------------------------

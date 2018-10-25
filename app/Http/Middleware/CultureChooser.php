@@ -37,14 +37,14 @@ class CultureChooser
         $querystring = str_replace('culture='.$locale.'&','',$querystring);
         $querystring = preg_replace ('/menupoint=(\d+)/', '', $querystring);
         session(['querystring' => $querystring]);
-        $sanitizedpath = '/'.$request->path().'?'.$querystring;
+        $sanitizedpath = '/'.$request->path();
         $sanitizedpath = str_replace('//', '/', $sanitizedpath);
 
         //Save path history in session
         $sanitizedpath1back = session('sanitizedpath', '');
         $sanitizedpath2back = session('sanitizedpath1back', '');
 
-        session(['sanitizedpath' => $sanitizedpath]);
+        if(strpos($sanitizedpath, 'ajax') === false) session(['sanitizedpath' => $sanitizedpath]);
         session(['sanitizedpath1back' => $sanitizedpath1back]);
         session(['sanitizedpath2back' => $sanitizedpath2back]);
 

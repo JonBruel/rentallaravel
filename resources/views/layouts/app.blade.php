@@ -9,13 +9,13 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ __(config('app.name', 'Rental')) }}</title>
 
     <!-- Scripts-->
-    <script src="{{ asset('js/app.js', false) }}" ></script>
+    <script src="{{ asset('js/app.js', config('app.secure', false)) }}" ></script>
 
     <!-- Styles-->
-    <link href="{{ asset('css/app.css', false) }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css', config('app.secure', false)) }}" rel="stylesheet">
 
 
 </head>
@@ -41,7 +41,7 @@
 
 
 
-                        <?php $oldlevel = 1 ?>
+                        @php($oldlevel = 1)
                         @foreach(\Session::get('menuStructure') as $menupoint => $item)
                             <?php
                             $newlevel = $item['level'];
@@ -72,7 +72,7 @@
                                 </li>
                             @endif
 
-                            <?php $oldlevel = $newlevel ?>
+                            @php($oldlevel = $newlevel)
                         @endforeach
                          </ul></div>
 
@@ -91,6 +91,9 @@
         </nav>
 
         <main class="container" style="margin-top: 5px; max-width: 100%">
+            @if(!isset($hidesalt))
+            <span id="statusrow"><strong>{{__('Here you are')}}: {{session('sanitizedpath','Home')}} <a href="{{session('sanitizedpath1back','')}}">{{__('Return')}}</a></strong></span>
+            @endif
             @if(session('warning'))
                 <div class="alert alert-warning border border-primary">{{session('warning')}}</div>
             @endif
@@ -99,11 +102,11 @@
             @endif
             @include('cookieConsent::index')
                 <div class="row">
-                <div class="col col-md-12">
+                <div class="col col-md-12" style="margin-left: 8px; margin-top: 10px">
                     @yield('content')
                     @if(\Gate::allows('Supervisor'))
                     <br />
-                    Time lapse: {{session('ost')}}
+                    {{session('timer')}}
                     <br />
                         Culture: {{session('culture')}}
                     <br />

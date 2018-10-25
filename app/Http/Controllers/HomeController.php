@@ -76,7 +76,7 @@ class HomeController extends Controller
         else
         {
             $info = HouseI18n::where('id', $defaultHouse)->where('culture', App::getLocale())->first()->$infotype;
-            return view('home/showinfo', ['info' => $info]);
+            return view('home/showinfo', ['info' => $info, 'hidesalt' => true]);
         }
     }
 
