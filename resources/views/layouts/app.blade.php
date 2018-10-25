@@ -5,6 +5,9 @@
     <meta name="google-site-verification" content="{{config('app.google-site-verification')}}"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{session('description')}}" />
+    <meta name="keywords" content="{{session('keywords')}}" />
+    <title>Rent a house | Beskrivelse</title>
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">

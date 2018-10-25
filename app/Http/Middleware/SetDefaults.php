@@ -9,15 +9,21 @@ use Event;
 use App;
 use Auth;
 use DB;
+use App\Models\HouseI18n;
 
 
 
 class SetDefaults {
 
-
+    public function getMicroTime()
+    {
+        list( $usec, $sec ) = explode( ' ', microtime() );
+        return round(( (float) $usec * 1000 + (float) $sec * 1000), 2);
+    }
 
     public function handle(Request $request, Closure $next)
     {
+        AfterMilliTimer::$tstart = $this->getMicroTime();
         $role = 1000;
         $ownerid = -1;
         $_SESSION['user'] = null;
@@ -55,6 +61,32 @@ class SetDefaults {
                     echo("Code not evaluated OK");
             }
             else session(['config' => 1]);
+        }
+
+        $culture = App::getLocale();
+        session(['keywords' => '']);
+        session(['description' => '']);
+
+        //Store houseinformation in the session
+        if (session('defaultHouse', -1) != -1)
+        {
+            $defaultHouse = session('defaultHouse');
+            if (!session($defaultHouse.'housedescriptions'))
+            {
+                $housedescriptions = [];
+                foreach(HouseI18n::where('id', $defaultHouse)->get() as $des) $housedescriptions[$des->culture] = $des;
+                session([$defaultHouse.'housedescriptions' => $housedescriptions]);
+            }
+        }
+
+        //Store information used for meta tags in the session
+        $housedescriptions = session($defaultHouse.'housedescriptions');
+        if (array_key_exists($culture, $housedescriptions))
+        {
+            session(['keywords' => $housedescriptions[$culture]->keywords]);
+            $descriptions = explode('|', $housedescriptions[$culture]->seo);
+            $ran = random_int(0, sizeof($descriptions)-1);
+            session(['description' => $descriptions[$ran]]);
         }
 
         config(['app.host' => 'rentallaravel.consiglia.dk']);
