@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-pack>
+  <header>
+    <!-- Please fill in contact information (author & email), we might contact you when we are doing updates -->
+    <!-- You will also have the chance to participate in beta releases of new versions -->
+    <author>jason</author>
+    <version minor="0" major="1" releasedate="2010-03-26" />
+    <description>
+			This is the Traditional Chinese language pack for the MCImageManager.
+	</description>
+  </header>
+  <language code="zh" title="Traditional Chinese" dir="ltr">
+    <group target="common">
+      <item name="title">Moxiecode 影像管理r</item>
+      <item name="filemanager">檔案管理</item>
+      <item name="createdir">建立資料夾</item>
+      <item name="refresh">重新整理</item>
+      <item name="upload">上傳</item>
+      <item name="help">協助</item>
+      <item name="edit">修改</item>
+      <item name="deleteit">刪除</item>
+      <item name="view">檢視</item>
+      <item name="insert">插入</item>
+      <item name="add_favorite">新增最愛</item>
+      <item name="directory">已選取的資料夾</item>
+      <item name="removefavorite">移除資料夾</item>
+      <item name="loading">讀取中...</item>
+      <item name="filter">篩選</item>
+      <item name="alert_ok">好</item>
+      <item name="confirm_yes">是</item>
+      <item name="confirm_no">否</item>
+      <item name="prev">往前</item>
+      <item name="next">往後</item>
+      <item name="image_data">正在取得影像檔，請稍候...</item>
+    </group>
+    <group target="button">
+      <!-- think about the length of the text -->
+      <item name="create">建立</item>
+      <item name="cancel">放棄</item>
+      <item name="apply">套用</item>
+      <item name="save">儲存</item>
+    </group>
+    <group target="error">
+      <!-- common -->
+      <item name="demo">此動作已被限制在預演模式。</item>
+      <item name="no_filesystem">沒有找到檔案系統路徑: {path}.</item>
+      <item name="no_access">在此檔案/資料夾沒有權限。</item>
+      <item name="no_write_access">在此資料夾沒有寫入權限</item>
+      <item name="file_not_exists">找不到檔案/資料夾。</item>
+      <item name="invalid_filename">無效的檔案名稱。</item>
+      <item name="remove_favorite_failed">從喜愛偏好清單中錯誤的移除您的喜愛偏好。</item>
+      <!-- create dir -->
+      <item name="template_missing">已選取的範本已遺失。</item>
+      <item name="folder_exists">具有指定名稱的資料夾已經存在。</item>
+      <item name="createdir_failed">無法建立資料夾。</item>
+      <!-- upload -->
+      <item name="upload_failed">上傳失敗，確定您的資料匣寫入權限。</item>
+      <item name="file_exists">具有指定名稱的檔案已經存在。</item>
+      <item name="error_to_large">您上傳的檔案太大。</item>
+      <!-- delete -->
+      <item name="delete_failed">無法刪除檔案。</item>
+      <!-- image edit -->
+      <item name="crop_failed">無法裁減影像。</item>
+      <item name="resize_failed">無法調整影像大小。</item>
+      <item name="rotate_failed">旋轉失敗。</item>
+      <item name="flip_failed">翻轉失敗。</item>
+      <item name="save_failed">儲存失敗。</item>
+    </group>
+    <group target="message">
+      <!-- common -->
+      <item name="save_success">檔案已被儲存。</item>
+      <item name="keepalive">持續存活的要求。</item>
+      <!-- delete -->
+      <item name="delete_success">檔案已成功刪除。</item>
+      <!-- create dir -->
+      <item name="directory_ok">資料夾已成功刪除。</item>
+      <!-- upload -->
+      <item name="upload_ok">上傳完成。</item>
+      <!-- image edit -->
+      <item name="crop_success">剪裁完成。</item>
+      <item name="resize_success">調整大小完成。</item>
+      <item name="rotate_success">旋轉完成。</item>
+      <item name="flip_success">翻轉完成。</item>
+    </group>
+    <group target="panel">
+      <item name="categories">分類</item>
+      <item name="folders">資料夾</item>
+      <item name="favorites">喜好偏愛</item>
+      <item name="history">歷程記錄</item>
+    </group>
+    <group target="view">
+      <item name="title">檢視</item>
+      <item name="mode">檢視模式:</item>
+      <item name="thumbnail">縮圖</item>
+      <item name="textlist">文字清單</item>
+      <item name="images_per_page">影像/頁面</item>
+      <item name="confirm_delete">您確定要移除這個檔案嗎？</item>
+      <item name="keyboard_next">鍵盤快捷鍵: 空白鍵，N 鍵，右向方向鍵，PAGE DOWN 鍵</item>
+      <item name="keyboard_prev">鍵盤快捷鍵: P 鍵，左向方向鍵，PAGE UP 鍵</item>
+      <item name="dimensions">尺寸</item>
+      <item name="confirm_remove_favorite">您確定要從您的最愛清單移除嗎？</item>
+    </group>
+    <group target="createdir">
+      <item name="title">建立資料夾</item>
+      <item name="description">插入一個您要建立的資料夾名稱。</item>
+      <item name="template">範本:</item>
+      <item name="select_template">-- 選取範本 --</item>
+      <item name="directory_name">資料夾名稱:</item>
+      <item name="create_in">建立在:</item>
+      <item name="progress">正在建立資料夾，請稍候...</item>
+    </group>
+    <group target="upload">
+      <item name="title">上傳</item>
+      <item name="description">使用該表格上載文件。</item>
+      <item name="valid_extensions">有效的延伸功能:</item>
+      <item name="max_upload_size">最大上傳大小:</item>
+      <item name="file_to_upload">要上傳的文件:</item>
+      <item name="as_file_name">如檔案名稱:</item>
+      <item name="path">路徑: </item>
+      <item name="button_upload">上傳</item>
+      <item name="browse">新增檔案</item>
+      <item name="progress">上傳中...</item>
+      <item name="upload_warn">檔案正被上傳，您確定您要放棄此次上傳？</item>
+    </group>
+    <group target="edit_image">
+      <item name="title">Moxiecode 影像管理修改器</item>
+      <item name="save">儲存</item>
+      <item name="revert">還原</item>
+      <item name="crop">剪裁</item>
+      <item name="resize">調整大小</item>
+      <item name="please_wait">處理影像中，請稍候...</item>
+      <item name="constrain">比例約束</item>
+      <item name="left">左</item>
+      <item name="top">上</item>
+      <item name="width">寬</item>
+      <item name="height">高</item>
+      <item name="save_as">另存為</item>
+      <item name="flip">翻轉</item>
+      <item name="rotate">旋轉</item>
+      <item name="reload">重新讀取</item>
+      <item name="horizontal">水平</item>
+      <item name="vertical">垂直</item>
+      <item name="saving_wait">儲存影像中，請稍候...</item>
+      <item name="confirm_revert">您確定您要還原到最後一次儲存過的影像嗎？</item>
+      <item name="loading">讀取影像中，請稍候...</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertimage_desc">插入影像</item>
+    </group>
+  </language>
+</language-pack>

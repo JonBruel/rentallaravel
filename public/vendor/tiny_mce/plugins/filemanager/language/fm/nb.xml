@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<language-pack>
+  <header>
+    <author>NCR Systems AS</author>
+    <version minor="0" major="1" releasedate="2008-05-15" />
+    <description>
+    		Dette er norsk bokmål språkpakke for MCFileManager.
+		</description>
+  </header>
+  <language code="nb" title="Norsk bokmål" dir="ltr">
+    <group target="error">
+      <item name="tofile_exists">Filen finnes allerede.</item>
+      <item name="no_from_file">Filen du forsøker å laste opp, eksisterer ikke.</item>
+      <item name="demo">Denne handlingen er ikke mulig i demo modus.</item>
+      <item name="invalid_filename">Ugyldig filnavn.</item>
+      <item name="no_write_access">Ingen skrivetilgang til denne fila/mappa.</item>
+      <item name="copy_failed">Kopi mislyktes.</item>
+      <item name="move_failed">Flytt mislyktes.</item>
+      <item name="template_missing">Malen ble ikke funnet.</item>
+      <item name="createdoc_failed">Opprettelse av dokumentet mislyktes.</item>
+      <item name="no_access">Du har ingen tilgang til å gjennomføre denne handlingen..</item>
+      <item name="file_exists">Filen finnes allerede.</item>
+      <item name="upload_failed">Opplastingen mislyktes. Kontroller skriverettighetene til mappa.</item>
+      <item name="error_to_large">Maksimal filstørrelse overskredet.</item>
+      <item name="file_not_exists">Filen eksisterer ikke.</item>
+      <item name="delete_failed">Sletting mislyktes.</item>
+      <item name="folder_exists">Mappa eksisterer allerede.</item>
+      <item name="no_filesystem">Kunne ikke lokalisere filsystemet.</item>
+      <item name="createdir_failed">Opprett mappa mislyktes.</item>
+      <item name="createzip_failed">Opprett zip mislyktes.</item>
+      <item name="rename_failed">Gi nytt navn mislyktes.</item>
+    </group>
+    <group target="message">
+      <item name="zip_success">Zip fullførte korrekt.</item>
+      <item name="copy_success">Kopier fullførte korrekt.</item>
+      <item name="move_success">Flytt fullførte korrekt.</item>
+      <item name="createdoc_success">Dokumentet ble opprettet korrekt.</item>
+      <item name="delete_success">Slettingen var vellykket.</item>
+      <item name="directory_ok">Mappa ble opprettet korrekt.</item>
+      <item name="keepalive">Keepalive</item>
+      <item name="upload_ok">Opplastingen var vellykket.</item>
+      <item name="confirm_cut">Er du sikker på at du vil klippe ut de valgte filene?</item>
+      <item name="confirm_copy">Er du sikker på at du vil kopiere de valgte filene?</item>
+      <item name="confirm_paste">Er du sikker på at du vil lime inn filene her?</item>
+      <item name="confirm_delete">Er du sikker på at du vil slette de valgte filene?</item>
+      <item name="insert">Henter informasjon om filen, vennligst vent...</item>
+      <item name="paste_in_progress">Lim inn pågår, vennligst vent...</item>
+    </group>
+    <group target="common">
+      <item name="createdir">Opprett mappe</item>
+      <item name="createfile">Ny fil</item>
+      <item name="help">Hjelp</item>
+      <item name="refresh">Oppdater</item>
+      <item name="upload">Last opp</item>
+      <item name="directory">Valgt mappe</item>
+      <item name="imagemanager">Image manager</item>
+      <item name="title">Moxiecode File Manager</item>
+      <item name="alert_ok">Ok</item>
+      <item name="confirm_yes">Ja</item>
+      <item name="confirm_no">Nei</item>
+    </group>
+    <group target="button">
+      <item name="create">Opprett</item>
+      <item name="cancel">Avbryt</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategorier</item>
+      <item name="preview">Forhåndsvisning</item>
+      <item name="favorites">Favoritter</item>
+      <item name="history">Historie</item>
+    </group>
+    <group target="actions">
+      <item name="insert">Sett inn</item>
+      <item name="download">Last ned</item>
+      <item name="rename">Gi nytt navn</item>
+      <item name="cut">Klipp ut</item>
+      <item name="copy">Kopier</item>
+      <item name="paste">Lim inn</item>
+      <item name="deleteit">Slett</item>
+      <item name="zip">Zip</item>
+      <item name="view">Vis</item>
+      <item name="select_all">Velg alle</item>
+      <item name="unselect_all">Fjern valg</item>
+      <item name="addfavorites">Legg til favoritter</item>
+      <item name="removefavorites">Slett favoritt(er)</item>
+    </group>
+    <group target="filelist">
+      <item name="filename">Filnavn</item>
+      <item name="size">Str</item>
+      <item name="type">Type</item>
+      <item name="modified">Sist endret</item>
+      <item name="with_selected">Med utvalgte:</item>
+      <item name="info_dirs">Mapper:</item>
+      <item name="info_files">Filer:</item>
+      <item name="info_size">Total str:</item>
+      <item name="info_access">Tilgang:</item>
+      <item name="loading">Laster...</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Opprett mappe</item>
+      <item name="description">Skriv inn et navn for mappa du vil opprette.</item>
+      <item name="template">Mal:</item>
+      <item name="select_template">-- Velg mal --</item>
+      <item name="directory_name">Mappe navn:</item>
+      <item name="create_in">Opprett i:</item>
+      <item name="progress">Oppretter mappe, vennligst vent...</item>
+    </group>
+    <group target="createdoc">
+      <item name="title">Opprett dokument</item>
+      <item name="description">Skriv inni skjemaet for å opprette et nytt dokument fra malen.</item>
+      <item name="template">Mal:</item>
+      <item name="select_template">-- Velg mal --</item>
+      <item name="name">Navn</item>
+      <item name="path">Sti</item>
+      <item name="preview">Forhåndsvisning</item>
+    </group>
+    <group target="upload">
+      <item name="title">Last opp</item>
+      <item name="description">Bruk skjemaet for å laste opp filer.</item>
+      <item name="valid_extensions">Godkjente filtyper:</item>
+      <item name="max_upload_size">Maks. str:</item>
+      <item name="file_to_upload">Filen som skal lastes opp:</item>
+      <item name="as_file_name">Tilpasset filnavn:</item>
+      <item name="path">Sti: </item>
+      <item name="button_upload">Last opp</item>
+      <item name="browse">Legg til fil(er)</item>
+      <item name="progress">Laster opp...</item>
+      <item name="upload_warn">Filene lastes opp. Er du sikker på at du vil kansellere opplastingen?</item>
+    </group>
+    <group target="createzip">
+      <item name="title">Lag zip</item>
+      <item name="description">Skriv innnavnet på zipfila du ønsker å opprette.</item>
+      <item name="name">Navn:</item>
+      <item name="path">Sti</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertfile_desc">Sett inn fil</item>
+    </group>
+  </language>
+</language-pack>

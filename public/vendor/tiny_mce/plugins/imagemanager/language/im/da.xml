@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-pack>
+  <header>
+    <!-- Please fill in contact information (author & email), we might contact you when we are doing updates -->
+    <!-- You will also have the chance to participate in beta releases of new versions -->
+    <author>TheBrew (thegbrew@gmail.com)</author>
+    <version minor="1" major="1" releasedate="2009-10-13" />
+    <description>
+			This is the Danish language pack for the MCImageManager.
+		</description>
+  </header>
+  <language code="da" title="Danish" dir="ltr">
+    <group target="common">
+      <item name="title">Billeder</item>
+      <item name="filemanager">Fil administrator</item>
+      <item name="createdir">Opret mappe</item>
+      <item name="refresh">Genindlæs</item>
+      <item name="upload">Upload</item>
+      <item name="help">Hjælp</item>
+      <item name="edit">Ret</item>
+      <item name="deleteit">Slet</item>
+      <item name="view">Vis</item>
+      <item name="download">Download</item>
+      <item name="insert">Indsæt</item>
+      <item name="directory">Valgt mappe</item>
+      <item name="loading">Indlæser...</item>
+      <item name="filter">Filter</item>
+      <item name="alert_ok">OK</item>
+      <item name="confirm_yes">Ja</item>
+      <item name="confirm_no">Nej</item>
+      <item name="prev">Forrige</item>
+      <item name="next">Næste</item>
+      <item name="image_data">Henter billed info, vent venligst...</item>
+      <item name="page">Side</item>
+      <item name="of">af</item>
+      <!-- Legacy items -->
+      <item name="add_favorite">Tilføj favorit</item>
+      <item name="removefavorite">Fjern favorit</item>
+    </group>
+    <group target="button">
+      <!-- think about the length of the text -->
+      <item name="create">Opret</item>
+      <item name="cancel">Fortryd</item>
+      <item name="apply">Godkend</item>
+      <item name="save">Gem</item>
+    </group>
+    <group target="error">
+      <!-- common -->
+      <item name="demo">Denne handling er begrænset i demo tilstand</item>
+      <item name="no_filesystem">Intet filstystem fundet for stien: {path}.</item>
+      <item name="no_access">Ingen adgang til denne fil/mappe</item>
+      <item name="no_write_access">Ingen skriverettigheder til mappen.</item>
+      <item name="file_not_exists">Filen/mappen blev ikke fundet.</item>
+      <item name="invalid_filename">Filnavnet er ikke gyldigt.</item>
+      <!-- create dir -->
+      <item name="template_missing">Den valgte skabelon mangler.</item>
+      <item name="folder_exists">A folder with the specified name already exists.</item>
+      <item name="createdir_failed">Error could not create folder.</item>
+      <!-- upload -->
+      <item name="upload_failed">Upload failed, check your folder write permissions.</item>
+      <item name="file_exists">En fil med det angivne navn finde allerede.</item>
+      <item name="error_to_large">Filen du prøver at lægge op er for stor.</item>
+      <!-- delete -->
+      <item name="delete_failed">Kunne ikke slette filen/filerne.</item>
+      <!-- image edit -->
+      <item name="crop_failed">Kunne ikke beskære billedet.</item>
+      <item name="resize_failed">Kunne ikke skalere billedet.</item>
+      <item name="rotate_failed">Kunne ikke rotere billedet.</item>
+      <item name="flip_failed">Kunne ikke spejle billedet.</item>
+      <item name="save_failed">Kunne ikke gemme billedet.</item>
+      <!-- Legacy items -->
+      <item name="remove_favorite_failed">Kunne ikke fjerne favoritten fra listen.</item>
+    </group>
+    <group target="message">
+      <!-- common -->
+      <item name="save_success">Filen er gemt.</item>
+      <item name="keepalive">Keepalive forespørgsel.</item>
+      <!-- delete -->
+      <item name="delete_success">Fil(erne) blev slettet.</item>
+      <!-- create dir -->
+      <item name="directory_ok">Mappen blev oprettet.</item>
+      <!-- upload -->
+      <item name="upload_ok">Upload udført.</item>
+      <!-- image edit -->
+      <item name="crop_success">Beskæring lykkedes.</item>
+      <item name="resize_success">Skalering lykkedes.</item>
+      <item name="rotate_success">Rotering lykkedes.</item>
+      <item name="flip_success">Spejling lykkedes.</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategorier</item>
+      <item name="folders">Mapper</item>
+      <!-- Legacy items -->
+      <item name="favorites">Favoritter</item>
+      <item name="history">Historie</item>
+    </group>
+    <group target="view">
+      <item name="title">Vis</item>
+      <item name="mode">Viser:</item>
+      <item name="thumbnail">Miniaturebilleder</item>
+      <item name="textlist">Tekstliste</item>
+      <item name="images_per_page">billeder/side</item>
+      <item name="confirm_delete">Er du sikker på du vil fjerne denne fil?</item>
+      <item name="keyboard_next">Keyboard genvej: SPACE,N,RIGHTARROW,PAGE DOWN</item>
+      <item name="keyboard_prev">Keyboard genvej: P,LEFTARROW,PAGE UP</item>
+      <item name="dimensions">Dimensioner</item>
+      <!-- Legacy items -->
+      <item name="confirm_remove_favorite">Er du sikker på du vil fjerne denne fra din favorit liste?</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Opret mappe</item>
+      <item name="description">Skriv navnet på den mappe du vil oprette.</item>
+      <item name="template">Skabelon:</item>
+      <item name="select_template">-- Vælg skabelon --</item>
+      <item name="directory_name">Mappe navn:</item>
+      <item name="create_in">Opret i:</item>
+      <item name="progress">Opretter mappe, vent venligst...</item>
+    </group>
+    <group target="upload">
+      <item name="title">Upload</item>
+      <item name="description">Her har du mulighed for at lægge billeder op.</item>
+      <item name="valid_extensions">Accepterede formater:</item>
+      <item name="max_upload_size">Max upload størrelse:</item>
+      <item name="file_to_upload">Fil der skal lægges op:</item>
+      <item name="as_file_name">Omdøb til:</item>
+      <item name="path">Sti: </item>
+      <item name="button_upload">Upload</item>
+      <item name="browse">Tilføj fil(er)</item>
+      <item name="progress">Uploader...</item>
+      <item name="upload_warn">Filer er ved at blive lagt op, er du sikker på du vil afbryde?</item>
+      <item name="statusrow">Der er {files} fil(er) (i alt {size}) der venter på at blive lagt op.</item>
+      <item name="progressinfo">{loaded} af {total} lagt op med {speed}/s.</item>
+      <item name="abort">Afbryd upload</item>
+      <item name="add_more">Tilføj flere?</item>
+      <item name="upload_to_server">Upload til server</item>
+      <item name="cancelled">Upload blev afbrudt</item>
+      <item name="choose_files">Vælg filer</item>
+      <item name="basic_upload">Hvis du har problemer med at uploade, kan du altid bruge {a}simpel upload{/a}.</item>
+      <item name="remove">Fjern</item>
+      <item name="file">Fil</item>
+      <item name="size">Størrelse</item>
+      <item name="status">Status</item>
+      <item name="no_valid_files">Ingen gyldige filer valgt, prøv igen.</item>
+    </group>
+    <group target="edit_image">
+      <item name="title">Billedredigering</item>
+      <item name="save">Gem</item>
+      <item name="revert">Fortryd</item>
+      <item name="crop">Beskær</item>
+      <item name="resize">Skaler</item>
+      <item name="please_wait">Behandler billede, vent venligst...</item>
+      <item name="constrain">Begræns proportioner</item>
+      <item name="left">Venstre</item>
+      <item name="top">Top</item>
+      <item name="width">Bredde</item>
+      <item name="height">Højde</item>
+      <item name="save_as">Gem som</item>
+      <item name="flip">Spejl</item>
+      <item name="rotate">Roter</item>
+      <item name="reload">Genindlæs</item>
+      <item name="horizontal">Horisontal</item>
+      <item name="vertical">Vertikal</item>
+      <item name="saving_wait">Gemmer billede, vent venligst...</item>
+      <item name="confirm_revert">Er du sikker på du vil gå tilbage til det sidst gemte billede?</item>
+      <item name="loading">Indlæser billede, vent venligst...</item>
+      <item name="confirm_no_save">Are you sure that you don't want to save the changes you made to the image?</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertimage_desc">Indsæt billede</item>
+      <item name="replaceimage_desc">Erstat billede</item>
+      <item name="editimage_desc">Rediger billede</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">Favoritter</item>
+      <item name="addfavorites">Tilføj favorit(ter)</item>
+      <item name="removefavorites">Fjern favorit(ter)</item>
+      <item name="confirm_remove_favorite">Er du sikker på at du vil fjerne dette fra din favoritliste?</item>
+      <item name="remove_favorite_failed">Kunne ikke fjerne favoritten fra listen.</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">Historie</item>
+    </group>
+  </language>
+</language-pack>

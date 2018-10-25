@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<language-pack>
+  <header>
+    <author>حسن طبال</author>
+    <version minor="1" major="1" releasedate="2010-01-18" />
+    <description>
+			هذا هو النص العربي لمتصفح الملفات الخاص بال TinyMCE
+		</description>
+  </header>
+  <language code="ar" title="Arabic" dir="rtl">
+    <group target="error">
+      <item name="tofile_exists">الملف موجود مسبقاً</item>
+      <item name="no_from_file">الملف المصدر غير موجود</item>
+      <item name="demo">هذه الخاصية معطلة أثناء التشغيل التجريبي</item>
+      <item name="invalid_filename">الاسم غير صحيح</item>
+      <item name="no_read_access"> أو المجلدليس لديك حق القراءة/الوصول لهذا الملف.</item>
+      <item name="no_write_access">ليس لديك حق الكتابة في هذا الملف أو المجلد</item>
+      <item name="copy_failed">فشل النسخ</item>
+      <item name="move_failed">فشل النقل</item>
+      <item name="template_missing">القالب غير موجود</item>
+      <item name="createdoc_failed">فشل انشاء ملف جديد</item>
+      <item name="no_access">ليس لديك الصلاحيات الكافية لتنفيذ الأمر</item>
+      <item name="file_exists">الملف موجود مسبقاً</item>
+      <item name="upload_failed">فشلت عملية الرفع، تأكد من أنك تملك صلاحيات الكتابة في المجلد</item>
+      <item name="error_to_large">تم الوصول إلى الحد الاقصى المسموح به لرفع الملفات</item>
+      <item name="file_not_exists">الملف غير موجود</item>
+      <item name="delete_failed">فشل الحذف</item>
+      <item name="folder_exists">المجلد موجود مسبقاً</item>
+      <item name="no_filesystem">No filesystem was found.</item>
+      <item name="createdir_failed">فشل إنشاء مجلد</item>
+      <item name="createzip_failed">فشل الضغط</item>
+      <item name="rename_failed">فشل تغيير الاسم</item>
+      <item name="savecontent_failed">فشل حفظ المحتوى</item>
+    </group>
+    <group target="message">
+      <item name="zip_success">تم الضغط بنجاح</item>
+      <item name="copy_success">تم النسخ بنجاح</item>
+      <item name="move_success">تم النقل بنجاح</item>
+      <item name="createdoc_success">تم انشاء الملف بنجاح</item>
+      <item name="delete_success">تم الحذف بنجاح</item>
+      <item name="directory_ok">تم انشاء المجلد الجديد بنجاح</item>
+      <item name="keepalive">Keepalive</item>
+      <item name="upload_ok">تم الرقع بنجاح</item>
+      <item name="confirm_cut">هل أنت متأكد من أنك تريد قص الملف؟</item>
+      <item name="confirm_copy">هل تريد حقاً نسخ الملف؟</item>
+      <item name="confirm_paste">هل تريد لصق الملف هنا؟؟</item>
+      <item name="confirm_delete">انتبه!! هل تريد فعلاً حذف الملف؟</item>
+      <item name="insert">الرجاء الانتظار قليلاً...</item>
+      <item name="paste_in_progress">جاري اللصق، انتظر قليلاً...</item>
+    </group>
+    <group target="common">
+      <item name="createdir">انشاء مجلد جديد</item>
+      <item name="createfile">ملف جديد</item>
+      <item name="help">مساعدة</item>
+      <item name="refresh">تحديث</item>
+      <item name="upload">رفع</item>
+      <item name="directory">المجلد المختار</item>
+      <item name="imagemanager">إدارة الصور</item>
+      <item name="title">Moxiecode File Manager</item>
+      <item name="alert_ok">موافق</item>
+      <item name="confirm_yes">نعم</item>
+      <item name="confirm_no">لا</item>
+    </group>
+    <group target="button">
+      <item name="create">إنشاء</item>
+      <item name="cancel">إلغاء</item>
+      <item name="save">حفظ</item>
+    </group>
+    <group target="panel">
+      <item name="categories">التصانيف</item>
+      <item name="preview">معاينة</item>
+      <!-- Legacy items -->
+      <item name="favorites">المفضلة</item>
+      <item name="history">السجل السابق</item>
+    </group>
+    <group target="edit">
+      <item name="title">تحرير الملف</item>
+      <item name="description">تحرير محتوى الملف</item>
+      <item name="loading_wait">جاري تحميل المحتوى...انتظر قليلاً</item>
+      <item name="saving_wait">جاري حفظ المحتوى...انتظر قليلاً</item>
+      <item name="file_path">مكان حفظ الملف</item>
+    </group>
+    <group target="actions">
+      <item name="insert">إدراج</item>
+      <item name="download">تحميل</item>
+      <item name="rename">تغيير الاسم</item>
+      <item name="cut">قص</item>
+      <item name="copy">نسخ</item>
+      <item name="paste">لصق</item>
+      <item name="deleteit">حذف</item>
+      <item name="edit">تحرير</item>
+      <item name="zip">ضغط</item>
+      <item name="view">معاينة</item>
+      <item name="select_all">اختيار الكل</item>
+      <item name="unselect_all">الغاء اختيار الكل</item>
+      <!-- Legacy items -->
+      <item name="addfavorites">إضافة غلى المفضلة</item>
+      <item name="removefavorites">إزالة من المفضلة</item>
+    </group>
+    <group target="filelist">
+      <item name="filename">اسم الملف</item>
+      <item name="size">الحجم</item>
+      <item name="type">النوع</item>
+      <item name="modified">تاريخ آخر تعديل</item>
+      <item name="with_selected">مع المختارات:</item>
+      <item name="info_dirs">مجلدات:</item>
+      <item name="info_files">ملفات:</item>
+      <item name="info_size">مجموع حجم الملفات:</item>
+      <item name="info_access">حق الوصول:</item>
+      <item name="loading">جاري التحميل...</item>
+    </group>
+    <group target="createdir">
+      <item name="title">انشاء مجلد</item>
+      <item name="description">اختر اسم المجلد</item>
+      <item name="template">القالب:</item>
+      <item name="select_template">-- اختر القالب --</item>
+      <item name="directory_name">اسم المجلد:</item>
+      <item name="create_in">ضعه في:</item>
+      <item name="progress">جاري انشاء المجلد، انتظر قليلاً...</item>
+    </group>
+    <group target="createdoc">
+      <item name="title">انشاء ملف</item>
+      <item name="description">الرجاء تعبئة الخانات لانشاء ملف جديد باستخدام القالب</item>
+      <item name="template">القالب:</item>
+      <item name="select_template">-- اختر القالب --</item>
+      <item name="name">الاسم</item>
+      <item name="path">مكان الوجود</item>
+      <item name="preview">معاينة</item>
+      <item name="preview_title">معينة الملف: {file}</item>
+    </group>
+    <group target="upload">
+      <item name="title">رفع</item>
+      <item name="description">استخدم هذه الصفحة لرفع الملفات.</item>
+      <item name="valid_extensions">الأنواع المسموحة:</item>
+      <item name="max_upload_size">الحد الأقصى المسموح به للرفع:</item>
+      <item name="file_to_upload">الملف:</item>
+      <item name="as_file_name">سمه بهذا الاسم:</item>
+      <item name="path">مكانه: </item>
+      <item name="button_upload">رفع</item>
+      <item name="browse">أضف ملفات</item>
+      <item name="progress">جاري الرفع...</item>
+      <item name="upload_warn">هناك ملفات جاري رفعها، هل أنت متأكد من أنك تريد إيقاف العملية؟</item>
+      <item name="statusrow">لديك {files} ملفات (total {size}) تنتظر الرفع</item>
+      <item name="progressinfo">{loaded} من {total} رفعت بسرعة {speed}/s.</item>
+      <item name="abort">الغاء الرفع</item>
+      <item name="add_more">إضافة المزيد؟</item>
+      <item name="upload_to_server">رفع إلى السيرفر</item>
+      <item name="cancelled">تم الغاء الرفع</item>
+      <item name="choose_files">اختر الملفات</item>
+      <item name="basic_upload">إذا واجهتك صعوبات في الرفع، اضغط على الرابط التالي لاستخدام طريقة ثانية في الرفع {a}basic uploader{/a}.</item>
+      <item name="remove">إزالة</item>
+      <item name="file">ملف</item>
+      <item name="size">الحجم</item>
+      <item name="status">الحالة</item>
+      <item name="no_valid_files">لم تقم باختيار ملفات مقبولة. رجاء أعد الكرة</item>
+    </group>
+    <group target="createzip">
+      <item name="title">إنشاء ملف مضغوط</item>
+      <item name="description">أدخل اسم الملف المضغوط الذي ترغب بإنشائه</item>
+      <item name="name">الاسم:</item>
+      <item name="path">مكان الحفظ</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertfile_desc">إدراج ملف</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">المفضلة</item>
+      <item name="addfavorites">إضافة إلى المفضلة</item>
+      <item name="removefavorites">إزالة من المفضلة</item>
+      <item name="confirm_remove_favorite">هل أنت متأكد أنك تريد إزالة الملف من لائحة الملفات المفضلة؟</item>
+      <item name="remove_favorite_failed">عذراً، فشلنا في إزالة الملف من مفضلتك</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">لائحة الملفات السابقة</item>
+    </group>
+  </language>
+</language-pack>

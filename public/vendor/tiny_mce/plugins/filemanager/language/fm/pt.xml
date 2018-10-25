@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<language-pack>
+  <header>
+    <author>Joab Peres (4link@4link.com.br)</author>
+    <version minor="1" major="1" releasedate="2010-03-20" />
+    <description>
+			This is the Portuguese language pack for the MCFileManager.
+		</description>
+  </header>
+  <language code="pt" title="Portugues" dir="ltr">
+    <group target="error">
+      <item name="tofile_exists">O arquivo jÃ¡ existe.</item>
+      <item name="no_from_file">From file does not exist.</item>
+      <item name="demo">Esta aÃ§Ã£o Ã© restrita na versÃ£o de demonstraÃ§Ã£o.</item>
+      <item name="invalid_filename">Nome do arquivo nÃ£o Ã© vÃ¡lido.</item>
+      <item name="no_read_access">Sem permissÃ£o de acesso de leitura para arquivo/pasta.</item>
+      <item name="no_write_access">Sem permissÃ£o de escrita para arquivo/pasta.</item>
+      <item name="copy_failed">Falha ao copiar.</item>
+      <item name="move_failed">Falha ao mover.</item>
+      <item name="template_missing">Modelo nÃ£o encontrado.</item>
+      <item name="createdoc_failed">Falha ao criar documento.</item>
+      <item name="no_access">VocÃª nÃ£o tem permissÃ£o de acesso para esta operaÃ§Ã£o.</item>
+      <item name="file_exists">O arquivo jÃ¡ existe.</item>
+      <item name="upload_failed">Falha ao enviar, cheque sua permissÃ£o de escrita na pasta.</item>
+      <item name="error_to_large">Tamanho mÃ¡ximo foi alcanÃ§ado.</item>
+      <item name="file_not_exists">O arquivo nÃ£o existe.</item>
+      <item name="delete_failed">Falha ao excluir.</item>
+      <item name="folder_exists">A pasta jÃ¡ existe.</item>
+      <item name="no_filesystem">Arquivo de sistema nÃ£o encontrado.</item>
+      <item name="createdir_failed">Falha ao criar a pasta.</item>
+      <item name="createzip_failed">Falha ao compactar.</item>
+      <item name="rename_failed">Falha ao remomear.</item>
+      <item name="savecontent_failed">Falha ao salvar conteÃºdo.</item>
+    </group>
+    <group target="message">
+      <item name="zip_success">Compactado com sucesso.</item>
+      <item name="copy_success">Copiado com sucesso.</item>
+      <item name="move_success">Movido com sucesso.</item>
+      <item name="createdoc_success">Documento criado com sucesso.</item>
+      <item name="delete_success">Excluido com sucesso.</item>
+      <item name="directory_ok">Pasta criada com sucesso.</item>
+      <item name="keepalive">Manter vivo</item>
+      <item name="upload_ok">Enviado com sucesso.</item>
+      <item name="confirm_cut">VocÃª tem certeza que deseja recortar os arquivos selecionados?</item>
+      <item name="confirm_copy">VocÃª tem certeza que deseja copiar os arquivos selecionados?</item>
+      <item name="confirm_paste">VocÃª tem certeza que deseja colar os aquivos recortados/ copiados aqui?</item>
+      <item name="confirm_delete">VocÃª tem certeza que deseja excluir os arquivos selecionados?</item>
+      <item name="insert">Obter dados do arquivo, por favor aguarde...</item>
+      <item name="paste_in_progress">OperaÃ§Ã£o de colar em andamento, por favor aguarde...</item>
+    </group>
+    <group target="common">
+      <item name="createdir">Criar pastar</item>
+      <item name="createfile">Novo arquivo</item>
+      <item name="help">Ajuda</item>
+      <item name="refresh">Atualizar</item>
+      <item name="upload">Enviar</item>
+      <item name="directory">Pasta selecionada</item>
+      <item name="imagemanager">Imagem manager</item>
+      <item name="title">Gerenciador de Arquivos</item>
+      <item name="alert_ok">Ok</item>
+      <item name="confirm_yes">Sim</item>
+      <item name="confirm_no">NÃ£o</item>
+    </group>
+    <group target="button">
+      <item name="create">Criar</item>
+      <item name="cancel">Cancelar</item>
+      <item name="save">Savar</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Categorias</item>
+      <item name="preview">Visualizar</item>
+      <!-- Legacy items -->
+      <item name="favorites">Favoritos</item>
+      <item name="history">HistÃ³rico</item>
+    </group>
+    <group target="edit">
+      <item name="title">Editar arquivo</item>
+      <item name="description">Editar conteÃºdo do arquivo.</item>
+      <item name="loading_wait">Carregando conteÃºdo favor aguarde.</item>
+      <item name="saving_wait">Salvando conteÃºdo favor aguarde.</item>
+      <item name="file_path">Caminho do arquivo:</item>
+    </group>
+    <group target="actions">
+      <item name="insert">Inserir</item>
+      <item name="download">Abaixar</item>
+      <item name="rename">Renomear</item>
+      <item name="cut">Cortar</item>
+      <item name="copy">Copiar</item>
+      <item name="paste">Colar</item>
+      <item name="deleteit">Excluir</item>
+      <item name="edit">Editar</item>
+      <item name="zip">Compactar</item>
+      <item name="view">Visualizar</item>
+      <item name="select_all">Marcar todos</item>
+      <item name="unselect_all">Desmarcar todos</item>
+      <!-- Legacy items -->
+      <item name="addfavorites">Adicionar favorito(s)</item>
+      <item name="removefavorites">Remover favorito(s)</item>
+    </group>
+    <group target="filelist">
+      <item name="filename">Nome do arquivo</item>
+      <item name="size">Tamanho</item>
+      <item name="type">Tipo</item>
+      <item name="modified">Modificado em</item>
+      <item name="with_selected">Com selecionado:</item>
+      <item name="info_dirs">Pastas:</item>
+      <item name="info_files">Arquivos:</item>
+      <item name="info_size">Tamanho total do arquivo:</item>
+      <item name="info_access">Acesso:</item>
+      <item name="loading">Carregando...</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Criar pasta</item>
+      <item name="description">Inserir o nome da pasta que vocÃª deseja criar.</item>
+      <item name="template">Modelo:</item>
+      <item name="select_template">-- Selecione um modelo --</item>
+      <item name="directory_name">Nome da pasta:</item>
+      <item name="create_in">Criado em:</item>
+      <item name="progress">Criando pasta, favor aguardar...</item>
+    </group>
+    <group target="createdoc">
+      <item name="title">Criar documento</item>
+      <item name="description">Preencha o formulÃ¡rio para criar um novo documento a partir de um modelo.</item>
+      <item name="template">Modelo:</item>
+      <item name="select_template">-- Selecione um modelo --</item>
+      <item name="name">Nome</item>
+      <item name="path">Caminho</item>
+      <item name="preview">Ver</item>
+      <item name="preview_title">Ver de: {file}</item>
+    </group>
+    <group target="upload">
+      <item name="title">Enviar</item>
+      <item name="description">Utilize o formulÃ¡rio para fazer enviar os arquivos.</item>
+      <item name="valid_extensions">ExtensÃµes vÃ¡lida:</item>
+      <item name="max_upload_size">Tamanho mÃ¡ximo de envio:</item>
+      <item name="file_to_upload">Arquivo para envio:</item>
+      <item name="as_file_name">Renomear arquivo para:</item>
+      <item name="path">Caminho:</item>
+      <item name="button_upload">Envio</item>
+      <item name="browse">Add file(s)</item>
+      <item name="progress">Carregando...</item>
+      <item name="upload_warn">Arquivos estÃ£o sendo carregado, vocÃª tem certeza de que deseja cancelar o envio?</item>
+      <item name="statusrow">O arquivo {files} (total: {size}) pode demorar para ser enviado, favor aguarde.</item>
+      <item name="progressinfo">{loaded} de {total} enviado em {speed}/s.</item>
+      <item name="abort">Envio cancelado</item>
+      <item name="add_more">Adicionar mais?</item>
+      <item name="upload_to_server">Enviar para o servidor</item>
+      <item name="cancelled">O envio foi cancelado</item>
+      <item name="choose_files">Selecione os arquivos</item>
+      <item name="basic_upload">Se vocÃª estÃ¡ tendo problemas para fazer o envio, vocÃª pode utilizar {a}envio simples{/a}.</item>
+      <item name="remove">Remover</item>
+      <item name="file">Arquivo</item>
+      <item name="size">Tamanho</item>
+      <item name="status">Status</item>
+      <item name="no_valid_files">Aquivos selecionado invÃ¡lido, favor tente novamente.</item>
+    </group>
+    <group target="createzip">
+      <item name="title">Criar arquivo compactado</item>
+      <item name="description">Inserir o nome do arquivo compactado que deseja criar.</item>
+      <item name="name">Nome:</item>
+      <item name="path">Caminho</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertfile_desc">Inserir Arquivo</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">Favoritos</item>
+      <item name="addfavorites">Adicionar favorito(s)</item>
+      <item name="removefavorites">Remover favorito(s)</item>
+      <item name="confirm_remove_favorite">VocÃª deseja remover da sua lista de favoritos?</item>
+      <item name="remove_favorite_failed">Failed to remove the favorite from your favorites list.</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">HistÃ³rico</item>
+    </group>
+    <group target="uploaded">
+      <item name="special_folder_title">Carregado</item>
+    </group>
+  </language>
+</language-pack>

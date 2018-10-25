@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-pack>
+  <header>
+    <!-- Please fill in contact information (author & email), we might contact you when we are doing updates -->
+    <!-- You will also have the chance to participate in beta releases of new versions -->
+    <author>Mirko Musanic (mirkom@vip.hr)</author>
+    <version minor="3" major="1" releasedate="2010-03-09" />
+    <description>
+			This is the Croatian language pack for the MCImageManager.
+		</description>
+  </header>
+  <language code="hr" title="Croatian" dir="ltr">
+    <group target="common">
+      <item name="title">Upravljanje slikama</item>
+      <item name="filemanager">File manager</item>
+      <item name="createdir">Napravi mapu</item>
+      <item name="refresh">Osvježi</item>
+      <item name="upload">Pošalji</item>
+      <item name="help">Pomoć</item>
+      <item name="edit">Uredi</item>
+      <item name="deleteit">Obriši</item>
+      <item name="view">Pregled</item>
+      <item name="download">Preuzimanje</item>
+      <item name="insert">Umetni</item>
+      <item name="directory">Odabrana mapa</item>
+      <item name="loading">Učitavanje...</item>
+      <item name="filter">Filter</item>
+      <item name="alert_ok">U redu</item>
+      <item name="confirm_yes">Da</item>
+      <item name="confirm_no">Ne</item>
+      <item name="prev">Prethodni</item>
+      <item name="next">Slijedeći</item>
+      <item name="image_data">Prikupljanje podataka o slici, pričekajte molim...</item>
+      <item name="page">Stranica</item>
+      <item name="of">od</item>
+      <item name="add_favorite">Dodaj kao omiljenu stavku</item>
+      <item name="removefavorite">Obriši omiljenu stavku</item>
+    </group>
+    <group target="button">
+      <!-- think about the length of the text -->
+      <item name="create">Izradi</item>
+      <item name="cancel">Poništi</item>
+      <item name="apply">Primijeni</item>
+      <item name="save">Spremi</item>
+    </group>
+    <group target="error">
+      <!-- common -->
+      <item name="demo">Ove radnje su ogranicene u demo modu.</item>
+      <item name="no_filesystem">Datotečni sustav nije pronadjen na stazi: {path}.</item>
+      <item name="no_access">Nema pristupa ovoj datoteci/mapi.</item>
+      <item name="no_write_access">Mapa nema dozvolu za pisanje.</item>
+      <item name="file_not_exists">Datoteka/mapa nije pronađena.</item>
+      <item name="invalid_filename">Naziv datoteke nije ispravan.</item>
+      <item name="remove_favorite_failed">Neuspješno micanje omiljene stavke iz popisa omiljenog.</item>
+      <!-- create dir -->
+      <item name="template_missing">Nedostaje odabrani predložak.</item>
+      <item name="folder_exists">Mapa sa navedenim imenom već postoji.</item>
+      <item name="createdir_failed">Greška: nije moguće napraviti mapu.</item>
+      <!-- upload -->
+      <item name="upload_failed">Slanje datoteke nije uspjelo, provjerite dozvole za pisanje unutar mape.</item>
+      <item name="file_exists">Datoteka sa navedenim imenom već postoji.</item>
+      <item name="error_to_large">Datoteka koju pokušavate poslati je prevelika.</item>
+      <!-- delete -->
+      <item name="delete_failed">Nije moguće obrisati datoteku(datoteke).</item>
+      <!-- image edit -->
+      <item name="crop_failed">Obrezivanje slike nije uspjelo.</item>
+      <item name="resize_failed">Promjena veličine slike nije uspjela.</item>
+      <item name="rotate_failed">Okretanje slike nije uspjelo.</item>
+      <item name="flip_failed">Zrcaljenje slike nije uspjelo.</item>
+      <item name="save_failed">Spremanje nije uspjelo.</item>
+    </group>
+    <group target="message">
+      <!-- common -->
+      <item name="save_success">Datoteka je uspješno snimljena.</item>
+      <item name="keepalive">Keepalive zahtjev.</item>
+      <!-- delete -->
+      <item name="delete_success">Uspješno brisanje datoteka(datoteke).</item>
+      <!-- create dir -->
+      <item name="directory_ok">Mapa je uspješno napravljena.</item>
+      <!-- upload -->
+      <item name="upload_ok">Uspješno slanje datoteke.</item>
+      <!-- image edit -->
+      <item name="crop_success">Uspjelo obrezivanje.</item>
+      <item name="resize_success">Uspjela promjena velicine.</item>
+      <item name="rotate_success">Uspjelo okretanje.</item>
+      <item name="flip_success">Uspjelo zrcaljenje.</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategorije</item>
+      <item name="folders">Mape</item>
+      <item name="favorites">Omiljene stavke</item>
+      <item name="history">Povijest</item>
+    </group>
+    <group target="view">
+      <item name="title">Pogled</item>
+      <item name="mode">Način pogleda:</item>
+      <item name="thumbnail">Popis sličica</item>
+      <item name="textlist">Tekstualni popis</item>
+      <item name="images_per_page">slika/stranici</item>
+      <item name="confirm_delete">Da li ste sigurni da želite obrisati ovu datoteku?</item>
+      <item name="keyboard_next">Skraćenice na tipkovnici: RAZMAK,N,STRELICA DESNO,PAGE DOWN</item>
+      <item name="keyboard_prev">Skraćenice na tipkovnici: P,STRELICA LIJEVO,PAGE UP</item>
+      <item name="dimensions">Dimenzije</item>
+      <item name="confirm_remove_favorite">Da li ste sigurni da želite obrisati iz popisa omiljenih stavki?</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Napravi mapu</item>
+      <item name="description">Umetni ime za mapu koju želite napraviti.</item>
+      <item name="template">Predložak:</item>
+      <item name="select_template">-- Odaberi predložak --</item>
+      <item name="directory_name">Ime mape:</item>
+      <item name="create_in">Napravi u:</item>
+      <item name="progress">Izrada mape u tijeku, molim pricekajte...</item>
+    </group>
+    <group target="upload">
+      <item name="title">Slanje datoteke</item>
+      <item name="description">Koristite ovaj obrazac kako bi poslali datoteku.</item>
+      <item name="valid_extensions">Valjane ekstenzije:</item>
+      <item name="max_upload_size">Maks velicina datoteke za slanje:</item>
+      <item name="file_to_upload">Datoteka za slanje:</item>
+      <item name="as_file_name">Kao ime datoteke:</item>
+      <item name="path">Staza: </item>
+      <item name="button_upload">Pošalji</item>
+      <item name="browse">Dodaj datoteku</item>
+      <item name="progress">Slanje datoteke u tijeku...</item>
+      <item name="upload_warn">Slanje datoteka je u tijeku, da li stvarno želite poništiti slanje datoteka?</item>
+      <item name="statusrow">Imate {files} datoteka (veličine {size}) koje čekaju na slanje.</item>
+      <item name="progressinfo">{loaded} od {total} poslano pri {speed}/s.</item>
+      <item name="abort">Prekid slanja</item>
+      <item name="add_more">Dodaj još?</item>
+      <item name="upload_to_server">Pošalji na poslužitelj</item>
+      <item name="cancelled">Slanje je prekinuto</item>
+      <item name="choose_files">Odabir datoteke</item>
+      <item name="basic_upload">Ako imate probleme sa naprednim slanjem uvijek možete poslati datoteke putem {a}osnovnog slanja{/a}.</item>
+      <item name="remove">Makni</item>
+      <item name="file">Datoteka</item>
+      <item name="size">Veličina</item>
+      <item name="status">Status</item>
+      <item name="no_valid_files">Nije izabrana nijedna valjana datoteka, probajte ponovno.</item>
+    </group>
+    <group target="edit_image">
+      <item name="title">Upravljanje slikama</item>
+      <item name="save">Spremi</item>
+      <item name="revert">Povratak na staro</item>
+      <item name="crop">Obrezivanje</item>
+      <item name="resize">Promjena veličine</item>
+      <item name="please_wait">Obrada slike u tijeku, pričekajte molim...</item>
+      <item name="constrain">Zadrži proporcije slike</item>
+      <item name="left">Lijevo</item>
+      <item name="top">Vrh</item>
+      <item name="width">Širina</item>
+      <item name="height">Visina</item>
+      <item name="save_as">Spremi kao</item>
+      <item name="flip">Zrcaljenje</item>
+      <item name="rotate">Okretanje</item>
+      <item name="reload">Obnovi</item>
+      <item name="horizontal">Horizontalno</item>
+      <item name="vertical">Vertikalno</item>
+      <item name="saving_wait">Spremanje slike, molimo pričekajte...</item>
+      <item name="confirm_revert">Da li ste sigurni da se želite vratiti na zadnju spremljenu sliku?</item>
+      <item name="loading">Učitavanje slike, molimo pricekajte...</item>
+      <item name="confirm_no_save">Jeste li ste sigurni da ne želite spremiti promjene na ovoj slici?</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertimage_desc">Umetni sliku</item>
+      <item name="replaceimage_desc">Zamijeni sliku</item>
+      <item name="editimage_desc">Uredi sliku</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">Omiljene stavke</item>
+      <item name="addfavorites">Dodaj kao omiljenu stavku</item>
+      <item name="removefavorites">Makni omiljenu stavku</item>
+      <item name="confirm_remove_favorite">Da li ste sigurni da želite obrisati stavku iz popisa omiljenih stavki?</item>
+      <item name="remove_favorite_failed">Omiljena stavka nije maknuta iz popisa omiljenih stavki.</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">Povijest</item>
+    </group>
+    <group target="uploaded">
+      <item name="special_folder_title">Poslane datoteke</item>
+    </group>
+  </language>
+</language-pack>

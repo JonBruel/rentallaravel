@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="ISO-8859-1"?>
+<language-pack>
+  <header>
+    <author>Sakari Laine (sakari.laine@mederra.com)</author>
+    <version minor="0" major="1" releasedate="2008-03-04" />
+    <description>
+			This is the Finnish language pack for the MCFileManager.
+		</description>
+  </header>
+  <language code="fi" title="Finnish" dir="ltr">
+    <group target="error">
+      <item name="tofile_exists">Tiedosto on jo olemassa.</item>
+      <item name="no_from_file">Tiedostoa ei ole olemassa.</item>
+      <item name="demo">Tätä toimintoa ei voi tehdä demo tilassa.</item>
+      <item name="invalid_filename">Tiedostonimi ei kelpaa.</item>
+      <item name="no_write_access">Tähän tiedostoon/kansioon ei ole kirjoitusoikeutta.</item>
+      <item name="copy_failed">Kopiointi epäonnistui.</item>
+      <item name="move_failed">Siirto epäonnistui.</item>
+      <item name="template_missing">Templatea ei löytynyt.</item>
+      <item name="createdoc_failed">Tiedoston luominen epäonnistui.</item>
+      <item name="no_access">Sinulla ei ole oikeutta tämän toiminnon tekemiseen.</item>
+      <item name="file_exists">Tiedosto on jo olemassa.</item>
+      <item name="upload_failed">Lataaminen epäonnistui, tarkista kansion oikeudet.</item>
+      <item name="error_to_large">File max size was reached.</item>
+      <item name="file_not_exists">Tiedotoa ei ole olemassa.</item>
+      <item name="delete_failed">Poistaminen epäonnistui.</item>
+      <item name="folder_exists">Kansio on jo olemassa.</item>
+      <item name="no_filesystem">Tiedostojärjestelmää ei löytynyt.</item>
+      <item name="createdir_failed">Kansion luominen epäonnistui.</item>
+      <item name="createzip_failed">Zip paketin luominen epäonnistui.</item>
+      <item name="rename_failed">Uudelleennimeäminen epäonnistui.</item>
+    </group>
+    <group target="message">
+      <item name="zip_success">Pakkaaminen onnistui.</item>
+      <item name="copy_success">Kopiointi onnistui.</item>
+      <item name="move_success">Siirto onnistui.</item>
+      <item name="createdoc_success">Tiedoston luominen onnistui.</item>
+      <item name="delete_success">Poisto onnistui.</item>
+      <item name="directory_ok">Kansion luonti onnistui.</item>
+      <item name="keepalive">Keepalive</item>
+      <item name="upload_ok">Lataaminen onnistui.</item>
+      <item name="confirm_cut">Oletko varma, että haluat leikata valitut tiedostot?</item>
+      <item name="confirm_copy">Oletko varma, että haluat kopioida valitut tiedostot?</item>
+      <item name="confirm_paste">Oletko varma, että haluat liittää leikatut/kopioidut tiedostot tänne?</item>
+      <item name="confirm_delete">Oletko varma, että haluat poistaa valitut tiedostot?</item>
+      <item name="insert">Haetaan tiedoston tietoja, odota hetki...</item>
+      <item name="paste_in_progress">Liittäminen meneillään, odota hetki...</item>
+    </group>
+    <group target="common">
+      <item name="createdir">Uusi kansio</item>
+      <item name="createfile">Uusi tiedosto</item>
+      <item name="help">Apua</item>
+      <item name="refresh">Päivitä</item>
+      <item name="upload">Lataa</item>
+      <item name="directory">Valitse kansio</item>
+      <item name="imagemanager">Kuvienhalinta</item>
+      <item name="title">Moxiecode File Manager</item>
+      <item name="alert_ok">Ok</item>
+      <item name="confirm_yes">Kyllä</item>
+      <item name="confirm_no">Ei</item>
+    </group>
+    <group target="button">
+      <item name="create">Luo</item>
+      <item name="cancel">Peruuta</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategoriat</item>
+      <item name="preview">Esikatselu</item>
+      <item name="favorites">Suosikit</item>
+      <item name="history">Historia</item>
+    </group>
+    <group target="actions">
+      <item name="insert">Liitä</item>
+      <item name="download">Lataa</item>
+      <item name="rename">Nimeä uudelleen</item>
+      <item name="cut">Leikkaa</item>
+      <item name="copy">Kopio</item>
+      <item name="paste">Liitä</item>
+      <item name="deleteit">Poista</item>
+      <item name="zip">Zip</item>
+      <item name="view">Katso</item>
+      <item name="select_all">Valitse kaikki</item>
+      <item name="unselect_all">Poista valinnat</item>
+      <item name="addfavorites">Lisää suosikkeihin</item>
+      <item name="removefavorites">Remove favorite(s)</item>
+    </group>
+    <group target="filelist">
+      <item name="filename">Tiedostonimi</item>
+      <item name="size">Koko</item>
+      <item name="type">Tyyppi</item>
+      <item name="modified">Muokattu</item>
+      <item name="with_selected">Toiminto valituille:</item>
+      <item name="info_dirs">Kansiot:</item>
+      <item name="info_files">Tiedostot:</item>
+      <item name="info_size">Tiedostot yhteensä:</item>
+      <item name="info_access">Oikeudet:</item>
+      <item name="loading">Ladataan...</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Uusi kansio</item>
+      <item name="description">Kirjoita nimi kansiolle, jonka haluat luoda.</item>
+      <item name="template">Template:</item>
+      <item name="select_template">-- Valitse template --</item>
+      <item name="directory_name">Kansion nimi:</item>
+      <item name="create_in">Polku:</item>
+      <item name="progress">Luodaan kansiota, odota hetki...</item>
+    </group>
+    <group target="createdoc">
+      <item name="title">Uusi tiedosto</item>
+      <item name="description">Täytä lomake luodaksesi uuden tiedoston templatesta.</item>
+      <item name="template">Template:</item>
+      <item name="select_template">-- Valitse template --</item>
+      <item name="name">Nimi</item>
+      <item name="path">Polku</item>
+      <item name="preview">Esikatsele</item>
+    </group>
+    <group target="upload">
+      <item name="title">Lataa</item>
+      <item name="description">Käytä lomaketta tiedosto(je)n lataamiseen.</item>
+      <item name="valid_extensions">Sallitut päätteet:</item>
+      <item name="max_upload_size">Tiedoston maksimikoko:</item>
+      <item name="file_to_upload">Ladattava tiedosto:</item>
+      <item name="as_file_name">Nimellä:</item>
+      <item name="path">Polku: </item>
+      <item name="button_upload">Lataa</item>
+      <item name="browse">Lisää tiedosto(ja)</item>
+      <item name="progress">Ladataan...</item>
+      <item name="upload_warn">Tiedostoja ladataan parhaillaan, haluatko varmasti peruuttaa latauksen?</item>
+    </group>
+    <group target="createzip">
+      <item name="title">Luo zip paketti</item>
+      <item name="description">Kirjoita zip tiedoston nimi</item>
+      <item name="name">Nimi:</item>
+      <item name="path">Polku</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertfile_desc">Lisää tiedosto</item>
+    </group>
+  </language>
+</language-pack>

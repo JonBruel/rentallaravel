@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<language-pack>
+  <header>
+    <author>Ferit Terzi (feritterzi@hotmail.com)</author>
+    <version minor="2" major="1" releasedate="2010-02-01" />
+    <description>
+			MCImageManager için Türkçe dil paketi.
+		</description>
+  </header>
+  <language code="tr" title="Türkçe" dir="ltr">
+    <group target="common">
+      <item name="title">Webeeo Resim Yöneticisi</item>
+      <item name="filemanager">Dosya Yöneticisi</item>
+      <item name="createdir">Yeni Klasör</item>
+      <item name="refresh">Yenile</item>
+      <item name="upload">Yeni Ekle</item>
+      <item name="help">Yardim</item>
+      <item name="edit">Düzenle</item>
+      <item name="deleteit">Sil</item>
+      <item name="view">Görüntüle</item>
+      <item name="insert">Ekle</item>
+      <item name="directory">Seçilen Klasör</item>
+      <item name="loading">Yükleniyor...</item>
+      <item name="filter">Filtre</item>
+      <item name="alert_ok">Tamam</item>
+      <item name="confirm_yes">Evet</item>
+      <item name="confirm_no">Hayir</item>
+      <item name="prev">Önceki</item>
+      <item name="next">Sonraki</item>
+      <item name="image_data">Resim bilgisi yükleniyor, Lütfen bekleyin...</item>
+      <item name="page">Sayfa</item>
+      <item name="of">nin</item>
+      <!-- Legacy items -->
+      <item name="add_favorite">Favorilere Ekle</item>
+      <item name="removefavorite">Favorilerden Sil</item>
+    </group>
+    <group target="button">
+      <!-- think about the length of the text -->
+      <item name="create">Olustur</item>
+      <item name="cancel">Vazgeç</item>
+      <item name="apply">Uygula</item>
+      <item name="save">Kaydet</item>
+    </group>
+    <group target="error">
+      <!-- common -->
+      <item name="demo">Sorun olustu (dm)</item>
+      <item name="no_filesystem">Dosya sisteminde böyle bir yol yok: {path}.</item>
+      <item name="no_access">Dosyaya veya klasöre erisim izniniz yok.</item>
+      <item name="no_write_access">Klasöre yazma izniniz yok.</item>
+      <item name="file_not_exists">Dosya veya klasör yok.</item>
+      <item name="invalid_filename">Dosya adi geçersiz.</item>
+      <!-- create dir -->
+      <item name="template_missing">Seçilen sablon eksik.</item>
+      <item name="folder_exists">Klasör zaten var.</item>
+      <item name="createdir_failed">Klasör olusturulamadi.</item>
+      <!-- upload -->
+      <item name="upload_failed">Resim yüklenemedi, klasördeki yazma yetkinizi kontrol ediniz.</item>
+      <item name="file_exists">Dosya zaten var.</item>
+      <item name="error_to_large">Yüklemek istediginiz resmin boyutu büyük.</item>
+      <!-- delete -->
+      <item name="delete_failed">Dosyalar silinemedi.</item>
+      <!-- image edit -->
+      <item name="crop_failed">Kirpma islemi basarisiz oldu</item>
+      <item name="resize_failed">Yeniden boyutlandirma islemi basarisiz oldu.</item>
+      <item name="rotate_failed">Döndürme islemi basarisiz oldu.</item>
+      <item name="flip_failed">Çevirme islemi basarisiz oldu.</item>
+      <item name="save_failed">Kaydetme islemi basarisiz oldu.</item>
+      <!-- Legacy items -->
+      <item name="remove_favorite_failed">Resim favori listenizden silinemedi.</item>
+    </group>
+    <group target="message">
+      <!-- common -->
+      <item name="save_success">Resim kaydedildi.</item>
+      <item name="keepalive">Keepalive request.</item>
+      <!-- delete -->
+      <item name="delete_success">Resimler silindi.</item>
+      <!-- create dir -->
+      <item name="directory_ok">Klasör olusturuldu.</item>
+      <!-- upload -->
+      <item name="upload_ok">Yükleme tamamlandi.</item>
+      <!-- image edit -->
+      <item name="crop_success">Kirpma islemi tamamlandi.</item>
+      <item name="resize_success">Yeniden boyutlandirma islemi tamamlandi.</item>
+      <item name="rotate_success">Döndürme islemi tamamlandi.</item>
+      <item name="flip_success">Çevirme islemi tamamlandi.</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategoriler</item>
+      <item name="folders">Klasörler</item>
+      <!-- Legacy items -->
+      <item name="favorites">Favoriler</item>
+      <item name="history">Geçmis</item>
+    </group>
+    <group target="view">
+      <item name="title">Görüntüle</item>
+      <item name="mode">Görüntüleme Modu:</item>
+      <item name="thumbnail">Küçük Resimler</item>
+      <item name="textlist">Text list</item>
+      <item name="images_per_page">images/page</item>
+      <item name="confirm_delete">Resmi silmek istediginizden emin misiniz?</item>
+      <item name="keyboard_next">Klavye Kisayolu: SPACE,N,RIGHTARROW,PAGE DOWN</item>
+      <item name="keyboard_prev">Klavye Kisayolu: P,LEFTARROW,PAGE UP</item>
+      <item name="dimensions">Boyutlar</item>
+      <!-- Legacy items -->
+      <item name="confirm_remove_favorite">Resmi favoriler listesinden silmek istediginize emin misiniz?</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Klasör Olustur</item>
+      <item name="description">Klasör için dosya ismi yazin.</item>
+      <item name="template">Sablon:</item>
+      <item name="select_template">-- Sablon Seç --</item>
+      <item name="directory_name">Dosya Adi:</item>
+      <item name="create_in">Burada olustur:</item>
+      <item name="progress">Klasör olusturuluyor, lütfen bekleyin...</item>
+    </group>
+    <group target="upload">
+      <item name="title">Yeni Ekle</item>
+      <item name="description">Resimleri eklemek için bu formu kullanin.</item>
+      <item name="valid_extensions">Geçerli türler:</item>
+      <item name="max_upload_size">Max yükleme boyutu:</item>
+      <item name="file_to_upload">Yüklenecek Resim:</item>
+      <item name="as_file_name">Resmin adi:</item>
+      <item name="path">Yol: </item>
+      <item name="button_upload">Yeni Ekle</item>
+      <item name="browse">Dosyalari ekle</item>
+      <item name="progress">Yükleniyor...</item>
+      <item name="upload_warn">Dosyalar yükleniyor, iptal etmek istediginize emin misiniz?</item>
+      <item name="statusrow">{files} dosya (toplam {size}) yüklenmek için hazir.</item>
+      <item name="progressinfo">Toplam {total} resmin {loaded} kadari  {speed}/s. hizinda yüklendi </item>
+      <item name="abort">Yüklemeden çik</item>
+      <item name="add_more">Daha fazla eklemek için tiklayin?</item>
+      <item name="upload_to_server">Sunucuya yükle</item>
+      <item name="cancelled">Yüklemekten vazgeçildi</item>
+      <item name="choose_files">Dosyalari seç</item>
+      <item name="basic_upload">Resim yüklerken sorun yasiyorsaniz {a}Basit yükleyiciyi{/a} kullanin.</item>
+      <item name="remove">Sil</item>
+      <item name="file">Dosya</item>
+      <item name="size">Boyut</item>
+      <item name="status">Durum</item>
+      <item name="no_valid_files">Geçerli bir resim seçilmedi, Tekrar deneyiniz.</item>
+    </group>
+    <group target="edit_image">
+      <item name="title">Webeeo Resim Yöneticisi</item>
+      <item name="save">Kaydet</item>
+      <item name="revert">Revert</item>
+      <item name="crop">Kirp</item>
+      <item name="resize">Yeniden Boyutlandir</item>
+      <item name="please_wait">Resim isleniyor, lütfen bekleyiniz...</item>
+      <item name="constrain">Orantiyi koru..</item>
+      <item name="left">Sol</item>
+      <item name="top">Üst</item>
+      <item name="width">Genislik</item>
+      <item name="height">Yükseklik</item>
+      <item name="save_as">Farkli kaydet</item>
+      <item name="flip">Çevir</item>
+      <item name="rotate">Döndür</item>
+      <item name="reload">Tekrar yükle</item>
+      <item name="horizontal">Yatay</item>
+      <item name="vertical">Dikey</item>
+      <item name="saving_wait">Resim kaydediliyor, lütfen bekleyin...</item>
+      <item name="confirm_revert">Son kaydedilen resme dönmek istediginize emin misiniz?</item>
+      <item name="loading">Resim yükleniyor, lütfen bekleyin...</item>
+      <item name="confirm_no_save">Degisiklikleri kaydetmek istemediginize emin misiniz?</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertimage_desc">Resim ekle</item>
+      <item name="replaceimage_desc">Resmi degistir</item>
+      <item name="editimage_desc">Resmi düzenle</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">Favoriler</item>
+      <item name="addfavorites">Favorilere Ekle</item>
+      <item name="removefavorites">Favorilerden Sil</item>
+      <item name="confirm_remove_favorite">Favoriler listesinden silmek istiyor musunuz?</item>
+      <item name="remove_favorite_failed">Favoriler listesinden silerken hata olustu.</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">Geçmis</item>
+    </group>
+  </language>
+</language-pack>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-pack>
+  <header>
+    <!-- Please fill in contact information (author & email), we might contact you when we are doing updates -->
+    <!-- You will also have the chance to participate in beta releases of new versions -->
+    <author>Gabriel Schwardy (caleydon@gmail.com)</author>
+    <version minor="9" major="1" releasedate="2009-11-24" />
+    <description>
+			Toto je slovenský jazykový balík pre MCImageManager.
+		</description>
+  </header>
+  <language code="sk" title="Slovak" dir="ltr">
+    <group target="common">
+      <item name="title">Správca obrázkov</item>
+      <item name="filemanager">Správca súborov</item>
+      <item name="createdir">Vytvoriť adresár</item>
+      <item name="refresh">Obnoviť</item>
+      <item name="upload">Nahrať obrázok</item>
+      <item name="help">Nápoveda</item>
+      <item name="edit">Upraviť</item>
+      <item name="deleteit">Zmazať</item>
+      <item name="view">Zobraziť</item>
+      <item name="insert">Vložiť</item>
+      <item name="directory">Zvolený adresár</item>
+      <item name="loading">Načítavam...</item>
+      <item name="filter">Filter</item>
+      <item name="alert_ok">OK</item>
+      <item name="confirm_yes">Áno</item>
+      <item name="confirm_no">Nie</item>
+      <item name="prev">Nasled.</item>
+      <item name="next">Predch.</item>
+      <item name="image_data">Získavam dáta obrázka, čakaj prosím...</item>
+      <item name="page">Strana</item>
+      <item name="of">z</item>
+      <!-- Legacy items -->
+      <item name="add_favorite">Pridať k obľúbeným</item>
+      <item name="removefavorite">Odstrániť z obľúbených</item>
+    </group>
+    <group target="button">
+      <!-- think about the length of the text -->
+      <item name="create">Vytvoriť</item>
+      <item name="cancel">Zrušiť</item>
+      <item name="apply">Potvrdiť</item>
+      <item name="save">Uložiť</item>
+    </group>
+    <group target="error">
+      <!-- common -->
+      <item name="demo">Táto operácia nie je v demo móde povolená.</item>
+      <item name="no_filesystem">Nebol nájdený žiaden systém súborov pre cestu: {path}.</item>
+      <item name="no_access">Do súboru/adresára nie je možný prístup.</item>
+      <item name="no_write_access">Do adresára nie je možný zápis.</item>
+      <item name="file_not_exists">Súbor/adresár nebol nájdený.</item>
+      <item name="invalid_filename">Názov súboru nie je platný.</item>
+      <!-- create dir -->
+      <item name="template_missing">Zvolená šablóna chýba.</item>
+      <item name="folder_exists">Adresár s rovnakým názvom už existuje.</item>
+      <item name="createdir_failed">Adresár nebolo možné vytvoriť.</item>
+      <!-- upload -->
+      <item name="upload_failed">Nahrávanie zlyhalo. Skontroluj prosím prístupové práva pre zápis.</item>
+      <item name="file_exists">Súbor s rovnakým názvom už existuje.</item>
+      <item name="error_to_large">Súbor, ktorý sa pokúšaš nahrať je príliš veľký.</item>
+      <!-- delete -->
+      <item name="delete_failed">Nie je možné zmazať súbor(y).</item>
+      <!-- image edit -->
+      <item name="crop_failed">Nie je možné orezať obrázok.</item>
+      <item name="resize_failed">Nie je možné zmeniť rozmery obrázku.</item>
+      <item name="rotate_failed">Otáčanie nebolo úspešné.</item>
+      <item name="flip_failed">Preklopenie nebolo úspešné.</item>
+      <item name="save_failed">Uloženie nebolo úspešné.</item>
+      <!-- Legacy items -->
+      <item name="remove_favorite_failed">Odstránenie zo zoznamu obľúbených položiek zlyhalo.</item>
+    </group>
+    <group target="message">
+      <!-- common -->
+      <item name="save_success">Súbor bol uložený.</item>
+      <item name="keepalive">Požiadavka pre udržanie spojenia.</item>
+      <!-- delete -->
+      <item name="delete_success">Súbor(y) bol úspešne zmazaný.</item>
+      <!-- create dir -->
+      <item name="directory_ok">Adresár bol úspešne vytvorený.</item>
+      <!-- upload -->
+      <item name="upload_ok">Nahrávanie bolo úspešné.</item>
+      <!-- image edit -->
+      <item name="crop_success">Orezanie bolo úspešné.</item>
+      <item name="resize_success">Zmena rozmerov bola úspešná.</item>
+      <item name="rotate_success">Otáčanie bolo úspešné.</item>
+      <item name="flip_success">Preklopenie bolo úspešné.</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategórie</item>
+      <item name="folders">Adresáre</item>
+      <!-- Legacy items -->
+      <item name="favorites">Obľúbené</item>
+      <item name="history">História</item>
+    </group>
+    <group target="view">
+      <item name="title">Náhľad</item>
+      <item name="mode">Zobrazenie:</item>
+      <item name="thumbnail">Náhľady</item>
+      <item name="textlist">Zoznam</item>
+      <item name="images_per_page">obrázky/strana</item>
+      <item name="confirm_delete">Naozaj chceš odstrániť tento súbor?</item>
+      <item name="keyboard_next">Klávesové skratky: SPACE,N,RIGHTARROW,PAGE DOWN</item>
+      <item name="keyboard_prev">Klávesové skratky: P,LEFTARROW,PAGE UP</item>
+      <item name="dimensions">Rozmery</item>
+      <!-- Legacy items -->
+      <item name="confirm_remove_favorite">Naozaj chceš odstrániť zo zoznamu obľúbených položiek?</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Vytvoriť adresár</item>
+      <item name="description">Zadaj názov adresára, ktorý si želáš vytvoriť.</item>
+      <item name="template">Šablóna:</item>
+      <item name="select_template">-- Vyber šablónu --</item>
+      <item name="directory_name">Názov adresára:</item>
+      <item name="create_in">Vytvoriť v:</item>
+      <item name="progress">Vytváram adresár, čakaj prosím...</item>
+    </group>
+    <group target="upload">
+      <item name="title">Nahrávanie súborov</item>
+      <item name="description">Použi tento formulár pre nahratie súborov.</item>
+      <item name="valid_extensions">Povolené typy súborov:</item>
+      <item name="max_upload_size">Max. veľkosť nahrávaných súborov:</item>
+      <item name="file_to_upload">Súbor pre nahratie:</item>
+      <item name="as_file_name">Ako názov súboru:</item>
+      <item name="path">Cesta: </item>
+      <item name="button_upload">Nahrať</item>
+      <item name="browse">Pridať súbor(y)</item>
+      <item name="progress">Nahrávam...</item>
+      <item name="upload_warn">Súbory sa nahrávajú. Naozaj chceš prerusiť nahrávanie?</item>
+      <item name="statusrow">Máš {files} súborov (celkovo {size}) čakajúcich na nahratie.</item>
+      <item name="progressinfo">{loaded} z {total} nahratých súborov, rýchlosťou {speed}/s.</item>
+      <item name="abort">Zrušiť nahrávanie</item>
+      <item name="add_more">Pridať ďalšie?</item>
+      <item name="upload_to_server">Nahrať na server</item>
+      <item name="cancelled">Nahrávanie bolo zrušené</item>
+      <item name="choose_files">Vyber súbory</item>
+      <item name="basic_upload">Ak máš problémy s nahrávaním, môžeš použiť {a}jednoduché nahrávanie{/a}.</item>
+      <item name="remove">Odstrániť</item>
+      <item name="file">Súbor</item>
+      <item name="size">Rozmery</item>
+      <item name="status">Stav</item>
+      <item name="no_valid_files">Označené súbory nie sú platné. Skús prosím znovu.</item>
+    </group>
+    <group target="edit_image">
+      <item name="title">Wditor obrázkov</item>
+      <item name="save">Uložiť</item>
+      <item name="revert">Obnoviť</item>
+      <item name="crop">Orezať</item>
+      <item name="resize">Zmeniť rozmery</item>
+      <item name="please_wait">Prebieha spracovanie obrázka, čakaj prosím...</item>
+      <item name="constrain">Zachovať proporcie</item>
+      <item name="left">vľavo</item>
+      <item name="top">hore</item>
+      <item name="width">šírka</item>
+      <item name="height">výška</item>
+      <item name="save_as">Uložiť ako</item>
+      <item name="flip">Preklopiť</item>
+      <item name="rotate">Otočiť</item>
+      <item name="reload">Opäť načítať</item>
+      <item name="horizontal">Horizontálne</item>
+      <item name="vertical">Vertikálne</item>
+      <item name="saving_wait">Ukladám obrázok, čakaj prosím...</item>
+      <item name="confirm_revert">Naozaj chceš navrátiť naposledy uložené zmeny?</item>
+      <item name="loading">Načítavam obrázok, čakaj prosím...</item>
+      <item name="confirm_no_save">Si si istý, že nechceš uložiť zmeny vykonané úpravou obrázka?</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertimage_desc">Vložiť obrázok</item>
+      <item name="replaceimage_desc">Nahradiť obrázok</item>
+      <item name="editimage_desc">Upraviť obrázok</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">Obľúbené</item>
+      <item name="addfavorites">Pridať k obľúbeným</item>
+      <item name="removefavorites">Odstrániť z obľúbených</item>
+      <item name="confirm_remove_favorite">Naozaj chceš odstrániť zo zoznamu obľúbených?</item>
+      <item name="remove_favorite_failed">Ostránenie zo zoznamu obľúbených zlyhalo.</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">História</item>
+    </group>
+  </language>
+</language-pack>

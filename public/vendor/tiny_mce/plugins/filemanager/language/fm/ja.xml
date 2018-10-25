@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<language-pack>
+  <header>
+    <author>Naggy Matsu (nagisa@shift-jp.net)</author>
+    <version minor="1" major="1" releasedate="2010-04-08" />
+    <description>
+			This is the Japanese language pack for the MCFileManager.
+		</description>
+  </header>
+  <language code="ja" title="Japanese" dir="ltr">
+    <group target="error">
+      <item name="tofile_exists">【エラー】ファイルがすでに存在します</item>
+      <item name="no_from_file">【エラー】ファイルが存在しません</item>
+      <item name="demo">この操作はデモモードのみ有効です</item>
+      <item name="invalid_filename">【エラー】ファイル名が無効です</item>
+      <item name="no_read_access">このファイル/フォルダには読込権限がありません</item>
+      <item name="no_write_access">このファイル/フォルダには書込権限がありません</item>
+      <item name="copy_failed">【エラー】コピーに失敗しました</item>
+      <item name="move_failed">【エラー】移動に失敗しました</item>
+      <item name="template_missing">【エラー】テンプレートが見つかりません</item>
+      <item name="createdoc_failed">【エラー】ドキュメントの作成に失敗しました</item>
+      <item name="no_access">【エラー】この操作に対するアクセス権限がありません</item>
+      <item name="file_exists">【エラー】ファイルがすでに存在します</item>
+      <item name="upload_failed">【エラー】アップロードに失敗しました。このフォルダに書込権限があることを確認してください。</item>
+      <item name="error_to_large">【エラー】ファイルサイズが大きすぎます</item>
+      <item name="file_not_exists">【エラー】ファイルが存在しません</item>
+      <item name="delete_failed">【エラー】削除に失敗しました</item>
+      <item name="folder_exists">【エラー】そのフォルダはすでに存在します</item>
+      <item name="no_filesystem">【エラー】ファイルシステムが見つかりません</item>
+      <item name="createdir_failed">【エラー】フォルダの作成に失敗しました</item>
+      <item name="createzip_failed">【エラー】ZIP圧縮に失敗しました</item>
+      <item name="rename_failed">【エラー】名前の変更に失敗しました</item>
+      <item name="savecontent_failed">【エラー】ファイルの保存に失敗しました</item>
+    </group>
+    <group target="message">
+      <item name="zip_success">ZIP圧縮が正常に成功しました</item>
+      <item name="copy_success">コピーが正常に成功しました</item>
+      <item name="move_success">移動が正常に成功しました</item>
+      <item name="createdoc_success">ファイルが正常に作成されました</item>
+      <item name="delete_success">削除しました</item>
+      <item name="directory_ok">フォルダを作成しました</item>
+      <item name="keepalive">Keepalive</item>
+      <item name="upload_ok">アップロード成功</item>
+      <item name="confirm_cut">選択したファイルを切り取りしますか？</item>
+      <item name="confirm_copy">選択したファイルをコピーしますか？</item>
+      <item name="confirm_paste">選択したファイルを貼り付けしますか？</item>
+      <item name="confirm_delete">選択したファイルを削除しますか？</item>
+      <item name="insert">ファイルを読み込み中です。しばらくお待ち下さい。</item>
+      <item name="paste_in_progress">貼り付け中です。しばらくお待ち下さい。</item>
+    </group>
+    <group target="common">
+      <item name="createdir">フォルダを新規作成</item>
+      <item name="createfile">ファイルを新規作成</item>
+      <item name="help">ヘルプ</item>
+      <item name="refresh">更新</item>
+      <item name="upload">アップロード</item>
+      <item name="directory">選択されたフォルダ</item>
+      <item name="imagemanager">画像管理</item>
+      <item name="title">ファイル管理</item>
+      <item name="alert_ok">OK</item>
+      <item name="confirm_yes">はい</item>
+      <item name="confirm_no">いいえ</item>
+    </group>
+    <group target="button">
+      <item name="create">作成</item>
+      <item name="cancel">キャンセル</item>
+      <item name="save">保存</item>
+    </group>
+    <group target="panel">
+      <item name="categories">カテゴリー</item>
+      <item name="preview">プレビュー</item>
+      <!-- Legacy items -->
+      <item name="favorites">お気に入り</item>
+      <item name="history">履歴</item>
+    </group>
+    <group target="edit">
+      <item name="title">ファイル編集</item>
+      <item name="description">ファイルの中身を編集します</item>
+      <item name="loading_wait">読み込み中です。しばらくお待ち下さい。</item>
+      <item name="saving_wait">保存中です。しばらくお待ち下さい。</item>
+      <item name="file_path">ファイルへのパス:</item>
+    </group>
+    <group target="actions">
+      <item name="insert">挿入</item>
+      <item name="download">ダウンロード</item>
+      <item name="rename">名前を変更</item>
+      <item name="cut">切り取り</item>
+      <item name="copy">コピー</item>
+      <item name="paste">貼り付け</item>
+      <item name="deleteit">削除</item>
+      <item name="edit">編集</item>
+      <item name="zip">圧縮</item>
+      <item name="view">表示</item>
+      <item name="select_all">全て選択</item>
+      <item name="unselect_all">選択解除</item>
+      <!-- Legacy items -->
+      <item name="addfavorites">お気に入りに追加</item>
+      <item name="removefavorites">お気に入りから削除</item>
+    </group>
+    <group target="filelist">
+      <item name="filename">ファイル名</item>
+      <item name="size">サイズ</item>
+      <item name="type">種類</item>
+      <item name="modified">変更日</item>
+      <item name="with_selected">選択されたファイルを：</item>
+      <item name="info_dirs">フォルダー：</item>
+      <item name="info_files">ファイル：</item>
+      <item name="info_size">合計ファイルサイズ：</item>
+      <item name="info_access">アクセス権限：</item>
+      <item name="loading">読み込み中</item>
+    </group>
+    <group target="createdir">
+      <item name="title">フォルダ新規作成</item>
+      <item name="description">新規作成するフォルダ名を入力して下さい</item>
+      <item name="template">テンプレート:</item>
+      <item name="select_template">-- テンプレートを選択 --</item>
+      <item name="directory_name">フォルダ名:</item>
+      <item name="create_in">作成先:</item>
+      <item name="progress">フォルダを作成中です。しばらくお待ち下さい。</item>
+    </group>
+    <group target="createdoc">
+      <item name="title">ファイル新規作成</item>
+      <item name="description">テンプレートから作成</item>
+      <item name="template">テンプレート:</item>
+      <item name="select_template">-- テンプレートを選択 --</item>
+      <item name="name">名前</item>
+      <item name="path">パス</item>
+      <item name="preview">プレビュー</item>
+      <item name="preview_title">{file}のプレビュー</item>
+    </group>
+    <group target="upload">
+      <item name="title">アップロード</item>
+      <item name="description">フォームを使用してアップロード</item>
+      <item name="valid_extensions">有効な拡張子：</item>
+      <item name="max_upload_size">最大ファイルサイズ：</item>
+      <item name="file_to_upload">アップロードするファイル：</item>
+      <item name="as_file_name">アップロード後のファイル名：</item>
+      <item name="path">パス： </item>
+      <item name="button_upload">アップロード</item>
+      <item name="browse">ファイルを追加</item>
+      <item name="progress">アップロード中</item>
+      <item name="upload_warn">ファイルをアップロード中です。中止しますか？</item>
+      <item name="statusrow">{files} 個のファイル (全ファイルサイズ： {size}) をアップロードしようとしています。</item>
+      <item name="progressinfo">{total}個のうち{loaded}個のファイルをアップロードしました。 {speed}/秒.</item>
+      <item name="abort">アップロード中止</item>
+      <item name="add_more">さらに追加</item>
+      <item name="upload_to_server">サーバにアップロード</item>
+      <item name="cancelled">アップロードは中止されました</item>
+      <item name="choose_files">ファイルを選択</item>
+      <item name="basic_upload">もしアップローダに問題があれば {a}通常のアップローダ{/a} を試して下さい。</item>
+      <item name="remove">削除</item>
+      <item name="file">ファイル</item>
+      <item name="size">サイズ</item>
+      <item name="status">操作</item>
+      <item name="no_valid_files">有効なファイルが選択されていません。もう一度試して下さい。</item>
+    </group>
+    <group target="createzip">
+      <item name="title">zipを作成</item>
+      <item name="description">作成するZIPファイルの名前を入力して下さい</item>
+      <item name="name">名前：</item>
+      <item name="path">パス：</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertfile_desc">ファイルを挿入</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">お気に入り</item>
+      <item name="addfavorites">お気に入りに追加</item>
+      <item name="removefavorites">お気に入りから削除</item>
+      <item name="confirm_remove_favorite">本当にこのファイルをお気に入りから削除しますか？</item>
+      <item name="remove_favorite_failed">お気に入りリストからの削除に失敗しました</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">履歴</item>
+    </group>
+    <group target="uploaded">
+      <item name="special_folder_title">アップロードされたファイル</item>
+    </group>
+  </language>
+</language-pack>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<language-pack>
+  <header>
+    <author>Michel Weimerskirch (michel@weimerskirch.net)</author>
+    <version major="1" minor="6" releasedate="2010-03-30" />
+    <description>
+      This is the french language pack for the MCImageManager.
+    </description>
+  </header>
+  <language code="fr" title="FranÃ§ais" dir="ltr">
+    <group target="common">
+      <item name="title">Moxiecode Gestionnaire d'images</item>
+      <item name="filemanager">Gestionnaire de fichiers</item>
+      <item name="createdir">CrÃ©er dossier</item>
+      <item name="refresh">RafraÃÂ®chir</item>
+      <item name="upload">TÃ©lÃ©chargement</item>
+      <item name="help">Aide</item>
+      <item name="edit">Modifier</item>
+      <item name="deleteit">Supprimer</item>
+      <item name="view">Afficher</item>
+      <item name="download">TÃ©lÃ©charger</item>
+      <item name="insert">InsÃ©rer</item>
+      <item name="directory">Dossier sÃ©lectionnÃ©</item>
+      <item name="loading">Chargement en cours...</item>
+      <item name="filter">Filtrer</item>
+      <item name="alert_ok">OK</item>
+      <item name="confirm_yes">Oui</item>
+      <item name="confirm_no">Non</item>
+      <item name="prev">prÃ©c.</item>
+      <item name="next">suiv.</item>
+      <item name="image_data">RÃ©cupÃ©ration des informations de l'image, patienter...</item>
+      <item name="page">Page</item>
+      <item name="of">de</item>
+      <!-- Legacy items -->
+      <item name="add_favorite">Ajouter aux favoris</item>
+      <item name="removefavorite">Retirer des favoris</item>
+    </group>
+    <group target="button">
+      <!-- think about the length of the text -->
+      <item name="create">CrÃ©er</item>
+      <item name="cancel">Annuler</item>
+      <item name="apply">Valider</item>
+      <item name="save">Enregistrer</item>
+    </group>
+    <group target="error">
+      <!-- common -->
+      <item name="demo">Cette action est interdite en mode dÃ©monstration.</item>
+      <item name="no_filesystem">Aucun fichier trouvÃ© pour le chemin : {path}.</item>
+      <item name="no_access">Vous ne disposez pas des droits sur ce dossier/fichier.</item>
+      <item name="no_write_access">Vous ne disposez pas des droits en Ã©criture sur ce dossier.</item>
+      <item name="file_not_exists">Le fichier/dossier n'a pas Ã©tÃ© trouvÃ©.</item>
+      <item name="invalid_filename">Nom de fichier non valide.</item>
+      <!-- create dir -->
+      <item name="template_missing">Le gabarit sÃ©lectionnÃ© n'existe pas.</item>
+      <item name="folder_exists">Un dossier du mÃªme nom existe dÃ©jÃ .</item>
+      <item name="createdir_failed">Erreur, impossible de crÃ©er le dossier.</item>
+      <!-- upload -->
+      <item name="upload_failed">TÃ©lÃ©chargement annulÃ©e, vÃ©rifiez les droits en Ã©criture sur le dossier.</item>
+      <item name="file_exists">Un fichier du mÃªme nom existe dÃ©jÃ .</item>
+      <item name="error_to_large">Le fichier que vous essayez de tÃ©lÃ©charger est trop volumineux.</item>
+      <!-- delete -->
+      <item name="delete_failed">Suppression impossible.</item>
+      <!-- image edit -->
+      <item name="crop_failed">Erreur, recadrage impossible.</item>
+      <item name="resize_failed">Erreur, redimensionnement impossible.</item>
+      <item name="rotate_failed">Rotation impossible.</item>
+      <item name="flip_failed">Retournement impossible.</item>
+      <item name="save_failed">Enregistrement impossible.</item>
+      <!-- Legacy items -->
+      <item name="remove_favorite_failed">Impossible de supprimer le favori de votre liste de favoris.</item>
+    </group>
+    <group target="message">
+      <!-- common -->
+      <item name="save_success">Fichier enregistrÃ©.</item>
+      <item name="keepalive">Demande "Keep-alive".</item>
+      <!-- delete -->
+      <item name="delete_success">Fichier(s) supprimÃ©(s).</item>
+      <!-- create dir -->
+      <item name="directory_ok">Le dossier a Ã©tÃ© crÃ©Ã©.</item>
+      <!-- upload -->
+      <item name="upload_ok">TÃ©lÃ©chargement terminÃ©.</item>
+      <!-- image edit -->
+      <item name="crop_success">Recadrage terminÃ©.</item>
+      <item name="resize_success">Redimensionnement terminÃ©.</item>
+      <item name="rotate_success">Rotation terminÃ©e.</item>
+      <item name="flip_success">Retournement terminÃ©.</item>
+    </group>
+    <group target="panel">
+      <item name="categories">CatÃ©gories</item>
+      <item name="folders">Dossiers</item>
+      <!-- Legacy items -->
+      <item name="favorites">Favoris</item>
+      <item name="history">Historique</item>
+    </group>
+    <group target="view">
+      <item name="title">Affichage</item>
+      <item name="mode">Type d'affichage</item>
+      <item name="thumbnail">Vignette</item>
+      <item name="textlist">Liste</item>
+      <item name="images_per_page">images par page</item>
+      <item name="confirm_delete">Voulez-vous vraiment supprimer cette image ?</item>
+      <item name="keyboard_next">Suivant</item>
+      <item name="keyboard_prev">PrÃ©cÃ©dent</item>
+      <item name="dimensions">Dimensions</item>
+      <!-- Legacy items -->
+      <item name="confirm_remove_favorite">Voulez-vous vraiment retirer cette image de vos favoris ?</item>
+    </group>
+    <group target="createdir">
+      <item name="title">CrÃ©er dossier</item>
+      <item name="description">InsÃ©rez le nom du dossier Ã  crÃ©er.</item>
+      <item name="template">Gabarit :</item>
+      <item name="select_template">-- SÃ©lection gabarit --</item>
+      <item name="directory_name">Nom du dossier :</item>
+      <item name="create_in">CrÃ©er dans :</item>
+      <item name="progress">CrÃ©ation du dossier, patientez...</item>
+    </group>
+    <group target="upload">
+      <item name="title">TÃ©lÃ©chargement</item>
+      <item name="description">Utilisez ce formulaire pour tÃ©lÃ©charger des fichiers.</item>
+      <item name="valid_extensions">Extensions valides :</item>
+      <item name="max_upload_size">Taille maximale :</item>
+      <item name="file_to_upload">Fichier Ã  tÃ©lÃ©charger :</item>
+      <item name="as_file_name">Nom de destination :</item>
+      <item name="path">Chemin :</item>
+      <item name="button_upload">TÃ©lÃ©charger</item>
+      <item name="browse">Parcourir</item>
+      <item name="progress">TÃ©lÃ©chargement en cours, patientez...</item>
+      <item name="upload_warn">Des fichiers sont en cours d'Ãªtre tÃ©lÃ©chargÃ©s, Ãªtes-vous sÃ»r de vouloir annuler l'opÃ©ration?</item>
+      <item name="statusrow">Vous avez {files} fichiers (total {size}) qui attendent impatiemment d'Ãªtre tÃ©lÃ©chargÃ©.</item>
+      <item name="progressinfo">{loaded} de chargÃ©s sur un total de {total} uploadÃ©s Ã  {speed} /s.</item>
+      <item name="progressinfo">{loaded} of {total} uploaded at {speed}/s.</item>
+      <item name="abort">Abandonner upload</item>
+      <item name="add_more">Ajouter de plus?</item>
+      <item name="upload_to_server">TÃ©lÃ©charger au serveur</item>
+      <item name="cancelled">Envoi a Ã©tÃ© annulÃ©</item>
+      <item name="choose_files">Choisir les fichiers</item>
+      <item name="basic_upload">Si vous rencontrez des problÃ¨mes lors du tÃ©lÃ©chargement, vous pouvez toujours utiliser {a} l'uploader de base {/ a}.</item>
+      <item name="remove">Supprimer</item>
+      <item name="file">Fichier</item>
+      <item name="size">Taille</item>
+      <item name="status">Ãtat</item>
+      <item name="no_valid_files">Pas de fichiers en cours de validitÃ© choisi, s'il vous plaÃ®t essayer de nouveau.</item>
+    </group>
+    <group target="edit_image">
+      <item name="title">Modification de l'image</item>
+      <item name="save">Enregistrer</item>
+      <item name="revert">Revenir</item>
+      <item name="crop">Recadrer</item>
+      <item name="resize">Redimensionner</item>
+      <item name="please_wait">Traitement de l'image, patientez...</item>
+      <item name="constrain">Conserver les proportions</item>
+      <item name="left">g :</item>
+      <item name="top">h :</item>
+      <item name="width">L :</item>
+      <item name="height">H :</item>
+      <item name="save_as">Enregistrer sous</item>
+      <item name="flip">Inverser</item>
+      <item name="rotate">Rotation</item>
+      <item name="reload">Recharger</item>
+      <item name="horizontal">Horizontal</item>
+      <item name="vertical">Vertical</item>
+      <item name="saving_wait">Sauvegarde de l'image, patientez...</item>
+      <item name="confirm_revert">ÃÂtes-vous sÃ»r de vouloir revenir Ã  la derniÃ¨re sauvegarde ?</item>
+      <item name="loading">Chargement...</item>
+      <item name="confirm_no_save">Etes-vous sÃ»r que vous ne voulez pas enregistrer les modifications apportÃ©es Ã  l'image?</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertimage_desc">InsÃ©rer image</item>
+      <item name="replaceimage_desc">Remplacez l'image</item>
+      <item name="editimage_desc">Modifier l'image</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">Favoris</item>
+      <item name="addfavorites">Ajouter un favori (s)</item>
+      <item name="removefavorites">Retirer favori (s)</item>
+      <item name="confirm_remove_favorite">Ãtes-vous sÃ»r de vouloir supprimer cet Ã©lÃ©ment de votre liste de favoris?</item>
+      <item name="remove_favorite_failed">Impossible de supprimer le favori de votre liste de favoris.</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">Histoire</item>
+    </group>
+  </language>
+</language-pack>

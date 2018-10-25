@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<language-pack>
+  <header>
+    <!-- Please fill in contact information (author & email), we might contact you when we are doing updates -->
+    <!-- You will also have the chance to participate in beta releases of new versions -->
+    <author>Sakari Laine (sakari.laine@mederra.com)</author>
+    <version minor="0" major="1" releasedate="2008-03-04" />
+    <description>
+			This is the Finnish language pack for the MCImageManager.
+		</description>
+  </header>
+  <language code="fi" title="Finnish" dir="ltr">
+    <group target="common">
+      <item name="title">Moxiecode Image Manager</item>
+      <item name="filemanager">Tiedostohallinta</item>
+      <item name="createdir">Uusi kansio</item>
+      <item name="refresh">Päivitä</item>
+      <item name="upload">Lataa</item>
+      <item name="help">Apua</item>
+      <item name="edit">Muokkaa</item>
+      <item name="deleteit">Poista</item>
+      <item name="view">Katso</item>
+      <item name="insert">Lisää</item>
+      <item name="add_favorite">Lisää suosikkeihin</item>
+      <item name="directory">Valittu kansio</item>
+      <item name="removefavorite">Poista suosikki</item>
+      <item name="loading">Ladataan...</item>
+      <item name="filter">Filtteri</item>
+      <item name="alert_ok">Ok</item>
+      <item name="confirm_yes">Kyllä</item>
+      <item name="confirm_no">Ei</item>
+      <item name="prev">Edellinen</item>
+      <item name="next">Seuraava</item>
+      <item name="image_data">Haetaan kuvan tietoja, odota hetki...</item>
+    </group>
+    <group target="button">
+      <!-- think about the length of the text -->
+      <item name="create">Uusi</item>
+      <item name="cancel">Peruuta</item>
+      <item name="apply">Apply</item>
+      <item name="save">Tallenna</item>
+    </group>
+    <group target="error">
+      <!-- common -->
+      <item name="demo">Tätä toimintoa ei voi tehdä demo tilassa.</item>
+      <item name="no_filesystem">Ei tiedostojärjestelmää polulle: {path}.</item>
+      <item name="no_access">No access on this file/folder.</item>
+      <item name="no_write_access">Kansiossa ei ole kirjoitusoikeutta.</item>
+      <item name="file_not_exists">Tiedostoa/Kansiota ei löytynyt .</item>
+      <item name="invalid_filename">Tiedoston nimi ei kelpaa.</item>
+      <item name="remove_favorite_failed">Suoikin poistaminen epäonnistui.</item>
+      <!-- create dir -->
+      <item name="template_missing">Valittu template puuttuu.</item>
+      <item name="folder_exists">Samanniminen kansio on jo olemassa.</item>
+      <item name="createdir_failed">Kansion luominen epäonnistui.</item>
+      <!-- upload -->
+      <item name="upload_failed">Lataaminen epäonnistui, tarkista kansion oikeudet.</item>
+      <item name="file_exists">Samanniminen tiedosto on jo olemassa.</item>
+      <item name="error_to_large">Lataamasi tiedosto on liian suuri.</item>
+      <!-- delete -->
+      <item name="delete_failed">Tiedosto(je)n poistaminen epäonnistui.</item>
+      <!-- image edit -->
+      <item name="crop_failed">Rajaaminen epäonnistui.</item>
+      <item name="resize_failed">Koon muuttaminen epäonnistui.</item>
+      <item name="rotate_failed">Kääntäminen epäonnistui.</item>
+      <item name="flip_failed">Kääntäminen epäonnistui.</item>
+      <item name="save_failed">Tallennus epäonnistui.</item>
+    </group>
+    <group target="message">
+      <!-- common -->
+      <item name="save_success">Tiedosto tallennettu.</item>
+      <item name="keepalive">Keepalive request.</item>
+      <!-- delete -->
+      <item name="delete_success">Tiedosto(t) poistettu.</item>
+      <!-- create dir -->
+      <item name="directory_ok">Kansio luotu.</item>
+      <!-- upload -->
+      <item name="upload_ok">Lataaminen onnistui.</item>
+      <!-- image edit -->
+      <item name="crop_success">Rajaus onnistui.</item>
+      <item name="resize_success">Koon muuttaminen onnistui.</item>
+      <item name="rotate_success">Kääntäminen onnistui.</item>
+      <item name="flip_success">Kääntäminen onnistui.</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategoriat</item>
+      <item name="folders">Kansiot</item>
+      <item name="favorites">Suosikit</item>
+      <item name="history">Historia</item>
+    </group>
+    <group target="view">
+      <item name="title">Katso</item>
+      <item name="mode">Listaustyyli:</item>
+      <item name="thumbnail">Pikkukuvat</item>
+      <item name="textlist">Tekstilista</item>
+      <item name="images_per_page">kuvaa sivulle</item>
+      <item name="confirm_delete">Haluatko varmasti poistaa tämän kuvan?</item>
+      <item name="keyboard_next">Näppäimistön oikopolut: SPACE,N,OIKEA,PAGE DOWN</item>
+      <item name="keyboard_prev">Näppäimistön oikopolut: P,VASEN,PAGE UP</item>
+      <item name="dimensions">Mitat</item>
+      <item name="confirm_remove_favorite">Haluatko varmasti poistaa tämän suosikeistasi?</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Uusi kansio</item>
+      <item name="description">Kirjoita nimi kansiolle, jonka haluat luoda.</item>
+      <item name="template">Template:</item>
+      <item name="select_template">-- Valitse template --</item>
+      <item name="directory_name">Kansion nimi:</item>
+      <item name="create_in">Uusi kansioon:</item>
+      <item name="progress">Kansiota luodaan, odota hetki...</item>
+    </group>
+    <group target="upload">
+      <item name="title">Lataa</item>
+      <item name="description">Lataa tiedotoja lomakkeen avulla.</item>
+      <item name="valid_extensions">Sallitut päätteet:</item>
+      <item name="max_upload_size">Tiedoston maksimikoko:</item>
+      <item name="file_to_upload">Ladattava tiedosto:</item>
+      <item name="as_file_name">Nimellä:</item>
+      <item name="path">Polku: </item>
+      <item name="button_upload">Lataa</item>
+      <item name="browse">Lisää tiedosto(ja)</item>
+      <item name="progress">Ladataan...</item>
+      <item name="upload_warn">Tiedostoja ladataan parhaillaan, haluatko varmasti peruuttaa latauksen?</item>
+    </group>
+    <group target="edit_image">
+      <item name="title">Moxiecode ImageManager Editor</item>
+      <item name="save">Tallenna</item>
+      <item name="revert">Palauta</item>
+      <item name="crop">Rajaa</item>
+      <item name="resize">Muuta kokoa</item>
+      <item name="please_wait">Käsitellään kuvaa, odota hetki...</item>
+      <item name="constrain">Säilytä kuvasuhde</item>
+      <item name="left">Vasen</item>
+      <item name="top">Ylös</item>
+      <item name="width">Leveys</item>
+      <item name="height">Korkeus</item>
+      <item name="save_as">Tallenna nimellä</item>
+      <item name="flip">Peilikuva</item>
+      <item name="rotate">Käännä</item>
+      <item name="reload">Päivitä</item>
+      <item name="horizontal">Vaakatasossa</item>
+      <item name="vertical">Pystysuoraan</item>
+      <item name="saving_wait">Tallennetaan kuvaa, odota hetki...</item>
+      <item name="confirm_revert">Oletko varma, että haluat palata viimeksi tallennettuun kuvaan?</item>
+      <item name="loading">Ladataan kuvaa, odota hetki...</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertimage_desc">Lisää kuva</item>
+    </group>
+  </language>
+</language-pack>

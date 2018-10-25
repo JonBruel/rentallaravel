@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-pack>
+  <header>
+    <!-- Please fill in contact information (author & email), we might contact you when we are doing updates -->
+    <!-- You will also have the chance to participate in beta releases of new versions -->
+    <author>Gabor Maklari (gabor.maklari@gmail.com)</author>
+    <version minor="1" major="1" releasedate="2009-02-11" />
+    <description>
+			This is the Hungarian language pack for the MCImageManager.
+		</description>
+  </header>
+  <language code="hu" title="Magyar" dir="ltr">
+    <group target="common">
+      <item name="title">Moxiecode Képkezelő</item>
+      <item name="filemanager">Fájlkezelő</item>
+      <item name="createdir">Mappa létrehozása</item>
+      <item name="refresh">Frissítés</item>
+      <item name="upload">Feltöltés</item>
+      <item name="help">Segítség</item>
+      <item name="edit">Szerkesztés</item>
+      <item name="deleteit">Törlés</item>
+      <item name="view">Megtekintés</item>
+      <item name="insert">Beszúrás</item>
+      <item name="directory">Kiválasztott mappa</item>
+      <item name="loading">Betöltés...</item>
+      <item name="filter">Keresés</item>
+      <item name="alert_ok">Ok</item>
+      <item name="confirm_yes">Igen</item>
+      <item name="confirm_no">Nem</item>
+      <item name="prev">Előző</item>
+      <item name="next">Következő</item>
+      <item name="image_data">Kép adatainak betöltése. Kérem várjon...</item>
+      <item name="page">Oldal</item>
+      <item name="of">/</item>
+      <!-- Legacy items -->
+      <item name="add_favorite">Hozzáadás a kedvencekhez</item>
+      <item name="removefavorite">Törlés a kedvencek közül</item>
+    </group>
+    <group target="button">
+      <!-- think about the length of the text -->
+      <item name="create">Létrehozás</item>
+      <item name="cancel">Mégse</item>
+      <item name="apply">Alkalmaz</item>
+      <item name="save">Mentés</item>
+    </group>
+    <group target="error">
+      <!-- common -->
+      <item name="demo">Ez a művelet demo üzemmódban nem engedélyezett.</item>
+      <item name="no_filesystem">Nem található fájlrendszer a következő útvonalon:: {path}.</item>
+      <item name="no_access">Nincs hozzáférési jog a fájlhoz vagy a könyvtárhoz.</item>
+      <item name="no_write_access">Nincs írási jog a mappára.</item>
+      <item name="file_not_exists">A fájl vagy könvtár nem található.</item>
+      <item name="invalid_filename">A fájlnév nem megfelelő.</item>
+      <!-- create dir -->
+      <item name="template_missing">A kiválasztott sablon hiányzik.</item>
+      <item name="folder_exists">Már létezik mappa ilyen névvel.</item>
+      <item name="createdir_failed">Nem sikerült a mappát létrehozni.</item>
+      <!-- upload -->
+      <item name="upload_failed">Sikertelen feltöltés. Ellenőrize a mappára vonatkozó jogosultságokat.</item>
+      <item name="file_exists">Már létezik a fájl a megadott névvel.</item>
+      <item name="error_to_large">A feltöltendő fájl mérete túl nagy.</item>
+      <!-- delete -->
+      <item name="delete_failed">Nem sikerült a fájl(ok) törlése.</item>
+      <!-- image edit -->
+      <item name="crop_failed">Nem sikerült a képet körbevágni.</item>
+      <item name="resize_failed">Nem sikerült az átméretezés.</item>
+      <item name="rotate_failed">Nem sikerült a forgatás.</item>
+      <item name="flip_failed">Nem sikerült az átforgatás.</item>
+      <item name="save_failed">Sikertelen mentés.</item>
+      <!-- Legacy items -->
+      <item name="remove_favorite_failed">Nem sikerült eltávolítani az elemet a kedvencek listájából.</item>
+    </group>
+    <group target="message">
+      <!-- common -->
+      <item name="save_success">A fájl mentésre kerül.</item>
+      <item name="keepalive">Folyamatban lévő kérés.</item>
+      <!-- delete -->
+      <item name="delete_success">A fájl(ok) sikeresen törlésre került.</item>
+      <!-- create dir -->
+      <item name="directory_ok">Mappa létrehozva.</item>
+      <!-- upload -->
+      <item name="upload_ok">Sikeres feltöltés.</item>
+      <!-- image edit -->
+      <item name="crop_success">Sikeres körbevágás.</item>
+      <item name="resize_success">Sikeres átméretezés.</item>
+      <item name="rotate_success">Sikeres forgatás.</item>
+      <item name="flip_success">Sikeres átforgatás.</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategóriák</item>
+      <item name="folders">Mappák</item>
+      <!-- Legacy items -->
+      <item name="favorites">Kedvencek</item>
+      <item name="history">Előzmények</item>
+    </group>
+    <group target="view">
+      <item name="title">Megtekintés</item>
+      <item name="mode">Megtekintés mód:</item>
+      <item name="thumbnail">Előnézeti kép</item>
+      <item name="textlist">Szöveges lista</item>
+      <item name="images_per_page">kép/oldal</item>
+      <item name="confirm_delete">Biztos benne, hogy törli ezt a fájlt?</item>
+      <item name="keyboard_next">Gyorsbillentyűk: SZÓKÖZ,N,JOBBNYÍL,PAGE DOWN</item>
+      <item name="keyboard_prev">Gyorsbillentyűk: P,BALNYÍL,PAGE UP</item>
+      <item name="dimensions">Dimenziók</item>
+      <item name="confirm_remove_favorite">Biztos benne, hogy eltávolítja a kedvencek listájáról?</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Mappa létrehozása</item>
+      <item name="description">Adjon meg egy nevet a mappának, amit létre kíván hozni.</item>
+      <item name="template">Sablon:</item>
+      <item name="select_template">-- Sablon választása --</item>
+      <item name="directory_name">Mappa neve:</item>
+      <item name="create_in">Szülömappa választása:</item>
+      <item name="progress">Mappa létrehozása, kérem várjon...</item>
+    </group>
+    <group target="upload">
+      <item name="title">Feltöltés</item>
+      <item name="description">Használja az űrlapot a feltöltéshez.</item>
+      <item name="valid_extensions">Megengedett kiterjesztések:</item>
+      <item name="max_upload_size">Maximális feltöltési méret:</item>
+      <item name="file_to_upload">Feltölteni kívánt fájl:</item>
+      <item name="as_file_name">Mint fájl név:</item>
+      <item name="path">Útvonal:</item>
+      <item name="button_upload">Feltöltés</item>
+      <item name="browse">Hozzáadása</item>
+      <item name="progress">Fájl feltöltése, kérem várjon...</item>
+      <item name="upload_warn">A fájlok feltöltése folyamatban van, biztosan megszakítja?</item>
+      <item name="statusrow">Eddig {files} fájl (összesen {size}) várakozik feltöltésre.</item>
+      <item name="progressinfo">{loaded} / {total} feltöltve. Sebesség {speed}/s.</item>
+      <item name="abort">Megszakít</item>
+      <item name="add_more">Még feltölt?</item>
+      <item name="upload_to_server">Feltöltés a szerverre</item>
+      <item name="cancelled">Feltöltés megszakítva</item>
+      <item name="choose_files">Tallóz</item>
+      <item name="basic_upload">Ha problémája van a feltöltéssel, bármikor használhatja az {a}alapértelmezett feltöltőt{/a}.</item>
+      <item name="remove">Töröl</item>
+      <item name="file">Fájl</item>
+      <item name="size">Méret</item>
+      <item name="status">Státusz</item>
+      <item name="no_valid_files">Nem lett érvényes fájl kiválasztva, kérjük próbálja újra.</item>
+    </group>
+    <group target="edit_image">
+      <item name="title">Moxiecode ImageManager Editor</item>
+      <item name="save">Mentés</item>
+      <item name="revert">Visszaállítás</item>
+      <item name="crop">Körbevágás</item>
+      <item name="resize">Átméretezés</item>
+      <item name="please_wait">Kép feldolgozása, kérem várjon...</item>
+      <item name="constrain">Arányok megtartása</item>
+      <item name="left">Bal</item>
+      <item name="top">Fent</item>
+      <item name="width">Szélesség</item>
+      <item name="height">Magasság</item>
+      <item name="save_as">Mentés másként</item>
+      <item name="flip">Átforgatás</item>
+      <item name="rotate">Forgat</item>
+      <item name="reload">Újratölt</item>
+      <item name="horizontal">Vizszintes</item>
+      <item name="vertical">Függőleges</item>
+      <item name="saving_wait">Kép mentése, kérem várjon...</item>
+      <item name="confirm_revert">Biztos, hogy visszaállítja a legutóbb mentett képet?</item>
+      <item name="loading">Kép betöltése, kérem várjon...</item>
+      <item name="confirm_no_save">Biztosan menti a változásokat?</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertimage_desc">Kép beszúrása</item>
+      <item name="replaceimage_desc">Kép felülírása</item>
+      <item name="editimage_desc">Kép szerkesztése</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">Kedvencek</item>
+      <item name="addfavorites">Hozzáadás kedvencekhez</item>
+      <item name="removefavorites">Törlés a kedvencekből</item>
+      <item name="confirm_remove_favorite">Biztosan törli a kedvencekből?</item>
+      <item name="remove_favorite_failed">Törlés sikertelen.</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">Előzmények</item>
+    </group>
+  </language>
+</language-pack>

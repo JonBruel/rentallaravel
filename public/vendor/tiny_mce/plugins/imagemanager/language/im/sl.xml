@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-pack>
+  <header>
+    <!-- Please fill in contact information (author & email), we might contact you when we are doing updates -->
+    <!-- You will also have the chance to participate in beta releases of new versions -->
+    <author>RIS Damjan Leban s.p. (ris@leban.si)</author>
+    <version minor="3" major="1" releasedate="2008-08-09" />
+    <description>
+			This is the Slovenian language pack for the MCImageManager.
+		</description>
+  </header>
+  <language code="sl" title="Slovenian" dir="ltr">
+    <group target="common">
+      <item name="title">Urejevalnik slik</item>
+      <item name="filemanager">File manager</item>
+      <item name="createdir">Ustvari mapo</item>
+      <item name="refresh">Osveži</item>
+      <item name="upload">Prenesi</item>
+      <item name="help">Pomoč</item>
+      <item name="edit">Uredi</item>
+      <item name="deleteit">Briši</item>
+      <item name="view">Pogled</item>
+      <item name="insert">Vstavi</item>
+      <item name="add_favorite">Med priljubljene</item>
+      <item name="directory">Izberi mapo</item>
+      <item name="removefavorite">Odstrani priljubljene</item>
+      <item name="loading">Nalaganje ...</item>
+      <item name="filter">Filter</item>
+      <item name="alert_ok">V redu</item>
+      <item name="confirm_yes">Da</item>
+      <item name="confirm_no">Ne</item>
+      <item name="prev">Pred</item>
+      <item name="next">Nasl</item>
+      <item name="image_data">Prenos slike, počakaj prosim ...</item>
+    </group>
+    <group target="button">
+      <!-- think about the length of the text -->
+      <item name="create">Ustvari</item>
+      <item name="cancel">Prekliči</item>
+      <item name="apply">Uporabi</item>
+      <item name="save">Shrani</item>
+    </group>
+    <group target="error">
+      <!-- common -->
+      <item name="demo">Ta ukaz je rezerviran za demo način.</item>
+      <item name="no_filesystem">Ni datotečnega sistema na naslovu: {path}.</item>
+      <item name="no_access">Ni dostopa do datoteke/mape.</item>
+      <item name="no_write_access">Mapa nima dovoljenja za pisanje.</item>
+      <item name="file_not_exists">Datoteka/mapa ni bila najdena.</item>
+      <item name="invalid_filename">Ime datoteke ni veljavno.</item>
+      <item name="remove_favorite_failed">Napaka pri odstranitvi zaznamka iz seznama priljubljenih.</item>
+      <!-- create dir -->
+      <item name="template_missing">Izbrana šablona manjka.</item>
+      <item name="folder_exists">Mapa s tem imenom že obstaja.</item>
+      <item name="createdir_failed">Napaka, mape se ne da ustvariti.</item>
+      <!-- upload -->
+      <item name="upload_failed">Prenos ni uspel, preveri če ima mapa dovoljenje za pisanje.</item>
+      <item name="file_exists">Datoteka s tem imenom že obstaja.</item>
+      <item name="error_to_large">Datoteka za prenos je prevelika.</item>
+      <!-- delete -->
+      <item name="delete_failed">Datotek(e) se ne da zbrisati.</item>
+      <!-- image edit -->
+      <item name="crop_failed">Slike se ne da obrezati (crop).</item>
+      <item name="resize_failed">Slike se ne da zmanjsati/povečati (resize).</item>
+      <item name="rotate_failed">Slike se ne da zasukati (rotate).</item>
+      <item name="flip_failed">Slike se ne da prevrniti (flip).</item>
+      <item name="save_failed">Shranjevanje ni uspelo.</item>
+    </group>
+    <group target="message">
+      <!-- common -->
+      <item name="save_success">Datoteka je shranjena.</item>
+      <item name="keepalive">Zahteva za ohranitev zveze.</item>
+      <!-- delete -->
+      <item name="delete_success">Datoteka(e) je(so) bila(e) zbrisana(e).</item>
+      <!-- create dir -->
+      <item name="directory_ok">Mapa je narejena.</item>
+      <!-- upload -->
+      <item name="upload_ok">Prenos je uspel.</item>
+      <!-- image edit -->
+      <item name="crop_success">Obrezovanje (crop) je uspelo.</item>
+      <item name="resize_success">Pomanjšanje (resize) je uspelo.</item>
+      <item name="rotate_success">Zasuk (rotate) je uspel.</item>
+      <item name="flip_success">Prevrnitev (flip) je uspela.</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategorije</item>
+      <item name="folders">Mape</item>
+      <item name="favorites">Priljubljene</item>
+      <item name="history">Zgodovina</item>
+    </group>
+    <group target="view">
+      <item name="title">Pogled</item>
+      <item name="mode">Način pogleda:</item>
+      <item name="thumbnail">Sličice</item>
+      <item name="textlist">Seznam</item>
+      <item name="images_per_page">slik/stran</item>
+      <item name="confirm_delete">Res želis odstraniti datoteko?</item>
+      <item name="keyboard_next">Bližnjice: SPACE,N,RIGHTARROW,PAGE DOWN</item>
+      <item name="keyboard_prev">Bližnjice: P,LEFTARROW,PAGE UP</item>
+      <item name="dimensions">Dimenzije</item>
+      <item name="confirm_remove_favorite">Res želiš odstraniti s seznama priljubljenih?</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Ustvari mapo</item>
+      <item name="description">Vnesi ime mape, ki jo želiš ustvariti.</item>
+      <item name="template">Šablona:</item>
+      <item name="select_template">-- Izberi šablono --</item>
+      <item name="directory_name">Ime mape:</item>
+      <item name="create_in">Ustvari v:</item>
+      <item name="progress">Ustvarjanje mape, počakaj prosim ...</item>
+    </group>
+    <group target="upload">
+      <item name="title">Prenos</item>
+      <item name="description">Uporabi obrazec za prenos datotek.</item>
+      <item name="valid_extensions">Veljavni podaljški:</item>
+      <item name="max_upload_size">Največja velikost:</item>
+      <item name="file_to_upload">Datoteka za prenos:</item>
+      <item name="as_file_name">Ime datoteke:</item>
+      <item name="path">Pot: </item>
+      <item name="button_upload">Prenesi</item>
+      <item name="browse">Dodaj datoteko(e)</item>
+      <item name="progress">Prenasanje ...</item>
+      <item name="upload_warn">Datoteke se prenasajo, ali res želiš prekiniti prenos?</item>
+    </group>
+    <group target="edit_image">
+      <item name="title">Urejevalnik slik</item>
+      <item name="save">Shrani</item>
+      <item name="revert">Povrni</item>
+      <item name="crop">Obrezi</item>
+      <item name="resize">Pomanjšaj</item>
+      <item name="please_wait">Obdelovanje slike, počakaj prosim ...</item>
+      <item name="constrain">Obdrži razmerja</item>
+      <item name="left">Levo</item>
+      <item name="top">Zgoraj</item>
+      <item name="width">Dolžina</item>
+      <item name="height">Višina</item>
+      <item name="save_as">Shrani kot</item>
+      <item name="flip">Flip</item>
+      <item name="rotate">Zasukaj</item>
+      <item name="reload">Ponovno naloži</item>
+      <item name="horizontal">Horizontalno</item>
+      <item name="vertical">Vertikalno</item>
+      <item name="saving_wait">Shranjevanje slike, počakaj prosim ...</item>
+      <item name="confirm_revert">Res želiš povrniti na zadnje shranjeno stanje?</item>
+      <item name="loading">Nalaganje slike, počakaj prosim ...</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertimage_desc">Vstavi sliko</item>
+    </group>
+  </language>
+</language-pack>

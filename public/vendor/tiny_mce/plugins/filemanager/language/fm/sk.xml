@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<language-pack>
+  <header>
+    <author>Gabriel Schwardy (caleydon@gmail.com)</author>
+    <version minor="4" major="1" releasedate="2009-11-24" />
+    <description>
+			Toto je slovenský jazykový balík pre MCFileManager.
+		</description>
+  </header>
+  <language code="sk" title="Slovak" dir="ltr">
+    <group target="error">
+      <item name="tofile_exists">Súbor už existuje.</item>
+      <item name="no_from_file">Zdrojový súbor neexistuje.</item>
+      <item name="demo">Táto operácia nie je v demo móde povolená.</item>
+      <item name="invalid_filename">Názov súboru nie je platný.</item>
+      <item name="no_read_access">Nie je možné zistiť prístup do súboru/adreára.</item>
+      <item name="no_write_access">Nedostatočné prístupové práva pre tento súbor/adresár.</item>
+      <item name="copy_failed">Kopírovanie zlyhalo.</item>
+      <item name="move_failed">Presúvanie zlyhalo.</item>
+      <item name="template_missing">Vybrátá šablóna chýba.</item>
+      <item name="createdoc_failed">Vytváranie dokumentu zlyhalo.</item>
+      <item name="no_access">Nemáš oprávnenie vykonať túto operáciu.</item>
+      <item name="file_exists">Súbor s rovnakým názvom už existuje.</item>
+      <item name="upload_failed">Nahrávanie zlyhalo. Skontroluj prosím prístupové práva pre zápis.</item>
+      <item name="error_to_large">Bola presiahnutá max. povolená veľkosť.</item>
+      <item name="file_not_exists">Súbor neexistuje.</item>
+      <item name="delete_failed">Mazanie zlyhalo.</item>
+      <item name="folder_exists">Adresár už existuje.</item>
+      <item name="no_filesystem">Nebol nájdený žiaden systém súborov.</item>
+      <item name="createdir_failed">Vytvorenie adresára zlyhalo.</item>
+      <item name="createzip_failed">Vytváranie zip zlyhalo.</item>
+      <item name="rename_failed">Premenovanie zlyhalo.</item>
+      <item name="savecontent_failed">Ukladanie obsahu zlyhalo.</item>
+    </group>
+    <group target="message">
+      <item name="zip_success">Zozipovanie bolo úspešné.</item>
+      <item name="copy_success">Kopírovanie bolo úspešné.</item>
+      <item name="move_success">Presunutie bolo úspešné.</item>
+      <item name="createdoc_success">Dokument bol úspešne vytvorený.</item>
+      <item name="delete_success">Zmazanie bolo úspešné.</item>
+      <item name="directory_ok">Adresár bol úspešne vytvorený.</item>
+      <item name="keepalive">Udržanie spojenia</item>
+      <item name="upload_ok">Nahrávanie bolo úspešné.</item>
+      <item name="confirm_cut">Naozaj chceš vystrihnúť vybraté súbory?</item>
+      <item name="confirm_copy">Naozaj chceš kopírovať vybraté súbory?</item>
+      <item name="confirm_paste">Naozaj chceš vložiť vystrihnutý/kopírovaný súbor na toto miesto?</item>
+      <item name="confirm_delete">Naozaj chceš zmazať vybraté súbory?</item>
+      <item name="insert">Získavam dáta súboru, čakaj prosím...</item>
+      <item name="paste_in_progress">Vykonáva sa operácia vkladania, čakaj prosím...</item>
+    </group>
+    <group target="common">
+      <item name="createdir">Vytvoriť tadresár</item>
+      <item name="createfile">Navý súbor</item>
+      <item name="help">Nápoveda</item>
+      <item name="refresh">Obnoviť</item>
+      <item name="upload">Nahrať</item>
+      <item name="directory">Vybraté adresáre</item>
+      <item name="imagemanager">Správca obrázkov</item>
+      <item name="title">Správca súborov</item>
+      <item name="alert_ok">OK</item>
+      <item name="confirm_yes">Áno</item>
+      <item name="confirm_no">Nie</item>
+    </group>
+    <group target="button">
+      <item name="create">Vytvoriť</item>
+      <item name="cancel">Zrušiť</item>
+      <item name="save">Uložiť</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategórie</item>
+      <item name="preview">Náhľad</item>
+      <!-- Legacy items -->
+      <item name="favorites">Obľúbené</item>
+      <item name="history">História</item>
+    </group>
+    <group target="edit">
+      <item name="title">Upraviť súbor</item>
+      <item name="description">Úprava obsahu, čakaj prosím.</item>
+      <item name="loading_wait">Načítanie obsahu, čakaj prosím.</item>
+      <item name="saving_wait">Ukladanie obsahu, čakaj prosím.</item>
+      <item name="file_path">Cesta k súboru:</item>
+    </group>
+    <group target="actions">
+      <item name="insert">Vložiť</item>
+      <item name="download">Uložiť</item>
+      <item name="rename">Premenovať</item>
+      <item name="cut">Vystrihnúť</item>
+      <item name="copy">Kopírovať</item>
+      <item name="paste">Vložiť</item>
+      <item name="deleteit">Zmazať</item>
+      <item name="edit">Upraviť</item>
+      <item name="zip">Zip</item>
+      <item name="view">Zobraziť</item>
+      <item name="select_all">Označiť všetky</item>
+      <item name="unselect_all">Odznačiť všetky</item>
+      <!-- Legacy items -->
+      <item name="addfavorites">Pridať ako obľúbenú</item>
+      <item name="removefavorites">Odstrániť obľúbenú</item>
+    </group>
+    <group target="filelist">
+      <item name="filename">Názov súboru</item>
+      <item name="size">Veľkosť</item>
+      <item name="type">Typ</item>
+      <item name="modified">Dátum úpravy</item>
+      <item name="with_selected">Zvolená šírka:</item>
+      <item name="info_dirs">Adresáre:</item>
+      <item name="info_files">Súbory:</item>
+      <item name="info_size">Celková veľkosť súborov:</item>
+      <item name="info_access">Prístup:</item>
+      <item name="loading">Nahrávam...</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Vytvoriť adresár</item>
+      <item name="description">Zadaj názov adresára, ktorý si želáš vytvoriť.</item>
+      <item name="template">Šablóna:</item>
+      <item name="select_template">-- Vyber šablónu --</item>
+      <item name="directory_name">Názov adresára:</item>
+      <item name="create_in">Vytvoriť v:</item>
+      <item name="progress">Vytváram adresár, čakaj prosím...</item>
+    </group>
+    <group target="createdoc">
+      <item name="title">Vytvoriť dokument</item>
+      <item name="description">Vyplň formulár, ak si želáš vytvoriť nový dokument podľa šablóny.</item>
+      <item name="template">Šablóna:</item>
+      <item name="select_template">-- Vyber šablónu --</item>
+      <item name="name">Názov</item>
+      <item name="path">Cesta</item>
+      <item name="preview">Náhľad</item>
+      <item name="preview_title">Náhľad: {file}</item>
+    </group>
+    <group target="upload">
+      <item name="title">Nahrávanie súborov</item>
+      <item name="description">Použi formulár pre nahratie súborov.</item>
+      <item name="valid_extensions">Povolené typy súborov:</item>
+      <item name="max_upload_size">Max. veľkosť nahrávaných súborov:</item>
+      <item name="file_to_upload">Súbor pre nahratie:</item>
+      <item name="as_file_name">Ako názov súboru:</item>
+      <item name="path">Cesta: </item>
+      <item name="button_upload">Nahrať</item>
+      <item name="browse">Pridať súbor(y)</item>
+      <item name="progress">Nahrávam...</item>
+      <item name="upload_warn">Súbory sa nahrávajú. Naozaj chceš prerusiť nahrávanie?</item>
+      <item name="statusrow">Máš {files} súborov (celkovo {size}) čakajúcich na nahratie.</item>
+      <item name="progressinfo">{loaded} z {total} nahratých súborov, rýchlosťou {speed}/s.</item>
+      <item name="abort">Zrušiť nahrávanie</item>
+      <item name="add_more">Pridať ďalšie?</item>
+      <item name="upload_to_server">Nahrať na server</item>
+      <item name="cancelled">Nahrávanie bolo zrušené</item>
+      <item name="choose_files">Vyber súbory</item>
+      <item name="basic_upload">Ak máš problémy s nahrávaním, môžeš použiť {a}jednoduché nahrávanie{/a}.</item>
+      <item name="remove">Odstrániť</item>
+      <item name="file">Súbor</item>
+      <item name="size">Rozmery</item>
+      <item name="status">Stav</item>
+      <item name="no_valid_files">Označené súbory nie sú platné. Skús prosím znovu</item>
+    </group>
+    <group target="createzip">
+      <item name="title">Vytvoriť zip</item>
+      <item name="description">Zadaj názov zip súboru, ktorý si želáš vytvoriť.</item>
+      <item name="name">Názov:</item>
+      <item name="path">Cesta</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertfile_desc">Vložiť súbor</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">Obľúbené</item>
+      <item name="addfavorites">Pridať k obľúbeným</item>
+      <item name="removefavorites">Odstrániť z obľúbených</item>
+      <item name="confirm_remove_favorite">Naozaj chceš odstrániť zo zoznamu obľúbených?</item>
+      <item name="remove_favorite_failed">Ostránenie zo zoznamu obľúbených zlyhalo.</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">História</item>
+    </group>
+  </language>
+</language-pack>

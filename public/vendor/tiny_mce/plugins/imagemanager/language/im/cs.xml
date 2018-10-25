@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-pack>
+  <header>
+    <!-- Please fill in contact information (author & email), we might contact you when we are doing updates -->
+    <!-- You will also have the chance to participate in beta releases of new versions -->
+    <author>Gabriel Schwardy (caleydon@gmail.com)</author>
+    <version minor="4" major="1" releasedate="2009-11-24" />
+    <description>
+		Toto je český jazykový balíček pro MCImageManager.
+	</description>
+  </header>
+  <language code="cs" title="Czech" dir="ltr">
+    <group target="common">
+      <item name="title">Správce obrázků</item>
+      <item name="filemanager">Správce souborů</item>
+      <item name="createdir">Vytvořit složku</item>
+      <item name="refresh">Obnovit</item>
+      <item name="upload">Nahrát nový obrázek</item>
+      <item name="help">Nápověda</item>
+      <item name="edit">Upravit</item>
+      <item name="deleteit">Smazat</item>
+      <item name="view">Zobrazit</item>
+      <item name="insert">Vložit</item>
+      <item name="directory">Vybraná složka</item>
+      <item name="loading">Nahrávám...</item>
+      <item name="filter">Filtr</item>
+      <item name="alert_ok">OK</item>
+      <item name="confirm_yes">Ano</item>
+      <item name="confirm_no">Ne</item>
+      <item name="prev">Předchozí</item>
+      <item name="next">Další</item>
+      <item name="image_data">Získávám data obrázku, čekej prosím...</item>
+      <item name="page">Strana</item>
+      <item name="of">ze</item>
+      <!-- Legacy items -->
+      <item name="add_favorite">Přidat k oblíbeným</item>
+      <item name="removefavorite">Smazat oblíbené</item>
+    </group>
+    <group target="button">
+      <!-- think about the length of the text -->
+      <item name="create">Vytvořit</item>
+      <item name="cancel">Zrušit</item>
+      <item name="apply">Použít</item>
+      <item name="save">Uložit</item>
+    </group>
+    <group target="error">
+      <!-- common -->
+      <item name="demo">Tato akce je v demu zakázána.</item>
+      <item name="no_filesystem">Uvedená cesta nebyla nalezena: {path}.</item>
+      <item name="no_access">K tomuto souboru/složce nemáš přístup.</item>
+      <item name="no_write_access">Složka nemá práva na zápis.</item>
+      <item name="file_not_exists">Soubor/složka nebyla nalezena.</item>
+      <item name="invalid_filename">Název souboru není platný.</item>
+      <!-- create dir -->
+      <item name="template_missing">Vybraná šablona neexistuje.</item>
+      <item name="folder_exists">Složka s tímto názvem již existuje.</item>
+      <item name="createdir_failed">Chyba, nebylo možné vytvořit složku.</item>
+      <!-- upload -->
+      <item name="upload_failed">Nahrávání selhalo, zkontroluj práva na zápis pro tuto složku.</item>
+      <item name="file_exists">Soubor s tímto názvem již existuje.</item>
+      <item name="error_to_large">Soubor, který se snažíš nahrát, je příliš veliký.</item>
+      <!-- delete -->
+      <item name="delete_failed">Není možné smazat soubor(y).</item>
+      <!-- image edit -->
+      <item name="crop_failed">Není možné oříznout obrázek.</item>
+      <item name="resize_failed">Není možné změnit velikost obrázku.</item>
+      <item name="rotate_failed">Otočení se nezdařilo.</item>
+      <item name="flip_failed">Překlopení se nezdařilo.</item>
+      <item name="save_failed">Uložení se nezdařilo.</item>
+      <!-- Legacy items -->
+      <item name="remove_favorite_failed">Nebylo mozné smazat oblíbenou polozku ze seznamu oblíbených.</item>
+    </group>
+    <group target="message">
+      <!-- common -->
+      <item name="save_success">Soubor uložen.</item>
+      <item name="keepalive">Požadavek na udržení spojení.</item>
+      <!-- delete -->
+      <item name="delete_success">Soubor(y) byly úspěšně smazány.</item>
+      <!-- create dir -->
+      <item name="directory_ok">Složka byla vytvořena.</item>
+      <!-- upload -->
+      <item name="upload_ok">Nahrání bylo úspěšné.</item>
+      <!-- image edit -->
+      <item name="crop_success">Oříznutí proběhlo úspěšně.</item>
+      <item name="resize_success">Změna velikosti obrázku proběhla úspěšně.</item>
+      <item name="rotate_success">Otočení proběhlo úspěšně.</item>
+      <item name="flip_success">Překlopení proběhlo úspěšně.</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategorie</item>
+      <item name="folders">Složky</item>
+      <!-- Legacy items -->
+      <item name="favorites">Oblíbené</item>
+      <item name="history">Historie</item>
+    </group>
+    <group target="view">
+      <item name="title">Zobrazení</item>
+      <item name="mode">Typ zobrazení:</item>
+      <item name="thumbnail">Náhledy</item>
+      <item name="textlist">Seznam</item>
+      <item name="images_per_page">obrázků na stránku</item>
+      <item name="confirm_delete">Opravdu chceš smazat tento soubor?</item>
+      <item name="keyboard_next">Klávesové zkratky: MEZERNÍK,N,ŠIPKA VPRAVO, PAGE DOWN</item>
+      <item name="keyboard_prev">Klávesové zkratky: P,ŠIPKA VLEVO,PAGE UP</item>
+      <item name="dimensions">Rozměry</item>
+      <!-- Legacy items -->
+      <item name="confirm_remove_favorite">Opravdu chceš smazat tuto položku z oblíbených položek?</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Vytvořit složku</item>
+      <item name="description">Napiš jméno složky, kterou chceš vytvořit.</item>
+      <item name="template">Šablona:</item>
+      <item name="select_template">-- Vyber šablonu --</item>
+      <item name="directory_name">Název složky:</item>
+      <item name="create_in">Vytvořit v:</item>
+      <item name="progress">Vytvářím složku, čekejte prosím...</item>
+    </group>
+    <group target="upload">
+      <item name="title">Nahrávaní souborů</item>
+      <item name="description">Použij formulář k nahratí souborů.</item>
+      <item name="valid_extensions">Povolené typy souborů:</item>
+      <item name="max_upload_size">Max. velikost nahrávaného souboru:</item>
+      <item name="file_to_upload">Soubor k nahrání:</item>
+      <item name="as_file_name">Jako název souboru:</item>
+      <item name="path">Cesta: </item>
+      <item name="button_upload">Nahrát</item>
+      <item name="browse">Přidat soubor(y)</item>
+      <item name="progress">Nahrávám na server...</item>
+      <item name="upload_warn">Soubory jsou právě nahrávány na server. Opravdu chceš ukládání přerušit?</item>
+      <item name="statusrow">{files} souborů (celkově {size}) čeká na nahrání.</item>
+      <item name="progressinfo">{loaded} z {total} náhráno rychlostí {speed}/s.</item>
+      <item name="abort">Zrušit nahrávání</item>
+      <item name="add_more">Přidat další?</item>
+      <item name="upload_to_server">Nahrát na server</item>
+      <item name="cancelled">Nahrávání bylo zrušeno</item>
+      <item name="choose_files">Vybrat soubory</item>
+      <item name="basic_upload">Pokud máte problém s nahráním souboru, můžete použít {a}jednoduchou metodu{/a}.</item>
+      <item name="remove">Odstranit</item>
+      <item name="file">Soubor</item>
+      <item name="size">Size</item>
+      <item name="status">Stav</item>
+      <item name="no_valid_files">Nebyl vybrán povolený soubor, prosím zkus znovu.</item>
+    </group>
+    <group target="edit_image">
+      <item name="title">Editor obrázků</item>
+      <item name="save">Uložit</item>
+      <item name="revert">Vrátit zpět</item>
+      <item name="crop">Oříznout</item>
+      <item name="resize">Změnit rozmněry</item>
+      <item name="please_wait">Provádím změny, čekej prosím...</item>
+      <item name="constrain">Zachovat proporce</item>
+      <item name="left">Vlevo</item>
+      <item name="top">Nahoru</item>
+      <item name="width">Šířka</item>
+      <item name="height">Výška</item>
+      <item name="save_as">Uložit jako</item>
+      <item name="flip">Překlopit</item>
+      <item name="rotate">Otočit</item>
+      <item name="reload">Obnovit</item>
+      <item name="horizontal">Horizontálně</item>
+      <item name="vertical">Vertikálně</item>
+      <item name="saving_wait">Ukládám obrázek, čekej prosím...</item>
+      <item name="confirm_revert">Opravdu se chcešvrátit k poslední uložené verzi obrázku?</item>
+      <item name="loading">Nahrávám obrázek, čekej prosím...</item>
+      <item name="confirm_no_save">Opravdu si nepřeješ uložit zmněny aplikované na obrázku?</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertimage_desc">Vložit obrázek</item>
+      <item name="replaceimage_desc">Nahradit obrázek</item>
+      <item name="editimage_desc">Upravit obrázek</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">Oblíbené</item>
+      <item name="addfavorites">Přidat oblíbené</item>
+      <item name="removefavorites">Odstranit oblíbené</item>
+      <item name="confirm_remove_favorite">Opravdu jsi si jist, že chceš toto odstranit z oblíbených?</item>
+      <item name="remove_favorite_failed">Nelze odstranit oblíbenou položku.</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">Historie</item>
+    </group>
+  </language>
+</language-pack>

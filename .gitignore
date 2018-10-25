@@ -5,8 +5,12 @@
 /storage/*.key
 /vendor
 /phpDocumentor
-/public/vendor
-!/public/vendor/tiny_mce/*
+/public/vendor/bootstrap-datetimepicker
+/public/vendor/cldr-data
+/public/vendor/cldrjs
+/public/vendor/globalize
+/public/vendor/jquery
+/public/vendor/tcg
 /.idea
 /.vagrant
 Homestead.json

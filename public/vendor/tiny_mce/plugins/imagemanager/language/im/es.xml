@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<language-pack>
+  <header>
+    <author>Idenet Internet Multimedia Consulting :: Alberto Vicente Jordana (colaboraciones@idenet.net) / Revisión(2009-05-18) :: Javier Garrido Galdón (nodlag@gmail.com)</author>
+    <version minor="3" major="1" releasedate="2009-05-18" />
+    <description>
+			This is the Spanish (es) language pack for the MCImageManager.
+		</description>
+  </header>
+  <language code="es" title="Español" dir="ltr">
+    <group target="common">
+      <item name="title">Moxiecode Image Manager</item>
+      <item name="filemanager">Administrar archivos</item>
+      <item name="createdir">Nueva carpeta</item>
+      <item name="refresh">Actualizar</item>
+      <item name="upload">Subir</item>
+      <item name="help">Ayuda</item>
+      <item name="edit">Editar</item>
+      <item name="deleteit">Borrar</item>
+      <item name="view">Ver</item>
+      <item name="insert">Insertar</item>
+      <item name="download">Descargar</item>
+      <item name="directory">Carpeta seleccionada</item>
+      <item name="loading">Cargando...</item>
+      <item name="filter">Filtro</item>
+      <item name="alert_ok">Ok</item>
+      <item name="confirm_yes">Si</item>
+      <item name="confirm_no">No</item>
+      <item name="prev">Anterior</item>
+      <item name="next">Siguiente</item>
+      <item name="image_data">Recuperando información de la imagen, por favor espere...</item>
+      <item name="page">Página</item>
+      <item name="of">de</item>
+      <!-- Legacy items -->
+      <item name="add_favorite">Agregar favorito</item>
+      <item name="removefavorite">Eliminar favorito</item>
+    </group>
+    <group target="button">
+      <!-- think about the length of the text -->
+      <item name="create">Nuevo</item>
+      <item name="cancel">Cancelar</item>
+      <item name="apply">Aplicar</item>
+      <item name="save">Guardar</item>
+    </group>
+    <group target="error">
+      <!-- common -->
+      <item name="demo">Acción restringida en modo demostración.</item>
+      <item name="no_filesystem">No se encuentra la ruta: {path}.</item>
+      <item name="no_access">No hay acceso a este fichero/carpeta.</item>
+      <item name="no_write_access">La carpeta no tiene permiso de escritura.</item>
+      <item name="file_not_exists">Fichero/carpeta no encontrado.</item>
+      <item name="invalid_filename">Nombre no válido.</item>
+      <!-- create dir -->
+      <item name="template_missing">No se encuentra la plantilla seleccionada.</item>
+      <item name="folder_exists">Ya existe una carpeta con el nombre indicado.</item>
+      <item name="createdir_failed">No se puede crear la carpeta.</item>
+      <!-- upload -->
+      <item name="upload_failed">Error en la subida, compruebe los permisos de escritura de la carpeta.</item>
+      <item name="file_exists">Ya existe un fichero con el mismo nombre.</item>
+      <item name="error_to_large">Archivo demasiado grande.</item>
+      <!-- delete -->
+      <item name="delete_failed">No se puede eliminar el archivo(s).</item>
+      <!-- image edit -->
+      <item name="crop_failed">No se puede recortar la imagen.</item>
+      <item name="resize_failed">No se puede redimensionar la imagen.</item>
+      <item name="rotate_failed">No se pudo rotar la imagen.</item>
+      <item name="flip_failed">No se pudo voltear la imagen.</item>
+      <item name="save_failed">No se pudo guardar la imagen.</item>
+      <!-- Legacy items -->
+      <item name="remove_favorite_failed">Error al eliminar el favorito de su lista.</item>
+    </group>
+    <group target="message">
+      <!-- common -->
+      <item name="save_success">Fichero guardado.</item>
+      <item name="keepalive">Petición "keepalive".</item>
+      <!-- delete -->
+      <item name="delete_success">El archivo(s) se eliminó correctamente.</item>
+      <!-- create dir -->
+      <item name="directory_ok">Se ha creado la carpeta.</item>
+      <!-- upload -->
+      <item name="upload_ok">Subida correcta.</item>
+      <!-- image edit -->
+      <item name="crop_success">Recorte correcto.</item>
+      <item name="resize_success">Redimensionado correcto.</item>
+      <item name="rotate_success">Rotación correcta.</item>
+      <item name="flip_success">Volteado correcto.</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Categorías</item>
+      <item name="folders">Carpetas</item>
+      <!-- Legacy items -->
+      <item name="favorites">Favoritos</item>
+      <item name="history">Historial</item>
+    </group>
+    <group target="view">
+      <item name="title">Ver</item>
+      <item name="mode">Modo vista:</item>
+      <item name="thumbnail">Miniaturas</item>
+      <item name="textlist">Lista</item>
+      <item name="images_per_page">imágenes/página</item>
+      <item name="confirm_delete">Está seguro de querer eliminar el archivo?</item>
+      <item name="keyboard_next">Atajo de teclado: ESPACIO,N,CURSOR DERECHA,AVANCE PAGINA</item>
+      <item name="keyboard_prev">Atajo de teclado: P,CURSOR DERECHA,ANTERIOR PAGINA</item>
+      <item name="dimensions">Dimensiones</item>
+      <!-- Legacy items -->
+      <item name="confirm_remove_favorite">Está seguro de querer eliminar el favorito de la lista?</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Nueva carpeta</item>
+      <item name="description">Indique el nombre de la carpeta a crear.</item>
+      <item name="template">Plantilla:</item>
+      <item name="select_template">-- Seleccione plantilla --</item>
+      <item name="directory_name">Nombre de la carpeta:</item>
+      <item name="create_in">Crear en:</item>
+      <item name="progress">Creando carpeta, por favor, espere...</item>
+    </group>
+    <group target="upload">
+      <item name="title">Subida</item>
+      <item name="description">Use el formulario para subir archivos.</item>
+      <item name="valid_extensions">Extensiones válidas:</item>
+      <item name="max_upload_size">Tamaño máximo:</item>
+      <item name="file_to_upload">Archivo a subir:</item>
+      <item name="as_file_name">Guardarlo con el nombre:</item>
+      <item name="path">Ruta: </item>
+      <item name="button_upload">Subir</item>
+      <item name="browse">Añadir archivo(s)</item>
+      <item name="progress">Subiendo...</item>
+      <item name="upload_warn">Se están subiendo los archivos, está seguro de querer cancelar la subida?</item>
+      <item name="statusrow">Hay {files} archivos (total {size}) en espera.</item>
+      <item name="progressinfo">{loaded} de {total} subidos a {speed}/s.</item>
+      <item name="abort">Cancelar subida</item>
+      <item name="add_more">Añadir más?</item>
+      <item name="upload_to_server">Subir al servidor</item>
+      <item name="cancelled">Subida cancelada</item>
+      <item name="choose_files">Seleccione los archivos</item>
+      <item name="basic_upload">Si experimenta problemas con la subida múltiple utilice la {a}subida básica{/a}.</item>
+      <item name="remove">Eliminar</item>
+      <item name="file">Archivo</item>
+      <item name="size">Tamaño</item>
+      <item name="status">Estado</item>
+      <item name="no_valid_files">Archivos seleccionados no válidos, pruebe de nuevo.</item>
+    </group>
+    <group target="edit_image">
+      <item name="title">Moxiecode ImageManager Editor</item>
+      <item name="save">Guardar</item>
+      <item name="revert">Deshacer</item>
+      <item name="crop">Recortar</item>
+      <item name="resize">Redimensionar</item>
+      <item name="please_wait">Procesando imagen, por favor, espere...</item>
+      <item name="constrain">Restringir proporciones</item>
+      <item name="left">Izquierda</item>
+      <item name="top">Arriba</item>
+      <item name="width">Ancho</item>
+      <item name="height">Alto</item>
+      <item name="save_as">Guardar como</item>
+      <item name="flip">Voltear</item>
+      <item name="rotate">Rotar</item>
+      <item name="reload">Recargar</item>
+      <item name="horizontal">Horizontal</item>
+      <item name="vertical">Vertical</item>
+      <item name="saving_wait">Guardando imagen, por favor, espere...</item>
+      <item name="confirm_revert">Está seguro de volver a cargar la última imagen guardada?</item>
+      <item name="loading">Cargando imagen, por favor, espere...</item>
+      <item name="confirm_no_save">Está seguro de querer descartar los cambios?</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertimage_desc">Insertar imagen</item>
+      <item name="replaceimage_desc">Reemplazar imagen</item>
+      <item name="editimage_desc">Editar imagen</item>
+    </group>
+    <group target="favorites">
+      <item name="special_folder_title">Favoritos</item>
+      <item name="addfavorites">Agregar favorito</item>
+      <item name="removefavorites">Eliminar favorito</item>
+      <item name="confirm_remove_favorite">Está seguro de querer eliminar el favorito de la lista?</item>
+      <item name="remove_favorite_failed">Error al eliminar el favorito de la lista.</item>
+    </group>
+    <group target="history">
+      <item name="special_folder_title">Historial</item>
+    </group>
+  </language>
+</language-pack>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-pack>
+  <header>
+    <author>Moxiecode Systems AB</author>
+    <version minor="2" major="1" releasedate="2010-03-03" />
+    <description>
+			Dette er den danske sprogpakke for MCFileManager.
+		</description>
+  </header>
+  <language code="da" title="Danish" dir="ltr">
+    <group target="error">
+      <item name="tofile_exists">Filen eksisterer forvejen.</item>
+      <item name="no_from_file">Originalfilen findes ikke.</item>
+      <item name="demo">Denne handling er begrænset i demotilstand.</item>
+      <item name="invalid_filename">Filenavnet er ikke gyldigt.</item>
+      <item name="no_write_access">Der er ikke skriveadgang til denne fil/mappe.</item>
+      <item name="copy_failed">Kopiering fejlede.</item>
+      <item name="move_failed">Flytning fejlede.</item>
+      <item name="template_missing">Skabelon blev ikke fundet.</item>
+      <item name="createdoc_failed">Opret dokument fejlede.</item>
+      <item name="no_access">Du har ikke adgang til at udføre denne handling.</item>
+      <item name="file_exists">Filen eksisterer forvejen.</item>
+      <item name="upload_failed">Upload fejlede, kontroller dine skriverettigheder til mappen.</item>
+      <item name="error_to_large">Maksimal filstørrelse nået.</item>
+      <item name="file_not_exists">Filen findes ikke.</item>
+      <item name="delete_failed">Slet fejlede.</item>
+      <item name="folder_exists">Mappe findes i forvejen.</item>
+      <item name="no_filesystem">Intet filsystem blev fundet.</item>
+      <item name="createdir_failed">Opret mappe fejlede.</item>
+      <item name="createzip_failed">Opret zip fejlede.</item>
+      <item name="rename_failed">Omdøb fejlede.</item>
+    </group>
+    <group target="message">
+      <item name="zip_success">Zip lykkedes.</item>
+      <item name="copy_success">Kopier lykkedes.</item>
+      <item name="move_success">Flytning Lykkedes.</item>
+      <item name="createdoc_success">Dokument blev oprettet.</item>
+      <item name="delete_success">Sletning lykkedes.</item>
+      <item name="directory_ok">Mappe blev oprettet.</item>
+      <item name="keepalive">Keepalive</item>
+      <item name="upload_ok">Upload lykkedes.</item>
+      <item name="confirm_cut">Vil du klippe de valgte filer?</item>
+      <item name="confirm_copy">Vil du kopiere de valgte filer?</item>
+      <item name="confirm_paste">Vil du indsætte de valgte kopierede/klippede filer her?</item>
+      <item name="confirm_delete">Vil du slette de valgte filer?</item>
+      <item name="insert">Henter fildata, vent veligst...</item>
+      <item name="paste_in_progress">Er ved at indsætte, vent venligst...</item>
+    </group>
+    <group target="common">
+      <item name="createdir">Opret mappe</item>
+      <item name="createfile">Ny fil</item>
+      <item name="help">Hjælp</item>
+      <item name="refresh">Opdater</item>
+      <item name="upload">Upload</item>
+      <item name="directory">Valgt mappe</item>
+      <item name="imagemanager">Billede manager</item>
+      <item name="title">Moxiecode Fil Manager</item>
+      <item name="alert_ok">Ok</item>
+      <item name="confirm_yes">Ja</item>
+      <item name="confirm_no">Nej</item>
+    </group>
+    <group target="button">
+      <item name="create">Opret</item>
+      <item name="cancel">Annuller</item>
+    </group>
+    <group target="panel">
+      <item name="categories">Kategorier</item>
+      <item name="preview">Vis eksempel</item>
+      <item name="favorites">Favoritter</item>
+      <item name="history">Historik</item>
+    </group>
+    <group target="edit">
+      <item name="title">Dokumentnavn</item>
+      <item name="description">Beskrivelse</item>
+      <item name="loading_wait">Venter på data.</item>
+      <item name="saving_wait">Vent venligst mens der gemmes.</item>
+      <item name="file_path">Filsti:</item>
+    </group>
+    <group target="actions">
+      <item name="insert">Indsæt</item>
+      <item name="download">Download</item>
+      <item name="rename">Omdøb</item>
+      <item name="cut">Klip</item>
+      <item name="edit">Editér</item>
+      <item name="copy">Kopier</item>
+      <item name="paste">Indsæt</item>
+      <item name="deleteit">Slet</item>
+      <item name="zip">Zip</item>
+      <item name="view">Vis</item>
+      <item name="select_all">Vælg alle</item>
+      <item name="unselect_all">Fravælg alle</item>
+      <item name="addfavorites">Tilføj favorit(ter)</item>
+      <item name="removefavorites">Fjern favorit(ter)</item>
+    </group>
+    <group target="filelist">
+      <item name="filename">Filenavn</item>
+      <item name="size">Størrelse</item>
+      <item name="type">Type</item>
+      <item name="modified">ændringsdato</item>
+      <item name="with_selected">Med valgte:</item>
+      <item name="info_dirs">Mapper:</item>
+      <item name="info_files">Filer:</item>
+      <item name="info_size">Filstørrelse i alt:</item>
+      <item name="info_access">Adgang:</item>
+      <item name="loading">Henter...</item>
+    </group>
+    <group target="createdir">
+      <item name="title">Opret mappe</item>
+      <item name="description">Indtast et navn for den mappe du vil oprette.</item>
+      <item name="template">Skabelon:</item>
+      <item name="select_template">-- Vælg skabelon --</item>
+      <item name="directory_name">Mappenavn:</item>
+      <item name="create_in">Opret i:</item>
+      <item name="progress">Opretter mappe, vent venligst...</item>
+    </group>
+    <group target="createdoc">
+      <item name="title">Opret dokument</item>
+      <item name="description">Udfyld fomularer for at oprette et nyt dokument baseret på en skabelon.</item>
+      <item name="template">Skabelon:</item>
+      <item name="select_template">-- Vælg skabelon --</item>
+      <item name="name">Navn</item>
+      <item name="path">Sti</item>
+      <item name="preview">Vis eksempel</item>
+    </group>
+    <group target="upload">
+      <item name="title">Upload</item>
+      <item name="description">Brug formularen til at uploade filer.</item>
+      <item name="valid_extensions">Gyldige filtyper:</item>
+      <item name="max_upload_size">Max upload størrelse:</item>
+      <item name="file_to_upload">Fil til upload:</item>
+      <item name="as_file_name">Som fil navn:</item>
+      <item name="path">Sti: </item>
+      <item name="button_upload">Upload</item>
+      <item name="browse">Tilføj fil(er)</item>
+      <item name="progress">Uploader...</item>
+      <item name="upload_warn">Filerne bliver uploaded, vil du afbryde upload?</item>
+      <item name="statusrow">Du har {files} filer (totalt {size}) som väntar på att få bli uppladdade.</item>
+      <item name="progressinfo">{loaded} af {total} uploadede med hastigheden {speed}/s.</item>
+      <item name="abort">Afbryd upload</item>
+      <item name="add_more">Tilføj flere?</item>
+      <item name="upload_to_server">Uploader til serveren</item>
+      <item name="cancelled">Upload afbrudt</item>
+      <item name="choose_files">Vælg filer</item>
+      <item name="basic_upload">Hvis du har problemer med at uploade kan du altid benytte den {a}simple upload{/a}.</item>
+      <item name="remove">venter - fjern</item>
+      <item name="file">Fil</item>
+      <item name="size">Størrelse</item>
+      <item name="status">Status</item>
+      <item name="no_valid_files">Du skal vælge tilladte filer.</item>
+    </group>
+
+    <group target="createzip">
+      <item name="title">Opret zip</item>
+      <item name="description">Indsæt navnet på den zip fil du vil oprette.</item>
+      <item name="name">Navn:</item>
+      <item name="path">Sti</item>
+    </group>
+    <group target="tinymce">
+      <item name="insertfile_desc">Indsæt fil</item>
+    </group>
+  </language>
+</language-pack>
