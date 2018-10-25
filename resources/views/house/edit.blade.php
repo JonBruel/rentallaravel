@@ -4,7 +4,9 @@
     <h3>{{ __('Edit house') }}</h3>
     <div class="table-responsive">
         {!! Form::model($models[0], ['action' => ['HouseController@update', $models[0]]]) !!}
-        {!! Form::submit('Save changes',['class' => "btn btn-primary"]); !!}
+        {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
+        <a href="/house/edithousehtml/{{$models[0]->id}}" class="btn btn-success" role="button">{{__('Add/edit text/pictures')}}</a>
+        {!! Form::submit(__('Copy to new'),['class' => "btn btn-success", 'name' => 'Newhouse']); !!}
         <br />
         <br />
 
