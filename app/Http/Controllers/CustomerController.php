@@ -241,6 +241,12 @@ class CustomerController extends Controller
         return redirect('/customer/index?menupoint=1010')->with('success', 'Customer ' . $name . ' has been deleted!');
     }
 
+    /**
+     * We will show the statistisk in an iframe pointing to the $awurl, thus using another system for the statistics.
+     * This system resides on the web router.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function statistics()
     {
         /*
@@ -266,11 +272,12 @@ class CustomerController extends Controller
         return view('customer/statistics', ['awurl' => $awurl]);
     }
 
-    public function tools($id)
-    {
-        return view('customer/tools', ['id' => $id]);
-    }
-
+    /**
+     * The function feed a view used to choose the customer to merge with.
+     *
+     * @param int $id of the customer to be merged and later deleted.
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function merge($id = 0)
     {
         $input1 = Input::get('input1', []);
@@ -295,6 +302,15 @@ class CustomerController extends Controller
         return view('customer/merge', ['customers1' => $customers1, 'customers2' => $customers2, 'input1' => $input1, 'input2' => $input2]);
     }
 
+    /**
+     * The function finds the information of the customer to be deleted and copies it into the customer who remains. The tables copied are:
+     * Emaillog::class, Batchlog::class, Accountpost::class and Contract::class. The information in the customer table is not copied, so the
+     * remaining custome record will be untouched.
+     *
+     * @param int $tobedeleted the id of the customer to be deleted after his data has been merged
+     * @param int $remaining the remaining customer which swallows the one above.
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
     public function domerge($tobedeleted, $remaining)
     {
         //Set rights
@@ -318,6 +334,13 @@ class CustomerController extends Controller
         return;
     }
 
+
+    /**
+     * This controller is called from the customer list and shows the account movements for the specified customer.
+     *
+     * @param int $id customer id.
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function checkaccount($id)
     {
         $customername = Customer::Find($id)->name;
