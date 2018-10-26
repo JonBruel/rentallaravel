@@ -79,6 +79,7 @@ class ImportFromRental
                 }
                 $new->plain_password = $new->password;
                 $new->password = Hash::make($new->plain_password );
+                $new->plain_password = '';
                 $new->verified = 1;
                 $new->save();
                 if ($Rcustomer->id == 0)
