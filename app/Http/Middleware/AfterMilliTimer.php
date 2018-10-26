@@ -4,6 +4,16 @@ namespace App\Http\Middleware;
 
 use Closure;
 
+
+/**
+ * Class AfterMilliTimer has the main purpose of measuring the time in milliseconds
+ * from starting the first middleware to leaving for the rendering of the view. It also sets
+ * some headers for the response.
+ *
+ * @todo Check if the headers are required.
+ *
+ * @package App\Http\Middleware
+ */
 class AfterMilliTimer
 {
 
@@ -26,11 +36,9 @@ class AfterMilliTimer
         //$request->getSession()->flash('timer',$lapse);
         \Session::flash('timer',$lapse);
 
-        /**
-        * Custom cache headers for js and css files, disables with "x"
-        */
+        $response->header('X-Through-Controller','Yes'); //For test
 
-        $response = $response->header('X-Through-Controller','Yes');
+        //I don't remember if these lines are used at all.
         $response->header("pragma", "no-cache");
         $response->header("Cache-Control", "no-store,no-cache, must-revalidate, post-check=0, pre-check=0");
 

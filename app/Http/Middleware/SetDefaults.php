@@ -12,7 +12,20 @@ use DB;
 use App\Models\HouseI18n;
 
 
-
+/**
+ * Class SetDefaults allows for number of default to be set as sourced from different sources.
+ *
+ * The sources are:
+ * * The configuration files
+ * * The table config
+ * * The table house
+ * Information regarding the house, which comes in diferent language versions, is saved in the session
+ * in order to save time. The setting in the config table is not firmly structured and the setup allows for
+ * many different customizations for each url where this system is used allowing for a truly
+ * multitennant setup.
+ *
+ * @package App\Http\Middleware
+ */
 class SetDefaults {
 
     public function getMicroTime()

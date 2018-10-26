@@ -11,6 +11,12 @@ use App\Models\Contract;
 use Illuminate\Queue\SerializesModels;
 use App\Helpers\ShowCalendar;
 
+/**
+ * Class ContractUpdated controls task(s) to be done when the contract is updated or created as
+ * controlled by the $dispatchesEvents in Contract.
+ *
+ * @package App\Events
+ */
 class ContractUpdated
 {
     use SerializesModels;
@@ -18,7 +24,9 @@ class ContractUpdated
     public $contract;
 
     /**
-     * Create a new event instance.
+     * Deletes the file cash. This could be refined ro only update the calendar involved, not all of them.
+     *
+     * @todo Refine method if the system is used for a large number of houses with lot's of activity.
      *
      * @param  \App\Models\Contract  $contract
      * @return void

@@ -122,6 +122,7 @@ class Contract extends BaseModel
 
     protected $dispatchesEvents = [
         'updated' => ContractUpdated::class,
+        'created' => ContractUpdated::class,
     ];
 
     public function getFinalpriceAttribute($value) {

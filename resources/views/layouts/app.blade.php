@@ -24,10 +24,9 @@
 </head>
 <body stylexx="overflow: hidden">
     <div class="wrapper" style="background-color: #ffffff; min-height: 1000px; width: 99%">
-        <nav class="navbar navbar-expand-md navbar-light row" style="border-style: solid; border-width: 0 0 2px 0 ; border-color: black">
-            <div class="container">
-
-                <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#menub" aria-controls="menub" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+       <nav class="navbar navbar-expand-md navbar-light row" style="border-style: solid; border-width: 0 0 2px 0 ; border-color: black">
+            <div class="container" style="margin-left: 0px; padding-left: 0px">
+                <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#menub" aria-controls="menub" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}" style="margin-left: 15px">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -41,9 +40,6 @@
             <!-- Menu -->
                 <div class="col navbar navbar-expand-md navbar-dark">
                     <nav class="collapse navbar-collapse" id="menub">
-
-
-
                         @php($oldlevel = 1)
                         @foreach(\Session::get('menuStructure') as $menupoint => $item)
                             <?php
@@ -95,7 +91,7 @@
 
         <main class="container" style="margin-top: 5px; max-width: 100%">
             @if(!isset($hidesalt))
-            <span id="statusrow"><strong>{{__('Here you are')}}: {{session('sanitizedpath','Home')}} <a href="{{session('sanitizedpath1back','')}}">{{__('Return')}}</a></strong></span>
+            <span id="statusrow"><strong>{{__('Here you are')}}: {{session('sanitizedpath','Home')}} <a href="{{session('sanitizedpath1back','')}}?{{session('querystring1back','')}}">{{__('Return')}}</a></strong></span>
             @endif
             @if(session('warning'))
                 <div class="alert alert-warning border border-primary">{{session('warning')}}</div>

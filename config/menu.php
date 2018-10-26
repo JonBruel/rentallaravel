@@ -167,7 +167,7 @@ return [
         'childrenmap' => []
     ],
     10060 => [
-        'text' => 'Gallery',
+        'text' => 'Slide show',
         'path' => 'home/showinfo/gallery',
         'parentid' => 10000,
         'cssclass' => 'menulevel2',
@@ -419,7 +419,7 @@ return [
         'childrenmap' => []
     ],
     14080 => [
-        'text' => 'Gallery',
+        'text' => 'Image captions',
         'path' => 'setup/editcaptions',
         'parentid' => 14000,
         'cssclass' => 'menulevel2',
@@ -499,7 +499,7 @@ return [
         'childrenmap' => []
     ],
     15060 => [
-        'text' => 'DGPR-delete customers',
+        'text' => 'GDPR-delete customers',
         'path' => 'setup/gdprdelete',
         'parentid' => 15000,
         'cssclass' => 'menulevel2',

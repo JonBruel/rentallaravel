@@ -273,7 +273,7 @@ class CustomerController extends Controller
     }
 
     /**
-     * The function feed a view used to choose the customer to merge with.
+     * The function feeds a view used to choose the customer to merge with.
      *
      * @param int $id of the customer to be merged and later deleted.
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

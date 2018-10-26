@@ -37,8 +37,11 @@ class ImportController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * Starts the command which imports all relevant data from the old rental system. This process
+     * is run in the background as a daemon and in the view we keep track of the progress
+     * by frequent ajax calls to a files which during the import is updated with the progress.
      *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function importfromrental()
     {

@@ -34,7 +34,9 @@ use Symfony\Component\Process\Process;
 
 
 /**
- * Class SetupController
+ * Class SetupController includes a range of setup functions or administrative functions used by the Administrator
+ * or above of the system.
+ *
  * @package App\Http\Controllers
  */
 class SetupController extends Controller
@@ -44,8 +46,14 @@ class SetupController extends Controller
         parent::__construct(\App\Models\Batchtask::class);
     }
 
+    /**
+     * Shows the phpinfo for the site.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function showphpinfo()
     {
+        if (!Gate::allows('Supervisor')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         ob_start();
         phpinfo();
         $phpinfo = ob_get_clean();
@@ -53,8 +61,14 @@ class SetupController extends Controller
         return view('/setup/phpinfo', ['phpinfo' => $phpinfo]);
     }
 
+    /**
+     * Feeds the view showing the filtered batchtasks.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function listbatchtasks()
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $models = Batchtask::filter(Input::all())->orderBy('id')->get();
 
         $owners = ['' => __('Please select owner')] + Customer::filter()->where('customertypeid', 10)->pluck('name', 'id')->toArray();
@@ -63,8 +77,17 @@ class SetupController extends Controller
         return view('/setup/listbatchtasks', ['models' => $models, 'houses' => $houses, 'owners' => $owners, 'ownerid' => Input::get('ownerid', ''), 'search' => Input::all()]);
     }
 
+    /**
+     * Feeds the view for editing a batcktask. When a batchtask has been edited the workflow system will be disabled until
+     * the user actively enables it again. This is a protection against sistuations where a lot of automatic actions are
+     * taken before the workflow setttings have been finalized.
+     *
+     * @param $id batchtask id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function editbatchtask($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         //Find page from id
         if (Input::get('page') == null) {
             $models = Batchtask::filter(Input::all())->sortable('id')->pluck('id')->all();
@@ -87,8 +110,15 @@ class SetupController extends Controller
             'vattr' => new ValidationAttributes($models[0])]);
     }
 
+    /**
+     * Updates the batchtask based on the input from the edirbatchtask view.
+     *
+     * @param $id batchtask id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatebatchtask($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $original = Batchtask::Find($id);
 
         //Lock batchtask
@@ -121,9 +151,14 @@ class SetupController extends Controller
         return redirect('/setup/editbatchtask/'.$id.'?ownerid='.$original->ownerid)->with('success', $success)->with('errors', $errors);
     }
 
-    //liststandardemails, editstandardemails, updatestandardemails
+    /**
+     * Feeds the view showing the standaremails, filtered according to the scope of the user
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function liststandardemails()
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $models = Standardemail::filter(Input::all())->orderBy('id')->get();
 
 
@@ -135,8 +170,15 @@ class SetupController extends Controller
             'ownerid' => Input::get('ownerid', ''), 'search' => Input::all()]);
     }
 
+    /**
+     * Feeds the view for editing the text in many languages of a standard email.
+     *
+     * @param $id standardemail  id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function editstandardemail($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         //Find page from id
         if (Input::get('page') == null) {
             $models = Standardemail::filter(Input::all())->sortable('id')->pluck('id')->all();
@@ -167,8 +209,16 @@ class SetupController extends Controller
             'standardemailcontents' => $standardemailcontents]);
     }
 
+
+    /**
+     * Updates the standard email in several languages based on the input from the editstandardemail view.
+     *
+     * @param $id standardemail id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatestandardemail($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $errors = '';
         $success = 'Standardemail has been updated!';
         $keys = '';
@@ -204,13 +254,17 @@ class SetupController extends Controller
         return redirect('/setup/editstandardemail/'.$id.'?ownerid='.$original->ownerid)->with('success', $success)->with('errors', $errors);
     }
 
-    /*
-     * This method is the step for making new batch tasks for existing houses. The idea is
+
+    /**
+     * This function is the first step for making new batch tasks for existing houses. The idea is
      * that it is too complicated to start from scratch, so the ovwe or supervisor is
      * suggested to copy existing batch task from the tasks belonging to the house  with id=0.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function makebatch1()
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $houses = House::filter()->sortable('id')->where('id', '>', 0)->paginate(25);
         $batchexistss = [];
         foreach ($houses as $house)
@@ -225,13 +279,20 @@ class SetupController extends Controller
         return view('/setup/makebatch1', ['houses' => $houses, 'batchexistss' => $batchexistss, 'search' => Input::all()]);
     }
 
-    //The function copies the batchtasks and standardemails belonging to house with id = 0
-    //to the houses filtered to
-    //Both tables have set up an unique key name (or description), houseid
-    //This is used as a way to update the records without having to delete them first.
-    //We want to avoid deletion due to foreign key contraints....
+    /**
+     * The function copies the batchtasks and standardemails belonging to house with id = 0 to the houses filtered to.
+     * Both tables have set up an unique key name (or description), houseid.
+     * This is used as a way to update the records without having to delete them first.
+     * We want to avoid deletion due to foreign key contraints....
+     *
+     * @param int $houseid
+     * @param 0|1 $overwrite
+     * @param 0|1 $batchexists
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function copybatch($houseid, $overwrite, $batchexists)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $goahead = false;
         $success = __('Nothing done');
         if ((Input::get('answer', 'no') == 'yes') && ($houseid > 0)) $goahead = true;
@@ -244,9 +305,14 @@ class SetupController extends Controller
         return redirect('setup/makebatch1')->with('success', $success);
     }
 
+    /**
+     * Feeds the view for searching, editing and creating translations.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function edittranslations()
     {
-
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         if (Input::get('Save'))  $this->savetranslations();
 
         $cultures = explode(';', config('app.cultures'));
@@ -310,8 +376,15 @@ class SetupController extends Controller
             'searchkey' => $searchkey, 'cultures' => $cultures, 'id' => $id, 'culturenames' => $culturenames]);
     }
 
+    /**
+     * Based on the input from the view edittranslations, we update the translations using the
+     * static helper function updateTranslations($key, $translations)
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     protected function savetranslations()
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $success = 'ABC';
         Input::merge(['Search' => 'Search']);
         Input::merge(['Save' => null]);
@@ -324,7 +397,7 @@ class SetupController extends Controller
         if (sizeof($keys) > 0) foreach($keys as $key)
         {
             $translations = Input::get('translation')[$key];
-            //New key
+            //New key, jkuuasg7892g is just a random string
             if ($key == 'jkuuasg7892g')
             {
                 $key = Input::get('jkuuasg7892g');
@@ -353,8 +426,14 @@ class SetupController extends Controller
     }
 
 
+    /**
+     * Feeds the view for editing the translation related to images show in the gallery.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function editcaptions()
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $this->checkHouseChoice('setup/editcaptions/?menupoint='.session('menupoint', 14080));
         $id = session('defaultHouse');
         $searchkey = 'gallery.'.$id.'.';
@@ -389,8 +468,15 @@ class SetupController extends Controller
         return view('/setup/editcaptions', ['translationstartkey' => $translationstartkey, 'searchkey' => $searchkey, 'cultures' => $cultures, 'id' => $id, 'culturenames' => $culturenames]);
     }
 
+    /**
+     * Based on the input from editcaptions view we create, delete or update captions.
+     *
+     * @param int $id house id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatecaptions($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $cultures = explode(';', config('app.cultures'));
         $searchkey = 'gallery.'.$id.'.';
         $success = '';
@@ -417,8 +503,17 @@ class SetupController extends Controller
         return redirect ('/setup/editcaptions')->with('success', $success);
     }
 
+    /**
+     * Helper function for updating translations. The function ensures that all the resource files
+     * hoding translations have the same keys and that they are sorted by the key.
+     *
+     * @param string $key of the text to be translated
+     * @param array $culturetranslation which for each culture holds the translation
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public static function updateTranslations($key, $culturetranslation)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         //TODO: Safeguard against non-existing cultures
         foreach($culturetranslation as $culture => $translation)
         {
@@ -436,8 +531,17 @@ class SetupController extends Controller
         }
     }
 
+    /**
+     * Helper function for deleting existing translations. The function ensures that all the resource files
+     * hoding translations have the same keys and that they are sorted by the key.
+     *
+     * @param string $key of the text to be translated
+     * @param array $culturetranslation which for each culture holds the translation. The tranlation is not used here.
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public static function destroyTranslations($key, $culturetranslation)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         //TODO: Safeguard against non-existing cultures
         foreach($culturetranslation as $culture => $translation)
         {
@@ -449,8 +553,14 @@ class SetupController extends Controller
         }
     }
 
+    /**
+     * Feeds the view for editing the config table.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function editconfig()
     {
+        if (!Gate::allows('Supervisor')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $models = Config::filter(Input::all())->paginate(1);
         $fields = ['id', 'url', 'index'];
         $vattr = '';
@@ -459,8 +569,14 @@ class SetupController extends Controller
         return view('/setup/editconfig', ['models' => $models, 'fields' => $fields, 'vattr' => $vattr]);
     }
 
+    /**
+     * Based in the input from the view editconfig this function updates the configuration.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateconfig()
     {
+        if (!Gate::allows('Supervisor')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $id = Input::get('id');
         $model =  Config::findOrFail($id);
         $fields = ['id', 'url', 'index'];
@@ -478,26 +594,42 @@ class SetupController extends Controller
         return redirect('/setup/editconfig?url='.Input::get('url'))->with('success', $success)->with('errors', $errors);
     }
 
+    /**
+     * Not implemented
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function firstsetup()
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         //TODO: implement it
         return view('/setup/firstsetup', []);
     }
 
+
+    /**
+     * List the errors as reported during exceptions.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function listerrorlogs()
     {
+        if (!Gate::allows('Supervisor')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $models = Errorlog::filter(Input::all())->orderBy('created_at', 'desc')->paginate(1);
         $fields = ['created_at', 'stack', 'customermessage', 'situation'];
 
         return view('/setup/listerrorlogs', ['models' => $models, 'fields' => $fields, 'search' => Input::all()]);
     }
 
-    /*
-     * Method is for showing the batchlog
+
+    /**
+     * Feeds a view listing the batchlog table
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function listqueue()
     {
-
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $models = Batchlog::filter(Input::all())->orderBy('created_at', 'desc')->with(['posttype', 'batchtask', 'house'])->paginate(20);
         $model = new Batchlog();
         $fields = ['created_at', 'statusid', 'posttypeid', 'batchtaskid', 'contractid', 'emailid', 'houseid'];
@@ -505,8 +637,15 @@ class SetupController extends Controller
         return view('/setup/listqueue', ['models' => $models, 'model' => $model, 'fields' => $fields, 'search' => Input::all()]);
     }
 
+    /**
+     * Feeds the view for editingbatchlogs.
+     *
+     * @param int $id batchlog id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function editbatchlog($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $model = Batchlog::Find($id);
         $fields = ['id', 'created_at', 'statusid', 'posttypeid', 'batchtaskid', 'contractid', 'emailid', 'houseid'];
         $vattr = (new ValidationAttributes($model))->setCast('id', 'hidden');
@@ -514,8 +653,16 @@ class SetupController extends Controller
         return view('/setup/editbatchlog', ['models' => [$model],  'fields' => $fields, 'search' => Input::all(), 'vattr' => $vattr]);
     }
 
+
+    /**
+     * Based on input from the editbatchlog view the batchlog is updated
+     *
+     * @param int $id batchlog id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatebatchlog($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $model = Batchlog::Find($id);
         $fields = ['created_at', 'statusid', 'posttypeid', 'batchtaskid', 'contractid', 'emailid', 'houseid'];
         foreach ($fields as $field) $model->$field = Input::Get($field);
@@ -529,12 +676,26 @@ class SetupController extends Controller
         return redirect('/setup/listqueue')->with('success', $success)->with('errors', $errors);
     }
 
+    /**
+     * Deletes a batchlog.
+     *
+     * @param $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function destroybatchlog($id)
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         Batchlog::Find($id)->delete();
         return $this->listqueue();
     }
 
+
+    /**
+     * Start the gdpr delete command in the background and show the progress via ajax calls
+     * which get the stated from a file updated during the process.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function gdprdelete()
     {
         if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
@@ -544,6 +705,11 @@ class SetupController extends Controller
         return view('/setup/gdprdelete');
     }
 
+    /**
+     * Start a process where the documentation is updated by phpDocumentor.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function updatephpdoc()
     {
         if (!Gate::allows('Supervisor')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
@@ -553,14 +719,25 @@ class SetupController extends Controller
         //return redirect('/doc/index.html');
     }
 
+    /**
+     * Feeds the view that shows the documentation in an iframe.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function showdocumentation()
     {
         if (!Gate::allows('Supervisor')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         return view('/setup/showdoc');
     }
 
+    /**
+     * Not implemented.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function workflow()
     {
+        if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         return view('/general/notimplemented');
     }
 

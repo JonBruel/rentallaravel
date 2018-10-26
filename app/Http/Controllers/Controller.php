@@ -21,7 +21,7 @@ use App\Models\Customer;
 use Auth;
 
 /**
- * Class Controller
+ * Class Controller commom controller for all the other controllers which has functions widely used among the controllers.
  * @package App\Http\Controllers
  */
 class Controller extends BaseController

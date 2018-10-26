@@ -561,7 +561,7 @@ class ContractController extends Controller
     }
 
     /**
-     * This feed the view for editing accountposts, which should not be allowed for anyone, but the supervisor.
+     * This function feeds the view for editing accountposts, which should not be allowed for anyone, but the supervisor.
      * TODO: Determined if it should be allowed at all.
      *
      * @param int $id

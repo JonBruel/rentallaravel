@@ -141,10 +141,9 @@ class HouseController extends Controller
         $field = Input::get('field', 'description');
         $fields = [$field];
 
-        //TODO: use webroot function to make it general
-        $uploaddirdocuments = '/var/www/html/rentallaravel/public/housedocuments/'.$id.'/';
-        $uploaddirgraphics =  '/var/www/html/rentallaravel/public/housegraphics/'.$id.'/';
-        $uploaddirgallery =   '/var/www/html/rentallaravel/public/housegraphics/'.$id.'/gallery1/';
+        $uploaddirdocuments = public_path().'/housedocuments/'.$id.'/';
+        $uploaddirgraphics =  public_path().'/housegraphics/'.$id.'/';
+        $uploaddirgallery =   public_path().'/housegraphics/'.$id.'/gallery1/';
 
         return view('house/edithousehtml', ['models' => $houseI18ns, 'model' => $houseI18n,
             'fields' => $fields,
@@ -188,7 +187,8 @@ class HouseController extends Controller
     }
 
     /**
-     *
+     * Feeds the view where all images for descriptions, gallery and documents can be seen. Uploading of these takes place in the
+     * edithousehtml view. So the purpose of this view is overview and the possibility to delete files.
      *
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -213,6 +213,12 @@ class HouseController extends Controller
         return view('house/browse', ['myfiles' => $myfiles, 'id' => $id, 'housename' => $house->name]);
     }
 
+    /**
+     * As a reult of the browse function this function deletes one or several files
+     *
+     * @param $id of house where a file name, as given in the parameter name, to de deleted
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deletefiles($id)
     {
         if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
@@ -236,7 +242,7 @@ class HouseController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Updates the basic information about a house or creates a new house based on values of an existing house.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -271,7 +277,7 @@ class HouseController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Deletes a house.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -284,9 +290,12 @@ class HouseController extends Controller
         return redirect('/house/listhouses?menupoint=12030');
     }
 
-    /*
+
+    /**
      * Method is used for the owner to get an overview off all periods and as an entry to change
      * the price for one or several periods. There is no pre-selection of the houseid.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function listperiods()
     {
@@ -300,6 +309,12 @@ class HouseController extends Controller
         return view('house/listperiods', ['models' => $models, 'fields' => $fields, 'houses' => $houses, 'search' => $search]);
     }
 
+    /**
+     * Used to show the values of the chosen rental period for a subsequent change of the details.
+     *
+     * @param $id id of the period
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function editperiod($id)
     {
         if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
@@ -309,6 +324,12 @@ class HouseController extends Controller
         return view('house/editperiod', ['models' => [$model], 'fields' => $fields, 'vattr' => $vattr]);
     }
 
+    /**
+     * Used to change details of a period.
+     *
+     * @param $id of the period
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateperiod($id)
     {
         if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
@@ -329,12 +350,21 @@ class HouseController extends Controller
         return redirect('house/editperiod/'.$id)->with('success', $success)->with('errors', $errors);
     }
 
+    /**
+     * Not implemented
+     */
     public function updateperiods()
     {
 
     }
 
-    public function createperiods(Request $request)
+    /**
+     * Prepares the view for inseting a several ranges of periods, each range belong to a season
+     * where the user defines the price and other details.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function createperiods()
     {
         //echo('test:'.Input::get('test', 'nothing') );
         //die(var_dump($request->get('data')));
@@ -392,6 +422,12 @@ class HouseController extends Controller
             'data' => $data]);
     }
 
+    /**
+     * Inserts ranges of periods prepared from the previous function create the period. We chack if
+     * the periods are already overlapped by leased periods and omit those.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
     public function insertcreatedperiods()
     {
         if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));

@@ -34,6 +34,11 @@ class MyAccountController extends Controller
         parent::__construct(\App\Models\Customer::class);
     }
 
+    /**
+     * Starts a view showing the gdpr rules which are all located in the view.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
      public function gdpr()
      {
          return view('home/gdpr');
@@ -41,7 +46,7 @@ class MyAccountController extends Controller
 
 
     /**
-     * Display a listing of the resource.
+     * Feeds the view for showing the customer details for a user.
      *
      * @return \Illuminate\Http\Response
      */
@@ -64,6 +69,13 @@ class MyAccountController extends Controller
         return view('myaccount/registration', ['models' => [$customer], 'fields' => $fields, 'vattr' => $vattr, 'allowdelete' => $allowdelete]);
     }
 
+    /**
+     * Feeds a view which allows the customer to delete himselves provided there are
+     * no accountposts for rental bookings.
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function destroycustomer($id)
     {
         if (!Auth::check()) return redirect('/login');
@@ -90,6 +102,11 @@ class MyAccountController extends Controller
         return redirect('/home')->with('warning',  __('All data about you is now deleted. Before you book next time, you must register anew.'));
     }
 
+    /**
+     * The function which updates information about a customer as requested by the customer.
+     *
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function updateregistration()
     {
         //Todo: Handle change and check of email address.
@@ -115,6 +132,12 @@ class MyAccountController extends Controller
         return redirect('/myaccount/registration?menupoint=9010')->with('success', 'Customer has been updated!');
     }
 
+    /**
+     * A helper function for the edittime(), listaccountposts(), listbookings() and updatetime() functions.
+     *
+     * @param Carbon|null $date is the from date to get the contracts
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     private function getContracts(Carbon $date = null)
     {
         if (!Auth::check()) return redirect('/login');
@@ -128,16 +151,32 @@ class MyAccountController extends Controller
         return $contractoverviews;
     }
 
+    /**
+     * Feeds the view which shoow all the rental contract ever for the customer.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function listbookings()
     {
         return view('myaccount/listbookings', ['models' => $this->getContracts()]);
     }
 
+    /**
+     * Feeds the view for showing all the accountposts including the accountpost with no amount.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function listaccountposts()
     {
+        Contract::$ajax = true;
         return view('myaccount/listaccountposts', ['models' => $this->getContracts()]);
     }
 
+    /**
+     * Feeds the view for showing all mails to the customer.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
     public function listmails()
     {
         if (!Auth::check()) return redirect('/login');
@@ -146,6 +185,11 @@ class MyAccountController extends Controller
         return view('myaccount/listmails', ['models' => $emails, 'title' => __('My emails')]);
     }
 
+    /**
+     * Feeds the view which lets the customer update the arrival and departure times of future rental bookings.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
     public function edittime()
     {
         //Following if used for edittiemelink
@@ -159,6 +203,12 @@ class MyAccountController extends Controller
         return view('myaccount/edittime', ['models' => $contracts, 'vattr' => new ValidationAttributes($contract)]);
     }
 
+    /**
+     * Updates arrival and departure times and inserts an accountpost for the workflow system
+     * to register the action.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updatetime()
     {
         $contracts = $this->getContracts(Carbon::now());

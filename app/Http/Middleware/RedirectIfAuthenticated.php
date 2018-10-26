@@ -6,6 +6,12 @@ use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * Class RedirectIfAuthenticated controls the behaviour after a customer has authenticated. The
+ * package has been changed from the original Laravel version.
+ *
+ * @package App\Http\Middleware
+ */
 class RedirectIfAuthenticated
 {
     /**

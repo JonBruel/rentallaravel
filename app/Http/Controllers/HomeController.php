@@ -86,7 +86,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Feed the listtestimonials view, which if the user is logged in, allows for new testimonials. House owners will be given the option
+     * Feeds the listtestimonials view, which if the user is logged in, allows for new testimonials. House owners will be given the option
      * of editing existing testimonials.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
