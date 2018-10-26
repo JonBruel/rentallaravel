@@ -741,4 +741,14 @@ class SetupController extends Controller
         return view('/general/notimplemented');
     }
 
+    /**
+     * Not implemented.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function listbounties()
+    {
+        if (!Gate::allows('Supervisor')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
+        return view('/general/notimplemented');
+    }
 }

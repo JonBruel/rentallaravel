@@ -97,7 +97,7 @@ class CustomerController extends Controller
             'ownerid',
             'plain_password'
         ];
-        return view('customer/create', ['models' => $models, 'fields' => $fields, 'vattr' => new ValidationAttributes($models[0])]);
+        return view('customer/create', ['models' => $models, 'fields' => $fields, 'errors' => [], 'vattr' => new ValidationAttributes($models[0])]);
     }
 
     /**
@@ -164,7 +164,7 @@ class CustomerController extends Controller
         }
 
         $models = Customer::filter(Input::all())->sortable('id')->paginate(1);
-        $fields = Schema::getColumnListing($models[0]->getTable());
+        $fields = array_diff(Schema::getColumnListing($models[0]->getTable()), ['password', 'plain_password']);
         return view('customer/show', ['models' => $models, 'fields' => $fields]);
     }
 

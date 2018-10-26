@@ -142,6 +142,7 @@ Route::post('/setup/edittranslations', 'SetupController@edittranslations');
 Route::get('/setup/updatephpdoc', 'SetupController@updatephpdoc');
 Route::get('/setup/showdocumentation', 'SetupController@showdocumentation');
 
+Route::get('/setup/listbounties', 'SetupController@listbounties');
 
 //From rental:
 Route::get('/contract/annualcontractoverview', 'ContractController@annualcontractoverview');
