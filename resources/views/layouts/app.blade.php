@@ -22,8 +22,8 @@
 
 
 </head>
-<body stylexx="overflow: hidden">
-    <div class="wrapper" style="background-color: #ffffff; min-height: 1000px; width: 99%">
+<body>
+    <div class="wrapper" style="background-color: #ffffff; min-height: 1000px; width: 98%">
        <nav class="navbar navbar-expand-md navbar-light row" style="border-style: solid; border-width: 0 0 2px 0 ; border-color: black">
             <div class="container" style="margin-left: 0px; padding-left: 0px">
                 <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#menub" aria-controls="menub" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}" style="margin-left: 15px">
