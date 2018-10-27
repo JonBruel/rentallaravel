@@ -29,7 +29,6 @@ use Carbon\Carbon;
 class MyAccountController extends Controller
 {
 
-
     public function __construct() {
         parent::__construct(\App\Models\Customer::class);
     }
@@ -41,9 +40,9 @@ class MyAccountController extends Controller
      */
      public function gdpr()
      {
+         session()->flash('warning', '');
          return view('home/gdpr');
      }
-
 
     /**
      * Feeds the view for showing the customer details for a user.
@@ -53,6 +52,7 @@ class MyAccountController extends Controller
     public function registration()
     {
         if (!Auth::check()) return redirect('/login');
+        session()->flash('warning', '');
         $user = Auth::user();
         $customer = Customer::Find($user->id);
         $fields = array_diff(Schema::getColumnListing($customer->getTable()), ['id', 'created_at', 'updated_at', 'remember_token', 'plain_password', 'password', 'ownerid', 'status', 'verified', 'houselicenses', 'customertypeid', 'lasturl', 'login' ]);
@@ -109,8 +109,8 @@ class MyAccountController extends Controller
      */
     public function updateregistration()
     {
-        //Todo: Handle change and check of email address.
         if (!Auth::check()) return redirect('/login');
+        session()->flash('warning', '');
         if (Input::get('delete')) return $this->destroycustomer(Input::get('id'));
 
         $customer = Customer::Find(Input::get('id'));
@@ -158,7 +158,10 @@ class MyAccountController extends Controller
      */
     public function listbookings()
     {
-        return view('myaccount/listbookings', ['models' => $this->getContracts()]);
+        session()->flash('warning', '');
+        $contracts = $this->getContracts();
+        if ( sizeof($contracts) == 0) session()->flash('warning', __('There are no contracts to show.'));
+        return view('myaccount/listbookings', ['models' => $contracts]);
     }
 
     /**
@@ -168,8 +171,11 @@ class MyAccountController extends Controller
      */
     public function listaccountposts()
     {
+        session()->flash('warning', '');
         Contract::$ajax = true;
-        return view('myaccount/listaccountposts', ['models' => $this->getContracts()]);
+        $contracts = $this->getContracts();
+        if (sizeof($contracts) == 0) session()->flash('warning', __('There are no account posts to show.'));
+        return view('myaccount/listaccountposts', ['models' => $contracts]);
     }
 
     /**
@@ -179,6 +185,7 @@ class MyAccountController extends Controller
      */
     public function listmails()
     {
+        session()->flash('warning', '');
         if (!Auth::check()) return redirect('/login');
         $user = Auth::user();
         $emails = Emaillog::where('to', $user->email)->get();
@@ -193,14 +200,20 @@ class MyAccountController extends Controller
     public function edittime()
     {
         //Following if used for edittiemelink
+        session()->flash('warning', '');
         $res = $this->checkToken();
         if($res) return redirect($res);
 
         $contracts = $this->getContracts(Carbon::now());
         $contract = null;
-        if (sizeof($contracts) > 0) $contract = $contracts[0];
-        else session()->flash('warning', __('There are no constacts to show.'));
-        return view('myaccount/edittime', ['models' => $contracts, 'vattr' => new ValidationAttributes($contract)]);
+        $vattr = null;
+        if (sizeof($contracts) > 0)
+        {
+            $vattr = new ValidationAttributes($contract);
+            $contract = $contracts[0];
+        }
+        else session()->flash('warning', __('There are no contracts to show.'));
+        return view('myaccount/edittime', ['models' => $contracts, 'vattr' => $vattr]);
     }
 
     /**

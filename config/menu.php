@@ -65,7 +65,7 @@ return [
         'childrenmap' => []
     ],
     9050 => [
-        'text' => 'Itenery',
+        'text' => 'Itinerary',
         'path' => 'myaccount/edittime',
         'parentid' => 9000,
         'cssclass' => 'menulevel2',
