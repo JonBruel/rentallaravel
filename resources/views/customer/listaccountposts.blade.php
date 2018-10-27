@@ -130,7 +130,7 @@
             @else
                     <tr>
                         <td colspan="6">
-                            {{__('No account post found.')}}
+                            {{__('No account posts found.')}}
                         </td>
                     </tr>
             @endif

@@ -62,7 +62,7 @@ class HomeController extends Controller
             session(['lastran' => $fileinfo['r']]);
             $text = $fileinfo['text'];
             $picture = '<img src="' . $fileinfo['filepath'] . '" alt="' . $fileinfo['text'] . '"/>';
-            return view('home/gallery', ['picturearray' => $picturearray, 'picture' => $picture, 'text' => $text])
+            return view('home/gallery', ['picturearray' => $picturearray, 'picture' => $picture, 'text' => $text, 'hidesalt' => true])
                     ->withHeader('Cache-Control', 'no-cache, must-revalidate');
         }
         else
@@ -101,7 +101,7 @@ class HomeController extends Controller
 
         $house = House::Find($houseid);
         $testimonials = Testimonial::where('houseid', $houseid)->sortable(['created_at' => 'desc'])->get();
-        return view('home/listtestimonials', ['models' => $testimonials, 'administrator' => Gate::allows('Administrator'), 'house' => $house, 'houseid' => $houseid])->with('search', Input::all());
+        return view('home/listtestimonials', ['models' => $testimonials, 'administrator' => Gate::allows('Administrator'), 'house' => $house, 'houseid' => $houseid, 'hidesalt' => true])->with('search', Input::all());
     }
 
     /**
@@ -206,7 +206,7 @@ class HomeController extends Controller
             $starttime->addMonth();
         }
 
-        return view('home/checkbookings', ['house' => $house, 'cal' => $cal, 'starttime' => $starttime, 'pager' => $pager, 'elements' => $elements, 'offset' => ($yearstart-1)])
+        return view('home/checkbookings', ['house' => $house, 'cal' => $cal, 'starttime' => $starttime, 'pager' => $pager, 'elements' => $elements, 'offset' => ($yearstart-1), 'hidesalt' => true])
                 ->withHeader('Cache-Control', 'no-cache, must-revalidate');
 
     }
@@ -235,7 +235,7 @@ class HomeController extends Controller
         }
 
         $models = House::filter()->sortable()->paginate(10);
-        return view('home/listhouses', ['models' => $models, 'returnpath' => $returnpath]);
+        return view('home/listhouses', ['models' => $models, 'returnpath' => $returnpath, 'hidesalt' => true]);
     }
 
     /**
@@ -261,7 +261,7 @@ class HomeController extends Controller
         //$gt = new GoogleTranslateWrapper();
         //$gt->selfTest();
 
-        return view('home/showmap', ['house' => $house, 'veryShortDescription'  => $veryShortDescription, 'googlekey' => $googlekey, 'housefields' => json_encode($housefields)])
+        return view('home/showmap', ['house' => $house, 'veryShortDescription'  => $veryShortDescription, 'googlekey' => $googlekey, 'housefields' => json_encode($housefields), 'hidesalt' => true])
             ->withHeader('Cache-Control', 'no-cache, must-revalidate');
     }
 

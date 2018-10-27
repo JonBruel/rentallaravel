@@ -3,7 +3,6 @@
     <h3>{{__('Account posts')}}</h3>
     <br /><br />
     <div class="table-responsive col-md-12">
-
         <table class="table table-striped">
             <tr>
                 <td>
@@ -23,6 +22,7 @@
                 </td>
             </tr>
             <?php App\Models\Accountpost::$ajax=false;?>
+            @if(sizeof($models) > 0)
             @foreach($models as $model)
                 <tr>
                     <td>
@@ -98,6 +98,9 @@
                     </td>
                 </tr>
             {!! Form::close() !!}
+            @else
+                <tr><td colspan="5">{{__('No account posts found.')}}</td></tr>
+            @endif
         </table>
     </div>
 @endsection

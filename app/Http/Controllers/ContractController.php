@@ -474,7 +474,6 @@ class ContractController extends Controller
     {
         $currencysymbol = 'DKK';
         $models =  Accountpost::where('contractid', $contractid)->where('amount', "!=", 0)->get();
-        if ($models) $currencysymbol = $models[0]->currency->currencysymbol;
         return view('contract/listaccountposts', ['models' => $models,'currencysymbol' => $currencysymbol]);
     }
 
