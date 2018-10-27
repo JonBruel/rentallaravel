@@ -8,7 +8,7 @@
                 <tr>
                     <td>
                         {!! Form::open(['action' => 'HomeController@createtestimonial']) !!}
-                        {!! Form::submit('Save changes',['class' => "btn btn-primary"]); !!}
+                        {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
                         {{ __('Please review the place! When done, press the "Save" button') }}<br /><br />
                         {!! Form::textarea('text', '', ['class' => 'col-md-12 col form-control']) !!}
                         {!! Form::hidden('houseid', $houseid) !!}
