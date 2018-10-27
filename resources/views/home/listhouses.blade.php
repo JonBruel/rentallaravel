@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <h3>Choose house</h3>
+    <h3>{{__('Choose house')}}</h3>
     <div class="table-responsive">
         <table class="table table-striped">
             <tbody>

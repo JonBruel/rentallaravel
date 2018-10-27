@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <h3>Bookings</h3>
+    <h3>{{__('Bookings')}}</h3>
     <style>
         .occupied {
             background: #FF9191;

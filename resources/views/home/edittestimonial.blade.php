@@ -2,7 +2,7 @@
 @extends('layouts.app')
 @section('content')
 
-    <h3>Edit testimonial</h3>
+    <h3>{{__('Edit testimonial')}}</h3>
     <div class="table-responsive">
         {!! Form::model($testimonial, ['action' => ['HomeController@updatetestimonial', $testimonial]]) !!}
         {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}

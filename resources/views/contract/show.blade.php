@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <h3>Contract</h3>
+    <h3>{{__('Contract')}}</h3>
     <div class="table-responsive">
         @foreach($fields as $field)
         <dl class="dl-horizontal row">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <h3>House</h3>
+    <h3>{{__('House')}}</h3>
     <div class="table-responsive">
         <a href="/house/edit/{{$models[0]->id}}">Edit House</a>
         @foreach($fields as $field)
