@@ -123,13 +123,13 @@ class MyAccountController extends Controller
 
         //We save. The save validates after the Mutators have been used.
         $errors = '';
-        $success = 'Your contact data have been updated';
+        $success = _('Your contact data have been updated');
         if (!$customer->save()) {
             $errors = $customer->getErrors();
             $success = '';
         }
         if ($errors != '') return redirect('/myaccount/registration')->with('success', $success)->with('errors',$errors)->withInput(Input::except('plain_password'));
-        return redirect('/myaccount/registration?menupoint=9010')->with('success', 'Customer has been updated!');
+        return redirect('/myaccount/registration?menupoint=9010')->with('success', __('Customer has been updated').'!');
     }
 
     /**
