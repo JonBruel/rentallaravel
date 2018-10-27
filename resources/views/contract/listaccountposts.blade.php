@@ -5,9 +5,11 @@
     <div class="table-responsive col-md-12">
         <table class="table table-striped">
             <tr>
-                <td>
-                    <strong>{{ __('Actions') }}</strong>
-                </td>
+                @if(Gate::allows('Supervisor'))
+                    <td>
+                        <strong>{{ __('Actions') }}</strong>
+                    </td>
+                @endif
                 <td>
                     <strong>{{ __('Date') }}</strong>
                 </td>
@@ -25,9 +27,11 @@
             @if(sizeof($models) > 0)
             @foreach($models as $model)
                 <tr>
-                    <td>
-                        @include('partials.edit_delete', ['path' => 'accountpost', 'id' => $model->id, 'deleteallowed' => Gate::allows('Supervisor')])
-                    </td>
+                    @if(Gate::allows('Supervisor'))
+                        <td>
+                            @include('partials.edit_delete', ['path' => 'accountpost', 'id' => $model->id, 'deleteallowed' => Gate::allows('Supervisor')])
+                        </td>
+                    @endif
                     <td>
                         {{ $model->created_at->format('Y-m-d') }}
                     </td>
@@ -48,7 +52,7 @@
             @endforeach
 
             <tr>
-                <td colspan="3">
+                <td colspan="{{(Gate::allows('Supervisor'))?3:2}}">
                 </td>
                 <td>
                     <strong>{{ __('Total') }}</strong>
@@ -59,7 +63,7 @@
             </tr>
             {!! Form::open(['url' => '/contract/registerpayment/'.$models[0]->contractid]) !!}
                 <tr style="border-style: solid solid none solid; border-width:4px 4px 0px 4px; border-color:red;">
-                    <td colspan="2">
+                    <td colspan="{{(Gate::allows('Supervisor'))?2:1}}">
                         {!! Form::label('text', __('Text').':') !!}
                     </td>
                     <td>
@@ -74,7 +78,7 @@
                     </td>
                 </tr>
             <tr style="border-style: none solid none solid; border-width:4px; border-color:red;">
-                <td colspan="2">
+                <td colspan="{{(Gate::allows('Supervisor'))?2:1}}">
                     {!! Form::label('posttypeid', __('Posttype').':') !!}
                 </td>
                 <td>
@@ -88,7 +92,7 @@
                 </td>
             </tr>
                 <tr style="border-style:none solid solid solid; border-width:4px; border-color:red;">
-                    <td colspan="4">
+                    <td colspan="{{(Gate::allows('Supervisor'))?4:3}}">
 
                     </td>
 
@@ -99,7 +103,7 @@
                 </tr>
             {!! Form::close() !!}
             @else
-                <tr><td colspan="5">{{__('No account posts found.')}}</td></tr>
+                <tr><td colspan="{{(Gate::allows('Supervisor'))?5:4}}">{{__('No account posts found.')}}</td></tr>
             @endif
         </table>
     </div>

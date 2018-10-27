@@ -465,7 +465,7 @@ class SetupController extends Controller
         {
             $culturenames[$culture] = Culture::where('culture', $culture)->first()->culturename;
         }
-        return view('/setup/editcaptions', ['translationstartkey' => $translationstartkey, 'searchkey' => $searchkey, 'cultures' => $cultures, 'id' => $id, 'culturenames' => $culturenames]);
+        return view('/setup/editcaptions', ['translationstartkey' => $translationstartkey, 'prefix' => $searchkey, 'cultures' => $cultures, 'id' => $id, 'culturenames' => $culturenames]);
     }
 
     /**

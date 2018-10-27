@@ -1,13 +1,12 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{ __('Customers') }}</h3>
-    <br />
     <a href='/customer/create'>
         <span class='glyphicon glyphicon-plus'></span>
     </a>
-    <br /><br />
+    <br />
     <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-striped"  style="max-width:98%;">
             <thead>
             <tr>
                 <th colspan="2">{{__('Customer type')}}</th>
@@ -15,7 +14,7 @@
                 <th>@sortablelink('address1')</th>
                 <th>@sortablelink('email')</th>
             </tr>
-            <tr>
+            <tr  style="border-style: solid solid solid solid; border-width:4px 4px 4px 4px; border-color:green;">
                 <form id="Filter" action="{{Session::get('sanitizedpath')}}" method="get">
                     <td colspan="2">
                         {!! Form::select('customertypeid',$customertypeselect,array_key_exists('customertypeid',

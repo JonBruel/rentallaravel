@@ -119,6 +119,7 @@ class MenuService {
 
         //Hide home/listhouses menu point if there only is one house
         if (($this->houses == 1) && $value['path'] == 'home/listhouses') $value = null;
+        if (($this->houses == 1) && $value['path'] == 'house/listhouses') $value = null;
     }
 
 

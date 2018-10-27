@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\App;
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-            <tr>
+            <tr  style="border-style: solid solid solid solid; border-width:4px 4px 4px 4px; border-color:green;">
                 <form>
                     <th colspan="3">
                         {!! Form::select('year',$years,$year,['class' => 'col-md-12 col form-control', 'onchange' =>  'submit();', 'style' => 'padding: 1px 0 3px 10px;']) !!}
@@ -24,7 +24,11 @@ use Illuminate\Support\Facades\App;
                     <th colspan="6">
                         {!! Form::select('houseid',$houses,$houseid,['class' => 'col-md-5 col form-control', 'onchange' =>  'submit();', 'style' => 'padding: 1px 0 3px 10px;']) !!}
                     </th>
+                    @else
+                        <th colspan="6">
+                        </th>
                     @endif
+
                 </form>
             </tr>
             <tr>@if(sizeof($houses) > 1)

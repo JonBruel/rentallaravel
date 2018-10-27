@@ -13,7 +13,7 @@
                         <td>{{ __($field) }}</td>
                     @endforeach
             </tr>
-            <tr>
+            <tr style="border-style: solid solid solid solid; border-width:4px 4px 4px 4px; border-color:green;">
                 <form id="Filter" action="{{Session::get('sanitizedpath')}}" method="get">
                     <td>
                         <button type="submit" class="btn btn-success glyphicon glyphicon-search" name="Search" value="Search"></button>

@@ -7,12 +7,10 @@
 
         <table class="table table-striped">
             <?php
+                $actioncell = (Gate::allows('Supervisor'))?"<td><strong>". __('Actions')."</strong></td>":'';
                 $header = "
-            <tr>
-                <td>
-                    <strong>". __('Actions')."</strong>
-                </td>
-                <td>
+            <tr>".$actioncell.
+                "<td>
                     <strong>". __('Date') ."</strong>
                 </td>
                 <td>
@@ -54,7 +52,7 @@
             ?>
             @if($headline)
                     <tr>
-                        <th colspan="4">
+                        <th colspan="{{(Gate::allows('Supervisor'))?4:3}}">
                             <strong>
                             </strong>
                         </th>
@@ -78,9 +76,11 @@
             @endif
 
                 <tr>
-                    <td>
-                        @include('partials.edit_delete', ['path' => 'accountpost', 'id' => $model->id, 'deleteallowed' => Gate::allows('Supervisor')])
-                    </td>
+                    @if(Gate::allows('Supervisor'))
+                        <td>
+                            @include('partials.edit_delete', ['path' => 'accountpost', 'id' => $model->id, 'deleteallowed' => Gate::allows('Supervisor')])
+                        </td>
+                    @endif
                     <td>
                         {{ $model->created_at->format('Y-m-d') }}
                     </td>
@@ -104,7 +104,7 @@
                 @php($subtotalid = $model->contractid)
             @endforeach
             <tr>
-                <th colspan="4">
+                <th colspan="{{(Gate::allows('Supervisor'))?4:3}}">
                     <strong>
                     </strong>
                 </th>
@@ -118,7 +118,7 @@
                 </th>
             </tr>
             <tr>
-                <td colspan="4">
+                <td colspan="{{(Gate::allows('Supervisor'))?4:3}}">
                 </td>
                 <td>
                     <strong>{{ __('Total') }}</strong>
@@ -129,7 +129,7 @@
             </tr>
             @else
                     <tr>
-                        <td colspan="6">
+                        <td colspan="{{(Gate::allows('Supervisor'))?6:5}}">
                             {{__('No account posts found.')}}
                         </td>
                     </tr>

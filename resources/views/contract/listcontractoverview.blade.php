@@ -11,15 +11,17 @@ use Illuminate\Support\Facades\App;
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <form>
-                    <th colspan="5">
-                        <div class="form-inline">
-                            {!! Form::Label('houseid', __('House').':') !!}&nbsp;&nbsp;&nbsp;{!! Form::select('houseid',$houses,$houseid,['class' => 'col-md-3 col form-control', 'onchange' =>  'submit();', 'style' => 'padding: 1px 0 3px 10px;']) !!}
-                        </div>
-                    </th>
-                </form>
-            </tr>
+            @if(sizeof($houses) > 1)
+                <tr  style="border-style: solid solid solid solid; border-width:4px 4px 4px 4px; border-color:green;">
+                    <form>
+                        <th colspan="5">
+                            <div class="form-inline">
+                                {!! Form::Label('houseid', __('House').':') !!}&nbsp;&nbsp;&nbsp;{!! Form::select('houseid',$houses,$houseid,['class' => 'col-md-3 col form-control', 'onchange' =>  'submit();', 'style' => 'padding: 1px 0 3px 10px;']) !!}
+                            </div>
+                        </th>
+                    </form>
+                </tr>
+            @endif
             <tr>
                 <th>{{ __('Period') }}</th>
                 <th>{{__('Arrival') }}</th>
