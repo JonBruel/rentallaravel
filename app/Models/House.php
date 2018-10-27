@@ -153,24 +153,21 @@ class House extends BaseModel
      *
      * @return string The formatted number.
      */
-	public function getLongitudeAttribute($value) {
-        if (static::$ajax) return $value;
-        return static::format($value,12);
+    public function getLongitudeAttribute($value)  {
+        return $this->getNumberAttribute($value, 12);
     }
 
+
     public function setLongitudeAttribute($value) {
-	    if (static::$ajax) $this->attributes['longitude'] = $value;
-        else $this->attributes['longitude'] = static::parse($value);
+        $this->setNumberAttribute($value, 'longitude');
     }
 
     public function getLatitudeAttribute($value) {
-        if (static::$ajax) return $value;
-        return static::format($value,12);
+        return $this->getNumberAttribute($value, 12);
     }
 
     public function setLatitudeAttribute($value) {
-        if (static::$ajax) $this->attributes['latitude'] = $value;
-	    else $this->attributes['latitude'] = static::parse($value);
+        $this->setNumberAttribute($value, 'latitude');
     }
 
     /*

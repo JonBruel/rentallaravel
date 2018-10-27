@@ -126,13 +126,11 @@ class Contract extends BaseModel
     ];
 
     public function getFinalpriceAttribute($value) {
-        if (static::$ajax) return $value;
-        return static::format($value,2);
+        return $this->getNumberAttribute($value, 2);
     }
 
     public function setFinalpriceAttribute($value) {
-        if (static::$ajax) $this->attributes['finalprice'] = $value;
-        else $this->attributes['finalprice'] = static::parse($value);
+        $this->setNumberAttribute($value, 'finalprice');
     }
 
     /*

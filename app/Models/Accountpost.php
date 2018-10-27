@@ -78,13 +78,11 @@ class Accountpost extends BaseModel
     }
 
     public function getAmountAttribute($value) {
-        if (static::$ajax) return $value;
-        return static::format($value,2);
+        return $this->getNumberAttribute($value, 2);
     }
 
     public function setAmountAttribute($value) {
-        if (static::$ajax) $this->attributes['amount'] = $value;
-        else $this->attributes['amount'] = static::parse($value);
+        $this->setNumberAttribute($value, 'amount');
     }
 
     protected $dates = ['returndate'];

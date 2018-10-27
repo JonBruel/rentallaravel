@@ -70,4 +70,17 @@ class BaseModel extends Model
     {
         return null;
     }
+
+    protected function getNumberAttribute($value, int $decimals, $culture = '', $format = null)
+    {
+        if (static::$ajax) return $value;
+        return static::format($value, $decimals);
+    }
+
+    protected function setNumberAttribute($value, string $field)
+    {
+        if (static::$ajax) $this->attributes[$field] = $value;
+        else $this->attributes[$field] = static::parse($value);
+    }
+
 }

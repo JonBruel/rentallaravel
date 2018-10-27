@@ -158,13 +158,11 @@ class Batchtask extends BaseModel
     }
 
     public function getPaymentbelowAttribute($value) {
-        if (static::$ajax) return $value;
-        return static::format($value,0, '', ['style' => 'percent']);
+        return $this->getNumberAttribute($value, 0, '', ['style' => 'percent']);
     }
 
     public function setPaymentbelowAttribute($value) {
-        if (static::$ajax) $this->attributes['paymentbelow'] = $value;
-        else $this->attributes['paymentbelow'] = static::parse($value);
+        $this->setNumberAttribute($value, 'paymentbelow');
     }
 
 	public function posttype()
