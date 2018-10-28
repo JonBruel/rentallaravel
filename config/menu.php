@@ -300,7 +300,7 @@ return [
     ],
     12000 => [
         'text' => 'House Adm.',
-        'path' => 'house/index?menupoint=12110',
+        'path' => 'contract/annualcontractoverview?menupoint=12050',
         'parentid' => 12000,
         'cssclass' => 'menulevel1',
         'role' => 100,
@@ -360,7 +360,7 @@ return [
     ],
     14000 => [
         'text' => 'Setup',
-        'path' => 'setup/listowners?menupoint=14010',
+        'path' => 'setup/liststandardemails?menupoint=14040',
         'parentid' => 14000,
         'cssclass' => 'menulevel1',
         'role' => 10,
