@@ -84,22 +84,28 @@ class SetDefaults {
         if (session('defaultHouse', -1) != -1)
         {
             $defaultHouse = session('defaultHouse');
-            if (!session($defaultHouse.'housedescriptions'))
+
+            $savehousedescriptions = false;
+            if ($savehousedescriptions)
             {
-                $housedescriptions = [];
-                foreach(HouseI18n::where('id', $defaultHouse)->get() as $des) $housedescriptions[$des->culture] = $des;
-                session([$defaultHouse.'housedescriptions' => $housedescriptions]);
+                if (!session($defaultHouse.'housedescriptions'))
+                {
+                    $housedescriptions = [];
+                    foreach(HouseI18n::where('id', $defaultHouse)->get() as $des) $housedescriptions[$des->culture] = $des;
+                    session([$defaultHouse.'housedescriptions' => $housedescriptions]);
+                }
+
+                //Store information used for meta tags in the session
+                $housedescriptions = session($defaultHouse.'housedescriptions');
+                if (array_key_exists($culture, $housedescriptions))
+                {
+                    session(['keywords' => $housedescriptions[$culture]->keywords]);
+                    $descriptions = explode('|', $housedescriptions[$culture]->seo);
+                    $ran = random_int(0, sizeof($descriptions)-1);
+                    session(['description' => $descriptions[$ran]]);
+                }
             }
 
-            //Store information used for meta tags in the session
-            $housedescriptions = session($defaultHouse.'housedescriptions');
-            if (array_key_exists($culture, $housedescriptions))
-            {
-                session(['keywords' => $housedescriptions[$culture]->keywords]);
-                $descriptions = explode('|', $housedescriptions[$culture]->seo);
-                $ran = random_int(0, sizeof($descriptions)-1);
-                session(['description' => $descriptions[$ran]]);
-            }
         }
 
         session(['host' => config('app.host')]);

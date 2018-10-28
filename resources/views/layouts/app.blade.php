@@ -53,15 +53,15 @@
 
                             @if($newlevel == 1 and sizeof($item['childrenmap']) > 0)
                                 <div class="dropdown">
-                                    <button class="btn btn-dropdown dropdown-toggle" data-toggle="dropdown" style="margin-left: 3px">
+                                    <button  onclick="window.location = '/{{$item['path']}}'" class="btn btn-dropdown dropdown-toggle" data-toggle="dropdown" style="margin-left: 3px">
                                         <span style="font-weight: {{$strong}}">{{ __($item['text']) }}</span><span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
                             @endif
 
                             @if($newlevel == 1 and sizeof($item['childrenmap']) == 0)
-                                    <button class="btn btn-dropdown " style="margin-left: 3px">
-                                       <a  style="color: black" href="/{{$item['path']}}"><span style="font-weight: {{$strong}}">{{ __($item['text']) }}</span></a>
+                                    <button onclick="window.location = '/{{$item['path']}}'" class="btn btn-dropdown " style="margin-left: 3px">
+                                       <a style="color: black" href="/{{$item['path']}}"><span style="font-weight: {{$strong}}">{{ __($item['text']) }}</span></a>
                                     </button>
                             @endif
 

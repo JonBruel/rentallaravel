@@ -79,10 +79,10 @@
                     oc = '';
                     if (month.vacancies > 0)
                     {
-                        om += 'onmouseover="highlight(\''+month.month+'\')"';
+                        //om += 'onmouseover="highlight(\''+month.month+'\');false;"';
                         oc += 'onclick="order('+month.id+');"';
                     }
-                    content +=  '<div class="row">' +
+                    content +=  '<div class="row" style="z-index: 1000">' +
                         '<div style="'+style+'" class="col-sm-12" '+om+' '+oc+' id="'+month.month+'" title="'+title+'" data-toggle="tooltip">' + month.text + '</div>' +
                         '</div>';
                 });
