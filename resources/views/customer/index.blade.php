@@ -5,8 +5,8 @@
         <span class='glyphicon glyphicon-plus'></span>
     </a>
     <br />
-    <div class="table-responsive">
-        <table class="table table-striped"  style="max-width:98%;">
+    <div class="table-responsive" style="max-width:100%">
+        <table class="table table-striped"  style="max-width:99%; margin-left:2px">
             <thead>
             <tr>
                 <th colspan="2">{{__('Customer type')}}</th>

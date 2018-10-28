@@ -36,7 +36,7 @@ class AfterMilliTimer
         //$request->getSession()->flash('timer',$lapse);
         \Session::flash('timer',$lapse);
 
-        $response->header('X-Through-Controller','Yes'); //For test
+        //$response->header('X-Through-Controller','Yes'); //For test
 
         //I don't remember if these lines are used at all.
         $response->header("pragma", "no-cache");

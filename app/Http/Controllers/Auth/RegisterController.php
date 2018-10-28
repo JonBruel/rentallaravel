@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use App\Models\Customer;
 use App\Models\VerifyUser;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Mail\VerifyMail;
 use Illuminate\Support\Facades\Mail;
+use ValidationAttributes;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Auth\Events\Registered;
 
 class RegisterController extends Controller
 {
@@ -53,11 +57,12 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
+        $this->validator = Validator::make($data, [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:customer',
             'password' => 'required|string|min:6|confirmed',
         ]);
+        return $this->validator;
     }
 
     /**
@@ -123,6 +128,45 @@ class RegisterController extends Controller
         //Other customer-related settings:
         $user->ownerid = config('app.restrictcustomerstoowner', 0);
         $user->save();
+        session()->flash('warning', __('Wellcome, please check you mail box and confirm the mail address. Please fill in the missing information under "My account"'));
         return redirect()->intended($this->redirectPath());
+    }
+
+    /**
+     * Show the application registration form. Overwritten.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        $vattr = new ValidationAttributes(new Customer());
+        return view('auth.register', ['vattr' => $vattr, 'name' => '', 'email' => session('email', '')])->withHeader('Cache-Control', 'no-cache, must-revalidate');
+    }
+
+    /**
+     * Handle a registration request for the application. Overwritten as the original version
+     * does not work on smartphones.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+
+        //Redirects back if not validated
+        if ($this->validator($request->all())->passes())
+        {
+            event(new Registered($user = $this->create($request->all())));
+
+            $this->guard()->login($user);
+
+            return $this->registered($request, $user)
+                ?: redirect($this->redirectPath());
+        }
+
+        $vattr = new ValidationAttributes(new Customer());
+        return view('auth.register', ['vattr' => $vattr, 'name' => Input::get('name'), 'email' => Input::get('email')])->withHeader('Cache-Control', 'no-cache, must-revalidate')->withErrors($this->validator);
+
+
     }
 }

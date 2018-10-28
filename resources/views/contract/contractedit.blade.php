@@ -4,6 +4,14 @@
     @if(Gate::allows('Administrator'))<h4>{{$models[0]->customer->name}}, {{__('Contract').': '.$models[0]->id}}</h4>@endif
     <div class="table">
         {!! Form::open(['action' => ['ContractController@contractupdate', $models[0]], 'class' => 'form-horizontal', 'autocomplete' => 'off']) !!}
+        @if(Gate::allows('Administrator'))
+            {!! Form::submit(__('Save changes'),['class' => "btn btn-primary col col-md-2", 'name' => 'Book']); !!}
+        @else
+            {!! Form::submit(__('Book house'),['class' => "btn btn-primary col col-md-12", 'name' => 'Book']); !!}
+        @endif
+        @if(Gate::allows('Owner'))
+            {!! Form::submit(__('Delete booking'),['class' => "btn btn-primary", 'name' => 'Delete']); !!}
+        @endif
         <br />
         <br />
         @if ($errors->any())

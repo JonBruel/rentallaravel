@@ -122,6 +122,7 @@ class Customer extends BaseModel
 
 
     public $rules = [
+        'password' => ['required', 'between:6,51'],
         'name' => ['required', 'between:5,51'],
         'address1' => ['required', 'between:3,51'],
         'country' => ['required', 'between:3,51'],
