@@ -93,6 +93,7 @@ Route::get('/home/listtestimonials', 'HomeController@listtestimonials');
 Route::post('/home/createtestimonial', 'HomeController@createtestimonial');
 Route::get('/home/showmap', 'HomeController@showmap');
 Route::get('/home/checkbookings', 'HomeController@checkbookings');
+Route::get('/home/checkbookingslist', 'HomeController@checkbookingslist');
 Route::get('/home/search', 'HomeController@search');
 Route::post('/home/search', 'HomeController@search');
 Route::get('/home/listhouses', 'HomeController@listhouses');

@@ -38,7 +38,7 @@
     <div class="row" id="family" style="margin-bottom: 5px">
         <div class="col-2 family"></div><div class="col-9">{{__('Turquoise days are for private use.')}} </div>
     </div>
-
+    <a class="btn btn-success col-md-12" href="/home/checkbookings?menupoint=10020&listtype=list">{{__('Change to list view')}}</a>
     </p>
     <br />
     <p class="header" id="tip"><?php echo __('For prices: move cursor to date, click to order.');?>

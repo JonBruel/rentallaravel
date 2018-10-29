@@ -171,6 +171,8 @@ class HomeController extends Controller
      */
     public function checkbookings()
     {
+        if (Input::get('listtype')) session(['listtype' => Input::get('listtype')]);
+        if (session('listtype') == 'list') return $this->checkbookingslist();
 
         $this->checkHouseChoice('home/checkbookings'.'?menupoint='.session('menupoint'));
 
@@ -209,6 +211,25 @@ class HomeController extends Controller
         return view('home/checkbookings', ['house' => $house, 'cal' => $cal, 'starttime' => $starttime, 'pager' => $pager, 'elements' => $elements, 'offset' => ($yearstart-1), 'hidesalt' => true])
                 ->withHeader('Cache-Control', 'no-cache, must-revalidate');
 
+    }
+
+    /**
+     * Alternative view to chackbooking, where the overview is shown as
+     * a list of rental periods, one year a page
+     *
+     * @return mixed
+     */
+    public function checkbookingslist()
+    {
+        if (Input::get('listtype')) session(['listtype' => Input::get('listtype')]);
+        if (session('listtype') == 'calendar') return $this->checkbookings();
+        $this->checkHouseChoice('home/checkbookings'.'?menupoint='.session('menupoint'));
+
+        $defaultHouse = session('defaultHouse' , config('app.default_house'));
+        $models = Periodcontract::filter(Input::all())->where('houseid', $defaultHouse)->whereDate('from', '>=', Carbon::now())->paginate(52);
+
+        return view('home/checkbookingslist', ['models' => $models, 'house' => House::Find($defaultHouse),  'hidesalt' => true])
+            ->withHeader('Cache-Control', 'no-cache, must-revalidate');
     }
 
     /**
