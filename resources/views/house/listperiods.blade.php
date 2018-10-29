@@ -3,7 +3,7 @@
     <h3>{{__('List or edit periods')}} @if(sizeof($houses) == 2){{$houses[1]}}@endif</h3>
 
     <br/>
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         <table class="table table-striped">
             @if(sizeof($houses) > 2)
             <tr   style="border-style: solid solid solid solid; border-width:4px 4px 4px 4px; border-color:green;">

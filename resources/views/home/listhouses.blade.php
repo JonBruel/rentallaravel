@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{__('Choose house')}}</h3>
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         <table class="table table-striped">
             <tbody>
             @foreach($models as $model)

@@ -7,7 +7,7 @@
     {!! Form::submit(__('Save changes'),['class' => "btn btn-primary", 'name' => 'Save']); !!}
     <br /><br />
     @php($seqnumber = 0)
-    <div class="table-responsive  col-md-12">
+    <div class="table-responsive  table-sm col-md-12">
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>

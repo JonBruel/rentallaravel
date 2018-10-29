@@ -7,12 +7,11 @@ use Illuminate\Support\Facades\App;
 @section('content')
     <h3>{{ __('Commercial house usage over the entire year') }}</h3>
     <br />
-    <br /><br />
     @php
         $contractamount = 0;
         $paid = 0;
     @endphp
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         <table class="table table-striped">
             <thead>
             <tr  style="border-style: solid solid solid solid; border-width:4px 4px 4px 4px; border-color:green;">

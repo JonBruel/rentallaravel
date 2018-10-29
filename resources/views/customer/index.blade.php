@@ -5,7 +5,7 @@
         <span class='glyphicon glyphicon-plus'></span>
     </a>
     <br />
-    <div class="table-responsive" style="max-width:100%">
+    <div class="table-responsive table-sm" style="max-width:100%">
         <table class="table table-striped"  style="max-width:99%; margin-left:2px">
             <thead>
             <tr>

@@ -2,7 +2,7 @@
 @section('content')
     <h3>{{__('Account posts')}}</h3>
     <br /><br />
-    <div class="table-responsive col-md-12">
+    <div class="table-responsive col-md-12 table-sm">
         <table class="table table-striped">
             <tr>
                 @if(Gate::allows('Supervisor'))
@@ -33,7 +33,7 @@
                         </td>
                     @endif
                     <td>
-                        {{ $model->created_at->format('Y-m-d') }}
+                        {{ $model->created_at->format('d-m-Y') }}
                     </td>
                     <td>
                         {{__($model->text)}}

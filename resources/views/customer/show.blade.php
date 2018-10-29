@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{__('Customer')}}</h3>
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         @foreach($fields as $field)
         <dl class="dl-horizontal row">
             <dt class="col-md-5 col">

@@ -209,8 +209,8 @@ class MyAccountController extends Controller
         $vattr = null;
         if (sizeof($contracts) > 0)
         {
-            $vattr = new ValidationAttributes($contract);
             $contract = $contracts[0];
+            $vattr = new ValidationAttributes($contract);
         }
         else session()->flash('warning', __('There are no contracts to show.'));
         return view('myaccount/edittime', ['models' => $contracts, 'vattr' => $vattr]);
@@ -233,9 +233,9 @@ class MyAccountController extends Controller
 
             //Empty values defaults to period start/end
             $landingdatetime = Input::get('landingdatetime_'.$contract->id);
-            if ($landingdatetime == '') $landingdatetime = $contractoverview->from->format('Y-m-d');
+            if ($landingdatetime == '') $landingdatetime = $contractoverview->from->format('d-m-Y');
             $departuredatetime = Input::get('departuredatetime_'.$contract->id);
-            if ($departuredatetime == '') $departuredatetime = $contractoverview->to->format('Y-m-d');
+            if ($departuredatetime == '') $departuredatetime = $contractoverview->to->format('d-m-Y');
 
             $contract->landingdatetime = Carbon::parse($landingdatetime);
             $contract->departuredatetime = Carbon::parse($departuredatetime);

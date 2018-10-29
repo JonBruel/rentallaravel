@@ -394,7 +394,7 @@ class HouseController extends Controller
                     $lastperiod = Period::where('houseid', $houseid)->orderBy('to', 'desc')->first();
                     if ($lastperiod)
                     {
-                        $data['seasonstart'][$i] = $lastperiod->to->format('Y-m-d');
+                        $data['seasonstart'][$i] = $lastperiod->to->format('d-m-Y');
                         $data['seasonend'][$i] = $data['seasonstart'][$i];
                         $data['basepersons'][$i] = $lastperiod->basepersons;
                         $data['maxpersons'][$i] = $lastperiod->maxpersons;
@@ -466,7 +466,7 @@ class HouseController extends Controller
             }
         }
 
-        //echo('Redirecting test: '.Input::get('test', 'nothing') . ' seasonend 0: ' .$seasonend[0]->format('Y-m-d'));
+        //echo('Redirecting test: '.Input::get('test', 'nothing') . ' seasonend 0: ' .$seasonend[0]->format('d-m-Y'));
         if (sizeof($errors) > 0)
         {
             $success = __('Noting created, please check the errors below.');

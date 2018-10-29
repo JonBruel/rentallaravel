@@ -2,7 +2,7 @@
 @section('content')
     <h4>{{$models[0]->house->name}}, {{$models[0]->house->address1}}, {{$models[0]->house->country}}</h4>
     <h4>{{$models[0]->customer->name}}, {{__('Contract').': '.$models[0]->id}}</h4>
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         {!! Form::model($models[0], ['action' => ['CustomerController@update', $models[0]], 'class' => 'form-horizontal']) !!}
         <br />
         <br />
@@ -124,13 +124,13 @@
         $(document).ready(getWeeks(0));
         $(function() {
             $('#landingdatetime').datetimepicker({ language: '{{str_replace('_', '-', App::getLocale())}}',
-                format: 'yyyy-mm-dd hh:ii',
+                format: 'dd-mm-yyyy hh:ii',
                 minuteStep: 30,
                 autoclose: true,
                 startView: 1});
 
             $('#departuredatetime').datetimepicker({ language: '{{str_replace('_', '-', App::getLocale())}}',
-                format: 'yyyy-mm-dd hh:ii',
+                format: 'dd-mm-yyyy hh:ii',
                 minuteStep: 30,
                 autoclose: true,
                 startView: 1});

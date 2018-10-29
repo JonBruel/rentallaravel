@@ -2,7 +2,7 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{ __('Edit house') }}</h3>
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         {!! Form::model($models[0], ['action' => ['HouseController@update', $models[0]]]) !!}
         {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
         <a href="/house/edithousehtml/{{$models[0]->id}}" class="btn btn-success" role="button">{{__('Add/edit text/pictures')}}</a>

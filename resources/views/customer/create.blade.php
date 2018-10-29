@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{__('Insert new customer')}}</h3>
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         {!! Form::model($models[0], ['action' => ['CustomerController@store', $models[0]]]) !!}
         {!! Form::submit(__('Create'),['class' => "btn btn-primary"]); !!}
         <br />

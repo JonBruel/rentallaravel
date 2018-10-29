@@ -84,11 +84,11 @@ class Batchlog extends BaseModel
         switch ($fieldname)
         {
             case 'statusid':
-                return $this->batchstatus->status;
+                return __($this->batchstatus->status);
             case 'posttypeid':
-                return $this->posttype->posttype;
+                return __($this->posttype->posttype);
             case 'batchtaskid':
-                return $this->batchtask->name;
+                return __($this->batchtask->name);
             case 'houseid':
                 return $this->house->name;
             default:
@@ -107,11 +107,17 @@ class Batchlog extends BaseModel
         switch ($fieldname)
         {
             case 'statusid':
-                return  Batchstatus::all()->pluck('status', 'id')->toArray();
+                return  Batchstatus::all()->pluck('status', 'id')
+                    ->map(function ($item, $key) {return $item = __($item);} )
+                    ->toArray();
             case 'posttypeid':
-                return Posttype::all()->pluck('posttype', 'id')->toArray();
+                return Posttype::all()->pluck('posttype', 'id')
+                    ->map(function ($item, $key) {return $item = __($item);} )
+                    ->toArray();
             case 'batchtaskid':
-                return Batchtask::where('houseid', $this->houseid)->pluck('name', 'id')->toArray();
+                return Batchtask::where('houseid', $this->houseid)->pluck('name', 'id')
+                    ->map(function ($item, $key) {return $item = __($item);} )
+                    ->toArray();
             case 'emailid':
                 return Standardemail::where('houseid', $this->houseid)->pluck('description', 'id')->toArray();
             case 'houseid':

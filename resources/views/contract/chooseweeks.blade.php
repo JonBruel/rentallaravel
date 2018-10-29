@@ -5,7 +5,7 @@ use Propaganistas\LaravelIntl\Facades\Number;
 use Illuminate\Support\Facades\App;
 ?>
 @section('content')
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         {!! Form::open(['url' => "contract/preparecontract"]) !!}
             <table class="table table-striped">
                 <tr>

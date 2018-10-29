@@ -3,7 +3,7 @@
     <h3>{{ __('Merge customer') }}</h3>
     <div class="alert alert-warning border border-primary">{{ __('merge.customer.explain') }}</div>
     <br /><br />
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         <table class="table table-striped">
             <thead>
             <tr>

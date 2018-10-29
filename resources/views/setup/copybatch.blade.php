@@ -3,7 +3,7 @@
 @section('content')
 
     <h3>{{ __('Please confirm') }}</h3>
-     <div class="table-responsive">
+     <div class="table-responsive table-sm">
         <table class="table table-striped">
                 <tr>
                     <td>

@@ -242,8 +242,8 @@ class ContractController extends Controller
 
             //Set default arrival and departure times if not set
             $contractoverview = Contractoverview::Find($contractid);
-            $landingdatetime = $contractoverview->from->format('Y-m-d');
-            $departuredatetime = $contractoverview->to->format('Y-m-d');
+            $landingdatetime = $contractoverview->from->format('d-m-Y');
+            $departuredatetime = $contractoverview->to->format('d-m-Y');
 
             if (!$model->landingdatetime) $model->landingdatetime = Carbon::parse($landingdatetime);
             if (!$model->departuredatetime) $model->departuredatetime = Carbon::parse($departuredatetime);
@@ -328,7 +328,7 @@ class ContractController extends Controller
         if (!Input::get('checkedWeeks')) return back()->withInput()->with('warning',  __('Please choose at least one period').'.');
         foreach (Input::get('checkedWeeks') as $periodid) {
             $period = Periodcontract::find($periodid);
-            $firstday = $period->from->format('Y-m-d');
+            $firstday = $period->from->format('d-m-Y');
             if ($lastday)
             {
                 if ($lastday != $firstday)
@@ -337,7 +337,7 @@ class ContractController extends Controller
                     return back()->withInput()->with('warning',  $weeksnotconsecutive);
                 }
             }
-            $lastday = $period->to->format('Y-m-d');
+            $lastday = $period->to->format('d-m-Y');
         }
 
         // Delete old period reservations as they might have been changed
@@ -390,9 +390,9 @@ class ContractController extends Controller
             $contractoverview = Contractoverview::Find($contractid);
             //Empty values defaults to period start/end
             $landingdatetime = Input::get('landingdatetime_'.$contract->id);
-            if ($landingdatetime == '') $landingdatetime = $contractoverview->from->format('Y-m-d');
+            if ($landingdatetime == '') $landingdatetime = $contractoverview->from->format('d-m-Y');
             $departuredatetime = Input::get('departuredatetime_'.$contract->id);
-            if ($departuredatetime == '') $departuredatetime = $contractoverview->to->format('Y-m-d');
+            if ($departuredatetime == '') $departuredatetime = $contractoverview->to->format('d-m-Y');
 
             $contract->landingdatetime = Carbon::parse($landingdatetime);
             $contract->departuredatetime = Carbon::parse($departuredatetime);

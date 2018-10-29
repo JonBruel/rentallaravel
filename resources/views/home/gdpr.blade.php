@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <div class="table-responsive">
+    <div class="table-responsive table-sm)">
         <div style="margin-top: 30px">
             {!! __('gdpr') !!}
         </div>

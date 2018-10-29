@@ -19,7 +19,7 @@
         }
     </style>
     <h3>{{ __('Standardemail  for').' '.$models[0]->house->name }}</h3>
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         {!! Form::model($models[0], ['action' => ['SetupController@updatestandardemail', $models[0]]]) !!}
         {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
         <br />
@@ -77,7 +77,7 @@
     <script type="text/javascript">
         $(function() {
             $('#activefrom').datetimepicker({ language: '{{str_replace('_', '-', App::getLocale())}}',
-                format: 'yyyy-mm-dd',
+                format: 'dd-mm-yyyy',
                 autoclose: true,
                 minView: 1,
                 startView: 3});

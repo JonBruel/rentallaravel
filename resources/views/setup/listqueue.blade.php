@@ -3,7 +3,7 @@
     <h3>{{ __('Batchlog') }}</h3>
     <br />
     <br /><br />
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         <table class="table table-striped">
             <thead>
             <tr>

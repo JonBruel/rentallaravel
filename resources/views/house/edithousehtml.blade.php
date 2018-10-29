@@ -24,7 +24,7 @@
         }
     </style>
     <h3>{{ __('Edit house') }}</h3>
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>

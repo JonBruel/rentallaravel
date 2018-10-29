@@ -11,7 +11,7 @@ return [
     | and no messages will be sent to anyone but jbr@consiglia.dk. This information
     | may also be retrieved from the config table.
     */
-    'testmessage' =>  '',
+    'testmessage' =>  'Testmail only test from new rental system:',
 
     /*
     |--------------------------------------------------------------------------

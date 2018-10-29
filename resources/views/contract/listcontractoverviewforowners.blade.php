@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\App;
 @section('content')
     <h3>{{ __('List of leases. Use the selectboxes to filter.') }}</h3>
     <br />
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         <table class="table table-striped">
             <thead>
             <tr  style="border-style: solid solid solid solid; border-width:4px 4px 4px 4px; border-color:green;">

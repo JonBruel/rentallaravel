@@ -171,11 +171,11 @@ class AjaxController extends Controller
         {
             if ($month->vacancies > 0)
             {
-               $text = Carbon::parse($month->month)->formatLocalized('%B %Y').": ".__('There are vacancies').'!';
+               $text = Carbon::parse($month->month)->formatLocalized('%B %Y').": ".__('There are vacancies');
             }
             else
             {
-               $text = Carbon::parse($month->month)->formatLocalized('%B %Y').": ".__('Sold out').'!';
+               $text = Carbon::parse($month->month)->formatLocalized('%B %Y').": ".__('Sold out');
             }
             $month->text = $text;
         }
@@ -241,7 +241,7 @@ class AjaxController extends Controller
                 $forJson[] = ['id' => $p->id, 'committed' => $committed, 'periodtext' => $p->getEnddays($culture),
                     'chosen' => $chosen, 'personprice' => $p->personprice, 'maxpersons' => $p->maxpersons,
                     'basepersons' => $p->basepersons, 'baseprice' => $p->baseprice, 'warning' => $warning,
-                    'rate' => $rate, 'from' => $p->from->format('Y-m-d'), 'to' => $p->to->format('Y-m-d')];
+                    'rate' => $rate, 'from' => $p->from->format('d-m-Y'), 'to' => $p->to->format('d-m-Y')];
             }
         }
 

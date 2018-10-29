@@ -58,7 +58,9 @@ class Standardemail extends BaseModel
         switch ($fieldname)
         {
             case 'ownerid':
-                return  Customer::where('customertype', 10)->pluck('name', 'id')->toArray();
+                return  Customer::where('customertype', 10)->pluck('name', 'id')
+                    ->map(function ($item, $key) {return $item = __($item);} )
+                    ->toArray();
             case 'houseid':
                 return  House::where('ownerid', $this->ownerid)->pluck('name', 'id')->toArray();
             default:

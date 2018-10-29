@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\App;
     <h3>{{ __('Customers and arrival/departure times') }}</h3>
     <br />
     <br /><br />
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         <table class="table table-striped">
             <thead>
             @if(sizeof($houses) > 1)
@@ -32,8 +32,8 @@ use Illuminate\Support\Facades\App;
             @foreach($contractoverview as $model)
                 <tr>
                     <td>{{ $model->contract->getPeriodtext(\App::getLocale())}}</td>
-                    <td>{{($model->contract->landingdatetime)?$model->contract->landingdatetime->format('Y-m-d h:m'):''}}</td>
-                    <td> {{($model->contract->departuredatetime)?$model->contract->departuredatetime->format('Y-m-d h:m'):''}}</td>
+                    <td>{{($model->contract->landingdatetime)?$model->contract->landingdatetime->format('d-m-Y h:m'):''}}</td>
+                    <td> {{($model->contract->departuredatetime)?$model->contract->departuredatetime->format('d-m-Y h:m'):''}}</td>
                     <td>{{ $model->customer->name }}</td>
                     <td>{{ $model->persons }}</td>
                 </tr>

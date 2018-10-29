@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{ __('What customers have said about')}} {{$house->name}}</h3>
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         <table class="table table-striped">
             <tbody>
             @if(Auth::check())
@@ -19,7 +19,7 @@
             @foreach($models as $model)
                 <tr>
                     <td colspan="1">
-                       {{ $model->created_at->format('Y-m-d') }}
+                       {{ $model->created_at->format('d-m-Y') }}
                         <br /><br />
                         {{ $model->text }}
                         @if($administrator)

@@ -35,13 +35,13 @@
         $(function() {
             @foreach($models as $model)
                 $('#landingdatetime_{{$model->id}}').datetimepicker({ language: '{{str_replace('_', '-', App::getLocale())}}',
-                    format: 'yyyy-mm-dd hh:ii',
+                    format: 'dd-mm-yyyy hh:ii',
                     minuteStep: 30,
                     autoclose: true,
                     startView: 1});
 
                 $('#departuredatetime_{{$model->id}}').datetimepicker({ language: '{{str_replace('_', '-', App::getLocale())}}',
-                    format: 'yyyy-mm-dd hh:ii',
+                    format: 'dd-mm-yyyy hh:ii',
                     minuteStep: 30,
                     autoclose: true,
                     startView: 1});

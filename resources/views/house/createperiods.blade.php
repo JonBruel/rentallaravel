@@ -2,7 +2,7 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{ __('Create periods') }}</h3>
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         <table class="table table-striped">
             {!! Form::open(['name' => 'start', 'url' => '/house/createperiods', 'autocomplete' => 'off']) !!}
             <tr>
@@ -177,13 +177,13 @@
         $(function() {
             @for($i=0;$i<$seasons;$i++)
             $('#data_seasonstart_{{$i}}').datetimepicker({ language: '{{str_replace('_', '-', App::getLocale())}}',
-                format: 'yyyy-mm-dd',
+                format: 'dd-mm-yyyy',
                 minView: 2,
                 autoclose: true,
                 startView: 2});
 
             $('#data_seasonend_{{$i}}').datetimepicker({ language: '{{str_replace('_', '-', App::getLocale())}}',
-                format: 'yyyy-mm-dd',
+                format: 'dd-mm-yyyy',
                 minView: 2,
                 autoclose: true,
                 startView: 2});

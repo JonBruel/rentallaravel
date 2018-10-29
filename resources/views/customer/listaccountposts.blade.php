@@ -3,7 +3,7 @@
     <h3>{{__('Account posts for ')}}{{$customername}}</h3>
     <div class="alert alert-warning border border-primary">{{__('Order: latest first') }}.</div>
     <br /><br />
-    <div class="table-responsive col-md-12">
+    <div class="table-responsive  table-sm col-md-12">
 
         <table class="table table-striped">
             <?php
@@ -82,7 +82,7 @@
                         </td>
                     @endif
                     <td>
-                        {{ $model->created_at->format('Y-m-d') }}
+                        {{ $model->created_at->format('d-m-Y') }}
                     </td>
                     <td>
                         {{__($model->text)}}

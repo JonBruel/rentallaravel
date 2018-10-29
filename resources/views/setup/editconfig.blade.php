@@ -2,7 +2,7 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{ __('Edit configuration') }}</h3>
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         {!! Form::model($models[0], ['action' => ['SetupController@updateconfig', $models[0]]]) !!}
         {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
         <br />

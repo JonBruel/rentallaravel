@@ -1,9 +1,10 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{__('Standard emails')}}</h3>
-    <div class="table-responsive">
+    <div class="table-responsive table-sm">
         <table class="table table-striped">
             <thead>
+            @if((sizeof($owners) > 2) || (sizeof($houses) > 2))
             <tr style="border-style: solid solid solid solid; border-width:4px 4px 4px 4px; border-color:green;">
                 <form id="Filter" action="{{Session::get('sanitizedpath')}}" method="get">
                     <td>
@@ -25,6 +26,7 @@
                      </td>
                 </form>
             </tr>
+            @endif
             <tr>
                 <th>{{ __('Edit') }}</th>
                 <th>{{ __('Email description') }}</th>
@@ -38,7 +40,7 @@
                     <td>
                         <a href="/setup/editstandardemail/{{ $model->id }}?ownerid={{ $ownerid }}" title="{{__('Edit')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-pencil'></span></a>
                     </td>
-                    <td>{{ $model->description }} ({{$model->id}})</td>
+                    <td>{{ __($model->description) }} ({{$model->id}})</td>
                     <td>{{ $model->customer->name }}</td>
                     <td>{{ $model->house->name }}</td>
                 </tr>

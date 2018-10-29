@@ -14,7 +14,7 @@
     </style>
     <h3>{{ __('Error log') }}</h3>
     <br /><br />
-    <div class="table-responsive" style="max-width: 1200px">
+    <div class="table-responsive table-sm" style="max-width: 1200px">
         <table class="table table-bordered table-sm">
             <tbody>
             <tr>
