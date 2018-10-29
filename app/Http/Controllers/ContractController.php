@@ -25,11 +25,13 @@ use App\Models\User;
 use App\Models\Accountpost;
 use App\Models\Emaillog;
 use App\Models\Periodcontract;
+use App\Models\Batchtask;
 use App\Models\Culture;
 use App\Models\Customer;
 use App;
 use App\Models\Contractoverview;
 use Carbon\Carbon;
+use Number;
 
 /**
  * Class ContractController. This is a controller with contains a wast amount of logic
@@ -127,10 +129,53 @@ class ContractController extends Controller
             session()->flash('warning', 'Please login or register to finalize the order.');
             return redirect('login');
         }
+        //Get payment details regarding prepayment
+        $batchtask = Batchtask::where('name', 'Reservation cancelled')->where('houseid', $contract->houseid)->first();
+        $duetext = '';
+        if ($batchtask)
+        {
+            if ($batchtask->usetimedelaystart == 1) $duedate = Carbon::now()->addDays($batchtask->timedelaystart - 7);
+            Contract::$ajax = true;
+            $dueamount = $contract->finalprice*$batchtask->paymentbelow;
+            Contract::$ajax = false;
+            $duetext = __('The pre-payment amount of').' '.$contract->currency->currencysymbol.' '.Number::format($dueamount,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => App::getLocale()]).
+                       ' '.__('must be paid before').' '.$duedate->format('d-m-Y').'. '.__('The mail includes the payment details').'.';
+        }
+
         $printedcontract = $contract->getOrder($contract->customer->culture->culture);
-        return view('contract/commitcontract', ['contract' => $contract, 'printedcontract' => $printedcontract]);
+        return view('contract/commitcontract', ['contract' => $contract, 'printedcontract' => $printedcontract, 'duetext' => $duetext]);
     }
 
+    /**
+     * Under certain conditions we allow for the user to cancel the contract. This will happen just after the contract has been committed,
+     * or it may happen later, if the user tries to tweek the system or if we have provided him with a link to do so. So below
+     * we check if the user is the same as the one who booked, and we check if the user is at least a customer.
+     *
+     * @param int $contractid id of contract
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function cancelorder($contractid)
+    {
+        if (!Gate::allows('Customer')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
+        $user = Auth::user();
+        $contract = Contract::findOrFail($contractid);
+        if ($contract->customerid != $user->id) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
+
+        //Get pre-payment date as expressed when the contract was committed
+        $batchtask = Batchtask::where('name', 'Reservation cancelled')->where('houseid', $contract->houseid)->first();
+        $duedate = Carbon::now()->addDays(7);;
+        if ($batchtask)
+        {
+            if ($batchtask->usetimedelaystart == 1) $duedate = Carbon::now()->addDays($batchtask->timedelaystart - 7);
+        }
+
+        //The user should not be able to cancel if the real date is after the indicated pre-payment date
+        if (Carbon::now()->gt($duedate)) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
+
+        //We are OK here and may detele.
+        $contract->delete();
+        return redirect('/home')->with('warning', __('You have cancelled the booking'));
+    }
 
 
     /**

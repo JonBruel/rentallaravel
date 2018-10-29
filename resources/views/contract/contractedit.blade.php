@@ -5,9 +5,9 @@
     <div class="table">
         {!! Form::open(['action' => ['ContractController@contractupdate', $models[0]], 'class' => 'form-horizontal', 'autocomplete' => 'off']) !!}
         @if(Gate::allows('Administrator'))
-            {!! Form::submit(__('Save changes'),['class' => "btn btn-primary col col-md-2", 'name' => 'Book']); !!}
+            {!! Form::submit(__('Save changes'),['class' => "btn btn-primary col col-md-2", 'name' => 'Book', 'style' => 'opacity: 0.1']); !!}
         @else
-            {!! Form::submit(__('Book house'),['class' => "btn btn-primary col col-md-12", 'name' => 'Book']); !!}
+            {!! Form::submit(__('Book house'),['class' => "btn btn-primary col col-md-12", 'name' => 'Book', 'style' => 'opacity: 0.1']); !!}
         @endif
         @if(Gate::allows('Owner'))
             {!! Form::submit(__('Delete booking'),['class' => "btn btn-primary", 'name' => 'Delete']); !!}
@@ -101,9 +101,9 @@
         </div>
         <br />
         @if(Gate::allows('Administrator'))
-            {!! Form::submit(__('Save changes'),['class' => "btn btn-primary col col-md-2", 'name' => 'Book']); !!}
+            {!! Form::submit(__('Save changes'),['class' => "btn btn-primary col col-md-2", 'name' => 'Book', 'style' => 'opacity: 0.1']); !!}
         @else
-            {!! Form::submit(__('Book house'),['class' => "btn btn-primary col col-md-12", 'name' => 'Book']); !!}
+            {!! Form::submit(__('Book house'),['class' => "btn btn-primary col col-md-12", 'name' => 'Book', 'style' => 'opacity: 0.1']); !!}
          @endif
         @if(Gate::allows('Owner'))
             {!! Form::submit(__('Delete booking'),['class' => "btn btn-primary", 'name' => 'Delete']); !!}
@@ -177,6 +177,7 @@
 
 
         $(document).ready(function(){
+            $("[name='Book']").css('opacity', 0.2);
             getWeeks(0);
         });
 
@@ -236,6 +237,7 @@
          */
         function getWeeks(offset)
         {
+            $("[name='Book']").css('opacity', 0.2);
             cont = false;
             culture = '{{App::getLocale()}}';
             contractid = {{$models[0]->id}};
@@ -277,6 +279,7 @@
                 if ($('#hiddenprice').val() == 0) setFinalprice();
                 setTimeout(function(){cont = true; }, 1000);
                 if ($("#calendar").scrollTop() < 10)  $("#calendar").scrollTop(10);
+                $("[name='Book']").css('opacity', 1);
             });
         }
 

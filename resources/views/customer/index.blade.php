@@ -51,7 +51,7 @@
                         <a href="/customer/merge/{{ $model->id }}"  title="{{__('Move customer accounts to the present user on the system').': '}} {{$model->name}}"  data-toggle="tooltip"><span class='glyphicon glyphicon-transfer'></span></a>
                         <a href="/impersonate/take/{{ $model->id }}"  title="{{__('See site as').': '}} {{$model->name}}"  data-toggle="tooltip"><span class='glyphicon glyphicon-user'></span></a>
                     </td>
-                    <td>{{ $model->name }}</td>
+                    <td>{{ $model->name }} ({{ $model->id }})</td>
                     <td>{{ $model->address1 }}</td>
                     <td>{{ $model->email }}</td>
                 </tr>

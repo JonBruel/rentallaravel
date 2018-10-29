@@ -82,6 +82,7 @@ Route::post('/contract/contractupdate/{id}', 'ContractController@contractupdate'
 Route::get('/contract/listaccountposts/{contractid}', 'ContractController@listaccountposts');
 Route::get('/contract/listmails/{customerid}', 'ContractController@listmails');
 Route::get('/contract/annualcontractoverview', 'ContractController@annualcontractoverview');
+Route::get('/contract/cancelorder/{id}', 'ContractController@cancelorder');
 Route::post('/contract/registerpayment/{contractid}', 'ContractController@registerpayment');
 Route::get('/accountpost/edit/{id}', 'ContractController@accountpostedit');
 Route::delete('/accountpost/destroy/{id}', 'ContractController@accountpostdestroy');

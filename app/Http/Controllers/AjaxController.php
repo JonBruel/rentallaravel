@@ -241,7 +241,7 @@ class AjaxController extends Controller
                 $forJson[] = ['id' => $p->id, 'committed' => $committed, 'periodtext' => $p->getEnddays($culture),
                     'chosen' => $chosen, 'personprice' => $p->personprice, 'maxpersons' => $p->maxpersons,
                     'basepersons' => $p->basepersons, 'baseprice' => $p->baseprice, 'warning' => $warning,
-                    'rate' => $rate, 'from' => $p->from->format('d-m-Y'), 'to' => $p->to->format('d-m-Y')];
+                    'rate' => $rate, 'from' => $p->from->format('Y-m-d'), 'to' => $p->to->format('Y-m-d')];
             }
         }
 

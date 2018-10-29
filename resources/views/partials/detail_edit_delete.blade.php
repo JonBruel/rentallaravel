@@ -14,7 +14,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">{{ __('Do yoy really want to delete?') }}</h4>
+                <h4 class="modal-title" id="myModalLabel">{{ __('Do you really want to delete?') }}</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class='glyphicon glyphicon-remove' aria-hidden="true"></span></button>
             </div>
             <div class="modal-footer">

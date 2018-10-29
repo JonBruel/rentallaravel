@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\App;
         <table class="table table-striped">
             <tr>
                 <th>
-                    <button class="btn btn-success" onclick="cmdPrint('#printerContent');return false;">{{ __('Print this order') }}</button>
+                    <button class="btn btn-primary" onclick="cmdPrint('#printerContent');return false;">{{ __('Print this order') }}</button>
                     <br /><br />
                     <p>
                         {{ __('Thank you! The order will be E-mailed shortly using the E-mailaddress you have given us.') }}
                     </p>
                     <p>
-                        {{ __('Lejeaftalen vises nedenfor. Husk at betale depositum inden for tidsfristen angivet i mailen.') }}
+                        {{ __('The contract is shown below') }}. {{ $duetext }}
                     </p>
                 </th>
             </tr>
@@ -34,11 +34,12 @@ use Illuminate\Support\Facades\App;
                 </th>
             </tr>
         </table>
-
+        <button class="btn btn-success"  id="cancel" data-toggle="tooltip" title="{{__('If you cancel now, you need to reorder to book the house')}}" onclick="window.location = '/contract/cancelorder/{{$contract->id}}'">{{ __('Cancel order') }}</button>
     </div>
 @endsection
 @section('scripts')
     <script type="text/javascript">
+
         function cmdPrint(element)
         {
             $(element).print();
