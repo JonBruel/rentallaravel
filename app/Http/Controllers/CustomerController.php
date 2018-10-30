@@ -187,7 +187,7 @@ class CustomerController extends Controller
         }
 
         $models = Customer::filter(Input::all())->sortable('id')->paginate(1);
-        $fields = array_diff(Schema::getColumnListing($models[0]->getTable()), ['created_at', 'updated_at', 'remember_token']);
+        $fields = array_diff(Schema::getColumnListing($models[0]->getTable()), ['created_at', 'updated_at', 'remember_token', 'password']);
         return view('customer/edit', ['models' => $models, 'fields' => $fields, 'vattr' => (new ValidationAttributes($models[0]))->setCast('notes', 'textarea')]);
     }
 

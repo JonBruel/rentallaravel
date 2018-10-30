@@ -277,6 +277,7 @@ class ContractController extends Controller
             //Find contract from id
             if (Input::get('page') == null)
             {
+                if (!Contract::Find($contractid)) return back()->with('warning', __('The contract has been deleted'));
                 $models = Contract::filter(Input::all())->sortable('id')->pluck('id')->all();
                 $page = array_flip($models)[$contractid]+1;
                 Input::merge(['page' => $page]);

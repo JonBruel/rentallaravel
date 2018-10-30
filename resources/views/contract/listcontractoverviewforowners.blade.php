@@ -54,7 +54,7 @@ use Illuminate\Support\Facades\App;
                     @if(sizeof($houses) > 1)
                         <td>{{$model->house->name}}</td>
                     @endif
-                    <td>{{ $model->customer->name }}</td>
+                    <td>{{ $model->customer->name }} ({{ $model->id }})</td>
                     <td>{{ $model->persons }}</td>
                     <td colspan="2">{{ $model->from->formatLocalized('%a %d %B %Y')}} - {{ $model->to->formatLocalized('%a %d %B %Y')}}</td>
                     <td>{{ $model->duration }}</td>
