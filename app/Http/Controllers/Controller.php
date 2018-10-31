@@ -202,4 +202,15 @@ class Controller extends BaseController
         }
     }
 
+    protected function setPageFromId($id, $modelclass)
+    {
+        if (Input::get('page') == null)
+        {
+            $models = $modelclass::filter(Input::all())->sortable('id')->pluck('id')->all();
+            $flipped = array_flip($models);
+            if (!array_key_exists($id, $flipped)) return back()->with('warning', __('The record has been deleted'));
+            $page = $flipped[$id]+1;
+            Input::merge(['page' => $page]);
+        }
+    }
 }

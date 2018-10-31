@@ -274,14 +274,8 @@ class ContractController extends Controller
             //Set rights
             if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
 
-            //Find contract from id
-            if (Input::get('page') == null)
-            {
-                if (!Contract::Find($contractid)) return back()->with('warning', __('The contract has been deleted'));
-                $models = Contract::filter(Input::all())->sortable('id')->pluck('id')->all();
-                $page = array_flip($models)[$contractid]+1;
-                Input::merge(['page' => $page]);
-            }
+            //Find contract page from id
+            $this->setPageFromId($contractid, Contract::class);
 
             $models = Contract::filter(Input::all())->sortable('id')->paginate(1);
             $model = $models[0];
