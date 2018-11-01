@@ -109,11 +109,7 @@ class Controller extends BaseController
     protected function generaledit($id, $modelclass, $view, $onlyFields = null, $plusFields = null, $minusFields = null, $casts = null)
     {
         //Find page from id
-        if (Input::get('page') == null) {
-            $models = $modelclass::filter(Input::all())->sortable('id')->pluck('id')->all();
-            $page = array_flip($models)[$id]+1;
-            Input::merge(['page' => $page]);
-        }
+        $this->setPageFromId($id, $modelclass);
 
         $models = $modelclass::filter(Input::all())->sortable('id')->paginate(1);
 
@@ -202,13 +198,13 @@ class Controller extends BaseController
         }
     }
 
-    protected function setPageFromId($id, $modelclass)
+    protected function setPageFromId($id, $modelclass, $errormessage = null)
     {
         if (Input::get('page') == null)
         {
             $models = $modelclass::filter(Input::all())->sortable('id')->pluck('id')->all();
             $flipped = array_flip($models);
-            if (!array_key_exists($id, $flipped)) return back()->with('warning', __('The record has been deleted'));
+            if (!array_key_exists($id, $flipped)) return back()->with('warning', ($errormessage)?__($errormessage):__('The record has been deleted'));
             $page = $flipped[$id]+1;
             Input::merge(['page' => $page]);
         }

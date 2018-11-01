@@ -89,11 +89,7 @@ class SetupController extends Controller
     {
         if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         //Find page from id
-        if (Input::get('page') == null) {
-            $models = Batchtask::filter(Input::all())->sortable('id')->pluck('id')->all();
-            $page = array_flip($models)[$id]+1;
-            Input::merge(['page' => $page]);
-        }
+        $this->setPageFromId($id, Batchtask::class, 'Batchtask was not found');
 
         $models = Batchtask::filter(Input::all())->sortable('id')->paginate(1);
 
@@ -180,11 +176,7 @@ class SetupController extends Controller
     {
         if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         //Find page from id
-        if (Input::get('page') == null) {
-            $models = Standardemail::filter(Input::all())->sortable('id')->pluck('id')->all();
-            $page = array_flip($models)[$id]+1;
-            Input::merge(['page' => $page]);
-        }
+        $this->setPageFromId($id, Standardemail::class, 'Standardemail was not found');
 
         $models = Standardemail::filter(Input::all())->sortable('id')->paginate(1);
         $cultures = Culture::all();

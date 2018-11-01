@@ -85,11 +85,7 @@ class ContractController extends Controller
         if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
 
         //Find page from id
-        if (Input::get('page') == null) {
-            $models = Contract::filter(Input::all())->sortable('id')->pluck('id')->all();
-            $page = array_flip($models)[$id]+1;
-            Input::merge(['page' => $page]);
-        }
+        $this->setPageFromId($id, Contract::class, 'Contract was not found');
 
         $models = Contract::filter(Input::all())->sortable('id')->paginate(1);
         $fields = Schema::getColumnListing($models[0]->getTable());
