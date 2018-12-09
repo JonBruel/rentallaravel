@@ -281,16 +281,10 @@ $factory->define(App\Models\House::class, function (Faker\Generator $faker) {
         'latitude' => $faker->latitude,
         'longitude' => $faker->longitude,
         'lockbatch' => $faker->boolean,
-        'currencyid' => function () {
-             return factory(App\Models\Currency::class)->create()->id;
-        },
-        'ownerid' => function () {
-             return factory(App\Models\Customer::class)->create()->id;
-        },
+        'currencyid' => 1,
+        'ownerid' => 174,
         'maidid' => $faker->word,
-        'viewfilter' => function () {
-             return factory(App\Models\Customertype::class)->create()->id;
-        },
+        'viewfilter' => 1000,
         'prepayment' => 0.3333,
         'disttobeach' => $faker->randomNumber(),
         'maxpersons' => $faker->boolean,
@@ -327,28 +321,6 @@ $factory->define(App\Models\HouseI18n::class, function (Faker\Generator $faker) 
         'shopping' => $faker->text,
         'environment' => $faker->text,
         'weather' => $faker->text,
-    ];
-});
-
-$factory->define(App\Models\Menu::class, function (Faker\Generator $faker) {
-    return [
-        'parentid' => function () {
-             return factory(App\Models\Menu::class)->create()->id;
-        },
-        'description' => $faker->text,
-        'path' => $faker->word,
-        'customertypes' => $faker->randomNumber(),
-        'sortnumber' => $faker->randomNumber(),
-    ];
-});
-
-$factory->define(App\Models\MenuI18n::class, function (Faker\Generator $faker) {
-    return [
-        'id' => function () {
-             return factory(App\Models\Menu::class)->create()->id;
-        },
-        'culture' => $faker->word,
-        'text' => $faker->word,
     ];
 });
 
