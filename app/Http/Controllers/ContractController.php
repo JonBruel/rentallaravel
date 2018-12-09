@@ -118,8 +118,8 @@ class ContractController extends Controller
             Log::info('Contract committed by user: '.$user->id.' for customer: '.$contract->customerid.'. Contractid is: '.$contract->id.'. Message from commitOrder: '.$message );
         }
 
-        //After having saved the contract we need to see if the userid is 10, if so it should be replaced before the contract is committed.
-        if ($contract->customerid == 10)
+        //After having saved the contract we need to see if the customer email is not.logged.in@consiglia.dk, if so it should be replaced before the contract is committed.
+        if ($contract->customer->email == "not.logged.in@consiglia.dk")
         {
             session(['redirectTo' => 'contract/commitcontract/'.$contractid.'?loginredirected=yes']);
             session()->flash('warning', 'Please login or register to finalize the order.');
@@ -176,7 +176,7 @@ class ContractController extends Controller
 
     /**
      * This method gives the input to the view used by the administrator to edit an
-     * existing contract.
+     * existing contract or the end user to create a new contract.
      *
      * Two use cases are handled here:
      * * We edit an existing contract, $contractid is then not 0
@@ -205,14 +205,10 @@ class ContractController extends Controller
 
             //Find customerid of logged in user or assign a temporary id id user is not logged in.
             //In the latter case, we will ask the user to login later. But not now, we want to delay
-            //the hazzle of loggin in to later.
+            //the hazzle of logging in to later in the order process.
             if (!(\Auth::check()))
             {
-                //TODO: Check if we can do away with this session setting
-                session(['conserveuserinfo' => 1]);
-                $user = User::find(10);
-                //TODO: Modify logic around users not logged in
-                //$this->loginRedirect('temp', 'hX16BvylOmps', 'contract/preparecontract');
+                $user = User::where("email","not.logged.in@consiglia.dk")->first();
             }
             else
             {

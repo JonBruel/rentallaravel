@@ -14,10 +14,10 @@
                     <strong>{{ __('Date') }}</strong>
                 </td>
                 <td>
-                    <strong>{{ __('Text') }}</strong>
+                    <strong>{{ __('Post type') }}</strong>
                 </td>
                 <td>
-                    <strong>{{ __('Text') }}</strong>
+                    <strong>{{ __('Post comment') }}</strong>
                 </td>
                 <td>
                     <strong>{{ __('Amount') }} {{$currencysymbol}}</strong>
