@@ -1,5 +1,12 @@
 @extends('layouts.app')
 @section('content')
+    <style>
+        @media (max-width: 800px) {
+            .img-class {
+                max-height: 100%;
+            }
+        }
+    </style>
     <div id="galleryCarousel" class="carousel slide" data-ride="carousel">
 
         <div class="carousel-inner" role="listbox">
@@ -10,7 +17,7 @@
                 ?>
                 <figure class="carousel-item {{$active}}" style="background-color: #5a6268;">
                     <img src="{{$pictureurl}}" alt="{{@trans($picturearray['text'][$key])}}" class="d-block mx-auto"
-                    style="height: 555px; max-width: 100%; ">
+                         style="max-height: 555px; max-width: 100%; ">
                     <div class="carousel-caption" style="background: radial-gradient(grey, #5a6268); top: 0;  opacity: 0.80; bottom: auto; color: darkblue; padding-top: 5px; padding-bottom: 5px">
                         <h4 style="margin-top: 0px">{{ __($picturearray['text'][$key])}}</h4>
                     </div>
