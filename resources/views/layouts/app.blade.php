@@ -7,12 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{{session('description')}}" />
     <meta name="keywords" content="{{session('keywords')}}" />
-    <title>Rent a house | Beskrivelse</title>
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ __(config('app.name', 'Rental')) }}</title>
+    <title>{{ "Rental|".substr(str_replace("/", " | ", session('sanitizedpath', '')),3) }}</title>
 
     <!-- Scripts-->
     <script src="{{ asset('js/app.js', config('app.secure', false)) }}" ></script>

@@ -281,10 +281,16 @@ $factory->define(App\Models\House::class, function (Faker\Generator $faker) {
         'latitude' => $faker->latitude,
         'longitude' => $faker->longitude,
         'lockbatch' => $faker->boolean,
-        'currencyid' => 1,
-        'ownerid' => 174,
+        'currencyid' => function () {
+             return factory(App\Models\Currency::class)->create()->id;
+        },
+        'ownerid' => function () {
+             return factory(App\Models\Customer::class)->create()->id;
+        },
         'maidid' => $faker->word,
-        'viewfilter' => 1000,
+        'viewfilter' => function () {
+             return factory(App\Models\Customertype::class)->create()->id;
+        },
         'prepayment' => 0.3333,
         'disttobeach' => $faker->randomNumber(),
         'maxpersons' => $faker->boolean,

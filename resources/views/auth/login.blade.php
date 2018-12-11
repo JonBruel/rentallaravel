@@ -53,7 +53,7 @@
                             <div class="col-md-6 offset-md-4">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : 'checked' }}> {{ __('Remember Me') }}
+                                        <input dusk="remme" type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : 'checked' }} > {{ __('Remember Me') }}
                                     </label>
                                 </div>
                             </div>
@@ -64,7 +64,7 @@
                                 <a class="btn btn-link" href="{{ route('password.request') }}">
                                     {{ __('Forgot Your Password?') }}
                                 </a>
-                                <button type="submit" class="btn btn-primary col-md-12">
+                                <button dusk="login-button" type="submit" class="btn btn-primary col-md-12">
                                     {{ __('Login') }}
                                 </button>
 
