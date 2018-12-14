@@ -248,7 +248,9 @@ class MyAccountController extends Controller
                 //If arrival or departure time, as recorded by user, is non-default, we register it as an account post event
                 if (($contract->landingdatetime->ne($contractoverview->from)) || ($contract->departuredatetime->ne($contractoverview->to)))
                 {
+                    Contract::$ajax = true;
                     Contract::commitOrder(90, Auth::user()->id, $contract->id, Auth::user()->id);
+                    Contract::$ajax = false;
                 }
 
             }

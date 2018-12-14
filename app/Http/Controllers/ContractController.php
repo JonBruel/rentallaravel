@@ -114,7 +114,9 @@ class ContractController extends Controller
             //commitOrder wil also adjust the values in the contract such as customerid and status.
             $contract->customerid = $user->id;
             $contract->save();
+            Contract::$ajax = true;
             $message = Contract::commitOrder(10, $user->id, $contract->id, $user->id);
+            Contract::$ajax = false;
             Log::info('Contract committed by user: '.$user->id.' for customer: '.$contract->customerid.'. Contractid is: '.$contract->id.'. Message from commitOrder: '.$message );
         }
 
@@ -412,7 +414,9 @@ class ContractController extends Controller
             {
                 $contract->finalprice = $newfinalprice;
                 $contract->status = 'AwaitsUpdate';
+                Contract::$ajax = true;
                 Contract::commitOrder(140, Auth::user()->id, $contractid, $contract->customerid);
+                Contract::$ajax = false;
                 $contract->save();
                 $success = __('Contract updated').'.';
             }
@@ -434,7 +438,9 @@ class ContractController extends Controller
             //If arrival or departure time are non-default, we register it as an account post event
             if (($contract->landingdatetime->ne($contractoverview->from)) || ($contract->departuredatetime->ne($contractoverview->to)))
             {
+                Contract::$ajax = true;
                 Contract::commitOrder(90, Auth::user()->id, $contract->id, $contract->customerid);
+                Contract::$ajax = false;
             }
 
             $success .= ($currencyid != Input::get('currencyid'))?' '.__('Currency cannot be changed for a committed order!'):'';

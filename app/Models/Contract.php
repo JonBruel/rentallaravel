@@ -274,8 +274,6 @@ class Contract extends BaseModel
      */
      public static function commitOrder($posttypeid, $userid, $contractid = 0, $customerid) {
 
-        static::$ajax = true;
-
         //The name of posttypes are stored in an array
         foreach (Posttype::all() as $posttype) $text[$posttype->id] = $posttype->posttype;
         $moretodo = true;
@@ -363,7 +361,6 @@ class Contract extends BaseModel
                     $contract->status = 'Committed';
                     $contract->customerid = $customerid;
                     $contract->save();
-                    static::$ajax = false;
                     return 'Order re-committed';
                 }
             }
@@ -551,13 +548,11 @@ class Contract extends BaseModel
                 $oldaccountpost->save();
             }
         }
-        static::$ajax = false;
         return $message;
     }
 
     //Get relevant accountposts
     public function getAccountposts($culture = '') {
-        static::$ajax = true;
         $sum = 0;
         $r = '<table class="table">';
         $customercurrencysymbol = $this->convertCurrencyAccountToCustomer('currencysymbol');
@@ -601,7 +596,6 @@ class Contract extends BaseModel
             $sum = 0;
         $r .= '<tr><td></td><td>&nbsp;&nbsp;' . __('Balance', [], $culture) . ': </td><td>&nbsp;&nbsp;' . static::format($sum, 2, $culture) . '&nbsp;&nbsp;&nbsp;</td></tr>';
         $r .= '</table>';
-        static::$ajax = false;
         return $r;
     }
 
