@@ -15,6 +15,7 @@ class CustomerTest extends TestCase
      */
     public function testExample()
     {
+        fwrite(STDERR, "Running unit testExample"."\n");
         $response = $this->get('/');
         $response->assertStatus(200);
         //$this->assertTrue(true);

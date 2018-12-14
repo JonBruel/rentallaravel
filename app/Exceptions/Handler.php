@@ -52,9 +52,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-
-        if (($exception) && (config('app.exceptions', false)))
+        $handleit = true;
+        if ($exception->getMessage() == "The given data was invalid.") $handleit = false;
+        if (($exception) && (config('app.exceptions', false)) && ($handleit))
         {
+
             //Count number of incident from same ipaddress from same session:
             $counter = session($_SERVER['HTTP_X_FORWARDED_FOR'],0) + 1;
             session([$_SERVER['HTTP_X_FORWARDED_FOR'] => $counter]);

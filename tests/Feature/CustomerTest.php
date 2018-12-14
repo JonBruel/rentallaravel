@@ -15,6 +15,7 @@ class CustomerTest extends TestCase
      */
     public function testExample()
     {
+        fwrite(STDERR, "Running feature testExample"."\n");
         $this->assertTrue(true);
     }
 }

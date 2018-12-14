@@ -15,7 +15,7 @@ use App\Models\Customer;
 
 class LoginTest extends DuskTestCase
 {
-    use DatabaseMigrations;
+    //use DatabaseMigrations;
 
     /**
      * A Dusk test example.
@@ -25,8 +25,7 @@ class LoginTest extends DuskTestCase
     public function testExample()
     {
 
-
-
+        /*
         $currency= factory(Currency::class)->create([
             'id' => '2',
             'currencysymbol' => 'DKK',
@@ -67,18 +66,44 @@ class LoginTest extends DuskTestCase
             'ownerid' => 1,
             'currencyid' => 2,
         ]);
+        */
 
-
+        //Using existing data
         $this->browse(function (Browser $browser) {
             $browser->visit('/login')
-                ->assertSee('E-Mail Address')
+                ->assertPathIs('/login')
+                ->assertSee('E-Mail adresse')
+                ->type('email', 'jbr@consiglia.dk')
+                ->type('password', '9Bukkelo!');
+
+            $value = $browser->attribute('@remme', 'checked');
+            fwrite(STDERR, "Running bowser test, result of checking:  $value"."\n");
+            self::assertTrue($value == 'true');
+
+            $browser->click('@login-button')
+                ->assertPathIs('/home')
+                ->assertTitleContains('home');
+
+            //Login again and check that we land on the main page
+            $browser->visit('/login')
+                ->assertPathIs('/home')
+                ->assertTitleContains('home');
+
+            //Logout
+            $browser->visit('/logout')
+                ->assertPathIs('/')
+                ->assertTitle('Rental:');
+
+            //login again
+            $browser->visit('/login')
+                ->assertPathIs('/login')
+                ->assertSee('E-Mail adresse')
                 ->type('email', 'jbr@consiglia.dk')
                 ->type('password', '9Bukkelo!')
-                ->press('Login')
+                ->click('@login-button')
                 ->assertPathIs('/home')
-                ->assertSee('Name');
+                ->assertTitleContains('home');
 
         });
-
     }
 }

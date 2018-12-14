@@ -11,7 +11,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ "Rental|".substr(str_replace("/", " | ", session('sanitizedpath', '')),3) }}</title>
+    <title>{{ "Rental: ".substr(str_replace("/", " | ", session('sanitizedpath', '')),2) }}</title>
 
     <!-- Scripts-->
     <script src="{{ asset('js/app.js', config('app.secure', false)) }}" ></script>

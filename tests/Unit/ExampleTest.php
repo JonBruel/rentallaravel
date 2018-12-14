@@ -14,6 +14,7 @@ class ExampleTest extends TestCase
      */
     public function testBasicTest()
     {
+        fwrite(STDERR, "Running unit testBasicTest"."\n");
         $this->assertTrue(true);
     }
 }

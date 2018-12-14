@@ -324,7 +324,7 @@ class Batchlog extends BaseModel
                 $mailtext = str_replace("\r", '<br/>', $mailtext);
                 $emailaddress = $recipient->email;
                 $from = $owner->email;
-                $subject = $emaildescription;
+                $subject = utf8_encode($emaildescription);
 
                 // The Middleware used in web part is not used here, so the config is the "raw" config
                 if ('' != config('app.testmessage', ''))

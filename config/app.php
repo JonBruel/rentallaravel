@@ -135,7 +135,7 @@ return [
     'googlekey' => 'AIzaSyCmXZ5CEhhFY3-qXoHRzs0XFK4a495LyxE',
 
     'host' => 'rentallaravel.consiglia.dk',
-    'exceptions' => (!env('APP_DEBUG', false)),
+    'exceptions' => (!env('APP_DEBUG', true)),
 
 
     /*
@@ -212,7 +212,7 @@ return [
         Propaganistas\LaravelIntl\IntlServiceProvider::class,
         Mpociot\LaravelTestFactoryHelper\TestFactoryHelperServiceProvider::class,
         EloquentFilter\ServiceProvider::class,
-
+        Webklex\IMAP\Providers\LaravelServiceProvider::class,
 
 
     ],
@@ -237,6 +237,7 @@ return [
         'Broadcast' => Illuminate\Support\Facades\Broadcast::class,
         'Bus' => Illuminate\Support\Facades\Bus::class,
         'Cache' => Illuminate\Support\Facades\Cache::class,
+        'Client' => Webklex\IMAP\Facades\Client::class,
         'Config' => Illuminate\Support\Facades\Config::class,
         'Cookie' => Illuminate\Support\Facades\Cookie::class,
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
