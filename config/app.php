@@ -135,7 +135,7 @@ return [
     'googlekey' => 'AIzaSyCmXZ5CEhhFY3-qXoHRzs0XFK4a495LyxE',
 
     'host' => 'rentallaravel.consiglia.dk',
-    'exceptions' => (!env('APP_DEBUG', true)),
+    'exceptions' => (!env('APP_DEBUG')),
 
 
     /*

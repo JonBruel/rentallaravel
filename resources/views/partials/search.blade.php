@@ -59,6 +59,7 @@
             url = '/ajax/getmonths/' + houseid;
             new $.getJSON(url, function(months)
             {
+                vacantmonthnumber = 0;
                 clickmessage = "{{__('Monthly vacancies')}}"+':';
                 title = "{{__('Click to choose specific rental periods')}}"+'.';
                 content =   '<div class="legend"  style="margin-left: 0; max-height: 230px; overflow-y: scroll;  overflow-x: hidden; padding-top: 3px; padding-bottom: 3px;">\n' +
@@ -79,8 +80,9 @@
                     oc = '';
                     if (month.vacancies > 0)
                     {
+                        vacantmonthnumber++;
                         //om += 'onmouseover="highlight(\''+month.month+'\');false;"';
-                        oc += 'onclick="order('+month.id+');"';
+                        oc += 'onclick="order('+month.id+');" dusk="vacantmonth' + vacantmonthnumber + '"';
                     }
                     content +=  '<div class="row" style="z-index: 1000">' +
                         '<div style="'+style+'" class="col-sm-12" '+om+' '+oc+' id="'+month.month+'" title="'+title+'" data-toggle="tooltip">' + month.text + '</div>' +

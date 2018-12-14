@@ -66,7 +66,7 @@
         @endforeach
         {!! Form::hidden('fromcalendar', ($fromcalendar)?1:0) !!}
         {!! Form::hidden('periodid', $periodid) !!}
-        {!! Form::hidden('id', $models[0]->id) !!}
+        {!! Form::hidden('id', $models[0]->id, ['dusk' => 'id']) !!}
         {!! Form::hidden('price', $models[0]->price, ['id' => 'hiddenprice']) !!}
 
         <div class="border border-primary rounded col col-md-12" >
@@ -101,9 +101,9 @@
         </div>
         <br />
         @if(Gate::allows('Administrator'))
-            {!! Form::submit(__('Save changes'),['class' => "btn btn-primary col col-md-2", 'name' => 'Book', 'style' => 'opacity: 0.1']); !!}
+            {!! Form::submit(__('Save changes'),['class' => "btn btn-primary col col-md-2", 'name' => 'Book', 'dusk' => 'next', 'style' => 'opacity: 0.1']); !!}
         @else
-            {!! Form::submit(__('Book house'),['class' => "btn btn-primary col col-md-12", 'name' => 'Book', 'style' => 'opacity: 0.1']); !!}
+            {!! Form::submit(__('Book house'),['class' => "btn btn-primary col col-md-12", 'name' => 'Book', 'dusk' => 'next', 'style' => 'opacity: 0.1']); !!}
          @endif
         @if(Gate::allows('Owner'))
             {!! Form::submit(__('Delete booking'),['class' => "btn btn-primary", 'name' => 'Delete']); !!}
