@@ -329,7 +329,7 @@ class Batchlog extends BaseModel
                 // The Middleware used in web part is not used here, so the config is the "raw" config
                 if ('' != config('app.testmessage', ''))
                 {
-                    $subject = 'Testmail only test from new rental system: ' . $emaildescription;
+                    $subject = 'Testmail only test from new rental system: ' . $emailid;
                     $emailaddress = 'jbr@consiglia.dk';
                 }
                 if (((1 == config('app.mailactive', true)) || ( substr($emailaddress, -12) == 'consiglia.dk')) && ($lockbatchvalue < 2))

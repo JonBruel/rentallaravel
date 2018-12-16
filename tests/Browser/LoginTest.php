@@ -77,7 +77,7 @@ class LoginTest extends DuskTestCase
                 ->type('password', '9Bukkelo!');
 
             $value = $browser->attribute('@remme', 'checked');
-            fwrite(STDERR, "Running bowser test, result of checking:  $value"."\n");
+            fwrite(STDERR, "Running browser test, result of checking:  $value"."\n");
             self::assertTrue($value == 'true');
 
             $browser->click('@login-button')

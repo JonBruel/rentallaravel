@@ -157,13 +157,14 @@ class Batchtask extends BaseModel
         }
     }
 
+    /* Fix this, when we update the value is set to 0
     public function getPaymentbelowAttribute($value) {
         return $this->getNumberAttribute($value, 0, '', ['style' => 'percent']);
     }
 
     public function setPaymentbelowAttribute($value) {
         $this->setNumberAttribute($value, 'paymentbelow');
-    }
+    */
 
 	public function posttype()
 	{

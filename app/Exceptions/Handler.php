@@ -52,7 +52,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        $handleit = true;
+        $handleit = false;
         if ($exception->getMessage() == "The given data was invalid.") $handleit = false;
         if (($exception) && (config('app.exceptions', false)) && ($handleit))
         {
