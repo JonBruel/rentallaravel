@@ -7,24 +7,19 @@ use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\User;
-use App\Models\House;
-use App\Models\Customertype;
-use App\Models\Customerstatus;
-use App\Models\Culture;
-use App\Models\Currency;
 use App\Models\Accountpost;
+use App\Models\Contractline;
 use App\Models\Contract;
 use App\Models\Batchlog;
-//use Webklex\IMAP\Client;
-use Webklex\IMAP\Facades\Client;
-use Carbon\Carbon;
+use Tests\Mail\CheckMail;
 
 class OrderTest extends DuskTestCase
 {
     //use DatabaseMigrations;
 
     /**
-     * A Dusk test example.
+     * Test of first steps in order system: Order, get confirmation mail, get payment reminder to customer and owner, no payment
+     * and ge cancellation mail, contract uncommitted.
      *
      * @return void
      */
@@ -60,71 +55,70 @@ class OrderTest extends DuskTestCase
             $browser->click('@next')
                 ->assertTitleContains('contractupdate');
 
+            $checkMail = new CheckMail();
+            $checkMail->deleteAll();
+
             //The contract is now committed, next to test is the E-mail worksflow.
             //Within a minute, and E-mail should arrive. We force this by running
             //addtoqueue and executequeue
-            BaseModel::$ajax = true;
-            $res1 = Batchlog::addtoqueue();
-            BaseModel::$ajax = true;
-            $res2 = Batchlog::executequeue();
-            sleep(5); //Allow mail to be received
+            //BaseModel::$ajax = true;
+            Batchlog::addtoqueue();
+            Batchlog::executequeue();
+            sleep(1); //Allow mail to be received
 
-            $oClient = Client::account('default');
-            $oClient->connect();
-            $oFolder = $oClient->getFolder('INBOX');
-            $aMessages = $oFolder->query(null)->since(Carbon::now()->subHours(1))->from('iben@hasselbalch.com')->get();
-
-            $this->assertTrue(sizeof($aMessages) > 0);
-            $emailid = 1066;
-            $findtext = 'Testmail only test from new rental system: ' . $emailid;
-            $found = false;
-
-            // We check for a mail from iben@hasselbalch with the subject used for order confirmation
-            foreach($aMessages as $key => $message) {
-                if ($message->getSubject() == $findtext) $found = true;
-                $aMessages[$key]->delete();
-            }
-            $this->assertTrue($found);
+            $this->assertTrue($checkMail->checkMail(1066));
 
             // Next we change the order date to trigger the reminder mail to the owner
-
-            $created_at = $contract->created_at->subDays(12);
+            $created_at = $contract->created_at->subDays(5);
             $contract->created_at = $created_at;
             $contract->save();
             $accountpost = Accountpost::where('contractid', $contractid)->where('posttypeid', 10)->first();
             $accountpost->created_at = $created_at;
             $accountpost->save();
-            sleep(1);
-            BaseModel::$ajax = true;
-            $res1 = Batchlog::addtoqueue();
-            BaseModel::$ajax = true;
-            $res2 = Batchlog::executequeue();
-            sleep(5); //Allow mail to be received
+
+            Batchlog::addtoqueue();
+            Batchlog::executequeue();
+            sleep(1); //Allow mail to be received
+
+            $this->assertTrue($checkMail->checkMail([1068]));
 
 
+            // Next we change the order date to trigger the reminder mail to the customer, total 11 days after order
+            $created_at = $contract->created_at->subDays(6);
+            $contract->created_at = $created_at;
+            $contract->save();
+            $accountpost = Accountpost::where('contractid', $contractid)->where('posttypeid', 10)->first();
+            $accountpost->created_at = $created_at;
+            $accountpost->save();
 
-            $oClient->connect();
-            $oFolder = $oClient->getFolder('INBOX');
-            $aMessages = $oFolder->query(null)->since(Carbon::now()->subHours(1))->from('iben@hasselbalch.com')->get();
+            Batchlog::addtoqueue();
+            Batchlog::executequeue();
+            sleep(1); //Allow mail to be received
 
-            $this->assertTrue(sizeof($aMessages) > 0);
-            $emailid = 1068;
-            $findtext1 = 'Testmail only test from new rental system: ' . $emailid;;
-            $found1 = false;
-            $emailid = 1069;
-            $findtext2 = 'Testmail only test from new rental system: ' . $emailid;
-            $found2 = false;
+            $this->assertTrue($checkMail->checkMail([1069]));
 
-            // We check for a mail from iben@hasselbalch with the subject used for order confirmation
-            foreach($aMessages as $key => $message) {
-                $subject = utf8_decode(imap_utf8($message->getSubject()));
-                if ($message->getSubject() == $findtext1)  $found1 = true;
-                if ($message->getSubject() == $findtext2)  $found2 = true;
-                $aMessages[$key]->delete();
-            }
-            $this->assertTrue($found1);
-            $this->assertTrue($found2);
-            $contract->delete();
+
+            // Next we change the order date to trigger the letter to customer about cancelled order, total 21 days after order
+            $created_at = $contract->created_at->subDays(10);
+            $contract->created_at = $created_at;
+            $contract->save();
+            $accountpost = Accountpost::where('contractid', $contractid)->where('posttypeid', 10)->first();
+            $accountpost->created_at = $created_at;
+            $accountpost->save();
+
+            Batchlog::addtoqueue();
+            Batchlog::executequeue();
+            sleep(1); //Allow mail to be received
+
+            $this->assertTrue($checkMail->checkMail([1070]));
+
+            echo("Order - mails - no payment - no payment mail, checked");
+
+            $contract = Contract::Find($contractid);
+            $this->assertTrue(($contract->status == "Uncommitted"));
+
+            //Check that orderlines are deleted
+            $this->assertTrue(Contractline::where('contractid', $contractid)->count() == 0);
 
         });
     }

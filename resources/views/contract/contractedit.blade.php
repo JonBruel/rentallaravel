@@ -23,6 +23,11 @@
                 </ul>
             </div>
         @endif
+        @if($models[0]->status == "Uncommitted")
+            <div class="form-group row">
+                <strong> {{__("Contract has been cancelled because of non-payment")}} </strong>
+            </div>
+        @endif
         @foreach($fields as $field)
             <div class="text-danger col-8 field-validation-valid row" data-valmsg-for="{{$field}}" data-valmsg-replace="true"></div>
             @if($errors->first($field))

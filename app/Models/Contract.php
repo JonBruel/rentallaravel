@@ -483,19 +483,19 @@ class Contract extends BaseModel
             $nonpassifiedsum = 0;
             foreach (Accountpost::where('contractid', $contractid)->where('passifiedby', 0)->where('id', '>=', $idstart)->get() as $accountpost)
             {
-                $nonpassifiedsum += $accountpost->getAmount($idstart);
+                $nonpassifiedsum += $accountpost->amount;
             }
 
             //We insert a new accountpost, we copy the stuff from:
             // the last committed order or order-change after the last payment (i.e. id>=$idstart)
             //in order to get the used currencies and rates
             $oldaccountpost = Accountpost::where('contractid', $contractid)->whereIn('posttypeid', [10, 110, 140])->where('id', '>=', $idstart)
-                                        ->orderBy('created_at', 'desc')->get();
+                                        ->orderBy('created_at', 'desc')->first();
 
             if ($oldaccountpost)
             {
                 $accountpost = new Accountpost();
-                foreach (static::$activefields as $field) $accountpost->$field = $oldaccountpost->$field;
+                foreach (Accountpost::$activefields as $field) $accountpost->$field = $oldaccountpost->$field;
                 $accountpost->amount = -$nonpassifiedsum;
                 $accountpost->posttypeid = $posttypeid;
                 $accountpost->text = 'Cancelling previous posts';
@@ -512,8 +512,10 @@ class Contract extends BaseModel
                 }
                 $message = "Order uncommitted OK";
             }
+
             $contract->status = 'Uncommitted';
             $contract->save();
+            Contractline::where('contractid', $contractid)->delete();
             $message = "Order uncommitted, no account records changed";
         }
 

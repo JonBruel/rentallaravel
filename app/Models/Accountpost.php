@@ -72,6 +72,23 @@ class Accountpost extends BaseModel
         'returndate'
 	];
 
+    static $activefields = [
+        'houseid',
+        'ownerid',
+        'customerid',
+        'postsource',
+        'amount',
+        'currencyid',
+        'customercurrencyid',
+        'usedrate',
+        'text',
+        'contractid',
+        'posttypeid',
+        'postedbyid',
+        'passifiedby',
+        'returndate'
+    ];
+
     public function modelFilter()
     {
         return $this->provideFilter(Filters\AccountpostFilter::class);
