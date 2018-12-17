@@ -393,7 +393,7 @@ class Batchlog extends BaseModel
         $batchviews = DB::table('batchview')->where('created_at', '>', Carbon::parse('2009-01-01'))->get();
         foreach ($batchviews as $batchview)
         {
-            echo 'Looking at accountpostid: ' . $batchview->id . ' using batchtaskid: ' . $batchview->batchtaskid . "\n";
+            echo 'Looking at accountpostid: ' . $batchview->id . ' using batchtaskid: ' . $batchview->batchtaskid  . " posttypeid: " . $batchview->posttypeid . "\n";
             $triggerpaymessage = Carbon::now()->subSeconds(300);
             $contractid = $batchview->contractid;
             $posttypeid = $batchview->posttypeid;
