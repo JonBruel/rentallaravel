@@ -21,7 +21,7 @@ class OrderTest extends DuskTestCase
 
     /**
      * Test of first steps in order system: Order, get confirmation mail, get payment reminder to customer and owner, no payment
-     * and ge cancellation mail, contract uncommitted.
+     * and get cancellation mail, contract uncommitted.
      *
      * @return void
      */
@@ -29,6 +29,8 @@ class OrderTest extends DuskTestCase
     {
         //Using existing data
         $this->browse(function (Browser $browser) {
+            $browser->visit('/logout');
+            sleep(3);
             $browser->visit('/login')
                 ->assertPathIs('/login')
                 ->assertSee('E-Mail adresse')
@@ -45,6 +47,7 @@ class OrderTest extends DuskTestCase
                 ->assertPathIs('/home')
                 ->assertTitleContains('home')
                 ->click("@click-order")
+                ->waitFor("@vacantmonth4")
                 ->click("@vacantmonth4")
                 ->assertTitleContains("contractedit");
 
@@ -115,8 +118,6 @@ class OrderTest extends DuskTestCase
             //Check that orderlines are deleted
             $this->assertTrue(Contractline::where('contractid', $contractid)->count() == 0);
             $contract->delete();
-            $browser->visit('/logout');
-            sleep(1);
             $checkMail->deleteAll();
         });
 
@@ -125,7 +126,7 @@ class OrderTest extends DuskTestCase
     /**
      * @group paid
      * Test of second steps in order system: Order, get confirmation mail, get payment reminder to customer and owner, payment
-     * payment receipt, ...
+     * payment receipt, get final payment reminder, pay, get welcome
      *
      * @return void
      */
@@ -133,6 +134,8 @@ class OrderTest extends DuskTestCase
     {
         //Using existing data
         $this->browse(function (Browser $browser) {
+            $browser->visit('/logout');
+            sleep(3);
             $browser->visit('/login')
                 ->assertPathIs('/login')
                 ->assertSee('E-Mail adresse')
@@ -149,6 +152,7 @@ class OrderTest extends DuskTestCase
                 ->assertPathIs('/home')
                 ->assertTitleContains('home')
                 ->click("@click-order")
+                ->waitFor("@vacantmonth5")
                 ->click("@vacantmonth5")
                 ->assertTitleContains("contractedit");
 
@@ -280,8 +284,6 @@ class OrderTest extends DuskTestCase
             $contract->delete();
 
             $this->assertTrue($checkMail->checkMail([1073]));
-            $browser->visit('/logout');
-            sleep(1);
             $checkMail->deleteAll();
         });
     }
@@ -299,6 +301,8 @@ class OrderTest extends DuskTestCase
     {
         //Using existing data
         $this->browse(function (Browser $browser) {
+            $browser->visit('/logout');
+            sleep(3);
             $browser->visit('/login')
                 ->assertPathIs('/login')
                 ->assertSee('E-Mail adresse')
@@ -315,6 +319,7 @@ class OrderTest extends DuskTestCase
                 ->assertPathIs('/home')
                 ->assertTitleContains('home')
                 ->click("@click-order")
+                ->waitFor("@vacantmonth5")
                 ->click("@vacantmonth5")
                 ->assertTitleContains("contractedit");
 
@@ -392,8 +397,6 @@ class OrderTest extends DuskTestCase
             $contract->delete();
             $this->assertTrue($checkMail->checkMail([1177]));
 
-            $browser->visit('/logout');
-            sleep(1);
             $checkMail->deleteAll();
         });
     }
