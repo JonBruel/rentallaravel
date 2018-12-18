@@ -82,7 +82,7 @@
                  This will require that the url is calculated, possible but not elegant.
              -->
             <form id="selectLanguageForm" action="{{Session::get('sanitizedpath')}}" method="get">
-                {{Form::select('culture', config('app.locales',[]), Session::get('culture'), array('id' => 'selectLanguage', 'onchange' => 'this.form.submit();'))}}
+                {{Form::select('culture', config('app.locales',[]), Session::get('culture'), array('dusk' => 'selectLanguage', 'id' => 'selectLanguage', 'onchange' => 'this.form.submit();'))}}
             </form>
 
             </div>

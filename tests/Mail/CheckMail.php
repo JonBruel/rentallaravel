@@ -35,26 +35,32 @@ class CheckMail
         return $this->messages;
     }
 
-    public function checkMail($mailids)
+    public function checkMail($mailids, $tries = 10)
     {
         if (!is_array($mailids)) $mailids = [$mailids];
-        $retval = [];
-        foreach ($mailids as $mailid) $retval[$mailid] = false;
-        $messages = $this->getInbox();
+        while($tries > 0) {
+            $tries--;
+            $retval = [];
+            foreach ($mailids as $mailid) $retval[$mailid] = false;
+            $messages = $this->getInbox();
 
-        foreach ($messages as $key => $message) {
-            foreach ($mailids as $mailid) {
-                $findtext = 'Testmail only test from new rental system: ' . $mailid;
-                if ($message->getSubject() == $findtext) {
-                    $retval[$mailid] = true;
-                    $messages[$key]->delete();
+            foreach ($messages as $key => $message) {
+                foreach ($mailids as $mailid) {
+                    $findtext = 'Testmail only test from new rental system: ' . $mailid;
+                    if ($message->getSubject() == $findtext) {
+                        $retval[$mailid] = true;
+                        $messages[$key]->delete();
+                    }
                 }
             }
+
+            // We only return true if all found
+            $allretval = true;
+            foreach  ($mailids as $mailid) $allretval = $retval[$mailid] && $allretval;
+            if ($allretval) return true;
+            sleep(1);
         }
 
-        // We only return true if all found
-        $allretval = true;
-        foreach  ($mailids as $mailid) $allretval = $retval[$mailid] && $allretval;
         return $allretval;
     }
 }
