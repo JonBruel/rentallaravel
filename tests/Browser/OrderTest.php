@@ -117,6 +117,7 @@ class OrderTest extends DuskTestCase
             $contract->delete();
             $browser->visit('/logout');
             sleep(1);
+            $checkMail->deleteAll();
         });
 
     }
@@ -281,6 +282,7 @@ class OrderTest extends DuskTestCase
             $this->assertTrue($checkMail->checkMail([1073]));
             $browser->visit('/logout');
             sleep(1);
+            $checkMail->deleteAll();
         });
     }
 
@@ -392,6 +394,7 @@ class OrderTest extends DuskTestCase
 
             $browser->visit('/logout');
             sleep(1);
+            $checkMail->deleteAll();
         });
     }
 
