@@ -74,7 +74,7 @@
 
                     </td>
                     <td>
-                        {!! Form::text('amount', '', ['class' => 'form-control col-md-11', 'style' => "height: 28px", 'id' => 'suggested']) !!}
+                        {!! Form::text('amount', '', ['dusk' => 'amount', 'class' => 'form-control col-md-11', 'style' => "height: 28px", 'id' => 'suggested']) !!}
                     </td>
                 </tr>
             <tr style="border-style: none solid none solid; border-width:4px; border-color:red;">
@@ -82,7 +82,7 @@
                     {!! Form::label('posttypeid', __('Posttype').':') !!}
                 </td>
                 <td>
-                    {!! Form::select('posttypeid',[50 => __('Prepayment'), 100 => __('Final payment received'), 300 => __('Rounding and currency adjustments')],'',['class' => 'form-control col-md-11', 'style' => 'padding: 1px 0 3px 10px;']) !!}
+                    {!! Form::select('posttypeid',[50 => __('Prepayment'), 100 => __('Final payment received'), 300 => __('Rounding and currency adjustments')],'',['dusk' => 'posttypeid', 'class' => 'form-control col-md-11', 'style' => 'padding: 1px 0 3px 10px;']) !!}
                 </td>
                 <td>
                     {!! Form::label('round', __('Tick if you want to make balance zero').':') !!}
@@ -98,7 +98,7 @@
 
                     <td>
                         {!! Form::hidden('contractid', $models[0]->contractid) !!}
-                        {!! Form::submit(__('Save payment registration'),['class' => "btn btn-primary"]); !!}
+                        {!! Form::submit(__('Save payment registration'),['dusk' => 'next', 'class' => "btn btn-primary"]); !!}
                     </td>
                 </tr>
             {!! Form::close() !!}
