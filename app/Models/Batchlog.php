@@ -334,9 +334,21 @@ class Batchlog extends BaseModel
                 }
                 if (((1 == config('app.mailactive', true)) || ( substr($emailaddress, -12) == 'consiglia.dk')) && ($lockbatchvalue < 2))
                 {
+                    // With Mail::to()->send(), we cannot use to detailed Swift settings used below. So we use Mail::send() instead.
+
+                    Mail::send('email/default', ['toName' => $recipient->name, 'fromName' => $owner->name, 'contents' => $mailtext], function($message) use  ($emailaddress, $from, $subject, $attchmentdoc, $owner) {
+                        $message->from($from, $owner->name);
+                        $message->sender(config('mail.MAIL_FROM_ADDRESS', 'rental@consiglia.dk'));
+                        $message->to($emailaddress);
+                        $message->subject($subject);
+                        $message->replyTo($from);
+                        foreach($attchmentdoc as $attchment) $message->attach($attchment);
+                    });
+
+                    // Using Mail:to, we cannot set the sender different from "from"
                     //public function __construct($contents, $subject = '', $fromaddress = 'jbr@consiglia.dk', $fromName = 'testFromName', $toName = '', $attachements = [])
-                    Mail::to($emailaddress)
-                        ->send(new DefaultMail($mailtext, $subject, $from, $owner->name, $recipient->name, $attchmentdoc));
+                    //Mail::to($emailaddress)
+                    //    ->send(new DefaultMail($mailtext, $subject, $from, $owner->name, $recipient->name, $attchmentdoc));
                 }
 
                 if (!($r)) $r = $mailtext;

@@ -24,7 +24,7 @@ class DefaultMail extends Mailable
      */
     public function __construct($contents, $subject = '', $fromaddress = 'jbr@consiglia.dk', $fromName = 'testFromName', $toName = '', $attachements = [])
     {
-        $this->from($fromaddress);
+        //$this->from($fromaddress);
         $this->subject($subject);
         $this->fromName = $fromName;
         $this->toName = $toName;

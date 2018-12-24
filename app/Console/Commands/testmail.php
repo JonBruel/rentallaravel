@@ -48,15 +48,24 @@ class testmail extends Command
      */
     public function handle()
     {
-        $emailaddress = 'jbr@consiglia.dk';
+        $to = 'jbr@consiglia.dk.test-google-a.com';
         $mailtext = "Dette er en prøve";
-        $from = "iben@hasselbalch.com";
         $subject = 'Test';
-        $fromname = 'From Iben';
+        $fromname = 'Iben Hasselbalch';
+        $fromaddress = 'iben@hasselbalch.com';
         $toname = 'To Jon';
-        $attchmentdoc = [];
+        $attchmentdocs = [];
 
-        Mail::to($emailaddress)
-            ->send(new DefaultMail($mailtext, $subject, $from, $fromname, $toname, $attchmentdoc));
+        // With Mail::to()->send(), we cannot use to detailed Swift settings used below.
+
+        Mail::send('email/default', ['toName' => $toname, 'fromName' => $fromname, 'contents' => $mailtext], function($message) use  ($to, $fromname, $fromaddress, $subject, $attchmentdocs) {
+            $message->from($fromaddress, $fromname);
+            $message->sender(config('mail.MAIL_FROM_ADDRESS', 'rental@consiglia.dk'));
+            $message->to($to);
+            $message->subject($subject);
+            $message->replyTo($fromaddress);
+            foreach($attchmentdocs as $attchmentdoc) $message->attach($attchmentdoc);
+        });
+
     }
 }

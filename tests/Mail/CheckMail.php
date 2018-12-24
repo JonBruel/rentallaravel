@@ -31,11 +31,11 @@ class CheckMail
     private function getInbox() {
         $this->client->connect();
         $this->inbox = $this->client->getFolder('INBOX');
-        $this->messages = $this->inbox->query(null)->since(Carbon::now()->subHours(1))->from('iben@hasselbalch.com')->get();
+        $this->messages = $this->inbox->query(null)->since(Carbon::now()->subHours(1))->from('Iben Hasselbalch')->get();
         return $this->messages;
     }
 
-    public function checkMail($mailids, $tries = 10)
+    public function checkMail($mailids, $tries = 100)
     {
         if (!is_array($mailids)) $mailids = [$mailids];
         while($tries > 0) {
