@@ -62,7 +62,7 @@ class SetDefaults {
         {
             $url = $request->getHost();
             //TODO: Fix this, gives error class sfConfig not found
-            if ($url == 'rentallaravel.consiglia.dk') $url = 'cangeroni.hasselbalch.com';
+            if (($url == 'rentallaravel.consiglia.dk') || ($url == 'remoterental.consiglia.dk')) $url = 'cangeroni.hasselbalch.com';
             $code = 1;
             $config = DB::table('config')->where('url', $url)->first();
             if ($config) {
