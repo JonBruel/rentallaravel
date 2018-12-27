@@ -29,9 +29,15 @@ class CheckMail
     }
 
     private function getInbox() {
-        $this->client->connect();
-        $this->inbox = $this->client->getFolder('INBOX');
-        $this->messages = $this->inbox->query(null)->since(Carbon::now()->subHours(1))->from('Iben Hasselbalch')->get();
+        try {
+            $this->client->connect();
+            $this->inbox = $this->client->getFolder('INBOX');
+            $this->messages = $this->inbox->query(null)->since(Carbon::now()->subHours(1))->from('Iben Hasselbalch')->get();
+        }
+        catch (Exception $e)
+        {
+            Log::error('Error in imap handler, getting inbox: ' . $e->getMessage());
+        }
         return $this->messages;
     }
 
@@ -58,7 +64,7 @@ class CheckMail
             }
             catch (Exception $e)
             {
-                Log::error('Error in imap handler, getting inbox: ' . $e->getMessage());
+                Log::error('Error in imap handler, getting messages from inbox: ' . $e->getMessage());
             }
             // We only return true if all found
             $allretval = true;
