@@ -11,6 +11,7 @@ namespace Tests\Mail;
 use Webklex\IMAP\Facades\Client;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Webklex\IMAP\Exceptions\GetMessagesFailedException;
 
 class CheckMail
 {
@@ -34,7 +35,7 @@ class CheckMail
             $this->inbox = $this->client->getFolder('INBOX');
             $this->messages = $this->inbox->query(null)->since(Carbon::now()->subHours(1))->from('Iben Hasselbalch')->get();
         }
-        catch (Exception $e)
+        catch (GetMessagesFailedException $e)
         {
             Log::error('Error in imap handler, getting inbox: ' . $e->getMessage());
         }
@@ -62,7 +63,7 @@ class CheckMail
                     }
                 }
             }
-            catch (Exception $e)
+            catch (GetMessagesFailedException $e)
             {
                 Log::error('Error in imap handler, getting messages from inbox: ' . $e->getMessage());
             }
