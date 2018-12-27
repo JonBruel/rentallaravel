@@ -49,23 +49,15 @@ class CheckMail
             $tries--;
             $retval = [];
             foreach ($mailids as $mailid) $retval[$mailid] = false;
-
-            try {
-                $messages = $this->getInbox();
-
-                foreach ($messages as $key => $message) {
-                    foreach ($mailids as $mailid) {
-                        $findtext = 'Testmail only test from new rental system: ' . $mailid;
-                        if ($message->getSubject() == $findtext) {
-                            $retval[$mailid] = true;
-                            $messages[$key]->delete();
-                        }
+            $messages = $this->getInbox();
+            foreach ($messages as $key => $message) {
+                foreach ($mailids as $mailid) {
+                    $findtext = 'Testmail only test from new rental system: ' . $mailid;
+                    if ($message->getSubject() == $findtext) {
+                        $retval[$mailid] = true;
+                        $messages[$key]->delete();
                     }
                 }
-            }
-            catch (GetMessagesFailedException $e)
-            {
-                Log::error('Error in imap handler, getting messages from inbox: ' . $e->getMessage());
             }
             // We only return true if all found
             $allretval = true;
