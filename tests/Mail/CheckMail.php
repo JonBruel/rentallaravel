@@ -10,7 +10,7 @@ namespace Tests\Mail;
 
 use Webklex\IMAP\Facades\Client;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Log;
 
 class CheckMail
 {
@@ -42,18 +42,24 @@ class CheckMail
             $tries--;
             $retval = [];
             foreach ($mailids as $mailid) $retval[$mailid] = false;
-            $messages = $this->getInbox();
 
-            foreach ($messages as $key => $message) {
-                foreach ($mailids as $mailid) {
-                    $findtext = 'Testmail only test from new rental system: ' . $mailid;
-                    if ($message->getSubject() == $findtext) {
-                        $retval[$mailid] = true;
-                        $messages[$key]->delete();
+            try {
+                $messages = $this->getInbox();
+
+                foreach ($messages as $key => $message) {
+                    foreach ($mailids as $mailid) {
+                        $findtext = 'Testmail only test from new rental system: ' . $mailid;
+                        if ($message->getSubject() == $findtext) {
+                            $retval[$mailid] = true;
+                            $messages[$key]->delete();
+                        }
                     }
                 }
             }
-
+            catch (Exception $e)
+            {
+                Log::error('Error in imap handler, getting inbox: ' . $e->getMessage());
+            }
             // We only return true if all found
             $allretval = true;
             foreach  ($mailids as $mailid) $allretval = $retval[$mailid] && $allretval;
