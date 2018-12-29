@@ -33,6 +33,7 @@ class OrderTest extends DuskTestCase
             sleep(3);
             $browser->visit('/login')
                 ->assertPathIs('/login')
+                ->select('@selectLanguage', 'da_DK')
                 ->assertSee('E-Mail adresse')
                 ->type('email', 'jbr3@consiglia.dk')
                 ->type('password', '9Bukkelo!');
