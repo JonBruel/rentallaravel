@@ -204,6 +204,7 @@ class ContractController extends Controller
             $period = Periodcontract::find($periodid);
             $houseid = $period->houseid;
             $maxpersons = $period->maxpersons;
+            $errors = '';
 
             //Find customerid of logged in user or assign a temporary id id user is not logged in.
             //In the latter case, we will ask the user to login later. But not now, we want to delay
@@ -239,7 +240,6 @@ class ContractController extends Controller
                     ]);
 
                 //We temporally save to get the id
-                $errors = '';
                 if (!$contract->save()) {
                     Log::notice('Aborting in ContractController, error during Save(), $contract not saved.');
                     $errors = $contract->getErrors();
