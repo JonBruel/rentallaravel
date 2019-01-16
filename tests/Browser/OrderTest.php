@@ -20,6 +20,8 @@ class OrderTest extends DuskTestCase
     //use DatabaseMigrations;
 
     /**
+     * @group order
+     *
      * Test of first steps in order system: Order, get confirmation mail, get payment reminder to customer and owner, no payment
      * and get cancellation mail, contract uncommitted.
      *
@@ -44,7 +46,6 @@ class OrderTest extends DuskTestCase
 
             // Below we click on the second vacant month, this should only trigger one type of mail
             $browser->click('@login-button')
-                ->assertPathIs('/home')
                 ->assertPathIs('/home')
                 ->assertTitleContains('home')
                 ->click("@click-order")
@@ -149,7 +150,6 @@ class OrderTest extends DuskTestCase
 
             // Below we click on the second vacant month, this should only trigger one type of mail
             $browser->click('@login-button')
-                ->assertPathIs('/home')
                 ->assertPathIs('/home')
                 ->assertTitleContains('home')
                 ->click("@click-order")
@@ -316,7 +316,6 @@ class OrderTest extends DuskTestCase
 
             // Below we click on the second vacant month, this should only trigger one type of mail
             $browser->click('@login-button')
-                ->assertPathIs('/home')
                 ->assertPathIs('/home')
                 ->assertTitleContains('home')
                 ->click("@click-order")
