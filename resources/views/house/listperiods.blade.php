@@ -46,7 +46,7 @@
                         {{$model->from->year}}
                     </td>
                     <td>
-                        {{$model->from->weekOfYear}}
+                        {{$model->to->weekOfYear}}
                     </td>
                     <td>
                         {{$model->getEnddays()}}
