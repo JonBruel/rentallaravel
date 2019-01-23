@@ -152,7 +152,7 @@ class ShowCalendar
         $vdays = static::cache_get($apckey);
 
         //Remove the remark below to uncache the vdays!
-        //$vdays = false;
+        $vdays = false;
         if ($vdays)
         {
                 static::$vdays = $vdays;
@@ -372,7 +372,7 @@ class ShowCalendar
         $th = '';
 
 
-        $monday = Carbon::now()->startOfWeek();
+        $monday = Carbon::now()->startOfWeek()->subDay(1);
         $weekdays = [Carbon::now()->startOfWeek(), $monday->copy()->addDays(1), $monday->copy()->addDays(2), $monday->copy()->addDays(3),
             $monday->copy()->addDays(4), $monday->copy()->addDays(5), $monday->copy()->addDays(6)];
         foreach ($weekdays as  $localized_day_name ){
