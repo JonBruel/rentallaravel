@@ -44,7 +44,7 @@
                 <?php
                 $booktext = __('Press to book');
                 $class = '';
-                 $link = '<a class="btn btn-primary" href="/contract/contractedit/0/'.$model->id.'">'.$booktext.'</a>';
+                 $link = '<a class="btn btn-primary btn-sm" href="/contract/contractedit/0/'.$model->id.'">'.$booktext.'</a>';
 
                 if ($model->committed)
                 {
@@ -76,16 +76,16 @@
                 }
                 ?>
                 <tr class="{{$class}}">
-                    <td>
+                    <td class="align-middle">
                        {{ $model->from->weekOfYear  }}
-                    </td>
-                    <td>
+                    </td >
+                    <td class="align-middle">
                         {{ $model->getEnddays() }}
                     </td>
-                    <td>
+                    <td class="align-middle">
                         {{ $priceinfo }}
                     </td>
-                    <td>
+                    <td class="align-middle">
                         {!! $link !!}
                     </td>
                 </tr>
