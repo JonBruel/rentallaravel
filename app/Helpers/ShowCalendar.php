@@ -152,7 +152,7 @@ class ShowCalendar
         $vdays = static::cache_get($apckey);
 
         //Remove the remark below to uncache the vdays!
-        $vdays = false;
+        //$vdays = false;
         if ($vdays)
         {
                 static::$vdays = $vdays;
