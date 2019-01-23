@@ -77,7 +77,7 @@
                 ?>
                 <tr class="{{$class}}">
                     <td class="align-middle">
-                       {{ $model->from->weekOfYear  }}
+                       {{ $model->to->weekOfYear  }}
                     </td >
                     <td class="align-middle">
                         {{ $model->getEnddays() }}
