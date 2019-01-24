@@ -118,7 +118,7 @@ return [
     ],
     10020 => [
         'text' => 'Vacancies',
-        'path' => 'home/checkbookings',
+        'path' => 'home/checkbookingslist',
         'parentid' => 10000,
         'cssclass' => 'menulevel2',
         'role' => 1000,

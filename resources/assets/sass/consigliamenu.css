@@ -135,7 +135,26 @@
 /*
 Used for order of weeks among other things
  */
-.pending {background-color: #FF9191; }
-.occupied {background-color: #ff4d4d; }
-.family {background-color: #00cc99; }
+
+.pending {
+    background-color: #FF9191;
+}
+
+.occupied {
+    background-color: #ff5a4b;
+}
+
+
+.family {
+    background-color: rgba(25, 219, 241, 0.42);
+}
+
+.notoffered {
+    background: #005588;
+}
+
+.halfday {
+    background: #88ff66;
+}
+
 .description {max-width: 98%}
