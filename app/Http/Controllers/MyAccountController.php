@@ -188,7 +188,7 @@ class MyAccountController extends Controller
         session()->flash('warning', '');
         if (!Auth::check()) return redirect('/login');
         $user = Auth::user();
-        $emails = Emaillog::where('to', $user->email)->get();
+        $emails = Emaillog::where('to', $user->email)->orderBy('created_at','desc')->get();
         return view('myaccount/listmails', ['models' => $emails, 'title' => __('My emails')]);
     }
 

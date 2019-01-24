@@ -423,7 +423,7 @@ return [
         'path' => 'setup/editcaptions',
         'parentid' => 14000,
         'cssclass' => 'menulevel2',
-        'role' => 1,
+        'role' => 10,
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => []
@@ -433,7 +433,7 @@ return [
         'path' => 'setup/edittranslations',
         'parentid' => 14000,
         'cssclass' => 'menulevel2',
-        'role' => 1,
+        'role' => 10,
         'level' => 2,
         'show' => 'hide',
         'childrenmap' => []

@@ -523,7 +523,7 @@ class ContractController extends Controller
      */
     public function listmails($customerid)
     {
-        $emails = Emaillog::where('customerid', $customerid)->get();
+        $emails = Emaillog::where('customerid', $customerid)->orderBy('created_at','desc')->get();
         return view('myaccount/listmails', ['models' => $emails, 'title' => __('Emails')]);
     }
 
