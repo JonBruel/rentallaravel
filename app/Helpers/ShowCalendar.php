@@ -284,6 +284,13 @@ class ShowCalendar
                     {
                         if ($time == strtotime($from)) $vdays[$daykey]['halfday'] = true;
                     }
+                    //Change by Iben 24-1-2019, don't show halfdays:
+                    $vdays[$daykey]['halfday'] = false;
+                    if ($reserved)
+                    {
+                        $vdays[$daykey]['occupied'] = true;
+                        $vdays[$daykey]['categoryid'] = $categoryid;
+                    }
                 }
             }
         }
