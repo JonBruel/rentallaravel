@@ -60,7 +60,7 @@ class testmail extends Command
 
         Mail::send('email/default', ['toName' => $toname, 'fromName' => $fromname, 'contents' => $mailtext], function($message) use  ($to, $fromname, $fromaddress, $subject, $attchmentdocs) {
             $message->from($fromaddress, $fromname);
-            $message->sender(config('mail.MAIL_FROM_ADDRESS', 'rental@consiglia.dk'));
+            //$message->sender(config('mail.MAIL_FROM_ADDRESS', 'rental@consiglia.dk'));
             $message->to($to);
             $message->subject($subject);
             $message->replyTo($fromaddress);

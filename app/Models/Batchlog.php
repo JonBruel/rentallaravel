@@ -324,6 +324,8 @@ class Batchlog extends BaseModel
                 $mailtext = str_replace("\r", '<br/>', $mailtext);
                 $emailaddress = $recipient->email;
                 $from = $owner->email;
+                //Hardwired:
+                $from = 'iben@hasselbalch.com';
                 $subject = utf8_encode($emaildescription);
 
                 // The Middleware used in web part is not used here, so the config is the "raw" config
@@ -338,7 +340,7 @@ class Batchlog extends BaseModel
 
                     Mail::send('email/default', ['toName' => $recipient->name, 'fromName' => $owner->name, 'contents' => $mailtext], function($message) use  ($emailaddress, $from, $subject, $attchmentdoc, $owner) {
                         $message->from($from, $owner->name);
-                        $message->sender(config('mail.MAIL_FROM_ADDRESS', 'rental@consiglia.dk'));
+                        //$message->sender(config('mail.MAIL_FROM_ADDRESS', 'rental@consiglia.dk'));
                         $message->to($emailaddress);
                         $message->subject($subject);
                         $message->replyTo($from);
