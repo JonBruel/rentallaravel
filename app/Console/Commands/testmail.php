@@ -9,6 +9,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Mail\DefaultMail;
+use App\Helpers\ConfigFromDB;
 use Illuminate\Support\Facades\Mail;
 
 /**
@@ -22,14 +23,14 @@ class testmail extends Command
      *
      * @var string
      */
-    protected $signature = 'command:testmail';
+    protected $signature = 'command:testmail {webaddress?}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Sends a test mail to jbr@consiglia.dk, possibly on behalf of iben.';
+    protected $description = 'Sends a test mail to jbr@consiglia.dk, according to the smail setup on the webaddress';
 
     /**
      * Create a new command instance.
@@ -46,8 +47,10 @@ class testmail extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle($webaddress = 'rentallaravel.consiglia.dk')
     {
+
+
         $to = 'jbr@consiglia.dk.test-google-a.com';
         $mailtext = "Dette er en prøve";
         $subject = 'Test';
@@ -56,6 +59,7 @@ class testmail extends Command
         $toname = 'To Jon';
         $attchmentdocs = [];
 
+        ConfigFromDB::configFromDB($webaddress);
         // With Mail::to()->send(), we cannot use to detailed Swift settings used below.
 
         Mail::send('email/default', ['toName' => $toname, 'fromName' => $fromname, 'contents' => $mailtext], function($message) use  ($to, $fromname, $fromaddress, $subject, $attchmentdocs) {

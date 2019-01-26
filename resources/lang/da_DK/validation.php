@@ -141,6 +141,6 @@ return [
     |
     */
 
-    'attributes' => ['password' => 'pasord'],
+    'attributes' => ['password' => 'adgangskode'],
 
 ];

@@ -4,12 +4,13 @@ namespace App\Http\Middleware;
 
 use Closure;
 use \Illuminate\Http\Request;
-use App\Services\MenuService;
+use App\Helpers\ConfigFromDB;
 use Event;
 use App;
 use Auth;
 use DB;
 use App\Models\HouseI18n;
+use Illuminate\Support\Facades\Log;
 
 
 /**
@@ -57,24 +58,11 @@ class SetDefaults {
         }
 
 
-        //$host is e.g. rentallaravel.consiglia.dk
-        //if (session('config', -1) == 1)
-        {
-            $url = $request->getHost();
-            //TODO: Fix this, gives error class sfConfig not found
-            if (($url == 'rentallaravel.consiglia.dk') || ($url == 'remoterental.consiglia.dk')) $url = 'cangeroni.hasselbalch.com';
-            $code = 1;
-            $config = DB::table('config')->where('url', $url)->first();
-            if ($config) {
-                $code = $config->index;
-                $code = str_replace('sfConfig::', '$this->', $code);
-            }
-            if ($code != '1') {
-                if (eval($code . "\nreturn 'OK';") != 'OK')
-                    echo("Code not evaluated OK");
-            }
-            else session(['config' => 1]);
-        }
+        $url = $request->getHost();
+        //TODO: Fix this, gives error class sfConfig not found
+        if (($url == 'rentallaravel.consiglia.dk') || ($url == 'remoterental.consiglia.dk')) $url = 'cangeroni.hasselbalch.com';
+
+        ConfigFromDB::configFromDB($url);
 
         $culture = App::getLocale();
         session(['keywords' => '']);

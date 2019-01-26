@@ -17,7 +17,7 @@
     <script src="{{ asset('js/app.js', config('app.secure', false)) }}" ></script>
 
     <!-- Styles-->
-    <link href="{{ asset('css/app.css', config('app.secure', false)) }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css?'.time(), config('app.secure', false)) }}" rel="stylesheet">
 
 
 </head>

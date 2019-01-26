@@ -1,23 +1,5 @@
 @extends('layouts.app')
 @section('content')
-    <style>
-        .occupied {
-            background: #FF9191;
-            margin-left: 15px;
-        }
-        .family {
-            background: #00cc99;
-            margin-left: 15px;
-        }
-        .notoffered {
-            background: #005588;
-            margin-left: 15px;
-        }
-        .halfday {
-            background: #88ff66;
-            margin-left: 15px;
-        }
-    </style>
     <h3>{{$house->name}} {{$house->address1}}</h3>
     <p>{{__('The bookings from now on and 52 weeks ahead.') . ' ' . __('Pink weeks are pending, red are occupied.') . ' ' . __('Turquoise weeks are for private use.')}}</p>
     <a class="btn btn-success col-md-12" href="/home/checkbookings?menupoint=10020&listtype=calendar">{{__('Change to calendar view')}}</a>
@@ -75,7 +57,7 @@
                         . ' ' . __('with a maximum of') . ' ' . $model->maxpersons . ' ' . __('persons');
                 }
                 ?>
-                <tr class="{{$class}}">
+                <tr class="{{$class}}" style="margin-left: 15px;">
                     <td class="align-middle">
                        {{ $model->to->weekOfYear  }}
                     </td >

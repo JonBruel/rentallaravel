@@ -1,41 +1,22 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{__('Bookings')}}</h3>
-    <style>
-        .occupied {
-            background: #FF9191;
-            margin-left: 15px;
-        }
-        .family {
-            background: #00cc99;
-            margin-left: 15px;
-        }
-        .notoffered {
-            background: #005588;
-            margin-left: 15px;
-        }
-        .halfday {
-            background: #88ff66;
-            margin-left: 15px;
-        }
-    </style>
-
     <p class="header"><strong>{{$house->name}}</strong></p>
-    <p class="header" style="margin-right:70px">{{ __('The bookings from now on and 52 weeks ahead.')}}</p>
+    <p class="header" style="margin-right:70px">{{ __('The bookings from now on and 52 weeks ahead.')}} {{ __('Check out day is Friday.')}}</p>
     <p>
-    <div class="row" id="occupied" style="margin-bottom: 5px">
+    <div class="row" id="occupied" style="margin-bottom: 5px; margin-left: 15px;">
         <div class="col-2 occupied"></div><div class="col-9">{{ __('Pink weeks are occupied.') }}</div>
     </div>
 
-    <div class="row" id="notoffered" style="margin-bottom: 5px">
+    <div class="row" id="notoffered" style="margin-bottom: 5px; margin-left: 15px;">
         <div class="col-2 notoffered"></div><div class="col-9">{{ __('Blue days are not yet scheduled for rental, but you are welcome to make an equiry.') }}</div>
     </div>
 
-    <div class="row" id="halfday" style="margin-bottom: 5px">
+    <div class="row" id="halfday" style="margin-bottom: 5px;  margin-left: 15px;">
         <div class="col-2 halfday"></div><div class="col-9">{{ __('Green days are change days.') }}</div>
     </div>
 
-    <div class="row" id="family" style="margin-bottom: 5px">
+    <div class="row" id="family" style="margin-bottom: 5px; margin-left: 15px;">
         <div class="col-2 family"></div><div class="col-9">{{__('Turquoise days are for private use.')}} </div>
     </div>
     <a class="btn btn-success col-md-12" href="/home/checkbookings?menupoint=10020&listtype=list">{{__('Change to list view')}}</a>
@@ -50,12 +31,12 @@
 
     <div id="calendar">
         <div class="row">
-            <div class="col-md-2">{{ __('Period')}}: </div>
-            <div class="col-md-10" id="period">{{ __('For prices: move cursor to date, click to order.') }}</div>
-        </div>
-        <div class="row" style="min-height: 3rem">
             <div class="col-md-2">{{ __('Price')}}: </div>
             <div class="col-md-10" id="price"></div>
+        </div>
+        <div class="row" style="min-height: 3rem">
+            <div class="col-md-2">{{ __('Period')}}: </div>
+            <div class="col-md-10" id="period"></div>
         </div>
         <div class="row justify-content-center" style="margin-top: 5px">
             @for($i = 0; $i < 12; $i++)

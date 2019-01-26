@@ -10,6 +10,7 @@ use DB;
 use Carbon\Carbon;
 use App\Mail\DefaultMail;
 use Illuminate\Support\Facades\Mail;
+use App\Helpers\ConfigFromDB;
 
 
 
@@ -208,6 +209,7 @@ class Batchlog extends BaseModel
             $sendto = explode(',',$batchtask->mailto);
             $customerid = $batchlog->customerid;
             $house = House::Find($houseid);
+            $webaddress = $house->www;
             $ownerid = $batchlog->ownerid;
             $contractid = $batchlog->contractid;
             $emailid = $batchtask->emailid;
@@ -323,9 +325,14 @@ class Batchlog extends BaseModel
                 $mailtext = str_replace("\n", '', $mailtext);
                 $mailtext = str_replace("\r", '<br/>', $mailtext);
                 $emailaddress = $recipient->email;
-                $from = $owner->email;
-                //Hardwired:
-                $from = 'iben@hasselbalch.com';
+
+
+                //Get the mailsystem information from the specific configuration for the site:
+                $webaddressarray = explode('//', $webaddress);
+                if (sizeof($webaddressarray) > 1) $webaddress = $webaddressarray[1];
+                ConfigFromDB::configFromDB($webaddress);
+
+                $from = config('mail.from');
                 $subject = utf8_encode($emaildescription);
 
                 // The Middleware used in web part is not used here, so the config is the "raw" config
@@ -339,11 +346,11 @@ class Batchlog extends BaseModel
                     // With Mail::to()->send(), we cannot use to detailed Swift settings used below. So we use Mail::send() instead.
 
                     Mail::send('email/default', ['toName' => $recipient->name, 'fromName' => $owner->name, 'contents' => $mailtext], function($message) use  ($emailaddress, $from, $subject, $attchmentdoc, $owner) {
-                        $message->from($from, $owner->name);
+                        $message->from($from['address'], $from['name']);
                         //$message->sender(config('mail.MAIL_FROM_ADDRESS', 'rental@consiglia.dk'));
                         $message->to($emailaddress);
                         $message->subject($subject);
-                        $message->replyTo($from);
+                        $message->replyTo($from['address']);
                         foreach($attchmentdoc as $attchment) $message->attach($attchment);
                     });
 
