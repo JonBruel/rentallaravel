@@ -8,8 +8,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Mail\DefaultMail;
 use App\Helpers\ConfigFromDB;
+//use App\Mail\DefaultMail;
 use Illuminate\Support\Facades\Mail;
 
 /**
@@ -47,9 +47,10 @@ class testmail extends Command
      *
      * @return mixed
      */
-    public function handle($webaddress = 'rentallaravel.consiglia.dk')
+    public function handle()
     {
-
+        $webaddress = 'rentallaravel.consiglia.dk';
+        if ($this->argument('webaddress')) $webaddress = $this->argument('webaddress');
 
         $to = 'jbr@consiglia.dk.test-google-a.com';
         $mailtext = "Dette er en prøve";

@@ -8,7 +8,6 @@
 namespace App\Models;
 use DB;
 use Carbon\Carbon;
-use App\Mail\DefaultMail;
 use Illuminate\Support\Facades\Mail;
 use App\Helpers\ConfigFromDB;
 
@@ -330,6 +329,7 @@ class Batchlog extends BaseModel
                 //Get the mailsystem information from the specific configuration for the site:
                 $webaddressarray = explode('//', $webaddress);
                 if (sizeof($webaddressarray) > 1) $webaddress = $webaddressarray[1];
+                echo("\nWebaddress used: $webaddress");
                 ConfigFromDB::configFromDB($webaddress);
 
                 $from = config('mail.from');
@@ -367,7 +367,7 @@ class Batchlog extends BaseModel
                 $emaillog->customerid = $customerid;
                 $emaillog->houseid = $houseid;
                 $emaillog->ownerid = $ownerid;
-                $emaillog->from = $from;
+                $emaillog->from = $from['name'];
                 $emaillog->to = $emailaddress;
                 $emaillog->cc = '';
                 $emaillog->text = $mailtext;

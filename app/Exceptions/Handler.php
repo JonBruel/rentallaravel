@@ -105,7 +105,7 @@ class Handler extends ExceptionHandler
                 $mailtext .=  'Customerinformation: ' . $customer . '<br />';
                 $mailtext .=  '<br />Stack information below: <br />'.str_replace('#', '<br />#',$exception->getTraceAsString());
                 Mail::to('jbr@consiglia.dk')
-                    ->send(new DefaultMail($mailtext, $subject, 'jbr@consiglia.dk', 'System administrator','System administrator'));
+                    ->send(new DefaultMail($mailtext, $subject, config('mail.from')['address'], 'System administrator','System administrator'));
 
             }
             //die($customermessage);

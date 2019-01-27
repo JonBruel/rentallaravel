@@ -27,7 +27,6 @@ use App\Models\House;
 use App\Models\Customer;
 use Carbon\Carbon;
 use DB;
-use App\Mail\DefaultMail;
 
 
 /**
