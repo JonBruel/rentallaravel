@@ -151,7 +151,7 @@ class Contract extends BaseModel
             case 'customerid':
                 return $this->customer->name;
             case 'categoryid':
-                return $this->category->name;
+                return $this->category->category;
             case 'curencyid':
                 return $this->currency->currencysymbol;
             default:
@@ -178,7 +178,10 @@ class Contract extends BaseModel
             //    return Customer::filter()->where('customertypeid', 1000)->where('ownerid', $this->ownerid)->pluck('name', 'id')->toArray();
             case 'cultureid':
                 return  Culture::all()->pluck('culturename', 'id')->toArray();
-
+            case 'categoryid':
+                return  Category::all()->pluck('category', 'id')
+                    ->map(function ($item, $key) {return $item = __($item);} )
+                    ->toArray();
             default:
                 return null;
         }

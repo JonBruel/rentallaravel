@@ -36,37 +36,45 @@
                 </div>
             @endif
             <div class="form-group row">
-                @if(($field != 'currencyid') && (($field != 'discount') || (!$fromcalendar)))
+                @if(($field != 'currencyid') && ($field != 'categoryid') && (($field != 'discount') || (!$fromcalendar)))
                     {!! Form::label($field, __(ucfirst($field)).':', ['class' => 'control-label col-3 col']) !!}
                 @endif
-                    @if(str_contains($field, 'time'))
-                        {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-5 col form-control'])) !!}
+                @if($field == 'categoryid')
+                    @if(Gate::allows('Administrator'))
+                        {!! Form::label($field, __(ucfirst($field)).':', ['class' => 'control-label col-3 col']) !!}
+                        {!! Form::select($field, $models[0]->withSelect($field), $models[0]->categoryid, ['class' => 'col-2 form-control', 'onChange' => 'setFinalprice()', 'id' => 'currencyid', 'style' => 'padding: 1px 0 3px 10px; height:35px']) !!}
+                    @else
+                        {!! Form::hidden($field, $models[0]->$field, ['id' => $field]) !!}
                     @endif
-                    @if($field == 'discount')
-                        @if(!$fromcalendar)
-                            {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-2 col form-control clearfix', 'onChange' => 'setFinalprice()'])) !!}
-                        @else
-                            {!! Form::hidden($field, 0, ['id' => 'discount']) !!}
-                         @endif
-                     @endif
-                     @if($field == 'finalprice')
-                        @if(Gate::allows('Administrator'))
-                            {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-4 col form-control', 'onChange' => 'setDiscount()', 'style' => 'height: 35px;'])) !!}
-                        @else
-                            {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-4 col form-control', 'readonly' => true, 'style' => 'font-weight: bold; height: 35px;'])) !!}
-                        @endif
-                        @if(sizeof($currencySelect) > 0)
-                            {!! Form::select('currencyid', $currencySelect, $models[0]->currencyid, ['class' => 'col-4 form-control', 'onChange' => 'setFinalprice()', 'id' => 'currencyid', 'style' => 'padding: 1px 0 3px 10px; height:35px']) !!}
-                        @endif
+                @endif
+                @if(str_contains($field, 'time'))
+                    {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-5 col form-control'])) !!}
+                @endif
+                @if($field == 'discount')
+                    @if(!$fromcalendar)
+                        {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-2 col form-control clearfix', 'onChange' => 'setFinalprice()'])) !!}
+                    @else
+                        {!! Form::hidden($field, 0, ['id' => 'discount']) !!}
                     @endif
-                    @if($field == 'persons')
-                        {!! Form::select($field, $personSelectbox, $models[0]->$field, $vattr->validationOptions($field, ['autocomplete' => 'off', 'class' => 'col-2 form-control', 'onChange' => 'setFinalprice()', 'style' => 'padding: 1px 0 3px 10px;', 'id' => 'persons'])) !!}
-                        <button class="glyphicon glyphicon-plus rounded-circle" style="margin-left: 10px" onclick="addPersons(1);return false;"></button>
-                        <button class="glyphicon glyphicon-minus rounded-circle"  style="margin-left: 10px" onclick="addPersons(-1);return false;"></button>
+                 @endif
+                 @if($field == 'finalprice')
+                    @if(Gate::allows('Administrator'))
+                        {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-4 col form-control', 'onChange' => 'setDiscount()', 'style' => 'height: 35px;'])) !!}
+                    @else
+                        {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-4 col form-control', 'readonly' => true, 'style' => 'font-weight: bold; height: 35px;'])) !!}
                     @endif
-                    @if($field == 'message')
-                        {!! Form::textarea($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-9 col form-control clearfix', 'style' => 'max-width: 73%'])) !!}
+                    @if(sizeof($currencySelect) > 0)
+                        {!! Form::select('currencyid', $currencySelect, $models[0]->currencyid, ['class' => 'col-4 form-control', 'onChange' => 'setFinalprice()', 'id' => 'currencyid', 'style' => 'padding: 1px 0 3px 10px; height:35px']) !!}
                     @endif
+                @endif
+                @if($field == 'persons')
+                    {!! Form::select($field, $personSelectbox, $models[0]->$field, $vattr->validationOptions($field, ['autocomplete' => 'off', 'class' => 'col-2 form-control', 'onChange' => 'setFinalprice()', 'style' => 'padding: 1px 0 3px 10px;', 'id' => 'persons'])) !!}
+                    <button class="glyphicon glyphicon-plus rounded-circle" style="margin-left: 10px" onclick="addPersons(1);return false;"></button>
+                    <button class="glyphicon glyphicon-minus rounded-circle"  style="margin-left: 10px" onclick="addPersons(-1);return false;"></button>
+                @endif
+                @if($field == 'message')
+                    {!! Form::textarea($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-9 col form-control clearfix', 'style' => 'max-width: 73%'])) !!}
+                @endif
             </div>
         @endforeach
         {!! Form::hidden('fromcalendar', ($fromcalendar)?1:0) !!}

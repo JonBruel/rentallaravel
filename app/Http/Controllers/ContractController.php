@@ -283,7 +283,7 @@ class ContractController extends Controller
             if (!$model->departuredatetime) $model->departuredatetime = Carbon::parse($departuredatetime);
         }
 
-        if  (Gate::allows('Administrator')) $fields = ['persons', 'discount', 'finalprice', 'currencyid', 'landingdatetime', 'departuredatetime', 'message'];
+        if  (Gate::allows('Administrator')) $fields = ['persons', 'discount', 'finalprice', 'currencyid', 'categoryid', 'landingdatetime', 'departuredatetime', 'message'];
         else $fields = $fields = ['persons', 'discount', 'finalprice', 'currencyid'];
 
         //We need the currency rate for the view, calculation based on price and discount:
@@ -354,6 +354,7 @@ class ContractController extends Controller
         $contract->discount = Input::get('discount');
         $contract->persons = Input::get('persons');
         $contract->message = Input::get('message');
+        $contract->categoryid = Input::get('categoryid');
         //$contract->save();
 
         // Update bookings and price information
