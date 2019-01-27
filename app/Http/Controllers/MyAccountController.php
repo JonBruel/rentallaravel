@@ -189,6 +189,11 @@ class MyAccountController extends Controller
         if (!Auth::check()) return redirect('/login');
         $user = Auth::user();
         $emails = Emaillog::where('to', $user->email)->orderBy('created_at','desc')->get();
+
+        //For testing we send all emails to jbr@consiglia.dk, not to the user, and we it here
+        if ((sizeof($emails) == 0) && (strpos($user->email, '@consiglia.dk') > 1)) {
+            $emails = Emaillog::where('customerid', $user->id)->orderBy('created_at','desc')->get();
+        }
         return view('myaccount/listmails', ['models' => $emails, 'title' => __('My emails')]);
     }
 
