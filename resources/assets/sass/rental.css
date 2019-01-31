@@ -110,3 +110,30 @@ table.calendar td.pad:hover {
     padding: 0 .5em .5em 0;
     height: 150px;
 }
+
+/*
+Used for order of weeks among other things
+ */
+
+.pending {
+    background-color: #FF9191;
+}
+
+.occupied {
+    background-color: #ff5a4b;
+}
+
+
+.family {
+    background-color: rgba(25, 219, 241, 0.42);
+}
+
+.notoffered {
+    background: #005588;
+}
+
+.halfday {
+    background: #88ff66;
+}
+
+.description {max-width: 98%}
