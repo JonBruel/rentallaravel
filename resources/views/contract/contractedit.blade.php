@@ -36,7 +36,7 @@
                 </div>
             @endif
             <div class="form-group row">
-                @if(($field != 'currencyid') && ($field != 'categoryid') && (($field != 'discount') || (!$fromcalendar)))
+                @if(($field != 'currencyid') && ($field != 'categoryid') && (($field != 'discount') || (!$fromcalendar) || Gate::allows('Administrator')))
                     {!! Form::label($field, __(ucfirst($field)).':', ['class' => 'control-label col-3 col']) !!}
                 @endif
                 @if($field == 'categoryid')
@@ -51,7 +51,7 @@
                     {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-5 col form-control'])) !!}
                 @endif
                 @if($field == 'discount')
-                    @if(!$fromcalendar)
+                    @if((!$fromcalendar) || (Gate::allows('Administrator')))
                         {!! Form::text($field, $models[0]->$field, $vattr->validationOptions($field, ['class' => 'col-2 col form-control clearfix', 'onChange' => 'setFinalprice()'])) !!}
                     @else
                         {!! Form::hidden($field, 0, ['id' => 'discount']) !!}
