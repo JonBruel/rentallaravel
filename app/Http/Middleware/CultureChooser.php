@@ -50,16 +50,40 @@ class CultureChooser
         $sanitizedpath = '/'.$request->path();
         $sanitizedpath = str_replace('//', '/', $sanitizedpath);
 
-        //Save path history in session
-        $sanitizedpath1back = session('sanitizedpath', '');
-        $sanitizedpath2back = session('sanitizedpath1back', '');
+        $pathhistory = session('pathhistory', []);
 
-        if(strpos($sanitizedpath, 'ajax') === false) session(['sanitizedpath' => $sanitizedpath]);
-        session(['sanitizedpath1back' => $sanitizedpath1back]);
-        session(['sanitizedpath2back' => $sanitizedpath2back]);
+        $path = str_replace('?&', '?', $sanitizedpath.'?'.$querystring);
 
-        session(['querystring1back' => session('querystring', '')]);
-        if(strpos($sanitizedpath, 'ajax') === false) session(['querystring' => $querystring]);
+        if (strpos($querystring,"back=1") !== false) {
+            array_pop($pathhistory);
+
+            //Remove back=1 from query, as we are not going to use it anymore
+            unset($request['back']);
+        }
+        else {
+            //Save path history in session, but not for ajax calls and non-GET requests
+            if (($request->isMethod('GET')) && (strpos($sanitizedpath, 'ajax') === false))
+            {
+                //We only add the path info to the history if it is different from the last
+                $addpath = true;
+                $historylength = sizeof($pathhistory) - 1;
+                if ($historylength >= 0) {
+                    $lastpath = $pathhistory[$historylength];
+                    if ($lastpath == $path) $addpath = false;
+                }
+                if ($addpath) {
+                    $pathhistory[] = $path;
+                }
+            }
+        }
+
+        $historylength = sizeof($pathhistory);
+        $back = "";
+        if ($historylength > 1) {
+            $back = $pathhistory[$historylength - 2];
+        }
+        session(['back' => $back]);
+        session(['pathhistory' => $pathhistory]);
 
         return $next($request);
     }
