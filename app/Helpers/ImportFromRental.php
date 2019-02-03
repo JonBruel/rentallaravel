@@ -109,6 +109,16 @@ class ImportFromRental
             static::copyTable('testimonials', Testimonial::class, $handle);
             static::copyTable('batchtask', Batchtask::class, $handle);
             static::copyTable('emaillog', Emaillog::class, $handle);
+
+            //Update quantity field in contractlines
+            $contracts = Contract::with('contractlines')->get();
+            foreach ($contracts as $contract) {
+                foreach ($contract->contractlines as $contractline)  {
+                    $contractline->quantity = $contract->persons;
+                    $contractline->save();
+                }
+            }
+
             //die('Name of last customer in rental: '.var_dump($new));
         }
         catch(Exception $e)
