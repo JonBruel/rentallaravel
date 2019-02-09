@@ -225,7 +225,7 @@ class HomeController extends Controller
         $this->checkHouseChoice('home/checkbookings'.'?menupoint='.session('menupoint'));
 
         $defaultHouse = session('defaultHouse' , config('app.default_house'));
-        $models = Periodcontract::filter(Input::all())->where('houseid', $defaultHouse)->whereDate('from', '>=', Carbon::now())->paginate(52);
+        $models = Periodcontract::filter(Input::all())->where('houseid', $defaultHouse)->whereDate('from', '>=', Carbon::now())->orderBy('from', 'asc')->paginate(52);
 
         return view('home/checkbookingslist', ['models' => $models, 'house' => House::Find($defaultHouse),  'hidesalt' => true])
             ->withHeader('Cache-Control', 'no-cache, must-revalidate');

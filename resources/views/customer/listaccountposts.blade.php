@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{__('Account posts for ')}}{{$customername}}</h3>
-    <div class="alert alert-warning border border-primary">{{__('Order: latest first') }}.</div>
+    <div class="alert alert-warning border border-primary">{{__('Order: latest first.') }}</div>
     <br /><br />
     <div class="table-responsive  table-sm col-md-12">
 

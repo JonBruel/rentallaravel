@@ -90,7 +90,7 @@
 
         <main class="container" style="margin-top: 5px; max-width: 100%">
             @if((!isset($hidesalt)) && (Gate::allows('Administrator')))
-            <span id="statusrow"><strong>{{__('Here you are')}}: {{session('sanitizedpath','Home')}} <a href="{{session('sanitizedpath1back','')}}?{{session('querystring1back','')}}">{{__('Return')}}</a></strong></span>
+            <span id="statusrow"><strong>{{__('Here you are')}}: {{session('sanitizedpath','Home')}} <a href="{{session('back','')}}&back=1">{{__('Return')}}</a></strong></span>
             @endif
             @if(session('warning'))
                 <div class="alert alert-warning border border-primary">{{session('warning')}}</div>

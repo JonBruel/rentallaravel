@@ -337,7 +337,7 @@ class CustomerController extends Controller
     public function checkaccount($id)
     {
         $customername = Customer::Find($id)->name;
-        $accountposts = Accountpost::where('customerid', $id)->orderBy('contractid')->orderBy('created_at')->get();
+        $accountposts = Accountpost::where('customerid', $id)->orderBy('contractid', 'desc')->orderBy('created_at', 'asc')->get();
         return view('customer/listaccountposts', ['models' => $accountposts, 'customername' => $customername]);
     }
 

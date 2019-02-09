@@ -82,7 +82,7 @@
                     {!! Form::label('posttypeid', __('Posttype').':') !!}
                 </td>
                 <td>
-                    {!! Form::select('posttypeid',[50 => __('Prepayment'), 100 => __('Final payment received'), 300 => __('Rounding and currency adjustments')],'',['dusk' => 'posttypeid', 'class' => 'form-control col-md-11', 'style' => 'padding: 1px 0 3px 10px;']) !!}
+                    {!! Form::select('posttypeid',[50 => __('Prepayment'), 100 => __('Final payment received'), 300 => __('Rounding and currency adjustments'), 5 => __('For test mails')],'',['dusk' => 'posttypeid', 'class' => 'form-control col-md-11', 'style' => 'padding: 1px 0 3px 10px;']) !!}
                 </td>
                 <td>
                     {!! Form::label('round', __('Tick if you want to make balance zero').':') !!}

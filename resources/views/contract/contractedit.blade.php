@@ -68,7 +68,8 @@
                     @endif
                 @endif
                 @if($field == 'persons')
-                    {!! Form::select($field, $personSelectbox, $models[0]->$field, $vattr->validationOptions($field, ['autocomplete' => 'off', 'class' => 'col-2 form-control', 'onChange' => 'setFinalprice()', 'style' => 'padding: 1px 0 3px 10px;', 'id' => 'persons'])) !!}
+                    {!! Form::hidden($field, $models[0]->$field, $vattr->validationOptions($field, ['autocomplete' => 'off', 'class' => 'col-2 form-control', 'onChange' => 'setFinalprice()', 'style' => 'padding: 1px 0 3px 10px;', 'id' => 'persons'])) !!}
+                    <span id="persons_0">{{$models[0]->$field}}</span>
                     <button class="glyphicon glyphicon-plus rounded-circle" style="margin-left: 10px" onclick="addPersons(1);return false;"></button>
                     <button class="glyphicon glyphicon-minus rounded-circle"  style="margin-left: 10px" onclick="addPersons(-1);return false;"></button>
                 @endif
@@ -78,6 +79,7 @@
             </div>
         @endforeach
         {!! Form::hidden('fromcalendar', ($fromcalendar)?1:0) !!}
+        {!! Form::hidden('ratechosen', 0, ['id' => 'ratechosen']) !!}
         {!! Form::hidden('periodid', $periodid) !!}
         {!! Form::hidden('id', $models[0]->id, ['dusk' => 'id']) !!}
         {!! Form::hidden('price', $models[0]->price, ['id' => 'hiddenprice']) !!}
@@ -192,6 +194,7 @@
         $(document).ready(function(){
             $("[name='Book']").css('opacity', 0.2);
             getWeeks(0);
+            addPersons(0);
         });
 
         $("#calendar").scrollTop(20);
@@ -259,7 +262,7 @@
             url = '/ajax/getweeks/' + houseid + '/' + culture + '/' + offset + '/' + periodid + '/' + contractid ;
             new $.getJSON(url, function(periods)
             {
-                content = '<table class="table table-striped"><tr><th>{{__('Tick period')}}</th><th>{{__('Period')}}</th></tr>';
+                content = '<table class="table table-striped"><tr><th>{{__('Tick period')}}</th><th>{{__('Period')}}</th><th>{{__('Guests')}}</th></tr>';
                 //We add a large number to ensure the index is positive
                 if (periods.warning == 'no records') alert('nothing found');
                 periodchunk[offset+1000] = periods;
@@ -276,15 +279,24 @@
                         checked = '';
                         style = '';
                         if (checkedstatus[period.id] != undefined) period.chosen = checkedstatus[period.id];
+                        if (!period.persons) period.persons = 2;
                         if (period.chosen) checked = ' checked = "checked"';
                         free = '<input onClick="setFinalprice()"' + checked + ' name="checkedWeeks[' + period.id + ']" id="checkedWeeks_' + period.id + '" type="checkbox" value="'+period.id+'">';
                         if (period.committed && !period.chosen) {
                             free = '{{__('Occupied')}}';
                             style = ' style = "opacity: 0.40"';
-                            content += '<tr' + style + '><td colspan="2">' + free + ': ' + period.periodtext + '</td></tr>';
+                            content += '<tr' + style + '><td colspan="3">' + free + ': ' + period.periodtext + '</td></tr>';
                         }
+
                         //content += '<tr' + style + '><td colspan="2">' + free + period.periodtext + '</td></tr>';
-                        else content += '<tr' + style + '><td>' + free + '</td><td onclick="togglecheck('+period.id+');">' + period.periodtext + '</td></tr>';
+                        else {
+                            fieldname = "persons_" + period.id;
+                            addreduce = '<input class="col-1 col form-control clearfix" name="'+fieldname+'" type="hidden" value="'+period.persons+'" id="'+fieldname+'">';
+                            addreduce += '<span id=span_'+period.id+'>'+period.persons+'</span>';
+                            addreduce += '<span style="margin-left: 10px" class="glyphicon glyphicon-plus rounded-circle" onclick="addPersonsPeriods(1, ' + period.id + ');return false;"></span>';
+                            addreduce += '<span style="margin-left: 10px" class="glyphicon glyphicon-minus rounded-circle" onclick="addPersonsPeriods(-1, ' + period.id + ');return false;"></span>';
+                            content += '<tr' + style + '><td>' + free + '</td><td onclick="togglecheck('+period.id+');">' + period.periodtext + '</td><td>' + addreduce + '</td></tr>';
+                        }
                     });
                 });
                 content += '</tr>';
@@ -307,11 +319,37 @@
 
         function addPersons(increment)
         {
-            persons = Number($('#persons').val());
+            persons = Math.round(Number($('#persons').val()));
             persons = persons + increment;
             persons = Math.min(persons, maxpersonscommon);
             persons = Math.max(persons, basepersonscommon);
             $('#persons').val(persons);
+            $('#persons_0').text(persons);
+
+            $("input:checked").each(function() {
+                $('#persons_' + this.value).val(persons);
+                $('#span_' + this.value).text(persons);
+            });
+
+            setFinalprice();
+        }
+
+        function addPersonsPeriods(increment, id)
+        {
+            persons = Number($('#persons_'+id).val());
+            persons = persons + increment;
+            persons = Math.min(persons, maxpersonscommon);
+            persons = Math.max(persons, basepersonscommon);
+            $('#persons_'+id).val(persons);
+            $('#span_'+id).text(persons);
+            weeks = 0;
+            sum = 0;
+            $("input:checked").each(function() {
+                weeks++;
+                sum += Number($('#persons_' + this.value).val());
+            });
+            $('#persons').val(0.01*Math.round(100*sum/weeks));
+            $('#persons_0').text(0.01*Math.round(100*sum/weeks));
             setFinalprice();
         }
 
@@ -362,7 +400,7 @@
             periods = 0;
             lastto = 0;
             $("input:checked").each(function() {
-                price += baseprice[this.value] + (persons - basepersons[this.value])*personprice[this.value];
+                price += baseprice[this.value] + (Number($('#persons_'+this.value).val()) - basepersons[this.value])*personprice[this.value];
                 periods = periods + 1;
                 if (periods > 1)
                 {
@@ -383,6 +421,7 @@
             @endif
 
             $('#hiddenprice').val(rate*price);
+            $('#ratechosen').val(rate);
             return rate*price;
         }
 

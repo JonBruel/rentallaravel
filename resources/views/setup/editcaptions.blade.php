@@ -4,7 +4,7 @@
     {!! Form::open(['url' => 'setup/updatecaptions/'.$id]) !!}
     {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
     <br /><br />
-    <div class="table-responsive table-sm">
+    <div class="table-responsive table-sm" style="margin-left: 0px">
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -46,8 +46,8 @@
                 <tr>
                     <td>
                         <div class="row">
-                            {!! Form::checkbox('key['.$key.']', $key, 0, ['class' => 'form-control col-md-6']) !!}
-                            {!! Form::checkbox('delete['.$key.']', $key, 0, ['class' => 'form-control col-md-6']) !!}
+                            {!! Form::checkbox('key['.$key.']', $key, 0, ['class' => 'form-control col-md-4', 'style' => 'margin-left: 15px']) !!}
+                            {!! Form::checkbox('delete['.$key.']', $key, 0, ['class' => 'form-control col-md-4']) !!}
                         </div>
 
                     </td>

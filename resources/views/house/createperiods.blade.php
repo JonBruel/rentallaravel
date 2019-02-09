@@ -8,6 +8,7 @@
             <tr>
                 <td colspan="7">
                     <p>{{ __('createperiods.explaintext')}}</p>
+                    <p>{{ __('Last 5 periods end:')}} <strong>{{ $lastperiods  }}</strong></p>
                 </td>
             </tr>
             <tr>

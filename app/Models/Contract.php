@@ -231,15 +231,16 @@ class Contract extends BaseModel
 	/*
 	 * Add a period determined by the periodid.
 	 * Retuns 0 if OK.
-	 * Return 1 if the period is alreadu occupied.
+	 * Return 1 if the period is already occupied.
 	 */
-	public function addWeek(int $periodid)
+	public function addWeek(int $periodid, $persons = 2)
     {
         if (Contractline::where('periodid', $periodid)->where('contractid', '<>', $this->id)->get()->count() > 0) return 1;
 
         $contractline = new Contractline();
         $contractline->contractid = $this->id;
         $contractline->periodid = $periodid;
+        $contractline->quantity = $persons;
         $contractline->save();
         return 0;
     }
@@ -424,23 +425,23 @@ class Contract extends BaseModel
             $moretodo = false;
             //Calculate the stored price in owners currency
             $contractprice = $contract->finalprice * $usedrate;
-            $previousprice = 0;
 
             //Calculate the price change
+            $previousprice = 0;
             foreach (Accountpost::where('contractid', $contractid)->whereIn('posttypeid', [10,110])->where('passifiedby', 0)->get()
                      as $accountpost) $previousprice += $accountpost->amount;
 
             $pricechange = $contractprice - $previousprice;
 
             //Check if the change is above threshold:
-
-            if ($contractprice != 0) $compareto = $contractprice;
-            else  $compareto = 1;
+            $compareto = max($contractprice, $previousprice);
 
             //Check if we want to register the change, small changes are neglected
             $savechange = false;
-            $relativechange = abs($pricechange / $compareto);
-            if ($relativechange > 0.001) $savechange = true;
+            if ($compareto != 0) {
+                $relativechange = abs($pricechange / $compareto);
+                if ($relativechange > 0.001) $savechange = true;
+            }
 
             //Check if a silent change record already exists, delete id and create a new
             Accountpost::where('contractid', $contractid)->where('posttypeid', 140)->where('passifiedby', 0)->delete();
@@ -693,9 +694,9 @@ class Contract extends BaseModel
                     if ($key == 'baseprice')
                         $listedvalue = static::format($usedrate * ($bp = $period->baseprice), 2, $culture);
                     if ($key == 'persons')
-                        $listedvalue = $this->persons;
+                        $listedvalue = $contractline->quantity;
                     if ($key == 'personsprice')
-                        $listedvalue = static::format($usedrate * ($pp = $period->personprice * max(0, ($this->persons - $period->basepersons))), 2, $culture);
+                        $listedvalue = static::format($usedrate * ($pp = $period->personprice * max(0, ($contractline->quantity - $period->basepersons))), 2, $culture);
                     if ($key == 'total')
                         $listedvalue = static::format($usedrate * ($bp + $pp), 2, $culture);
                     $r .= '<td align="right">&nbsp;&nbsp;' . $listedvalue . '</td>';
@@ -730,6 +731,23 @@ class Contract extends BaseModel
         }
         return $periodtext;
     }
+
+    public function getDuration()
+    {
+        $contractlines = Contractline::where('contractid', $this->id)->get();
+        if (sizeof($contractlines) > 0) {
+            $from = $contractlines[0]->period->from;
+            $to = $contractlines[0]->period->to;
+            foreach ($contractlines as $contractline)
+            {
+                if ($from->gt($contractline->period->from)) $from = $contractline->period->from;
+                if ($to->lt($contractline->period->to)) $to = $contractline->period->to;
+            }
+            $duration = $to->diffInDays($from);
+        }
+        return $duration;
+    }
+
 
     public function getReturndate()
     {

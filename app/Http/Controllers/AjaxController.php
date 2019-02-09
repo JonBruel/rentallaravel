@@ -238,7 +238,7 @@ class AjaxController extends Controller
                 $chosen = false;
                 if ($periodid == $p->id) $chosen = true;
                 if ($contractid == $p->contractid) $chosen = true;
-                $forJson[] = ['id' => $p->id, 'committed' => $committed, 'periodtext' => $p->getEnddays($culture),
+                $forJson[] = ['id' => $p->id, 'committed' => $committed, 'periodtext' => $p->getEnddays($culture), 'persons' => $p->persons,
                     'chosen' => $chosen, 'personprice' => $p->personprice, 'maxpersons' => $p->maxpersons,
                     'basepersons' => $p->basepersons, 'baseprice' => $p->baseprice, 'warning' => $warning,
                     'rate' => $rate, 'from' => $p->from->format('Y-m-d'), 'to' => $p->to->format('Y-m-d')];

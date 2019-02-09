@@ -27,11 +27,11 @@ use App\Models\Emaillog;
 use App\Models\Periodcontract;
 use App\Models\Batchtask;
 use App\Models\Culture;
-use App\Models\Customer;
 use App;
 use App\Models\Contractoverview;
 use Carbon\Carbon;
 use Number;
+use DB;
 
 /**
  * Class ContractController. This is a controller with contains a wast amount of logic
@@ -304,17 +304,40 @@ class ContractController extends Controller
         $choosecurrency = true;
         $rates = [];
         $currencySelect = [];
-        if ($choosecurrency)
+        //We check if we are editing an existing order, if so we use the same currency and rate as during the original purchase:
+        $contractprice = DB::table('contractprice')->where('id', $contractid)->first();
+        if ($contractprice) {
+            $existingprice = $contractprice->price;
+
+            //Check recorded account post
+            Accountpost::$ajax = true;
+            $accountpost = Contractoverview::Find($contractid);
+            if ($accountpost) {
+                $accountprice = $accountpost->contractamount;
+                $customercurrencyid = $accountpost->customercurrencyid;
+                $choosecurrency = false;
+                $fixedrate = $accountprice/$existingprice;
+            }
+        }
+
+
+        // The data for the currency is build here. For changes in existing orders,
+        // the currency cannot be changed, and we use the same rate as used at the initial order.
+        // The chosen rate will be posted to contractupdate below.
+        foreach (Culture::all() as $cult)
         {
-            //Calculate the rates as a function of the currencyid
-            //Set the array used for the currencySelect in the view
-            foreach (Culture::all() as $cult)
-            {
-                //$cultuteidToCurrencyid[$cult->culture] = $culture->currencyid;
+            if ($choosecurrency) {
                 $rates[$cult->currencyid] = $firstperiod->getRate($cult->culture)['rate'];
                 $currencySelect[$cult->currencyid] = $firstperiod->getRate($cult->culture)['currencysymbol'];
             }
+            else {
+                if ($cult->currencyid == $customercurrencyid) {
+                    $rates[$cult->currencyid] = $fixedrate;
+                    $currencySelect[$cult->currencyid] = $firstperiod->getRate($cult->culture)['currencysymbol'];
+                }
+            }
         }
+
 
         return view('contract/contractedit', ['models' => $models, 'rate' => $rate, 'rates' => $rates, 'fields' => $fields,
                                             'vattr' => (new ValidationAttributes($models[0]))->setCast('message', 'textarea'),
@@ -381,16 +404,18 @@ class ContractController extends Controller
         $price = 0;
         $persons = Input::get('persons');
 
-        //We add the periods
+        //We add the periods and calculate the duration
         $firstperiodid = 0;
 
         foreach (Input::get('checkedWeeks') as $periodid) {
-            if (0 != $contract->addWeek($periodid)) {
+            $persons = Input::get('persons_'.$periodid);
+            if (0 != $contract->addWeek($periodid, $persons)) {
                 //$request>session()->flash('warning', 'Please clich the first week you want to rent!');
                 session()->flash('warning', 'The chosen period is already booked, please re-order.');
                 return redirect('contract/adminedit/'.$contractid); //There is a difference here
             }
             if ($firstperiodid == 0) $firstperiodid = $periodid;
+
             $period = Periodcontract::find($periodid);
             $price += (max(0, $persons - $period->basepersons))*$period->personprice + $period->baseprice;
         }
@@ -398,27 +423,31 @@ class ContractController extends Controller
 
         Contract::$ajax = true;
         $period = Periodcontract::find($firstperiodid);
-        $rate = $period->getRate('', $currencyid)['rate'];
+        //$rate = $period->getRate('', $currencyid)['rate'];
+        // Instead of the present rate, we take the rate from the form, which for existing contracts is the rate used the first time.
+        $rate = Input::get('ratechosen');
         $contract->price = $price * $rate;
+        $contract->duration = $contract->getDuration();
         $newfinalprice = $price * $rate * (1-$contract->discount/100);
         $contract->finalprice = $newfinalprice;
+
 
         //We are administrating the contract
         if (Input::get('fromcalendar', 1) == 0)
         {
             //Set rights
             if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
-
+            //die("New final price: " . $newfinalprice);
             //Check if we want to ignore the change, be sure we don't divide with 0
             if ($oldfinalprice == 0) $oldfinalprice = 1;
             if (abs(($oldfinalprice - $newfinalprice)/$oldfinalprice) > 0.001)
             {
                 $contract->finalprice = $newfinalprice;
                 $contract->status = 'AwaitsUpdate';
+                $contract->save();
                 Contract::$ajax = true;
                 Contract::commitOrder(140, Auth::user()->id, $contractid, $contract->customerid);
                 Contract::$ajax = false;
-                $contract->save();
                 $success = __('Contract updated').'.';
             }
             else $success = __('Contract not updated  as new final price is within 1 o/oo of old final price').'.';
@@ -499,6 +528,7 @@ class ContractController extends Controller
         $year = Input::get('yearfrom', $thisyear);
         $contractquery = Contractoverview::filter(Input::all())->sortable()->orderBy('from')->with('customer')->with('house');
         $contractoverview = $contractquery->get();
+
         return view('contract/listcontractoverviewforowners', ['year' => $year, 'years' => $years, 'contractoverview' => $contractoverview, 'houses' => $houses, 'houseid' => $houseid]);
     }
 

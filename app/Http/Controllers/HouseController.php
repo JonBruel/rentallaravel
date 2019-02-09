@@ -80,7 +80,7 @@ class HouseController extends Controller
         if (!Gate::allows('Owner')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $model = (new House)->findOrFail($id);
 
-        $fields = array_diff(Schema::getColumnListing($model->getTable()), ['created_at', 'updated_at', 'lockbatch', 'viewfilter']);
+        $fields = array_diff(Schema::getColumnListing($model->getTable()), ['created_at', 'updated_at', 'lockbatch', 'viewfilter', 'isprivate']);
         $vattr = (new ValidationAttributes($model))->setCast('id', 'hidden');
         $housefields = $model->toArray();
         $googlekey = config('app.googlekey', 'AIzaSyCmXZ5CEhhFY3-qXoHRzs0XFK4a495LyxE');
@@ -121,7 +121,7 @@ class HouseController extends Controller
             $houseI18ns[$culture->culture] = $houseI18n;
         }
 
-        $fields = array_diff(Schema::getColumnListing($houseI18n->getTable()), ['culture', 'id', 'created_at', 'updated_at']);
+        $fields = array_diff(Schema::getColumnListing($houseI18n->getTable()), ['culture', 'id', 'created_at', 'updated_at', 'isprivate']);
         $vattr = (new ValidationAttributes($houseI18n))->setCast('id', 'hidden')->setCast('culture', 'hidden');
 
         $fieldselect = [];
@@ -377,6 +377,14 @@ class HouseController extends Controller
         $houseid = Input::get('houseid', 1);
         $thisyear = Carbon::now()->year;
 
+        //Find last 5 period ends
+        $periods = Period::where('houseid', $houseid)->orderBy('to', 'desc')->limit(5)->get();
+        $lastperiods = '';
+        foreach ($periods as $key => $period) {
+            if ($key == 0) $lastperiods = $period->to->formatLocalized('%a %d %b %Y').'.';
+            else $lastperiods = $period->to->formatLocalized('%a %d %b %Y') . ', ' . $lastperiods;
+        }
+
         //Initialize raw example data
         if (Input::get('test', 'no') == 'no')
         {
@@ -419,7 +427,8 @@ class HouseController extends Controller
             'periodlength' => $periodlength, 'seasons' => $seasons,
             'year' => $year,
             'easter' => $easter,
-            'data' => $data]);
+            'data' => $data,
+            'lastperiods' => $lastperiods]);
     }
 
     /**

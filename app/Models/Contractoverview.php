@@ -42,10 +42,6 @@ class Contractoverview extends BaseModel
 	protected $table = 'contractoverview';
 	public $timestamps = false;
 
-    public $rules = [
-        'persons' => ['required', 'between:2,30'],
-    ];
-
     public $sortable = [
         'house.name',
         'customer.name',
@@ -63,7 +59,6 @@ class Contractoverview extends BaseModel
 		'houseid' => 'int',
 		'ownerid' => 'int',
 		'customerid' => 'int',
-		'persons' => 'int',
 		'duration' => 'float',
         'price' => 'float',
 		'finalprice' => 'float',
