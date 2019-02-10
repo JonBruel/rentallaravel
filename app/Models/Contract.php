@@ -662,7 +662,7 @@ class Contract extends BaseModel
     }
 
 
-    public function getOrder($culture)
+    public function getOrder($culture = '')
     {
         $sum = 0;
         $r = '';
@@ -706,7 +706,7 @@ class Contract extends BaseModel
             }
         }
         if ($this->discount > 0) {
-            $r .= '<tr><td colspan="3"></td>';
+            $r .= '<tr><td colspan="4"></td>';
             $r .= '<td>&nbsp;&nbsp;Discount: ' . static::format($this->discount, 2, $culture) . '% </td>';
             $r .= '<td>&nbsp;&nbsp;' . static::format($usedrate * ($sum * $this->discount / 100), 2, $culture) . ' </td></tr>';
         }
