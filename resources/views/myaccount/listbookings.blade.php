@@ -6,11 +6,11 @@
             @foreach($models as $model)
                 <tr>
                     <td>
-                        <strong>{{ $model->contract->house->name }}:</strong>
+                        <strong>{{ $model->contract->house->name }}:</strong> {{ __('To change the order, please contact the owner.') }}
                     </td>
                 </tr>
                 <tr>
-                    <td>{{__('Period')}}: {{ $model->contract->getPeriodtext(\App::getLocale()) }}. {{__('Final price')}}; {{ $model->contract->finalprice }}</td>
+                    <td>{!! $model->contract->getOrder() !!} </td>
                 </tr>
             @endforeach
             </tbody>

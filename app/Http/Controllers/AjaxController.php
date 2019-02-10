@@ -211,12 +211,12 @@ class AjaxController extends Controller
         }
 
         //Prepare for showing several weeks, limit to 6 weeks using the paginate method
-        $fromdate = $period->from->subDays(15-7*6*$offset);
+        $fromdate = $period->from->subDays(15-7*8*$offset);
         $periodcontracts = Periodcontract::where('houseid', $houseid)
             ->whereDate('from', '>', $fromdate)
             ->whereDate('to', '>', Carbon::now())
             ->orderBy('from')
-            ->paginate(6);
+            ->paginate(8);
 
         //We check if some record are not included due to the to requirement
         $expelledperiods = Periodcontract::where('houseid', $houseid)

@@ -1,5 +1,25 @@
 @extends('layouts.app')
 @section('content')
+    <div class="modal" tabindex="-1" role="dialog" id="adjustguestsinfo">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ __('Tip') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ __('You may adjust the number of guests for each period chosen.') }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <h4 style="text-align: center">{{$models[0]->house->name}}</h4>
     @if(Gate::allows('Administrator'))<h4>{{$models[0]->customer->name}}, {{__('Contract').': '.$models[0]->id}}</h4>@endif
     <div class="table">
@@ -84,7 +104,7 @@
         {!! Form::hidden('id', $models[0]->id, ['dusk' => 'id']) !!}
         {!! Form::hidden('price', $models[0]->price, ['id' => 'hiddenprice']) !!}
 
-        <div class="border border-primary rounded col col-md-12" >
+        <div class="border border-primary rounded col col-md-12" style="border-width: 3px">
             <div style="text-align: right;">
                 <!--<button class='btn btn-success' onclick='getWeeks(lessWeeks(0));return false'>{{__('Reset')}}</button>-->
             </div>
@@ -104,14 +124,11 @@
                     </div>
                 </div>
             </div>
-            <div style="max-height: 230px; overflow-y: scroll;" id="calendar">
-
-
-            <div id="showweeks" class="row col-12" style="margin-left: 0">
-                <h3>{{__('Please wait until the weeks are shown!')}}</h3>
-                <div style="background: rgba( 255, 255, 255, .8 ) url('/images/ajax-loader.gif') 50% 50%  no-repeat;"></div>
-            </div>
-
+            <div style="max-height: 290px; overflow-y: scroll; margin-top: 3px; margin-bottom: 3px" id="calendar">
+                <div id="showweeks" class="row col-12" style="margin-left: 0">
+                    <h3>{{__('Please wait until the weeks are shown!')}}</h3>
+                    <div style="background: rgba( 255, 255, 255, .8 ) url('/images/ajax-loader.gif') 50% 50%  no-repeat;"></div>
+                </div>
             </div>
         </div>
         <br />
@@ -165,6 +182,7 @@
 
         offsetminus = 0;
         offsetplus = 0;
+        showadjustguestsinfo = false;
         adjustOffsetMinus = true;
         periodchunk = [];
         baseprice = [];
@@ -262,7 +280,7 @@
             url = '/ajax/getweeks/' + houseid + '/' + culture + '/' + offset + '/' + periodid + '/' + contractid ;
             new $.getJSON(url, function(periods)
             {
-                content = '<table class="table table-striped"><tr><th>{{__('Tick period')}}</th><th>{{__('Period')}}</th><th>{{__('Guests')}}</th></tr>';
+                content = '<table class="table table-striped"><tr><th>{{__('Period')}}</th><th>{{__('Choose')}}</th><th>{{__('Guests')}}</th></tr>';
                 //We add a large number to ensure the index is positive
                 if (periods.warning == 'no records') alert('nothing found');
                 periodchunk[offset+1000] = periods;
@@ -281,7 +299,7 @@
                         if (checkedstatus[period.id] != undefined) period.chosen = checkedstatus[period.id];
                         if (!period.persons) period.persons = 2;
                         if (period.chosen) checked = ' checked = "checked"';
-                        free = '<input onClick="setFinalprice()"' + checked + ' name="checkedWeeks[' + period.id + ']" id="checkedWeeks_' + period.id + '" type="checkbox" value="'+period.id+'">';
+                        free = '<input class="" onClick="setFinalprice()"' + checked + ' name="checkedWeeks[' + period.id + ']" id="checkedWeeks_' + period.id + '" type="checkbox" value="'+period.id+'">';
                         if (period.committed && !period.chosen) {
                             free = '{{__('Occupied')}}';
                             style = ' style = "opacity: 0.40"';
@@ -291,11 +309,11 @@
                         //content += '<tr' + style + '><td colspan="2">' + free + period.periodtext + '</td></tr>';
                         else {
                             fieldname = "persons_" + period.id;
-                            addreduce = '<input class="col-1 col form-control clearfix" name="'+fieldname+'" type="hidden" value="'+period.persons+'" id="'+fieldname+'">';
+                            addreduce = '<input  name="'+fieldname+'" type="hidden" value="'+period.persons+'" id="'+fieldname+'">';
                             addreduce += '<span id=span_'+period.id+'>'+period.persons+'</span>';
                             addreduce += '<span style="margin-left: 10px" class="glyphicon glyphicon-plus rounded-circle" onclick="addPersonsPeriods(1, ' + period.id + ');return false;"></span>';
                             addreduce += '<span style="margin-left: 10px" class="glyphicon glyphicon-minus rounded-circle" onclick="addPersonsPeriods(-1, ' + period.id + ');return false;"></span>';
-                            content += '<tr' + style + '><td>' + free + '</td><td onclick="togglecheck('+period.id+');">' + period.periodtext + '</td><td>' + addreduce + '</td></tr>';
+                            content += '<tr' + style + '><td onclick="togglecheck('+period.id+');">' + period.periodtext + '</td><td>' + free + '</td><td><div id="addreduce_' + period.id + '" style="border: none; border-color: red">' + addreduce + '</div></td></tr>';
                         }
                     });
                 });
@@ -413,6 +431,24 @@
 
                 }
                 lastto = to[this.value];
+            });
+
+            if ((periods > 1) && (!showadjustguestsinfo)) {
+                // Show modal informing customer that the number of guest can be set for each period.
+                showadjustguestsinfo = true;
+                $('#adjustguestsinfo').modal();
+            }
+
+            $("input:not(:checked)").each(function() {
+                if (showadjustguestsinfo) {
+                    $('#addreduce_' + this.value).css('border', 'none');
+                }
+            });
+
+            $("input:checked").each(function() {
+                if (showadjustguestsinfo) {
+                    $('#addreduce_' + this.value).css('border', 'solid').css('border-color', 'red');
+                }
             });
 
             @if(sizeof($currencySelect) > 0)
