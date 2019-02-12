@@ -116,7 +116,7 @@
                     </div>
                 </div>
             </div>
-            <div style="max-height: 290px; overflow-y: scroll; margin-top: 3px; margin-bottom: 3px" id="calendar">
+            <div style="margin-top: 3px; margin-bottom: 3px" id="calendar">
                 <div id="showweeks" class="row col-12" style="margin-left: 0">
                     <h3>{{__('Please wait until the weeks are shown!')}}</h3>
                     <div style="background: rgba( 255, 255, 255, .8 ) url('/images/ajax-loader.gif') 50% 50%  no-repeat;"></div>
@@ -168,7 +168,7 @@
         offsetminus = 0;
         offsetplus = 0;
         periodsshown = {{ $periodsshown }}
-        showadjustguestsinfo = false;
+        showadjustguestsinfo = true;
         adjustOffsetMinus = true;
         periodchunk = [];
         baseprice = [];
@@ -197,7 +197,7 @@
 
         $(document).ready(function(){
             $("[name='Book']").css('opacity', 0.2);
-            getWeeks(0);
+            getWeeks(0.2);
             addPersons(0);
         });
 
@@ -269,7 +269,7 @@
                 content = '<table class="table table-striped"><tr><th>{{__('Period')}}</th><th>{{__('Choose')}}</th><th>{{__('Guests')}}</th></tr>';
                 //We add a large number to ensure the index is positive
                 if (periods.warning == 'no records') alert('nothing found');
-                periodchunk[offset+1000] = periods;
+                periodchunk[Math.round(offset+1000)] = periods;
                 periodchunk.forEach(periods => {
                     periods.forEach(period => {
                         if (period.warning == 'lower limit reached') adjustOffsetMinus  = false;
