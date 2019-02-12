@@ -277,7 +277,7 @@
             contractid = {{$models[0]->id}};
             periodid = 0;
             houseid = {{$models[0]->houseid}};
-            url = '/ajax/getweeks/' + houseid + '/' + culture + '/' + offset + '/' + periodid + '/' + contractid ;
+            url = '/ajax/getweeks/' + houseid + '/' + culture + '/' + offset + '/' + periodid + '/' + contractid  + '/8';
             new $.getJSON(url, function(periods)
             {
                 content = '<table class="table table-striped"><tr><th>{{__('Period')}}</th><th>{{__('Choose')}}</th><th>{{__('Guests')}}</th></tr>';

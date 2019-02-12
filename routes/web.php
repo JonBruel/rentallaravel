@@ -87,7 +87,8 @@ Route::post('/contract/registerpayment/{contractid}', 'ContractController@regist
 Route::get('/accountpost/edit/{id}', 'ContractController@accountpostedit');
 Route::delete('/accountpost/destroy/{id}', 'ContractController@accountpostdestroy');
 Route::post('/accountpost/update/{id}', 'ContractController@accountpostupdate');
-
+Route::get('/contract/limitedcontractedit/{contractid}', 'ContractController@limitedcontractedit');
+Route::post('/contract/limitedcontractupdate/{contractid}', 'ContractController@limitedcontractupdate');
 
 Route::get('/home/showinfo/{infotype}', 'HomeController@showinfo');
 Route::get('/home/listtestimonials', 'HomeController@listtestimonials');
@@ -151,7 +152,7 @@ Route::get('/contract/annualcontractoverview', 'ContractController@annualcontrac
 
 //AJAX
 Route::get('/ajax/ajaxlisthouses/x1/{x1}/y1/{y1}/x2/{x2}/y2/{y2}', 'AjaxController@listhouses');
-Route::get('/ajax/getweeks/{houseid}/{culture}/{offset}/{periodid}/{contractid}', 'AjaxController@getweeks');
+Route::get('/ajax/getweeks/{houseid}/{culture}/{offset}/{periodid}/{contractid}/{periodsshown}', 'AjaxController@getweeks');
 Route::get('/ajax/getmonths/{houseid}', 'AjaxController@getmonths');
 Route::get('/ajax/getimportstatus', 'AjaxController@getImportStatus');
 Route::get('/ajax/getgdprdeletestatus', 'AjaxController@getGdprDeleteStatus');

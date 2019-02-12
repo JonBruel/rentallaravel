@@ -187,7 +187,7 @@ class AjaxController extends Controller
      * of choosing periods for the contract.
      * The following
      */
-    public function getweeks($houseid, $culture, $offset = 0, $periodid = 0, $contractid = 0)
+    public function getweeks($houseid, $culture, $offset = 0, $periodid = 0, $contractid = 0, $periodsshown = 8)
     {
         $rate = 1;
         $warning = '';
@@ -211,12 +211,12 @@ class AjaxController extends Controller
         }
 
         //Prepare for showing several weeks, limit to 6 weeks using the paginate method
-        $fromdate = $period->from->subDays(15-7*8*$offset);
+        $fromdate = $period->from->subDays(15-7*$periodsshown*$offset);
         $periodcontracts = Periodcontract::where('houseid', $houseid)
             ->whereDate('from', '>', $fromdate)
             ->whereDate('to', '>', Carbon::now())
             ->orderBy('from')
-            ->paginate(8);
+            ->paginate($periodsshown+1);
 
         //We check if some record are not included due to the to requirement
         $expelledperiods = Periodcontract::where('houseid', $houseid)

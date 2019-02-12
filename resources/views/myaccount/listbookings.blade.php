@@ -6,7 +6,10 @@
             @foreach($models as $model)
                 <tr>
                     <td>
-                        <strong>{{ $model->contract->house->name }}:</strong> {{ __('To change the order, please contact the owner.') }}
+                        <strong>{{ $model->contract->house->name }}:</strong>
+                        @if(Carbon\Carbon::now()->lt($model->contract->contractlines()->first()->period->to))
+                            <a href="/contract/limitedcontractedit/{{$model->contract->id}}" class="btn btn-primary" role="button">{{ __('Change number of guests') }}</a> {{ __('For other changes, please contact the owner.') }}
+                        @endif
                     </td>
                 </tr>
                 <tr>
@@ -15,6 +18,5 @@
             @endforeach
             </tbody>
         </table>
-
     </div>
 @endsection

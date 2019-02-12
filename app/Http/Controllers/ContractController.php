@@ -349,6 +349,72 @@ class ContractController extends Controller
 
 
     /**
+     * This method allows the customer to make sertain changes to an existing contract such as
+     * changing the number of guests each week. The changes are limited according to the business rules
+     * setup in this function
+     *
+     * @param $contractid
+     * @return \Illuminate\View\View
+     */
+    public function limitedcontractedit($contractid)
+    {
+        $model = Contract::Find($contractid);
+        if (!$model) return back()->withInput()->with('warning',  __('The contract you try to edit is not yours and can\'t be edited by you.'));
+        if (Auth::user()->id != $model->customerid) return back()->withInput()->with('warning',  __('The contract was not found and can\'t be edited.'));
+
+        $fields = $fields = ['persons', 'discount', 'finalprice', 'currencyid'];
+
+        //Get max persons
+        $contractlines = $model->contractlines();
+        $firstperiod = Periodcontract::Find($contractlines->get()->first()->periodid);
+
+        //Data for persons selectbox
+        $personSelectbox = [];
+        for ($i=$firstperiod->basepersons; $i <= $firstperiod->maxpersons; $i++)
+        {
+            $personSelectbox[$i] = $i;
+        }
+
+        $choosecurrency = true;
+        $rates = [];
+        $currencySelect = [];
+        //We check if we are editing an existing order, if so we use the same currency and rate as during the original purchase:
+        $contractprice = DB::table('contractprice')->where('id', $contractid)->first();
+        if ($contractprice) {
+            $existingprice = $contractprice->price;
+
+            //Check recorded account post
+            Accountpost::$ajax = true;
+            $accountpost = Contractoverview::Find($contractid);
+            if ($accountpost) {
+                $accountprice = $accountpost->contractamount;
+                $customercurrencyid = $accountpost->customercurrencyid;
+                $choosecurrency = false;
+                $fixedrate = $accountprice/$existingprice;
+            }
+        }
+
+        // The currency cannot be changed, and we use the same rate and currency as used at the initial order.
+        // The chosen rate will be posted to contractupdate below.
+        foreach (Culture::all() as $cult)
+        {
+            if ($cult->currencyid == $customercurrencyid) {
+                $rates[$cult->currencyid] = $fixedrate;
+                $currencySelect[$cult->currencyid] = $firstperiod->getRate($cult->culture)['currencysymbol'];
+            }
+        }
+
+        return view('contract/limitedcontractedit', ['models' => [$model], 'rate' => 1, 'rates' => $rates, 'fields' => $fields,
+            'vattr' => (new ValidationAttributes($model))->setCast('message', 'textarea'),
+            'personSelectbox' => $personSelectbox,
+            'fromcalendar' => true,
+            'periodid' => 0,
+            'periodsshown' => $contractlines->count()+1,
+            'currencySelect' => $currencySelect]);
+
+    }
+
+    /**
      * This method is for the customer, administrator, owner or supervisor. The finalprice is recalculated
      * to avoid possible attempts to inject javascript to fiddle with the price.
      *
@@ -482,6 +548,89 @@ class ContractController extends Controller
             $contract->save();
             return $this->commitcontract($contract->id);
         }
+    }
+
+    /**
+     * This function updates the order based on the form limitedcontractedit, which is used by the customer
+     * for limited changed such as changing the number of guests.
+     *
+     * @param $contractid
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    public function limitedcontractupdate($contractid)
+    {
+
+        $contract = Contract::Find($contractid);
+
+        Contract::$ajax = true;
+        $oldfinalprice = $contract->finalprice;
+        Contract::$ajax = false;
+
+        $contract->persons = Input::get('persons');
+
+
+
+        $price = 0;
+
+        // We add the periods and calculate the duration. Contractlines are the same as we do not allow
+        // the customer to add or delete weeks here.
+        $firstperiodid = 0;
+
+        foreach ($contract->contractlines()->get() as $contractline) {
+            $persons = Input::get('persons_'.$contractline->periodid);
+            $period = Periodcontract::find($contractline->periodid);
+            $contractline->quantity = $persons;
+            $contractline->save();
+            $price += (max(0, $persons - $period->basepersons))*$period->personprice + $period->baseprice;
+        }
+        //The price is now calculated, and the rate(s) below will be the rates of the created_at date of the contract.
+
+        Contract::$ajax = true;
+        $period = Periodcontract::find($firstperiodid);
+        //$rate = $period->getRate('', $currencyid)['rate'];
+        // Instead of the present rate, we take the rate from the form, which for existing contracts is the rate used the first time.
+        $rate = Input::get('ratechosen');
+        $contract->price = $price * $rate;
+        $contract->duration = $contract->getDuration();
+        $newfinalprice = $price * $rate * (1-$contract->discount/100);
+        $contract->finalprice = $newfinalprice;
+
+
+        if ($oldfinalprice == 0) $oldfinalprice = 1;
+        if (abs(($oldfinalprice - $newfinalprice)/$oldfinalprice) > 0.001)
+        {
+            $contract->finalprice = $newfinalprice;
+            $contract->status = 'AwaitsUpdate';
+            $contract->save();
+            $errors = 'Persons: '.$contract->persons;
+            $success = __('Contract updated').'.';
+            if (!$contract->save()) {
+                $errors = $contract->getErrors();
+                $success = '';
+            }
+            Contract::$ajax = true;
+            Contract::commitOrder(140, Auth::user()->id, $contractid, $contract->customerid);
+            Contract::$ajax = false;
+
+        }
+        else $success = __('Contract not updated  as new final price is within 1 o/oo of old final price').'.';
+
+        //We check the arrival and departuretime - not used at this stage
+        $contractoverview = Contractoverview::Find($contractid);
+        //Empty values defaults to period start/end
+        $landingdatetime = Input::get('landingdatetime_'.$contract->id);
+        if ($landingdatetime == '') $landingdatetime = $contractoverview->from->format('d-m-Y');
+        $departuredatetime = Input::get('departuredatetime_'.$contract->id);
+        if ($departuredatetime == '') $departuredatetime = $contractoverview->to->format('d-m-Y');
+
+        $contract->landingdatetime = Carbon::parse($landingdatetime);
+        $contract->departuredatetime = Carbon::parse($departuredatetime);
+
+        $contract->save();
+
+
+
+        return redirect('/myaccount/listbookings?menupoint=9020')->with('errors', $errors);
     }
 
     /**
