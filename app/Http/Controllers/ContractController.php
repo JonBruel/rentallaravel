@@ -194,6 +194,7 @@ class ContractController extends Controller
      */
     public function contractedit($contractid, $periodid)
     {
+        Log::info("Contractedit contractid: $contractid, periodid: $periodid");
         $fromcalendar = false;
 
         //We have entered this method from the calendar, a new contract will be made
@@ -358,6 +359,7 @@ class ContractController extends Controller
      */
     public function limitedcontractedit($contractid)
     {
+        Log::info("Limitedcontractedit contractid: $contractid");
         $model = Contract::Find($contractid);
         if (!$model) return back()->withInput()->with('warning',  __('The contract you try to edit is not yours and can\'t be edited by you.'));
         if (Auth::user()->id != $model->customerid) return back()->withInput()->with('warning',  __('The contract was not found and can\'t be edited.'));
@@ -510,11 +512,15 @@ class ContractController extends Controller
             {
                 $contract->finalprice = $newfinalprice;
                 $contract->status = 'AwaitsUpdate';
-                $contract->save();
+                $success = __('Contract updated').'.';
+                if (!$contract->save()) {
+                    $errors = $contract->getErrors();
+                    Log::warning('Eror during contract save: ' . $errors);
+                    $success = '';
+                }
                 Contract::$ajax = true;
                 Contract::commitOrder(140, Auth::user()->id, $contractid, $contract->customerid);
                 Contract::$ajax = false;
-                $success = __('Contract updated').'.';
             }
             else $success = __('Contract not updated  as new final price is within 1 o/oo of old final price').'.';
 

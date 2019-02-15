@@ -189,6 +189,8 @@ class AjaxController extends Controller
      */
     public function getweeks($houseid, $culture, $offset = 0, $periodid = 0, $contractid = 0, $periodsshown = 8)
     {
+        Log::info("Ajax call getweeks(houseid; $houseid, culture: $culture, offset: $offset, periodid: $periodid, contractid: $contractid, periodsshown: $periodsshown)");
+
         $rate = 1;
         $warning = '';
 
