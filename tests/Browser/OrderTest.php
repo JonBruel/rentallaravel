@@ -44,11 +44,12 @@ class OrderTest extends DuskTestCase
             fwrite(STDERR, "Running browser test, result of checking:  $value" . "\n");
             self::assertTrue($value == 'true');
 
-            // Below we click on the second vacant month, this should only trigger one type of mail
+            // Below we click on the fourth vacant week, this should only trigger one type of mail
             $browser->click('@login-button')
                 ->assertPathIs('/home')
-                ->assertTitleContains('home')
+                ->assertTitleContains('Rental')
                 ->click("@click-order")
+                ->assertPathIs('/home/checkbookingslist')
                 ->waitFor("@vacantmonth4")
                 ->click("@vacantmonth4")
                 ->assertTitleContains("contractedit");
@@ -58,8 +59,8 @@ class OrderTest extends DuskTestCase
             $contract = Contract::Find($contractid);
 
             fwrite(STDERR, "Running browser test, result of contractid:  $contractid" . "\n");
-            $browser->waitFor('@next');
-            $browser->click('@next')
+            $browser->waitFor('@next')
+                ->click('@next')
                 ->assertTitleContains('contractupdate');
 
             $checkMail = new CheckMail();
@@ -153,9 +154,11 @@ class OrderTest extends DuskTestCase
                 ->assertPathIs('/home')
                 ->assertTitleContains('home')
                 ->click("@click-order")
+                ->assertPathIs('/home/checkbookingslist')
                 ->waitFor("@vacantmonth5")
                 ->click("@vacantmonth5")
                 ->assertTitleContains("contractedit");
+
 
             $contractid = $browser->value('@id');
 
@@ -319,6 +322,7 @@ class OrderTest extends DuskTestCase
                 ->assertPathIs('/home')
                 ->assertTitleContains('home')
                 ->click("@click-order")
+                ->assertPathIs('/home/checkbookingslist')
                 ->waitFor("@vacantmonth5")
                 ->click("@vacantmonth5")
                 ->assertTitleContains("contractedit");
