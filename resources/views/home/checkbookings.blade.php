@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{__('Bookings')}}</h3>
+    <a class="btn btn-primary btn-sm" href="/contract/contractedit/0/7899" dusk="vacantmonth400">Tryk for at bestille</a>
     <p class="header"><strong>{{$house->name}}</strong></p>
     <p class="header" style="margin-right:70px">{{ __('The bookings from now on and 52 weeks ahead.')}} {{ __('Check out day is Friday.')}}</p>
     <p>

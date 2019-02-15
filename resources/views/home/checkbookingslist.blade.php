@@ -22,11 +22,9 @@
             </tr>
             </thead>
             <tbody>
+            @php($weeknumber = 0)
             @foreach($models as $model)
                 <?php
-                $booktext = __('Press to book');
-                $class = '';
-                 $link = '<a class="btn btn-primary btn-sm" href="/contract/contractedit/0/'.$model->id.'">'.$booktext.'</a>';
 
                 if ($model->committed)
                 {
@@ -38,6 +36,12 @@
                         $booktext = __('Private');
                     }
                     $link = '<div align="center">' . $booktext . '<div>';
+                }
+                else {
+                    $weeknumber++;
+                    $booktext = __('Press to book');
+                    $class = '';
+                    $link = '<a class="btn btn-primary btn-sm" href="/contract/contractedit/0/'.$model->id.'" dusk="vacantmonth'.$weeknumber.'">'.$booktext.'</a>';
                 }
 
 

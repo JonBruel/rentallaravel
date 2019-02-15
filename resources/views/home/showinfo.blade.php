@@ -7,7 +7,6 @@
             <div dusk="click-order" class="btn btn-success row col-md-12"  data-offset-top="30px" role="alert"  id="checkvacanciesappear" onclick="window.location = '/home/checkbookingslist?menupoint=10020';" style="display: none; ">
                 {{ (config('app.testmessage'))?__(config('app.testmessage')):__('Check prices and book') }}
             </div>
-
             <div class="row col-md-12" id="vacancyPrMonth" style="display: none;">
                 @include('partials.search', ['houseid' => session('defaultHouse' , 1)])
             </div>
