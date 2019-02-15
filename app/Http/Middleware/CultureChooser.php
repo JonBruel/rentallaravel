@@ -49,7 +49,7 @@ class CultureChooser
 
         $sanitizedpath = '/'.$request->path();
         $sanitizedpath = str_replace('//', '/', $sanitizedpath);
-
+        session(['sanitizedpath' => $sanitizedpath]);
         $pathhistory = session('pathhistory', []);
 
         $path = str_replace('?&', '?', $sanitizedpath.'?'.$querystring);
