@@ -527,9 +527,9 @@ class ContractController extends Controller
             //We check the arrival and departuretime
             $contractoverview = Contractoverview::Find($contractid);
             //Empty values defaults to period start/end
-            $landingdatetime = Input::get('landingdatetime_'.$contract->id);
+            $landingdatetime = Input::get('landingdatetime');
             if ($landingdatetime == '') $landingdatetime = $contractoverview->from->format('d-m-Y');
-            $departuredatetime = Input::get('departuredatetime_'.$contract->id);
+            $departuredatetime = Input::get('departuredatetime');
             if ($departuredatetime == '') $departuredatetime = $contractoverview->to->format('d-m-Y');
 
             $contract->landingdatetime = Carbon::parse($landingdatetime);
