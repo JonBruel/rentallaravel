@@ -9,6 +9,7 @@ namespace App\Models;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Identitypaper;
 use App\Helpers\ConfigFromDB;
 
 
@@ -275,7 +276,12 @@ class Batchlog extends BaseModel
                     '*MESSAGE*' => $contract->message,
                     '*PERSONS*' => $contract->persons,
                     '*ARRIVALTIME*' => $contract->getArrival($culture),
-                    '*DEPARTURETIME*' => $contract->getDeparture($culture)];
+                    '*DEPARTURETIME*' => $contract->getDeparture($culture),
+                    '*ARRIVALDATE*' => $contract->getArrivaldate(),
+                    '*COUNTOFIDENTITYRECORDS*' => $contract->getCountofidentityrecords(),
+                    '*IDENTITYRECORDS*' => $contract->getIdentityrecords(),
+                    '*IDENTITYPAPERLINK*' => $customer->getIdentitypaperlink($contract->id, $culture),
+                    ];
 
                 $topeople .= ' and ' . $recipient->email . ' (id: ' . $recipient->id . ' )';
                 $helptext .= $customerid . ': ' . $replacearray['*CUSTOMERNAME*'] . '   ';
@@ -321,6 +327,7 @@ class Batchlog extends BaseModel
                         $attchmentdoc[$key] = $attchmentdir . $value;
                 }
 
+                $filetext = $mailtext;
                 $mailtext = str_replace("\n", '', $mailtext);
                 $mailtext = str_replace("\r", '<br/>', $mailtext);
                 $emailaddress = $recipient->email;
@@ -372,6 +379,27 @@ class Batchlog extends BaseModel
                 $emaillog->cc = '';
                 $emaillog->text = $mailtext;
                 if ($lockbatchvalue < 2)   $emaillog->save();
+
+                // Handle file creation for Guardia Civil, the file will have the contractid as extension
+                // enabling us to establish the link between the contract and the identitypapers when
+                // a cron sends the file using Dusk.
+                if (($batchtask->batchfunctionid == 2) && ($lockbatchvalue < 2))
+                {
+                    if ($contract->getCountofidentityrecords() > 0)
+                    {
+                        $filedirectory = base_path().'/storage/guardiacivil/';
+                        //Get the Guardia Civil identity of the owner, being the second field in the generated text
+                        $gcid = explode('|', $mailtext)[1];
+                        $filename = $filedirectory.$gcid.'.'.$contract->id;
+                        //Create and save the file
+                        $filesave = file_put_contents($filename, $filetext);
+
+                        // If we succeed, we delete the idenditypaper records
+                        if ($filesave !== FALSE) Identitypaper::where('contractid', $contractid)->delete();
+                        //Change the filedate
+                    }
+                }
+
             }
 
             if (($lockbatchvalue == 0) OR ( $lockbatchvalue == 2))

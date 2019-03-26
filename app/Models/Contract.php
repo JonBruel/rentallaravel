@@ -64,6 +64,9 @@ class Contract extends BaseModel
         'persons' => ['required', 'between:1,101'],
     ];
 
+    //Used for the calculation of the arrival date in getArrivaldate
+    protected $from;
+
 	protected $casts = [
 		'houseid' => 'int',
 		'ownerid' => 'int',
@@ -227,6 +230,11 @@ class Contract extends BaseModel
 	{
 		return $this->hasMany(\App\Models\Contractline::class, 'contractid');
 	}
+
+    public function idenditypapers()
+    {
+        return $this->hasMany(\App\Models\Identitypaper::class, 'contractid');
+    }
 
 	/*
 	 * Add a period determined by the periodid.
@@ -743,6 +751,7 @@ class Contract extends BaseModel
                 if ($from->gt($contractline->period->from)) $from = $contractline->period->from;
                 if ($to->lt($contractline->period->to)) $to = $contractline->period->to;
             }
+            $this->from = $from;
             $duration = $to->diffInDays($from);
         }
         return $duration;
@@ -771,4 +780,29 @@ class Contract extends BaseModel
         $r = $currencysymbol . ' ' . static::format($prepaymentamount, 2);
         return $r;
     }
+
+    public function getArrivaldate()
+    {
+        $this->getDuration();
+        return $this->from->format('Ymd');
+    }
+
+    public function getCountofidentityrecords()
+    {
+        return $this->idenditypapers()->count();
+    }
+
+    public function getIdentityrecords()
+    {
+        $retunedtext = '';
+        foreach ($this->idenditypapers()->get() as $identitypaper)
+        {
+            $retunedtext .= '2||'.$identitypaper->passportnumber.'|P|'.$identitypaper->dateofissue->format('Ymd').'|'.strtoupper($identitypaper->surname1).'|'.strtoupper($identitypaper->surname2).'|'.strtoupper($identitypaper->forename).
+                '|'.strtoupper($identitypaper->sex).'|'.$identitypaper->dateofbirth->format('Ymd').'|'.strtoupper($identitypaper->country).'|'.$this->getArrivaldate()."|\n";
+        }
+        return $retunedtext;
+    }
+
+
+
 }

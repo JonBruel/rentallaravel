@@ -47,6 +47,7 @@ use Illuminate\Support\Facades\App;
                             <a href="/contract/contractedit/{{$model->id}}/0" title="{{__('Show contract')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-home'></span></a>
                             <a href="/contract/listaccountposts/{{$model->id}}" title="{{__('Show account')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-euro'></span></a>
                             <a href="/contract/listmails/{{$model->customerid}}" title="{{__('Show mail')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-envelope'></span></a>
+                            <a href="/myaccount/editidentitypapers/{{$model->id}}" title="{{__('Passport details')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-eye-open'></span></a>
                         </td>
                     @endif
                     @if(sizeof($houses) > 1)

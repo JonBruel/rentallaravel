@@ -8,7 +8,9 @@
                     <td>
                         <strong>{{ $model->contract->house->name }}:</strong>
                         @if(Carbon\Carbon::now()->lt($model->contract->contractlines()->first()->period->to))
-                            <a href="/contract/limitedcontractedit/{{$model->contract->id}}" class="btn btn-primary" role="button">{{ __('Change number of guests') }}</a> {{ __('For other changes, please contact the owner.') }}
+                            <a href="/contract/limitedcontractedit/{{$model->contract->id}}" class="btn btn-primary" role="button">{{ __('Change number of guests') }}</a>
+                            <a href="/myaccount/editidentitypapers/{{$model->contract->id}}" class="btn btn-primary" role="button">{{ __('Guest passport details') }}</a>
+                            {{ __('For other changes, please contact the owner.') }}
                         @endif
                     </td>
                 </tr>

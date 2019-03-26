@@ -270,6 +270,23 @@ $factory->define(App\Models\Emaillog::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Models\Identitypaper::class, function (Faker\Generator $faker) {
+    return [
+        'contractid' => function () {
+            return factory(App\Models\Contract::class)->create()->id;
+        },
+        'forename' => $faker->word,
+        'surname1' => $faker->word,
+        'surname2' => $faker->word,
+        'sex' => $faker->word,
+        'passportnumber' => $faker->word,
+        'country' => $faker->country,
+        'dateofissue' => $faker->dateTimeBetween(),
+        'dateofbirth' => $faker->dateTimeBetween(),
+        'arrivaldate' => $faker->dateTimeBetween(),
+    ];
+});
+
 $factory->define(App\Models\House::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,

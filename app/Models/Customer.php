@@ -327,4 +327,20 @@ class Customer extends BaseModel
         return $r;
     }
 
+    public function getIdentitypaperlink($contractid, $culture)
+    {
+        $contract = Contract::Find($contractid);
+        $house = House::Find($contract->houseid);
+        $remember_token = $this->remember_token;
+        if (is_null($remember_token))
+        {
+            $remember_token = Str::random(60);
+            $this->remember_token = $remember_token;
+            $this->save();
+        }
+
+        $r = $house->www.'/myaccount/editidentitypapers/'.$contractid.'?remember_token='.$this->remember_token.'&redirectTo=/myaccount/editidentitypapers/'.$contractid.'?menupoint=9050';
+        $r = '<a href="' . $r . '">'.__('Guest passport numbers', [], $culture).'</a>';
+        return $r;
+    }
 }

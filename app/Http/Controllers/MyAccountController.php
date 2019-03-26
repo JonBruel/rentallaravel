@@ -16,10 +16,12 @@ use ValidationAttributes;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\MessageBag;
 use Auth;
+use App;
 use App\Models\Customer;
 use App\Models\Contract;
 use App\Models\Contractoverview;
 use App\Models\Emaillog;
+use App\Models\Identitypaper;
 use Carbon\Carbon;
 
 /**
@@ -196,6 +198,123 @@ class MyAccountController extends Controller
         }
         return view('myaccount/listmails', ['models' => $emails, 'title' => __('My emails')]);
     }
+
+    /**
+     * Feed the view where the customer or the administrator enters the passport details
+     * of the guests. This was added in March 2019 as a response to requirements from Guardia
+     * Civil in Spain.
+     *
+     * In the case where the customer is the user of the form, we check if the contract belongs
+     * to the customer.
+     *
+     * @param $contractid Contractid for the rental
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    public function editidentitypapers($contractid)
+    {
+        if (!Auth::check()) return redirect('/login');
+        $contract = Contractoverview::findOrFail($contractid);
+        $housename = $contract->house->name;
+        $contractdescription = $housename . ' ' . lcfirst(Contract::Find($contractid)->getPeriodtext(App::getLocale()));
+        $user = Auth::user();
+        $models = [];
+        $error = '';
+        if ($user->customertypeid == 1000) {
+            if ($contract->customerid != $user->id) $error = __('The rental period does not belong to you.');
+        }
+        else {
+            $models = Identitypaper::where('contractid', $contractid)->get();
+        }
+        $fields = ['forename', 'surname1', 'passportnumber', 'sex', 'dateofissue', 'dateofbirth', 'country', 'contractid'];
+        $newidentitypaper = new Identitypaper();
+        $newidentitypaper->contractid = $contractid;
+        $vattr = (new ValidationAttributes($newidentitypaper))->setCast('contractid', 'hidden');
+        return view('myaccount/editidentitypapers', ['models' => $models, 'contractdescription' =>  $contractdescription, 'newidentitypaper' => $newidentitypaper, 'fields' => $fields, 'vattr' => $vattr, 'title' => __('Guest identity registration')]);
+    }
+
+    /**
+     * Saves new identitypaperlines
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
+    public function saveidentitypaper()
+    {
+        $contractid = Input::get('contractid');
+        $contract = Contractoverview::findOrFail($contractid);
+        $newidentitypaper = new Identitypaper();
+
+        $fields = ['forename', 'surname1', 'passportnumber', 'sex', 'country', 'contractid'];
+        foreach($fields as $field) $newidentitypaper->$field = Input::get($field);
+
+        $fields = ['dateofissue', 'dateofbirth'];
+        foreach($fields as $field) $newidentitypaper->$field = Carbon::parse(Input::get($field));
+
+        $newidentitypaper->arrivaldate = $contract->from;
+        $newidentitypaper->save();
+        return redirect('/myaccount/editidentitypapers/'.$contractid);
+    }
+
+    /**
+     * Edit one identityrecord
+     */
+    public function edit($id)
+    {
+        $identitypaper = Identitypaper::findOrFail($id);
+        $contract = $identitypaper->contract();
+
+        //We check if the user should be authorized to edit the passport details
+        $user = Auth::user();
+        $errors = '';
+        if ($user->customertypeid == 1000) {
+            if ($contract->customerid != $user->id) $error = __('The rental period does not belong to you.');
+        }
+        if ($errors != '') return back()->withInput()->with('errors', $errors);
+
+        $fields = array_diff(Schema::getColumnListing($identitypaper->getTable()), ['arrivaldate']);
+        return view('myaccount/editidentitypaper', ['models' => [$identitypaper], 'fields' => $fields, 'vattr' => (new ValidationAttributes($identitypaper))->setCast('contractid', 'hidden')->setCast('id', 'hidden')]);
+
+    }
+
+    public function destroy($id)
+    {
+        $identitypaper = Identitypaper::findOrFail($id);
+        $contract = $identitypaper->contract();
+
+        //We check if the user should be authorized to edit the passport details
+        $user = Auth::user();
+        $errors = '';
+        if ($user->customertypeid == 1000) {
+            if ($contract->customerid != $user->id) $error = __('The rental period does not belong to you.');
+        }
+        if ($errors != '') return back()->withInput()->with('errors', $errors);
+        $identitypaper->delete();
+        return back();
+    }
+
+    public function update($id)
+    {
+        $identitypaper = Identitypaper::findOrFail($id);
+        $contract = $identitypaper->contract();
+
+        //We check if the user should be authorized to edit the passport details
+        $user = Auth::user();
+        $errors = '';
+        if ($user->customertypeid == 1000) {
+            if ($contract->customerid != $user->id) $error = __('The rental period does not belong to you.');
+        }
+        if ($errors != '') return back()->withInput()->with('errors', $errors);
+
+        $fields = array_diff(Schema::getColumnListing($identitypaper->getTable()), ['dateofissue', 'dateofbirth', 'arrivaldate']);
+        foreach ($fields as $field) $identitypaper->$field = Input::get($field);
+
+        $fields = ['dateofissue', 'dateofbirth', 'arrivaldate'];
+        foreach($fields as $field) $identitypaper->$field = Carbon::parse(Input::get($field));
+
+        $identitypaper->save();
+        return redirect('/myaccount/editidentitypapers/'.$identitypaper->contractid);
+    }
+
 
     /**
      * Feeds the view which lets the customer update the arrival and departure times of future rental bookings.

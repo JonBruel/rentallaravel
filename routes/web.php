@@ -31,6 +31,11 @@ Route::get('/myaccount/edittime', 'MyAccountController@edittime');
 Route::post('/myaccount/updatetime', 'MyAccountController@updatetime');
 Route::get('/myaccount/gdpr', 'MyAccountController@gdpr');
 Route::post('/myaccount/destroycustomer/{id}', 'MyAccountController@destroycustomer');
+Route::get('/myaccount/editidentitypapers/{contractid}', 'MyAccountController@editidentitypapers');
+Route::post('/myaccount/saveidentitypaper', 'MyAccountController@saveidentitypaper');
+Route::get('/myaccount/edit/{id}', 'MyAccountController@edit');
+Route::delete('/myaccount/destroy/{id}', 'MyAccountController@destroy');
+Route::post('/myaccount/update/{id}', 'MyAccountController@update');
 
 
 Route::get('/customer/index', 'CustomerController@index');
