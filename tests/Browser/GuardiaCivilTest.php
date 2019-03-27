@@ -22,11 +22,6 @@ class GuardiaCivilTest extends DuskTestCase
 
 
         $this->browse(function (Browser $browser) {
-            config(['database.connections.mysql.host' => '192.168.160.55']);
-            config(['database.connections.mysql.database' => 'rentallaravel']);
-            //var_dump(config('database.connections.mysql.host'));
-            //var_dump(config('database.connections.mysql.database'));
-            // At this stage we don't use the database connection setup above.
 
             $path = base_path().'/storage/guardiacivil/';
             $files = array_diff(scandir($path), array('.', '..'));
@@ -57,7 +52,8 @@ class GuardiaCivilTest extends DuskTestCase
                 //The program will exit here if there are errors as per the assertion above
                 unlink($filename);
                 unlink($path.$file);
-                // The deletion below is not working, the testdatabase is still used.
+                // The deletion below is not working, the testdatabase is still used. Starting dusk with the
+                // --env=.env will make it work. At this stage we delete the passport data when executing the queue.
                 // Identitypaper::where('contractid', $contractid)->delete();
             }
 
