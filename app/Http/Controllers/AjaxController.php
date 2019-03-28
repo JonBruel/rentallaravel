@@ -216,7 +216,7 @@ class AjaxController extends Controller
         $fromdate = $period->from->subDays(15-7*$periodsshown*$offset);
         $periodcontracts = Periodcontract::where('houseid', $houseid)
             ->whereDate('from', '>', $fromdate)
-            ->whereDate('to', '>', Carbon::now())
+        //    ->whereDate('to', '>', Carbon::now())
             ->orderBy('from')
             ->paginate($periodsshown+1);
 
