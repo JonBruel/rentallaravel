@@ -123,7 +123,7 @@ class SetupController extends Controller
 
 
         //Fields with "normal" values
-        $fields1 = ['name', 'activefrom', 'posttypeid', 'emailid', 'batchfunctionid', 'paymentbelow', 'requiredposttypeid',
+        $fields1 = ['name', 'posttypeid', 'emailid', 'batchfunctionid', 'paymentbelow', 'requiredposttypeid',
                     'timedelaystart', 'timedelayfrom', 'addposttypeid', 'dontfireifposttypeid'];
 
         //Yes/no fields
@@ -133,9 +133,13 @@ class SetupController extends Controller
         //Multiple yes/no fields
         $fields3 = ['mailto'];
 
+        //For the date field
+        $fields4 = ['activefrom'];
+
         foreach($fields1 as $field) $original->$field = Input::get($field);
         foreach($fields2 as $field) $original->$field = Input::get($field,0);
         foreach($fields3 as $field) $original->$field = implode(',', Input::get($field, []));
+        foreach($fields4 as $field) $original->$field = Carbon::parse(Input::get($field));
 
         $errors = '';
         $success = 'Batcktask has been updated!';
