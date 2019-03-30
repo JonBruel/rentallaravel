@@ -117,7 +117,7 @@ return [
         'childrenmap' => []
     ],
     10020 => [
-        'text' => 'Vacancies',
+        'text' => 'Check vacancy',
         'path' => 'home/checkbookingslist',
         'parentid' => 10000,
         'cssclass' => 'menulevel2',
