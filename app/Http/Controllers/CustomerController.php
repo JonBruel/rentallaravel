@@ -261,7 +261,7 @@ class CustomerController extends Controller
         if ($awlanguage == 'da') $awlanguage = 'dk';
         $defaultHouse = session('defaultHouse' , 1);
         $url = House::Find($defaultHouse)->www;
-        $awurl = "https://".substr($url,7)."/awstats/awstats.pl?lang=".$awlanguage."&config=" . substr($url,7);
+        $awurl = "https://awstat.consiglia.dk/awstats/awstats.pl?lang=".$awlanguage."&config=" . substr($url,7);
         return view('customer/statistics', ['awurl' => $awurl]);
     }
 
