@@ -18,7 +18,7 @@
     </div>
 
     <div class="row" id="family" style="margin-bottom: 5px; margin-left: 15px;">
-        <div class="col-2 family"></div><div class="col-9">{{__('Turquoise days are for private use.')}} </div>
+        <div class="col-2 family"></div><div class="col-9">{{__('Light blue days are for private use.')}} </div>
     </div>
     <a class="btn btn-success col-md-12" href="/home/checkbookings?menupoint=10020&listtype=list">{{__('Change to list view')}}</a>
     </p>

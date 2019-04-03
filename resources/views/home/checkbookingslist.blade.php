@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <h3>{{$house->name}} {{$house->address1}}</h3>
-    <p>{{__('The bookings from now on and 52 weeks ahead.') . ' ' . __('Pink weeks are pending, red are occupied.') . ' ' . __('Turquoise weeks are for private use.')}}</p>
+    <p>{{__('The bookings from now on and 52 weeks ahead.') . ' ' . __('Pink weeks are pending, red are occupied.') . ' ' . __('Light blue weeks are for private use.')}}</p>
     <a class="btn btn-success col-md-12" href="/home/checkbookings?menupoint=10020&listtype=calendar">{{__('Change to calendar view')}}</a>
     <div class="table-responsive">
         <table class="table table-sm">
