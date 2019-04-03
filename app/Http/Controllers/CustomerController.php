@@ -196,17 +196,17 @@ class CustomerController extends Controller
         //Set rights
         if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $model =  Customer::findOrFail($id);
-        $fields = Schema::getColumnListing($model->getTable());
-
+        $fields = array_diff(Schema::getColumnListing($model->getTable()), ['created_at', 'updated_at', 'remember_token', 'password']);
+        $plain_password = Input::get('plain_password');
         foreach ($fields as $field){
             $model->$field = Input::get($field);
-            $plain_password = Input::get('plain_password');
-            if ($field == 'plain_password' && (strlen($plain_password) < 60) && (strlen($plain_password > 5)))
+            if (($field == 'plain_password') && (strlen($plain_password) < 60) && (strlen($plain_password) > 5))
             {
                 $model->$field = Hash::make($plain_password);
+                $model->password = Hash::make($plain_password);
             }
-            $model->plain_password = '';
         }
+        $model->plain_password = '';
         //We save. The save validates after the Mutators have been used.
         $errors = '';
         $success = __('Customer has been updated!');
