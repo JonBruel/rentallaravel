@@ -52,6 +52,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+            return redirect('/');
+        }
+
         $handleit = false;
         if ($exception->getMessage() == "The given data was invalid.") $handleit = false;
         if (($exception) && (config('app.exceptions', false)) && ($handleit))
