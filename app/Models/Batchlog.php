@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Identitypaper;
 use App\Helpers\ConfigFromDB;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -350,16 +351,27 @@ class Batchlog extends BaseModel
                 }
                 if (((1 == config('app.mailactive', true)) || ( substr($emailaddress, -12) == 'consiglia.dk')) && ($lockbatchvalue < 2))
                 {
-                    // With Mail::to()->send(), we cannot use to detailed Swift settings used below. So we use Mail::send() instead.
 
-                    Mail::send('email/default', ['toName' => $recipient->name, 'fromName' => $owner->name, 'contents' => $mailtext], function($message) use  ($emailaddress, $from, $subject, $attchmentdoc, $owner) {
-                        $message->from($from['address'], $from['name']);
-                        //$message->sender(config('mail.MAIL_FROM_ADDRESS', 'rental@consiglia.dk'));
-                        $message->to($emailaddress);
-                        $message->subject($subject);
-                        $message->replyTo($from['address']);
-                        foreach($attchmentdoc as $attchment) $message->attach($attchment);
-                    });
+                    // We change the status to "processing" to avoid the same mail to be sent again when the send process
+                    // takes long time - more than a minute - or there is an exception error.
+                    $batchlog->statusid = 3;
+                    $batchlog->save();
+
+                    // With Mail::to()->send(), we cannot use to detailed Swift settings used below. So we use Mail::send() instead.
+                    try
+                    {
+                        Mail::send('email/default', ['toName' => $recipient->name, 'fromName' => $owner->name, 'contents' => $mailtext], function($message) use  ($emailaddress, $from, $subject, $attchmentdoc, $owner) {
+                            $message->from($from['address'], $from['name']);
+                            //$message->sender(config('mail.MAIL_FROM_ADDRESS', 'rental@consiglia.dk'));
+                            $message->to($emailaddress);
+                            $message->subject($subject);
+                            $message->replyTo($from['address']);
+                            foreach($attchmentdoc as $attchment) $message->attach($attchment);
+                        });
+                    } catch (\Exception $e) {
+                        Log::warning("There was an exception sending mail to $emailaddress: " . $e->getMessage());
+                    }
+
 
                     // Using Mail:to, we cannot set the sender different from "from"
                     //public function __construct($contents, $subject = '', $fromaddress = 'jbr@consiglia.dk', $fromName = 'testFromName', $toName = '', $attachements = [])
@@ -413,9 +425,10 @@ class Batchlog extends BaseModel
                 if (($batchtask->useaddposttypeid == 1) AND ( $batchtask->addposttypeid > 0)) {
                     Contract::commitOrder($batchtask->addposttypeid, 0, $contractid, $customerid);
                 }
+
+                $batchlog->statusid = 2;
             }
 
-            if (($lockbatchvalue == 0) OR ( $lockbatchvalue == 2)) $batchlog->statusid = 2;
             $batchlog->emailid = $emailid;
             $batchlog->save();
         }
