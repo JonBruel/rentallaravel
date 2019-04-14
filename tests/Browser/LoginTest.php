@@ -18,6 +18,7 @@ class LoginTest extends DuskTestCase
     //use DatabaseMigrations;
 
     /**
+     * @group login
      * A Dusk test example.
      *
      * @return void

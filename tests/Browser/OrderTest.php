@@ -74,6 +74,7 @@ class OrderTest extends DuskTestCase
             Batchlog::executequeue();
 
             $this->assertTrue($checkMail->checkMail(1066));
+            fwrite(STDERR, "Running browser test, group order, mailid 1066 verified.\n");
 
             // Next we change the order date to trigger the reminder mail to the owner
             $created_at = $contract->created_at->subDays(5);
@@ -86,6 +87,7 @@ class OrderTest extends DuskTestCase
             Batchlog::addtoqueue();
             Batchlog::executequeue();
             $this->assertTrue($checkMail->checkMail([1068]));
+            fwrite(STDERR, "Running browser test, group order, mailid 1068 verified.\n");
 
 
             // Next we change the order date to trigger the reminder mail to the customer, total 11 days after order
@@ -99,6 +101,7 @@ class OrderTest extends DuskTestCase
             Batchlog::addtoqueue();
             Batchlog::executequeue();
             $this->assertTrue($checkMail->checkMail([1069]));
+            fwrite(STDERR, "Running browser test, group order, mailid 1069 verified.\n");
 
 
             // Next we change the order date to trigger the letter to customer about cancelled order, total 21 days after order
@@ -112,8 +115,7 @@ class OrderTest extends DuskTestCase
             Batchlog::addtoqueue();
             Batchlog::executequeue();
             $this->assertTrue($checkMail->checkMail([1070]));
-
-            echo("Order - mails - no payment - no payment mail, checked");
+            fwrite(STDERR, "Running browser test, group order, mailid 1070 (no payment mail) verified.\n");
 
             $contract = Contract::Find($contractid);
             $this->assertTrue(($contract->status == "Uncommitted"));
@@ -146,7 +148,7 @@ class OrderTest extends DuskTestCase
                 ->type('password', '9Bukkelo!');
 
             $value = $browser->attribute('@remme', 'checked');
-            fwrite(STDERR, "Running browser test, result of checking:  $value"."\n");
+            fwrite(STDERR, "Running browser test, group paid, result of checking:  $value"."\n");
             self::assertTrue($value == 'true');
 
             // Below we click on the second vacant month, this should only trigger one type of mail
@@ -179,6 +181,7 @@ class OrderTest extends DuskTestCase
             Batchlog::addtoqueue();
             Batchlog::executequeue();
             $this->assertTrue($checkMail->checkMail(1066));
+            fwrite(STDERR, "Running browser test, group paid, mailid 1066 verified.\n");
 
             // Next we change the order date to trigger the reminder mail to the owner
             $created_at = $contract->created_at->subDays(5);
@@ -191,6 +194,7 @@ class OrderTest extends DuskTestCase
             Batchlog::addtoqueue();
             Batchlog::executequeue();
             $this->assertTrue($checkMail->checkMail([1068]));
+            fwrite(STDERR, "Running browser test, group paid, mailid 1068 verified.\n");
 
 
             // Next we change the order date to trigger the reminder mail to the customer, total 11 days after order
@@ -204,6 +208,7 @@ class OrderTest extends DuskTestCase
             Batchlog::addtoqueue();
             Batchlog::executequeue();
             $this->assertTrue($checkMail->checkMail([1069]));
+            fwrite(STDERR, "Running browser test, group paid, mailid 1069 verified.\n");
 
             // Next we pay, using the browser to pay.
             $browser->visit('/contract/listaccountposts/' . $contractid)
@@ -223,6 +228,7 @@ class OrderTest extends DuskTestCase
             Batchlog::addtoqueue();
             Batchlog::executequeue();
             $this->assertTrue($checkMail->checkMail([1071]));
+            fwrite(STDERR, "Running browser test, group paid, mailid 1071 verified.\n");
 
             // We want to check if reminder mail about arrival time is sent out a the predefines time before start. We need
             // to fiddle with the from field of the contract
@@ -246,6 +252,7 @@ class OrderTest extends DuskTestCase
             $period->from = $from;
             $period->save();
             $this->assertTrue($checkMail->checkMail([1072]));
+            fwrite(STDERR, "Running browser test, group paid, mailid 1072 verified.\n");
 
 
             // Reminder final payment
@@ -259,6 +266,7 @@ class OrderTest extends DuskTestCase
             $period->from = $from;
             $period->save();
             $this->assertTrue($checkMail->checkMail([1075]));
+            fwrite(STDERR, "Running browser test, group paid, mailid 1075 verified.\n");
 
             // Register final payment
             $browser->visit('/contract/listaccountposts/' . $contractid)
@@ -277,17 +285,8 @@ class OrderTest extends DuskTestCase
             Batchlog::addtoqueue();
             Batchlog::executequeue();
             $this->assertTrue($checkMail->checkMail([1076]));
+            fwrite(STDERR, "Running browser test, group paid, mailid 1076 verified.\n");
 
-            // Second reminder of arrival time
-            $period->from = Carbon::now()->addDays(14);
-            $period->save();
-            Batchlog::addtoqueue();
-            Batchlog::executequeue();
-            $period->from = $from;
-            $period->save();
-            $contract->delete();
-
-            $this->assertTrue($checkMail->checkMail([1073]));
             $checkMail->deleteAll();
         });
     }

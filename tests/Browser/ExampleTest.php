@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 class ExampleTest extends DuskTestCase
 {
     /**
+     * @group example
      * A basic browser test example.
      *
      * @return void
