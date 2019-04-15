@@ -287,6 +287,17 @@ class OrderTest extends DuskTestCase
             $this->assertTrue($checkMail->checkMail([1076]));
             fwrite(STDERR, "Running browser test, group paid, mailid 1076 verified.\n");
 
+
+            // Second reminder of arrival time
+            $period->from = Carbon::now()->addDays(14);
+            $period->save();
+            Batchlog::addtoqueue();
+            Batchlog::executequeue();
+            $period->from = $from;
+            $period->save();
+            $contract->delete();
+            $this->assertTrue($checkMail->checkMail([1073]));
+            fwrite(STDERR, "Running browser test, group paid, mailid 1073 verified.\n");
             $checkMail->deleteAll();
         });
     }
