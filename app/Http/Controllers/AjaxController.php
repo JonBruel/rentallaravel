@@ -15,6 +15,7 @@ use Schema;
 use ValidationAttributes;
 use App\Models\BaseModel;
 use App\Models\House;
+use App\Models\HouseI18n;
 use App\Models\Periodcontract;
 use App\Models\Contract;
 use Illuminate\Support\Facades\Input;
@@ -22,6 +23,7 @@ use Auth;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use DB;
+use App;
 
 /**
  * Class AjaxController is used for a limited set of ajax functions.
@@ -97,7 +99,8 @@ class AjaxController extends Controller
             $housefields[$i] = $house->toArray();
             $housefields[$i]['latitude'] = $latitude;
             $housefields[$i]['longitude'] = $longitude;
-            //$housefields[$i]['veryshortdescription'] = $house->getVeryshortdescription($this->culture);
+
+            $housefields[$i]['veryshortdescription'] = HouseI18n::where('id', $house->id)->where('culture', App::getLocale())->first()->veryshortdescription;
             if ($i == 1)
             {
                 $x1 = $latitude;

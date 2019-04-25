@@ -234,7 +234,7 @@ class MyAccountController extends Controller
     }
 
     /**
-     * Saves new identitypaperlines
+     * Saves new identitypaperlines. Used after the view editidentitypapers.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
@@ -256,7 +256,11 @@ class MyAccountController extends Controller
     }
 
     /**
-     * Edit one identityrecord
+     * Feeds the view edit one existing identityrecord.
+     *
+     * @param $id identitypaper id
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function edit($id)
     {
@@ -276,6 +280,12 @@ class MyAccountController extends Controller
 
     }
 
+    /**
+     * Deletes an existing identitypaper and returns to the calling form
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy($id)
     {
         $identitypaper = Identitypaper::findOrFail($id);
@@ -292,6 +302,12 @@ class MyAccountController extends Controller
         return back();
     }
 
+    /**
+     * Used after editing an existing identitypaper to update the record.
+     *
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function update($id)
     {
         $identitypaper = Identitypaper::findOrFail($id);

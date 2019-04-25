@@ -22,7 +22,6 @@
         function initialize()
         {
             var mytext = {!!  $housefields !!} ;
-            veryshortdescription = mytext.veryShortDescription;
             id = mytext.id;
             housename = mytext.name;
             latitude = mytext.latitude;
@@ -108,7 +107,7 @@
                             id = house.Id;
 
                             mytext = '<div class="labels"><br/><a href="/home/showinfo/field/description/houseid/'+id+'/">' + housename + '</a>';
-                            mytext = mytext + '<br/>'+house.veryShortDescription+"</div>";
+                            mytext = mytext + '<br/>'+house.veryshortdescription+"</div>";
 
                             markeroptions = {
                                 position:  new google.maps.LatLng(house.latitude,house.longitude),
