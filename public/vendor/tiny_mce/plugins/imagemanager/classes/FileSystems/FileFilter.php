@@ -4,7 +4,7 @@
  *
  * @package MCFileManager.filesystems
  * @author Moxiecode
- * @copyright Copyright © 2005, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright ï¿½ 2005, Moxiecode Systems AB, All rights reserved.
  */
 
 /**
@@ -183,7 +183,7 @@ class Moxiecode_BasicFileFilter extends Moxiecode_FileFilter {
 	 */
 	function setExcludeFiles($files) {
 		if ($files != "")
-			$this->_excludeFiles = split(',', $files);
+			$this->_excludeFiles = explode(',', $files);
 	}
 
 	/**
@@ -193,7 +193,7 @@ class Moxiecode_BasicFileFilter extends Moxiecode_FileFilter {
 	 */
 	function setIncludeFiles($files) {
 		if ($files != "")
-			$this->_includeFiles = split(',', $files);
+			$this->_includeFiles = explode(',', $files);
 	}
 
 	/**
@@ -203,7 +203,7 @@ class Moxiecode_BasicFileFilter extends Moxiecode_FileFilter {
 	 */
 	function setExcludeFolders($folders) {
 		if ($folders != "")
-			$this->_excludeFolders = split(',', $folders);
+			$this->_excludeFolders = explode(',', $folders);
 	}
 
 	/**
@@ -213,7 +213,7 @@ class Moxiecode_BasicFileFilter extends Moxiecode_FileFilter {
 	 */
 	function setIncludeFolders($folders) {
 		if ($folders != "")
-			$this->_includeFolders = split(',', $folders);
+			$this->_includeFolders = explode(',', $folders);
 	}
 
 	/**

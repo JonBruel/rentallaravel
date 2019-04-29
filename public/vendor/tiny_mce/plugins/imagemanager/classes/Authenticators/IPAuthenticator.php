@@ -4,7 +4,7 @@
  *
  * @package IPAuthenticator
  * @author Moxiecode
- * @copyright Copyright © 2007, Moxiecode Systems AB, All rights reserved.
+ * @copyright Copyright ï¿½ 2007, Moxiecode Systems AB, All rights reserved.
  */
 
 /**
@@ -28,11 +28,11 @@ class Moxiecode_IPAuthenticator extends Moxiecode_ManagerPlugin {
 	 */
 	function onAuthenticate(&$man) {
 		$config = $man->getConfig();
-		$ipNums = split(',', $config['IPAuthenticator.ip_numbers']);
+		$ipNums = explode(',', $config['IPAuthenticator.ip_numbers']);
 		$currentIP = $this->_ip2int($_SERVER["REMOTE_ADDR"]);
 
 		foreach ($ipNums as $ip) {
-			$ipRange = split('-', $ip);
+			$ipRange = explode('-', $ip);
 
 			if (count($ipRange) == 1 && $this->_ip2int($ipRange[0]) == $currentIP)
 				return true;
@@ -45,7 +45,7 @@ class Moxiecode_IPAuthenticator extends Moxiecode_ManagerPlugin {
 	}
 
 	function _ip2int($addr) {
-		$ips = split("\.", $addr);
+		$ips = explode("\.", $addr);
 		return ($ips[3] + $ips[2] * 256 + $ips[1] * 256 * 256 + $ips[0] * 256 * 256 * 256);
 	}
 }
