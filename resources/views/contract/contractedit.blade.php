@@ -454,10 +454,10 @@
             @if(sizeof($currencySelect) > 0)
                 rate = rates[$('#currencyid').val()];
                 console.log('Currencyid is: '+$('#currencyid').val());
-                console.log("Rate: "+rate);
+                console.log('Rate is: '+rate);
             @endif
 
-            //$('#hiddenprice').val(rate*price);
+            $('#hiddenprice').val(rate*price);
             $('#ratechosen').val(rate);
             return rate*price;
         }
