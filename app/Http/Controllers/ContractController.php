@@ -318,9 +318,9 @@ class ContractController extends Controller
                 $customercurrencyid = $accountpost->customercurrencyid;
                 $choosecurrency = false;
                 $fixedrate = $accountprice/$existingprice;
-                if ($accountpost->discount != 100)
+                if ($models[0]->discount != 100)
                 {
-                    $fixedrate = 100 * $fixedrate / (100 - $accountpost->discount);
+                    $fixedrate = 100 * $fixedrate / (100 - $models[0]->discount);
                 }
             }
         }
