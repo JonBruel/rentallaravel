@@ -318,6 +318,10 @@ class ContractController extends Controller
                 $customercurrencyid = $accountpost->customercurrencyid;
                 $choosecurrency = false;
                 $fixedrate = $accountprice/$existingprice;
+                if ($accountpost->discount != 100)
+                {
+                    $fixedrate = 100 * $fixedrate / (100 - $accountpost->discount);
+                }
             }
         }
 
