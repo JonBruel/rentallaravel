@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+    @php($id = $models[0]->id)
     <div class="modal" tabindex="-1" role="dialog" id="adjustguestsinfo">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -29,9 +30,7 @@
         @else
             {!! Form::submit(__('Book house'),['class' => "btn btn-primary col col-md-12", 'name' => 'Book', 'style' => 'opacity: 0.1']); !!}
         @endif
-        @if(Gate::allows('Owner'))
-            {!! Form::submit(__('Delete booking'),['class' => "btn btn-primary", 'name' => 'Delete']); !!}
-        @endif
+
         <br />
         <br />
         @if ($errors->any())
@@ -138,14 +137,36 @@
             {!! Form::submit(__('Book house'),['class' => "btn btn-primary col col-md-12", 'name' => 'Book', 'dusk' => 'next', 'style' => 'opacity: 0.1']); !!}
          @endif
         @if(Gate::allows('Owner'))
-            {!! Form::submit(__('Delete booking'),['class' => "btn btn-primary", 'name' => 'Delete']); !!}
+            <!--{!! Form::submit(__('Delete booking'),['class' => "btn btn-primary", 'name' => 'Delete']); !!}-->
         @endif
         {!! Form::close() !!}
         <br />
         @if(!$fromcalendar)
             {!! $models->appends(\Request::except('page'))->render() !!}
         @endif
+        <br />
+        @if(Gate::allows('Owner'))
+            <form class="delete" action="/contract/destroy/{{ $id }}" method="POST" id="delete{{ $id }}">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                <a href="#" id="btn-confirm{{ $id }}"  class="btn btn-primary" title="{{__('Deletes everything related to this booking, including accountposts.')}}" data-toggle="tooltip">{{__('Delete booking')}}</a>
+            </form>
+        @endif
 
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="my-modal{{ $id }}">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">{{ __('Do you really want to delete?') }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class='glyphicon glyphicon-remove' aria-hidden="true"></span></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="modal-btn-yes{{ $id }}">{{ __('Yes') }}</button>
+                    <button type="button" class="btn btn-primary" id="modal-btn-no{{ $id }}">{{ __('No') }}</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     @include('partials.client_validation')
@@ -461,6 +482,30 @@
             $('#ratechosen').val(rate);
             return rate*price;
         }
+
+        var modalConfirm = function(callback){
+
+            $("#btn-confirm{{ $id }}").on("click", function(){
+                $("#my-modal{{ $id }}").modal('show');
+            });
+
+            $("#modal-btn-yes{{ $id }}").on("click", function(){
+                callback(true);
+                $("#my-modal{{ $id }}").modal('hide');
+
+            });
+
+            $("#modal-btn-no{{ $id }}").on("click", function(){
+                callback(false);
+                $("#my-modal{{ $id }}").modal('hide');
+            });
+        };
+
+        modalConfirm(function(confirm){
+            if(confirm){
+                $("#delete{{ $id }}").submit();
+            }
+        });
 
     </script>
 @endsection

@@ -432,12 +432,6 @@ class ContractController extends Controller
         //TODO: should we handle the situation where there is no existing contract?
         $contract = Contract::Find($contractid);
 
-        if (Input::get('Delete'))
-        {
-            $contract->delete();
-            return redirect('contract/listcontractoverviewforowners?menupoint=11020')->with('success', __('Contract deleted').'.');
-        }
-
         Contract::$ajax = true;
         $oldfinalprice = $contract->finalprice;
         Contract::$ajax = false;
@@ -558,6 +552,17 @@ class ContractController extends Controller
             $contract->save();
             return $this->commitcontract($contract->id);
         }
+    }
+
+    public function destroy($contractid)
+    {
+
+        //Set rights
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
+
+        $contract = Contract::Find($contractid);
+        $contract->delete();
+        return redirect('contract/listcontractoverviewforowners?menupoint=11020')->with('success', __('Contract deleted').'.');
     }
 
     /**

@@ -80,6 +80,7 @@ Route::get('/contract/listcontractoverview', 'ContractController@listcontractove
 Route::get('/contract/listcontractoverviewforowners', 'ContractController@listcontractoverviewforowners');
 Route::get('/contract/show/{id}', 'ContractController@show');
 Route::get('/contract/contractedit/{id}/{periodid}', 'ContractController@contractedit');
+Route::delete('/contract/destroy/{id}', 'ContractController@destroy');
 Route::get('/contract/commitcontract/{id}', 'ContractController@commitcontract');
 Route::post('/contract/commitcontract', 'ContractController@commitcontract');
 Route::post('/contract/commitcontract/{id}', 'ContractController@commitcontract');
@@ -89,6 +90,8 @@ Route::get('/contract/listmails/{customerid}', 'ContractController@listmails');
 Route::get('/contract/annualcontractoverview', 'ContractController@annualcontractoverview');
 Route::get('/contract/cancelorder/{id}', 'ContractController@cancelorder');
 Route::post('/contract/registerpayment/{contractid}', 'ContractController@registerpayment');
+
+
 Route::get('/accountpost/edit/{id}', 'ContractController@accountpostedit');
 Route::delete('/accountpost/destroy/{id}', 'ContractController@accountpostdestroy');
 Route::post('/accountpost/update/{id}', 'ContractController@accountpostupdate');
