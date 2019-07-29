@@ -222,6 +222,7 @@ class MyAccountController extends Controller
         $error = '';
         if ($user->customertypeid == 1000) {
             if ($contract->customerid != $user->id) $error = __('The rental period does not belong to you.');
+            else $models = Identitypaper::where('contractid', $contractid)->get();
         }
         else {
             $models = Identitypaper::where('contractid', $contractid)->get();
