@@ -43,12 +43,11 @@
         <h3>{{__('Add guest passport details')}}</h3>
         <div class="table-responsive table-sm">
             {!! Form::model($newidentitypaper, ['action' => ['MyAccountController@saveidentitypaper', $newidentitypaper]]) !!}
-            {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
             <br />
             <br />
 
             @include('partials.two_column_edit_1', ['model' => $newidentitypaper, 'errors' => $errors, 'fields' => $fields, 'vattr' => $vattr])
-            {!! Form::submit(__('Save changes'),['class' => "btn btn-primary"]); !!}
+            {!! Form::submit(__('Add new identity paper'),['class' => "btn btn-primary"]); !!}
             {!! Form::close() !!}
         </div>
         @include('partials.client_validation')
