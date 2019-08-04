@@ -395,6 +395,7 @@ class Batchlog extends BaseModel
                 // Handle file creation for Guardia Civil, the file will have the contractid as extension
                 // enabling us to establish the link between the contract and the identitypapers when
                 // a cron sends the file using Dusk.
+                Log::info("We check if a file for Guardia Civil should be made");
                 if (($batchtask->batchfunctionid == 2) && ($lockbatchvalue < 2))
                 {
                     if ($contract->getCountofidentityrecords() > 0)
