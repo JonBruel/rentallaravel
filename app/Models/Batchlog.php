@@ -505,7 +505,7 @@ class Batchlog extends BaseModel
             if ($batchview->usetimedelayfrom == 1)
             {
                 $timeto = $batchview->timedelayfrom; //unit: days
-                if ($timeto > 0)
+                if ($timeto >= 0)
                 {
                     //$TimeToStartCondition = (($periodstart - time()) / $secondsperday < $timeto);
                     $TimeToStartCondition = $periodstart->subDays($timeto)->lt(Carbon::now());
