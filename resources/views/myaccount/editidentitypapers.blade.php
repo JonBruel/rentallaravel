@@ -11,13 +11,13 @@
                         {{ __('Edit') }}
                     </th>
                     <th>
-                        {{ ucfirst(__('forename') )}}
+                        {{ ucfirst(__('Forename') )}}
                     </th>
                     <th>
-                        {{ ucfirst(__('surname1')) }}
+                        {{ ucfirst(__('Surname1')) }}
                     </th>
                     <th>
-                        {{ ucfirst(__('passportnumber')) }}
+                        {{ ucfirst(__('Passportnumber')) }}
                     </th>
                 </tr>
                 @foreach($models as $model)
