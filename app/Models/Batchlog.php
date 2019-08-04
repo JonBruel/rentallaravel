@@ -409,7 +409,7 @@ class Batchlog extends BaseModel
                         Log::info("Trying to save to $filename this: $filetext");
                         // If we succeed, we delete the idenditypaper records
                         if ($filesave !== FALSE) Identitypaper::where('contractid', $contractid)->delete();
-                        Log::info("Result of file sane attempt: $filesave");
+                        Log::info("Result of file save attempt: $filesave");
                         //Change the filedate
                     }
                 }
