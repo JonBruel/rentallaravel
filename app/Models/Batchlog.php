@@ -400,14 +400,16 @@ class Batchlog extends BaseModel
                     if ($contract->getCountofidentityrecords() > 0)
                     {
                         $filedirectory = base_path().'/storage/guardiacivil/';
+
                         //Get the Guardia Civil identity of the owner, being the second field in the generated text
                         $gcid = explode('|', $mailtext)[1];
                         $filename = $filedirectory.$gcid.'.'.$contract->id;
                         //Create and save the file
                         $filesave = file_put_contents($filename, $filetext);
-
+                        Log::info("Trying to save to $filename this: $filetext");
                         // If we succeed, we delete the idenditypaper records
                         if ($filesave !== FALSE) Identitypaper::where('contractid', $contractid)->delete();
+                        Log::info("Result of file sane attempt: $filesave");
                         //Change the filedate
                     }
                 }
