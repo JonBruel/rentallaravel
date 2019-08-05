@@ -38,8 +38,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:activateawaitingaccountposts 0')->everyMinute();
         $schedule->command('command:addtoqueue')->everyMinute();
         $schedule->command('command:execute')->everyMinute();
-        $schedule->command('dusk --group=guardia --env=.envgit pull
-        ')->dailyAt('08:30')->timezone('Europe/Copenhagen');
+        $schedule->command('dusk --group=guardia --env=.env')->dailyAt('08:30')->timezone('Europe/Copenhagen');
         //$schedule->command('dusk --group=guardia --env=.env')->everyMinute();
     }
 
