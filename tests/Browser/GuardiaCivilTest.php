@@ -50,7 +50,7 @@ class GuardiaCivilTest extends DuskTestCase
 
                 $browser->assertDontSee('error');
                 //The program will exit here if there are errors as per the assertion above
-                unlink($filename);
+                if (file_exists($filename)) unlink($filename);
                 unlink($path.$file);
                 // The deletion below is not working, the testdatabase is still used. Starting dusk with the
                 // --env=.env will make it work. At this stage we delete the passport data when executing the queue.
