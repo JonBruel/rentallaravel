@@ -276,7 +276,7 @@ class MyAccountController extends Controller
         }
         if ($errors != '') return back()->withInput()->with('errors', $errors);
 
-        $fields = array_diff(Schema::getColumnListing($identitypaper->getTable()), ['arrivaldate']);
+        $fields = array_diff(Schema::getColumnListing($identitypaper->getTable()), ['surname2', 'arrivaldate']);
         return view('myaccount/editidentitypaper', ['models' => [$identitypaper], 'fields' => $fields, 'vattr' => (new ValidationAttributes($identitypaper))->setCast('contractid', 'hidden')->setCast('id', 'hidden')]);
 
     }
