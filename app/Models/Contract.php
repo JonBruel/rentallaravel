@@ -771,13 +771,13 @@ class Contract extends BaseModel
         return $to;
     }
 
-    public function getPrepaymentamount()
+    public function getPrepaymentamount($culture = null)
     {
         $house = $this->house;
         $prepaymentamount = $house->prepayment * $this->finalprice;
         $currency = $this->currency;
         $currencysymbol = $currency->currencysymbol;
-        $r = $currencysymbol . ' ' . static::format($prepaymentamount, 2);
+        $r = $currencysymbol . ' ' . static::format($prepaymentamount, 2, $culture);
         return $r;
     }
 

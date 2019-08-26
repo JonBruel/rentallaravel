@@ -258,7 +258,7 @@ class Batchlog extends BaseModel
                     '*RECEIPIENTNAME*' => $recipient->name,
                     '*RECIPIENTNAME*' => $recipient->name,
                     '*ACCOUNTPOSTS*' => $contract->getAccountposts($culture),
-                    '*PREPAYMENTAMOUNT*' => $contract->getPrepaymentamount(),
+                    '*PREPAYMENTAMOUNT*' => $contract->getPrepaymentamount($culture),
                     '*FINALPAYMENT*' => static::format($accountidbalance->balance/$accountidbalance->usedrate, 2, $culture),
                     '*CONTRACTAMOUNT*' => static::format($contract->finalprice, 2, $culture),
                     '*CURRENCY*' => $contract->currency->currencysymbol,
