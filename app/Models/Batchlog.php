@@ -341,21 +341,22 @@ class Batchlog extends BaseModel
                 ConfigFromDB::configFromDB($webaddress);
 
                 $from = config('mail.from');
-                $subject = utf8_encode($emaildescription);
+                $subject = $emaildescription;
 
                 // The Middleware used in web part is not used here, so the config is the "raw" config
                 if ('' != config('app.testmessage', ''))
                 {
-                    $subject = 'Testmail only test from new rental system: ' . $emailid;
+                    $subject = 'ÆØÅæøå Testmail only test from new rental system: ' . $emailid;
                     $emailaddress = 'jbr@consiglia.dk';
                 }
                 if (((1 == config('app.mailactive', true)) || ( substr($emailaddress, -12) == 'consiglia.dk')) && ($lockbatchvalue < 2))
                 {
-
+                    $subject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
                     // We change the status to "processing" to avoid the same mail to be sent again when the send process
                     // takes long time - more than a minute - or there is an exception error.
                     $batchlog->statusid = 3;
                     $batchlog->save();
+
 
                     // With Mail::to()->send(), we cannot use to detailed Swift settings used below. So we use Mail::send() instead.
                     try
