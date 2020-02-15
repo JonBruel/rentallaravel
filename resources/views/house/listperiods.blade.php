@@ -16,6 +16,9 @@
             @endif
             <tr>
                 <td>
+                    {{__('Edit')}}
+                </td>
+                <td>
                     {{__('Year')}}
                 </td>
                 <td>
@@ -35,13 +38,16 @@
                 <td>
                     {{__('Person price')}}
                 </td>
-                <td>
-                    {{__('Edit')}}
-                </td>
             </tr>
             <tbody>
             @foreach($models as $model)
                 <tr style="{{(($model->committed>0) || ($model->prepaid>0))?'background-color: #FF9191;':''}}">
+                    <td>
+                        @if(!(($model->committed>0) || ($model->prepaid>0)))
+
+                            @include('partials.edit_delete', ['path' => 'houseperiod', 'id' => $model->id, 'deleteallowed' => Gate::allows('Administrator')])
+                        @endif
+                    </td>
                     <td>
                         {{$model->from->year}}
                     </td>
@@ -61,11 +67,6 @@
                     </td>
                     <td>
                         {{$model->house->currency->currencysymbol}} {{$model->personprice}}
-                    </td>
-                    <td>
-                        @if(!(($model->committed>0) || ($model->prepaid>0)))
-                        <a href="/house/editperiod/{{ $model->id }}" title="{{__('Edit')}}" data-toggle="tooltip"><span class='glyphicon glyphicon-pencil'></span></a>
-                        @endif
                     </td>
                 </tr>
             @endforeach

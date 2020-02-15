@@ -310,6 +310,19 @@ class HouseController extends Controller
     }
 
     /**
+     * Method is used for the owner to delete a specific period.
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function destroyperiod($id)
+    {
+        if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
+
+        Period::Find($id)->delete();
+        return redirect('/house/listperiods?menupoint=12020');
+    }
+
+    /**
      * Used to show the values of the chosen rental period for a subsequent change of the details.
      *
      * @param $id id of the period

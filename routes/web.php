@@ -76,6 +76,9 @@ Route::get('/house/editperiod/{id}', 'HouseController@editperiod');
 Route::post('/house/updateperiod/{id}', 'HouseController@updateperiod');
 Route::post('/house/updateperiods', 'HouseController@updateperiods');
 
+Route::get('/houseperiod/edit/{id}', 'HouseController@editperiod');
+Route::delete('/houseperiod/destroy/{id}', 'HouseController@destroyperiod');
+
 Route::get('/contract/listcontractoverview', 'ContractController@listcontractoverview');
 Route::get('/contract/listcontractoverviewforowners', 'ContractController@listcontractoverviewforowners');
 Route::get('/contract/show/{id}', 'ContractController@show');
