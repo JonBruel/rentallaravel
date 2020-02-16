@@ -75,3 +75,4 @@
         {!! $models->appends(\Request::except('page'))->render() !!}
     </div>
 @endsection
+

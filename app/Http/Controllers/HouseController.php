@@ -332,7 +332,7 @@ class HouseController extends Controller
     {
         if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $model = Period::Find($id);
-        $fields = ['id', 'baseprice','basepersons', 'maxpersons','personprice'];
+        $fields = ['id', 'baseprice','basepersons', 'maxpersons','personprice', 'from', 'to'];
         $vattr = (new ValidationAttributes($model))->setCast('id', 'hidden');
         return view('house/editperiod', ['models' => [$model], 'fields' => $fields, 'vattr' => $vattr]);
     }
@@ -347,12 +347,15 @@ class HouseController extends Controller
     {
         if (!Gate::allows('Administrator')) return redirect('/home')->with('warning', __('Somehow you the system tried to let you do something which is not allowed. So you are sent home!'));
         $model = Period::Find($id);
-        $fields = ['baseprice','basepersons', 'maxpersons','personprice'];
+        $fields = ['baseprice','basepersons', 'maxpersons','personprice', 'from', 'to'];
 
         foreach($fields as $field)
         {
-            $model->$field = Input::get($field);
+            if (($field == "from") || ($field == "to")) $model->$field = Carbon::parse(Input::get($field));
+            else $model->$field = Input::get($field);
         }
+
+
         $success = __('Period updated');
         $errors = [];
         if (!$model->save())

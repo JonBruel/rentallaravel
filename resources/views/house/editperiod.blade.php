@@ -14,3 +14,23 @@
     </div>
     @include('partials.client_validation')
 @endsection
+@section('scripts')
+    <link href="{{ asset('/vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css', true)}}" rel="stylesheet">
+    <script type="text/javascript" src="{{ asset('/vendor/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js', true)}}"></script>
+    <script type="text/javascript">
+
+        $(function() {
+            $('#from').datetimepicker({ language: '{{str_replace('_', '-', App::getLocale())}}',
+                format: 'dd-mm-yyyy',
+                minView: 2,
+                autoclose: true,
+                startView: 2});
+
+            $('#to').datetimepicker({ language: '{{str_replace('_', '-', App::getLocale())}}',
+                format: 'dd-mm-yyyy',
+                minView: 2,
+                autoclose: true,
+                startView: 2});
+        });
+    </script>
+@endsection

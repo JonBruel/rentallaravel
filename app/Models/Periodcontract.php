@@ -128,7 +128,7 @@ class Periodcontract extends BaseModel
             setlocale(LC_TIME, $culture);
             App::setLocale($culture);
         }
-        $r = __('From') . ' ' .Carbon::parse($this->from)->formatLocalized('%a %d %b %Y').' '.__('to').' '.Carbon::parse($this->to)->formatLocalized('%a %d %b %Y');
+        $r = __('From') . ' ' .Carbon::parse($this->from)->formatLocalized('%d %b %Y').' '.__('to').' '.Carbon::parse($this->to)->formatLocalized('%d %b %Y');
         return $r;
     }
 }
