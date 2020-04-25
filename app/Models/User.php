@@ -52,6 +52,42 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+
+
+    /*
+     * This function is used to show the relevant associated
+     * user-friendly value as opposed to showing the id.
+     * Performance: as we are making up to 4 queries, it does take some time.
+     * Measured to around 5 ms.
+     */
+    public function withBelongsTo($fieldname)
+    {
+        switch ($fieldname)
+        {
+            case 'cultureid':
+                return $this->culture->culturename;
+            default:
+                return $this->$fieldname;
+        }
+    }
+
+    /*
+     * Retuns an array of keys and values to be used in forms for select boxes. Typical uses
+     * are filters, e.g selection housed owner by a specific owner.
+     *
+     * Retuns null if no select boxes are to be used.
+     */
+    public function withSelect($fieldname)
+    {
+        switch ($fieldname)
+        {
+            case 'cultureid':
+                return  Culture::all()->pluck('culturename', 'id')->toArray();
+            default:
+                return null;
+        }
+    }
+
     public function sendPasswordResetNotification($token)
     {
         // Your your own implementation.

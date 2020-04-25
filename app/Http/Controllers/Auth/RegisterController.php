@@ -61,6 +61,11 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:customer',
             'password' => 'required|string|min:6|confirmed',
+            'mobile' => 'required|string|min:8',
+            'address1' => 'required|string|min:2',
+            'address3' => 'required|string|min:2',
+            'country' => 'required|string|min:2',
+            'cultureid' => 'required'
         ]);
         return $this->validator;
     }
@@ -77,6 +82,11 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'mobile' => $data['mobile'],
+            'address1' => $data['address1'],
+            'address3' => $data['address3'],
+            'country' => $data['country'],
+            'cultureid' => $data['cultureid']
         ]);
 
 
@@ -139,8 +149,11 @@ class RegisterController extends Controller
      */
     public function showRegistrationForm()
     {
-        $vattr = new ValidationAttributes(new Customer());
-        return view('auth.register', ['vattr' => $vattr, 'name' => '', 'email' => session('email', '')])->withHeader('Cache-Control', 'no-cache, must-revalidate');
+        $model = new Customer();
+        $vattr = new ValidationAttributes($model);
+        return view('auth.register', ['vattr' => $vattr, 'name' => '', 'email' => session('email', ''), 'mobile' => '',
+            'address1' => '', 'address3' => '', 'country' => '',
+            'cultureid' => session('cultureid', ''), 'model' => $model])->withHeader('Cache-Control', 'no-cache, must-revalidate');
     }
 
     /**
@@ -165,7 +178,9 @@ class RegisterController extends Controller
         }
 
         $vattr = new ValidationAttributes(new Customer());
-        return view('auth.register', ['vattr' => $vattr, 'name' => Input::get('name'), 'email' => Input::get('email')])->withHeader('Cache-Control', 'no-cache, must-revalidate')->withErrors($this->validator);
+        return view('auth.register', ['vattr' => $vattr, 'name' => Input::get('name'), 'email' => Input::get('email'), 'mobile' => Input::get('mobile'),
+            'address1' => Input::get('address1'), 'address3' => Input::get('address3'), 'country' => Input::get('country'),
+            'cultureid' => Input::get('cultureid')])->withHeader('Cache-Control', 'no-cache, must-revalidate')->withErrors($this->validator);
 
 
     }
