@@ -59,7 +59,7 @@ use Illuminate\Support\Facades\App;
                     <td>{{ $model->duration }}</td>
                     @if(Gate::allows('Administrator'))
                         <td>{{ Number::format($model->contractamount*$model->contract->getExchangeRate(),['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => App::getLocale()])}}</td>
-                        <td>{{ Number::format($model->paid,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => App::getLocale()])}}</td>
+                        <td>{{ Number::format($model->paid*$model->contract->getExchangeRate(),['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => App::getLocale()])}}</td>
                     @endif
                 </tr>
             @endforeach
