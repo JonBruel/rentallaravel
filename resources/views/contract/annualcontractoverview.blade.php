@@ -54,7 +54,7 @@ use Illuminate\Support\Facades\App;
                     <td colspan="2">{{ $model->from->formatLocalized('%a %d %B %Y')}} - {{ $model->to->formatLocalized('%a %d %B %Y')}}</td>
                     <td>{{ $model->duration }}</td>
                     <td>{{ $model->from->quarter }}</td>
-                    <td>{{ Number::format($model->contractamount,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => App::getLocale()])}}@php($contractamount += $model->contractamount)</td>
+                    <td>{{ Number::format($model->contractamount*$model->contract->getExchangeRate(),['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => App::getLocale()])}}@php($contractamount += $model->contractamount*$model->contract->getExchangeRate())</td>
                     <td>{{ Number::format($model->paid,['minimum_fraction_digits' => 2, 'maximum_fraction_digits' => 2, 'locale' => App::getLocale()])}}@php($paid += $model->paid)</td>
                 </tr>
             @endforeach

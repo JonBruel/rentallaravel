@@ -27,6 +27,7 @@ use App\Models\Emaillog;
 use App\Models\Periodcontract;
 use App\Models\Batchtask;
 use App\Models\Culture;
+use App\Models\Currency;
 use App;
 use App\Models\Contractoverview;
 use Carbon\Carbon;
@@ -705,8 +706,10 @@ class ContractController extends Controller
      */
     public function listaccountposts($contractid)
     {
-        $currencysymbol = 'DKK';
         $models =  Accountpost::where('contractid', $contractid)->where('amount', "!=", 0)->get();
+        $currencyid = $models[0]->contract->currencyid;
+        $customercurrency = Currency::Find($currencyid);
+        $currencysymbol = $customercurrency->currencysymbol;
         return view('contract/listaccountposts', ['models' => $models,'currencysymbol' => $currencysymbol]);
     }
 
