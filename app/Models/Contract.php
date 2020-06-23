@@ -14,7 +14,7 @@ use DB;
 
 /**
  * Class Contract
- * 
+ *
  * @property int $id
  * @property int $houseid
  * @property int $ownerid
@@ -33,7 +33,7 @@ use DB;
  * @property int $currencyid
  * @property int $categoryid
  * @property string $status
- * 
+ *
  * @property \App\Models\Category $category
  * @property \App\Models\Customer $customer
  * @property \App\Models\Currency $currency
@@ -251,6 +251,30 @@ class Contract extends BaseModel
         $contractline->quantity = $persons;
         $contractline->save();
         return 0;
+    }
+
+    /* Get exchange rate in order to convert price into owners currency
+    */
+    public function getExchangeRate()
+    {
+        $owner = Customer::Find($this->ownerid);
+
+        //Get owners currency rate (against €)
+        $accountcurrency = $owner->culture->currency;
+        $accountcurrencyid = $accountcurrency->id;
+        $accountcurrencyrate = 1;
+        if ($accountcurrencyid != 1)  $accountcurrencyrate = Currencyrate::where('currencyid', $accountcurrencyid)->where('created_at', '<=', $this->created_at)->orderBy('created_at', 'desc')->first()->rate;
+
+        //Get customers currency rate (against €)
+        //The currency used in the contract is as default the customers preferred currency
+        //but the customer may change it before committing.
+        $customercurrency = Currency::Find($this->currencyid);
+        $customercurrencyid = $customercurrency->id;
+        $customercurrencyrate = 1;
+        if ($customercurrencyid != 1) $customercurrencyrate = Currencyrate::where('currencyid', $customercurrencyid)->where('created_at', '<=', $this->created_at)->orderBy('created_at', 'desc')->first()->rate;
+
+        $usedrate = round($accountcurrencyrate / $customercurrencyrate, 8);
+        return $usedrate;
     }
 
     /*
