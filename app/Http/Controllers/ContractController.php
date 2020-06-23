@@ -444,7 +444,7 @@ class ContractController extends Controller
         $contract->discount = Input::get('discount');
         $contract->persons = Input::get('persons');
         $contract->message = Input::get('message');
-        $contract->categoryid = Input::get('categoryid');
+        $contract->categoryid = Input::get('categoryid', 0);
         //$contract->save();
 
         // Update bookings and price information
