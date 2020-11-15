@@ -49,10 +49,10 @@ class testmail extends Command
      */
     public function handle()
     {
-        $webaddress = 'rentallaravel.consiglia.dk';
+        $webaddress = 'cangeroni.hasselbalch.com';
         if ($this->argument('webaddress')) $webaddress = $this->argument('webaddress');
 
-        $to = 'jbr@consiglia.dk.test-google-a.com';
+        $to = 'jbr3@consiglia.dk';
         $mailtext = "Dette er en prøve";
         $subject = 'Test';
         $fromname = 'Iben Hasselbalch';
