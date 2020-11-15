@@ -134,7 +134,7 @@ return [
     //Used for google maps
     'googlekey' => 'AIzaSyCmXZ5CEhhFY3-qXoHRzs0XFK4a495LyxE',
 
-    'host' => 'cangeroni.hasselbalch.com',
+    'host' => 'rentallaravel.consiglia.dk',
     'exceptions' => (!env('APP_DEBUG')),
 
 
