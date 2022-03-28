@@ -58,7 +58,7 @@ class testmail extends Command
         $fromname = 'Iben Hasselbalch';
         $fromaddress = 'iben@hasselbalch.com';
         $toname = 'To Jon';
-        $attchmentdocs = [];
+        $attchmentdocs = [public_path() . '/housedocuments/1/cangeroniankomstdansk070114.doc'];
 
         ConfigFromDB::configFromDB($webaddress);
         // With Mail::to()->send(), we cannot use to detailed Swift settings used below.
