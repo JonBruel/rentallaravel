@@ -53,6 +53,7 @@ class testmail extends Command
         if ($this->argument('webaddress')) $webaddress = $this->argument('webaddress');
 
         $to = 'jbr3@consiglia.dk';
+        $to = 'adam@vivino.com';
         $mailtext = "Dette er en prøve";
         $subject = 'Test';
         $fromname = 'Iben Hasselbalch';
